@@ -21,11 +21,19 @@ import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } fr
 // @ts-ignore
 import { ChatMessage } from '../models';
 // @ts-ignore
+import { ChatRole } from '../models';
+// @ts-ignore
 import { ConfigProperty1 } from '../models';
+// @ts-ignore
+import { ConfigProperty2 } from '../models';
+// @ts-ignore
+import { ConfigResponse } from '../models';
 // @ts-ignore
 import { FeedbackLabelsProperty } from '../models';
 // @ts-ignore
 import { HTTPValidationError } from '../models';
+// @ts-ignore
+import { LocationPropertyInner } from '../models';
 // @ts-ignore
 import { LogDatapointRequest } from '../models';
 // @ts-ignore
@@ -33,7 +41,13 @@ import { LogResponse } from '../models';
 // @ts-ignore
 import { LogsLogResponse } from '../models';
 // @ts-ignore
+import { ProviderResponseProperty } from '../models';
+// @ts-ignore
+import { ToolCallProperty } from '../models';
+// @ts-ignore
 import { UpdateLogRequest } from '../models';
+// @ts-ignore
+import { ValidationError } from '../models';
 import { paginate } from "../pagination/paginate";
 import { requestBeforeHook } from '../requestBeforeHook';
 /**

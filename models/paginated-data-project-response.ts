@@ -13,7 +13,40 @@
 
 // May contain unused imports in some cases
 // @ts-ignore
+import { ActiveConfigProperty } from './active-config-property';
+// May contain unused imports in some cases
+// @ts-ignore
+import { ActiveExperimentProperty } from './active-experiment-property';
+// May contain unused imports in some cases
+// @ts-ignore
+import { CategoricalFeedbackLabel } from './categorical-feedback-label';
+// May contain unused imports in some cases
+// @ts-ignore
+import { ConfigType } from './config-type';
+// May contain unused imports in some cases
+// @ts-ignore
+import { EvaluatorArgumentsType } from './evaluator-arguments-type';
+// May contain unused imports in some cases
+// @ts-ignore
+import { EvaluatorResponse } from './evaluator-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import { EvaluatorReturnTypeEnum } from './evaluator-return-type-enum';
+// May contain unused imports in some cases
+// @ts-ignore
+import { FeedbackTypeModel } from './feedback-type-model';
+// May contain unused imports in some cases
+// @ts-ignore
+import { FeedbackTypeProperty } from './feedback-type-property';
+// May contain unused imports in some cases
+// @ts-ignore
+import { LabelSentiment } from './label-sentiment';
+// May contain unused imports in some cases
+// @ts-ignore
 import { ProjectResponse } from './project-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import { ProjectUserResponse } from './project-user-response';
 
 /**
  * 

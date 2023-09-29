@@ -13,6 +13,9 @@
 
 // May contain unused imports in some cases
 // @ts-ignore
+import { ConfigProperty } from './config-property';
+// May contain unused imports in some cases
+// @ts-ignore
 import { ExperimentConfigResponse } from './experiment-config-response';
 // May contain unused imports in some cases
 // @ts-ignore

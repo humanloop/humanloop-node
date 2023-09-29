@@ -29,11 +29,21 @@ import { CompletionRequest } from '../models';
 // @ts-ignore
 import { CompletionResponse } from '../models';
 // @ts-ignore
+import { DataResponse } from '../models';
+// @ts-ignore
 import { HTTPValidationError } from '../models';
+// @ts-ignore
+import { LocationPropertyInner } from '../models';
 // @ts-ignore
 import { ModelConfigurationProperty1 } from '../models';
 // @ts-ignore
 import { ProviderAPIKeysProperty } from '../models';
+// @ts-ignore
+import { ToolResultResponse } from '../models';
+// @ts-ignore
+import { UsageProperty } from '../models';
+// @ts-ignore
+import { ValidationError } from '../models';
 import { paginate } from "../pagination/paginate";
 import { requestBeforeHook } from '../requestBeforeHook';
 /**
@@ -43,7 +53,7 @@ import { requestBeforeHook } from '../requestBeforeHook';
 export const CompletionsApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * Create a completion by providing details of the model configuration in the request.
+         * Create a completion by providing details of the model configuration in the request. change
          * @summary Create
          * @param {CompletionRequest} completionRequest 
          * @param {*} [options] Override http request option.
@@ -233,7 +243,7 @@ export const CompletionsApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = CompletionsApiAxiosParamCreator(configuration)
     return {
         /**
-         * Create a completion by providing details of the model configuration in the request.
+         * Create a completion by providing details of the model configuration in the request. change
          * @summary Create
          * @param {CompletionsApiCreateRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
@@ -287,7 +297,7 @@ export const CompletionsApiFactory = function (configuration?: Configuration, ba
     const localVarFp = CompletionsApiFp(configuration)
     return {
         /**
-         * Create a completion by providing details of the model configuration in the request.
+         * Create a completion by providing details of the model configuration in the request. change
          * @summary Create
          * @param {CompletionsApiCreateRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
@@ -373,7 +383,7 @@ export type CompletionsApiCreateModelConfigRequest = {
  */
 export class CompletionsApiGenerated extends BaseAPI {
     /**
-     * Create a completion by providing details of the model configuration in the request.
+     * Create a completion by providing details of the model configuration in the request. change
      * @summary Create
      * @param {CompletionsApiCreateRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.

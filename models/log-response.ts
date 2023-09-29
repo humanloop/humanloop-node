@@ -16,6 +16,9 @@
 import { ChatMessage } from './chat-message';
 // May contain unused imports in some cases
 // @ts-ignore
+import { ChatRole } from './chat-role';
+// May contain unused imports in some cases
+// @ts-ignore
 import { ConfigProperty2 } from './config-property2';
 // May contain unused imports in some cases
 // @ts-ignore
@@ -26,6 +29,9 @@ import { FeedbackLabelsProperty } from './feedback-labels-property';
 // May contain unused imports in some cases
 // @ts-ignore
 import { ProviderResponseProperty } from './provider-response-property';
+// May contain unused imports in some cases
+// @ts-ignore
+import { ToolCallProperty } from './tool-call-property';
 
 /**
  * Request model for logging a datapoint.

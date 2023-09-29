@@ -19,7 +19,13 @@ import { ConfigResponse } from './config-response';
 import { EvaluationStatus } from './evaluation-status';
 // May contain unused imports in some cases
 // @ts-ignore
+import { EvaluatorArgumentsType } from './evaluator-arguments-type';
+// May contain unused imports in some cases
+// @ts-ignore
 import { EvaluatorResponse } from './evaluator-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import { EvaluatorReturnTypeEnum } from './evaluator-return-type-enum';
 // May contain unused imports in some cases
 // @ts-ignore
 import { ModelConfigEvaluatorAggregateResponse } from './model-config-evaluator-aggregate-response';

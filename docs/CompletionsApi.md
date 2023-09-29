@@ -15,7 +15,7 @@ Method | HTTP request | Description
 #### **POST** /completion
 
 ### Description
-Create a completion by providing details of the model configuration in the request.
+Create a completion by providing details of the model configuration in the request. change
 
 ### Example
 

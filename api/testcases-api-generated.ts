@@ -21,13 +21,21 @@ import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } fr
 // @ts-ignore
 import { ChatMessage } from '../models';
 // @ts-ignore
+import { ChatRole } from '../models';
+// @ts-ignore
 import { HTTPValidationError } from '../models';
+// @ts-ignore
+import { LocationPropertyInner } from '../models';
 // @ts-ignore
 import { Target } from '../models';
 // @ts-ignore
 import { TestcaseResponse } from '../models';
 // @ts-ignore
+import { ToolCallProperty } from '../models';
+// @ts-ignore
 import { UpdateTestcaseRequest } from '../models';
+// @ts-ignore
+import { ValidationError } from '../models';
 import { paginate } from "../pagination/paginate";
 import { requestBeforeHook } from '../requestBeforeHook';
 /**
