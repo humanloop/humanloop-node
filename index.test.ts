@@ -1,3 +1,5 @@
+import { ConfigCache } from "./cache";
+import { configCache } from "./complete-deployed";
 import { Humanloop, HumanloopError } from "./index";
 
 describe("client", () => {
@@ -57,6 +59,18 @@ describe("client", () => {
     });
     console.log(response);
   });
+  it("listProjects", async () => {
+    const humanloop = new Humanloop({
+      apiKey: process.env.HUMANLOOP_API_KEY,
+      basePath: "https://neostaging.humanloop.ml/v4",
+      openaiApiKey: process.env.OPENAI_API_KEY,
+    });
+    let page = await humanloop.projects.list();
+    for (let i = 0; i < 2; i++) {
+      console.log(page.data);
+      page = await page.next();
+    }
+  });
   it("chatStream", async () => {
     const humanloop = new Humanloop({
       apiKey: process.env.HUMANLOOP_API_KEY,
@@ -80,6 +94,44 @@ describe("client", () => {
       done = doneReading;
       console.log(decoder.decode(value));
     }
+  });
+
+  it("completeDeployed-completeDeployedNoProxy", async () => {
+    const humanloop = new Humanloop({
+      basePath: "https://neostaging.humanloop.ml/v4",
+      apiKey: process.env.HUMANLOOP_API_KEY,
+      openaiApiKey: process.env.OPENAI_API_KEY,
+    });
+    const params = {
+      project_id: "pr_2DCxnUcGuDiBPkjSpxev5",
+      inputs: {
+        topic: "hello!",
+      },
+      source: "test",
+      metadata: { key: "value" },
+    };
+    const response = await humanloop.completeDeployed(params);
+    const responseNoProxy = await humanloop.completeDeployedNoProxy(params);
+    console.log(JSON.stringify(response.data, null, 2));
+    console.log(JSON.stringify(responseNoProxy.data, null, 2));
+    expect(response.data.data[0].model_config_id).toEqual(responseNoProxy.data[0].model_config_id);
+    configCache.dispose()
+  });
+  it("completeDeployed", async () => {
+    const humanloop = new Humanloop({
+      basePath: "https://neostaging.humanloop.ml/v4",
+      apiKey: process.env.HUMANLOOP_API_KEY,
+      openaiApiKey: process.env.OPENAI_API_KEY,
+    });
+    const response = await humanloop.completeDeployed({
+      project_id: "pr_2DCxnUcGuDiBPkjSpxev5",
+      inputs: {
+        topic: "artificial intelligence",
+      },
+      source: "test",
+      metadata: { key: "value" },
+    });
+    console.log(JSON.stringify(response.data, null, 2));
   });
   it("HumanloopError", async () => {
     // Initialize the Humanloop client.

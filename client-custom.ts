@@ -20,6 +20,10 @@ import globalAxios, { AxiosResponse } from "axios";
 import fetchAdapter from "konfig-axios-fetch-adapter";
 import { createRequestFunction } from "./common";
 import { BASE_PATH, RequestArgs } from "./base";
+import {
+  CompletionDeployedRequestNoProxy,
+  completeDeployed,
+} from "./complete-deployed";
 
 export class HumanloopCustom {
   readonly _complete: CompletionsApi;
@@ -63,6 +67,24 @@ export class HumanloopCustom {
 
   async listConfigs({ projectId }: { projectId: string }) {
     return this._projects.listConfigs({ id: projectId });
+  }
+
+  async completeDeployedNoProxy(
+    requestParameters: CompletionDeployedRequestNoProxy,
+    options?: AxiosRequestConfig,
+    refreshInterval?: number
+  ) {
+    if (typeof this._configuration.apiKey !== "string")
+      throw Error("API key is not a string");
+    return completeDeployed(
+      {
+        apiKey: this._configuration.apiKey,
+        basePath: this._configuration.basePath,
+      },
+      requestParameters,
+      options,
+      refreshInterval
+    );
   }
 
   async chatStream(
