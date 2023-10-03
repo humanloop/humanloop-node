@@ -16,6 +16,9 @@
 import { DataResponse } from './data-response';
 // May contain unused imports in some cases
 // @ts-ignore
+import { ToolResultResponse } from './tool-result-response';
+// May contain unused imports in some cases
+// @ts-ignore
 import { UsageProperty } from './usage-property';
 
 /**

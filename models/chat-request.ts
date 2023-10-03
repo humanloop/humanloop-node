@@ -16,10 +16,19 @@
 import { ChatMessage } from './chat-message';
 // May contain unused imports in some cases
 // @ts-ignore
+import { ChatRole } from './chat-role';
+// May contain unused imports in some cases
+// @ts-ignore
 import { ModelConfigurationProperty } from './model-configuration-property';
 // May contain unused imports in some cases
 // @ts-ignore
 import { ProviderAPIKeysProperty } from './provider-apikeys-property';
+// May contain unused imports in some cases
+// @ts-ignore
+import { ToolCallProperty } from './tool-call-property';
+// May contain unused imports in some cases
+// @ts-ignore
+import { ToolCallProperty1 } from './tool-call-property1';
 
 /**
  * Base chat request.
@@ -111,6 +120,12 @@ export interface ChatRequest {
      * @memberof ChatRequest
      */
     'user'?: string;
+    /**
+     * 
+     * @type {ToolCallProperty1}
+     * @memberof ChatRequest
+     */
+    'tool_call'?: ToolCallProperty1;
     /**
      * 
      * @type {ModelConfigurationProperty}

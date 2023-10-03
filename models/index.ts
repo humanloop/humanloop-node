@@ -107,6 +107,7 @@ export * from './testset-response';
 export * from './testsets-create-testcase-request';
 export * from './tool-call';
 export * from './tool-call-property';
+export * from './tool-call-property1';
 export * from './tool-config-request';
 export * from './tool-config-response';
 export * from './tool-result-response';

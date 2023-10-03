@@ -19,6 +19,8 @@ import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObj
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
 // @ts-ignore
+import { ChatDataResponse } from '../models';
+// @ts-ignore
 import { ChatDeployedRequest } from '../models';
 // @ts-ignore
 import { ChatExperimentRequest } from '../models';
@@ -31,11 +33,25 @@ import { ChatRequest } from '../models';
 // @ts-ignore
 import { ChatResponse } from '../models';
 // @ts-ignore
+import { ChatRole } from '../models';
+// @ts-ignore
 import { HTTPValidationError } from '../models';
+// @ts-ignore
+import { LocationPropertyInner } from '../models';
 // @ts-ignore
 import { ModelConfigurationProperty } from '../models';
 // @ts-ignore
 import { ProviderAPIKeysProperty } from '../models';
+// @ts-ignore
+import { ToolCallProperty } from '../models';
+// @ts-ignore
+import { ToolCallProperty1 } from '../models';
+// @ts-ignore
+import { ToolResultResponse } from '../models';
+// @ts-ignore
+import { UsageProperty } from '../models';
+// @ts-ignore
+import { ValidationError } from '../models';
 import { paginate } from "../pagination/paginate";
 import { requestBeforeHook } from '../requestBeforeHook';
 /**

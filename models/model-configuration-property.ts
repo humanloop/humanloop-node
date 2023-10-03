@@ -16,6 +16,9 @@
 import { ChatMessage } from './chat-message';
 // May contain unused imports in some cases
 // @ts-ignore
+import { ChatRole } from './chat-role';
+// May contain unused imports in some cases
+// @ts-ignore
 import { ModelConfigChatRequest } from './model-config-chat-request';
 // May contain unused imports in some cases
 // @ts-ignore
@@ -29,6 +32,9 @@ import { ModelProviders } from './model-providers';
 // May contain unused imports in some cases
 // @ts-ignore
 import { StopSequenceSProperty } from './stop-sequence-sproperty';
+// May contain unused imports in some cases
+// @ts-ignore
+import { ToolCallProperty } from './tool-call-property';
 
 /**
  * The model configuration used to create a chat response.

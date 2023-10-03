@@ -17,6 +17,9 @@ import { FeedbackClass } from './feedback-class';
 // May contain unused imports in some cases
 // @ts-ignore
 import { FeedbackLabelRequest } from './feedback-label-request';
+// May contain unused imports in some cases
+// @ts-ignore
+import { LabelSentiment } from './label-sentiment';
 
 /**
  * 

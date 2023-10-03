@@ -16,6 +16,21 @@
 import { ChatDataResponse } from './chat-data-response';
 // May contain unused imports in some cases
 // @ts-ignore
+import { ChatMessage } from './chat-message';
+// May contain unused imports in some cases
+// @ts-ignore
+import { ChatRole } from './chat-role';
+// May contain unused imports in some cases
+// @ts-ignore
+import { ToolCallProperty } from './tool-call-property';
+// May contain unused imports in some cases
+// @ts-ignore
+import { ToolCallProperty1 } from './tool-call-property1';
+// May contain unused imports in some cases
+// @ts-ignore
+import { ToolResultResponse } from './tool-result-response';
+// May contain unused imports in some cases
+// @ts-ignore
 import { UsageProperty } from './usage-property';
 
 /**
@@ -78,5 +93,11 @@ export interface ChatResponse {
      * @memberof ChatResponse
      */
     'provider_responses': Array<any>;
+    /**
+     * 
+     * @type {ToolCallProperty1}
+     * @memberof ChatResponse
+     */
+    'tool_call'?: ToolCallProperty1;
 }
 

@@ -52,7 +52,7 @@ export interface DataResponse {
      */
     'inputs': object;
     /**
-     * Why the completion ended. Usually one of \'stop\' (indicating a stop token was encountered), or \'length\' (indicating the max tokens limit has been reached). It will be set as null for the intermediary responses during a stream, and will only be set as non-null for the final streamed token.
+     * Why the generation ended. One of \'stop\' (indicating a stop token was encountered), or \'length\' (indicating the max tokens limit has been reached), or \'tool_call\' (indicating that the model has chosen to call a tool - in which case the tool_call parameter of the response will be populated). It will be set as null for the intermediary responses during a stream, and will only be set as non-null for the final streamed token.
      * @type {string}
      * @memberof DataResponse
      */

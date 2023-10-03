@@ -16,7 +16,16 @@
 import { ChatMessage } from './chat-message';
 // May contain unused imports in some cases
 // @ts-ignore
+import { ChatRole } from './chat-role';
+// May contain unused imports in some cases
+// @ts-ignore
 import { ProviderAPIKeysProperty } from './provider-apikeys-property';
+// May contain unused imports in some cases
+// @ts-ignore
+import { ToolCallProperty } from './tool-call-property';
+// May contain unused imports in some cases
+// @ts-ignore
+import { ToolCallProperty1 } from './tool-call-property1';
 
 /**
  * Chat request for active deployment.
@@ -108,6 +117,12 @@ export interface ChatDeployedRequest {
      * @memberof ChatDeployedRequest
      */
     'user'?: string;
+    /**
+     * 
+     * @type {ToolCallProperty1}
+     * @memberof ChatDeployedRequest
+     */
+    'tool_call'?: ToolCallProperty1;
     /**
      * The environment name used to create a chat response. If not specified, the default environment will be used.
      * @type {string}

@@ -16,7 +16,16 @@
 import { ChatMessage } from './chat-message';
 // May contain unused imports in some cases
 // @ts-ignore
+import { ChatRole } from './chat-role';
+// May contain unused imports in some cases
+// @ts-ignore
 import { ProviderAPIKeysProperty } from './provider-apikeys-property';
+// May contain unused imports in some cases
+// @ts-ignore
+import { ToolCallProperty } from './tool-call-property';
+// May contain unused imports in some cases
+// @ts-ignore
+import { ToolCallProperty1 } from './tool-call-property1';
 
 /**
  * Base chat request.
@@ -108,6 +117,12 @@ export interface ChatExperimentRequest {
      * @memberof ChatExperimentRequest
      */
     'user'?: string;
+    /**
+     * 
+     * @type {ToolCallProperty1}
+     * @memberof ChatExperimentRequest
+     */
+    'tool_call'?: ToolCallProperty1;
     /**
      * If an experiment ID is provided a model configuration will be sampled from the experiments active model configurations.
      * @type {string}

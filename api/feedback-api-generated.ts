@@ -26,6 +26,10 @@ import { FeedbackSubmitResponse } from '../models';
 import { FeedbackTypeProperty } from '../models';
 // @ts-ignore
 import { HTTPValidationError } from '../models';
+// @ts-ignore
+import { LocationPropertyInner } from '../models';
+// @ts-ignore
+import { ValidationError } from '../models';
 import { paginate } from "../pagination/paginate";
 import { requestBeforeHook } from '../requestBeforeHook';
 /**
