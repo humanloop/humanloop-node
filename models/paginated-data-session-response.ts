@@ -13,6 +13,9 @@
 
 // May contain unused imports in some cases
 // @ts-ignore
+import { SessionProjectResponse } from './session-project-response';
+// May contain unused imports in some cases
+// @ts-ignore
 import { SessionResponse } from './session-response';
 
 /**

@@ -13,6 +13,9 @@
 
 // May contain unused imports in some cases
 // @ts-ignore
+import { LocationPropertyInner } from './location-property-inner';
+// May contain unused imports in some cases
+// @ts-ignore
 import { ValidationError } from './validation-error';
 
 /**

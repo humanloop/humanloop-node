@@ -21,9 +21,13 @@ import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } fr
 // @ts-ignore
 import { ChatMessage } from '../models';
 // @ts-ignore
+import { ChatRole } from '../models';
+// @ts-ignore
 import { CreateTestsetRequest } from '../models';
 // @ts-ignore
 import { HTTPValidationError } from '../models';
+// @ts-ignore
+import { LocationPropertyInner } from '../models';
 // @ts-ignore
 import { PaginatedDataTestcaseResponse } from '../models';
 // @ts-ignore
@@ -35,7 +39,11 @@ import { TestsetResponse } from '../models';
 // @ts-ignore
 import { TestsetsCreateTestcaseRequest } from '../models';
 // @ts-ignore
+import { ToolCallProperty } from '../models';
+// @ts-ignore
 import { UpdateTestsetRequest } from '../models';
+// @ts-ignore
+import { ValidationError } from '../models';
 import { paginate } from "../pagination/paginate";
 import { requestBeforeHook } from '../requestBeforeHook';
 /**
