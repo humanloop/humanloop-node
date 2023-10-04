@@ -16,10 +16,16 @@
 import { ChatMessage } from './chat-message';
 // May contain unused imports in some cases
 // @ts-ignore
+import { ChatRole } from './chat-role';
+// May contain unused imports in some cases
+// @ts-ignore
 import { ModelConfigurationProperty } from './model-configuration-property';
 // May contain unused imports in some cases
 // @ts-ignore
 import { ProviderAPIKeysProperty } from './provider-apikeys-property';
+// May contain unused imports in some cases
+// @ts-ignore
+import { ToolCallProperty } from './tool-call-property';
 
 /**
  * Base chat request.

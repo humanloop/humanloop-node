@@ -13,7 +13,19 @@
 
 // May contain unused imports in some cases
 // @ts-ignore
+import { ChatMessage } from './chat-message';
+// May contain unused imports in some cases
+// @ts-ignore
+import { ChatRole } from './chat-role';
+// May contain unused imports in some cases
+// @ts-ignore
+import { Target } from './target';
+// May contain unused imports in some cases
+// @ts-ignore
 import { TestcaseResponse } from './testcase-response';
+// May contain unused imports in some cases
+// @ts-ignore
+import { ToolCallProperty } from './tool-call-property';
 
 /**
  * 

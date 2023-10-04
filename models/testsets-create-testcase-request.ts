@@ -16,6 +16,9 @@
 import { ChatMessage } from './chat-message';
 // May contain unused imports in some cases
 // @ts-ignore
+import { ChatRole } from './chat-role';
+// May contain unused imports in some cases
+// @ts-ignore
 import { CreateTestcaseByDatapointsRequest } from './create-testcase-by-datapoints-request';
 // May contain unused imports in some cases
 // @ts-ignore
@@ -23,6 +26,9 @@ import { CreateTestcaseRequest } from './create-testcase-request';
 // May contain unused imports in some cases
 // @ts-ignore
 import { Target } from './target';
+// May contain unused imports in some cases
+// @ts-ignore
+import { ToolCallProperty } from './tool-call-property';
 
 /**
  * @type TestsetsCreateTestcaseRequest

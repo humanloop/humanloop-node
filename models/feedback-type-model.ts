@@ -17,6 +17,9 @@ import { CategoricalFeedbackLabel } from './categorical-feedback-label';
 // May contain unused imports in some cases
 // @ts-ignore
 import { FeedbackTypeProperty } from './feedback-type-property';
+// May contain unused imports in some cases
+// @ts-ignore
+import { LabelSentiment } from './label-sentiment';
 
 /**
  * 

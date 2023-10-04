@@ -16,6 +16,18 @@
 import { ChatDataResponse } from './chat-data-response';
 // May contain unused imports in some cases
 // @ts-ignore
+import { ChatMessage } from './chat-message';
+// May contain unused imports in some cases
+// @ts-ignore
+import { ChatRole } from './chat-role';
+// May contain unused imports in some cases
+// @ts-ignore
+import { ToolCallProperty } from './tool-call-property';
+// May contain unused imports in some cases
+// @ts-ignore
+import { ToolResultResponse } from './tool-result-response';
+// May contain unused imports in some cases
+// @ts-ignore
 import { UsageProperty } from './usage-property';
 
 /**
