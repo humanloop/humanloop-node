@@ -1,8 +1,13 @@
-# humanloop
+<div align="center">
 
+[![Visit Humanloop](./header.png)](https://humanloop.com)
 
-[![npm](https://img.shields.io/badge/npm-v0.5.17-blue)](https://www.npmjs.com/package/humanloop/v/0.5.17)
+# [Humanloop](https://humanloop.com)
+
+[![npm](https://img.shields.io/badge/npm-v0.5.18-blue)](https://www.npmjs.com/package/humanloop/v/0.5.18)
 [![GitHub last commit](https://img.shields.io/github/last-commit/humanloop/humanloop-node.svg)](https://github.com/humanloop/humanloop-node/commits)
+
+</div>
 
 ## Table of Contents
 
