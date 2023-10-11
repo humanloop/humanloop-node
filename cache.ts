@@ -20,7 +20,7 @@ export class ConfigCache {
   async getConfig(
     projectId: ProjectId,
     environment: EnvironmentName | undefined,
-    humanloopConnectionParams?: { apiKey?: string; basePath?: string },
+    humanloopConnectionParams?: { apiKey: string; basePath?: string },
     refreshInterval: number = 1000 * 60 // 1 minute
   ): Promise<ConfigResponse> {
     // If the value is cached, return it
@@ -87,7 +87,7 @@ export class ConfigCache {
   private async fetchConfig(
     projectId: ProjectId,
     environment: EnvironmentName | undefined,
-    humanloopConnectionParams?: { apiKey?: string; basePath?: string }
+    humanloopConnectionParams?: { apiKey: string; basePath?: string }
   ): Promise<ConfigResponse> {
     const humanloop = new Humanloop(humanloopConnectionParams);
 

@@ -57,7 +57,7 @@ export type CompletionDeployedRequestNoProxy =
  * -  The return type is no longer wrapped in an `AxiosResponse`.
  */
 export async function completeDeployed(
-  humanloopConnectionParams: { apiKey?: string; basePath?: string },
+  humanloopConnectionParams: { apiKey: string; basePath?: string },
   requestParameters: CompletionDeployedRequestNoProxy,
   options?: AxiosRequestConfig,
   refreshInterval?: number
@@ -336,7 +336,7 @@ const logCompletion = async (
   completion: CompletionResponse,
   modelConfig: ModelConfigResponse,
   providerLatency: number,
-  humanloopConnectionParams?: { apiKey?: string; basePath?: string }
+  humanloopConnectionParams?: { apiKey: string; basePath?: string }
 ) => {
   const humanloop = new Humanloop(humanloopConnectionParams);
 
@@ -373,7 +373,7 @@ const logCompletionError = async (
   error: string,
   modelConfig: ModelConfigResponse,
   providerLatency?: number,
-  humanloopConnectionParams?: { apiKey?: string; basePath?: string }
+  humanloopConnectionParams?: { apiKey: string; basePath?: string }
 ) => {
   const humanloop = new Humanloop(humanloopConnectionParams);
 
