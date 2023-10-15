@@ -27,10 +27,20 @@
   * [`humanloop.completeDeployed`](#humanloopcompletedeployed)
   * [`humanloop.completeExperiment`](#humanloopcompleteexperiment)
   * [`humanloop.completeModelConfiguration`](#humanloopcompletemodelconfiguration)
+  * [`humanloop.datapoints.delete`](#humanloopdatapointsdelete)
+  * [`humanloop.datapoints.get`](#humanloopdatapointsget)
+  * [`humanloop.datapoints.update`](#humanloopdatapointsupdate)
+  * [`humanloop.datasets.create`](#humanloopdatasetscreate)
+  * [`humanloop.datasets.createDatapoint`](#humanloopdatasetscreatedatapoint)
+  * [`humanloop.datasets.delete`](#humanloopdatasetsdelete)
+  * [`humanloop.datasets.get`](#humanloopdatasetsget)
+  * [`humanloop.datasets.listAllForProject`](#humanloopdatasetslistallforproject)
+  * [`humanloop.datasets.listDatapoints`](#humanloopdatasetslistdatapoints)
+  * [`humanloop.datasets.update`](#humanloopdatasetsupdate)
   * [`humanloop.evaluations.create`](#humanloopevaluationscreate)
   * [`humanloop.evaluations.get`](#humanloopevaluationsget)
   * [`humanloop.evaluations.listAllForProject`](#humanloopevaluationslistallforproject)
-  * [`humanloop.evaluations.listTestcases`](#humanloopevaluationslisttestcases)
+  * [`humanloop.evaluations.listDatapoints`](#humanloopevaluationslistdatapoints)
   * [`humanloop.evaluators.create`](#humanloopevaluatorscreate)
   * [`humanloop.evaluators.delete`](#humanloopevaluatorsdelete)
   * [`humanloop.evaluators.list`](#humanloopevaluatorslist)
@@ -41,6 +51,10 @@
   * [`humanloop.experiments.sample`](#humanloopexperimentssample)
   * [`humanloop.experiments.update`](#humanloopexperimentsupdate)
   * [`humanloop.feedback`](#humanloopfeedback)
+  * [`humanloop.finetunes.create`](#humanloopfinetunescreate)
+  * [`humanloop.finetunes.listAllForProject`](#humanloopfinetuneslistallforproject)
+  * [`humanloop.finetunes.summary`](#humanloopfinetunessummary)
+  * [`humanloop.finetunes.update`](#humanloopfinetunesupdate)
   * [`humanloop.log`](#humanlooplog)
   * [`humanloop.logs.update`](#humanlooplogsupdate)
   * [`humanloop.logs.updateByRef`](#humanlooplogsupdatebyref)
@@ -63,16 +77,6 @@
   * [`humanloop.sessions.create`](#humanloopsessionscreate)
   * [`humanloop.sessions.get`](#humanloopsessionsget)
   * [`humanloop.sessions.list`](#humanloopsessionslist)
-  * [`humanloop.testcases.delete`](#humanlooptestcasesdelete)
-  * [`humanloop.testcases.get`](#humanlooptestcasesget)
-  * [`humanloop.testcases.update`](#humanlooptestcasesupdate)
-  * [`humanloop.testsets.create`](#humanlooptestsetscreate)
-  * [`humanloop.testsets.createTestcase`](#humanlooptestsetscreatetestcase)
-  * [`humanloop.testsets.delete`](#humanlooptestsetsdelete)
-  * [`humanloop.testsets.get`](#humanlooptestsetsget)
-  * [`humanloop.testsets.listAllForProject`](#humanlooptestsetslistallforproject)
-  * [`humanloop.testsets.listTestcases`](#humanlooptestsetslisttestcases)
-  * [`humanloop.testsets.update`](#humanlooptestsetsupdate)
 
 <!-- tocstop -->
 
@@ -934,6 +938,343 @@ End-user ID passed through to provider call.
 ---
 
 
+### `humanloop.datapoints.delete`
+
+Delete a list of testsets by their IDs.
+
+#### 🛠️ Usage
+
+```typescript
+const deleteResponse = await humanloop.datapoints.delete([
+  "requestBody_example",
+]);
+```
+
+#### ⚙️ Request Body
+
+`string`[]
+
+#### 🌐 Endpoint
+
+`/datapoints` `DELETE`
+
+[🔙 **Back to Table of Contents**](#table-of-contents)
+
+---
+
+
+### `humanloop.datapoints.get`
+
+Get a datapoint by ID.
+
+#### 🛠️ Usage
+
+```typescript
+const getResponse = await humanloop.datapoints.get({
+  id: "id_example",
+});
+```
+
+#### ⚙️ Parameters
+
+##### id: `string`
+
+String ID of datapoint. Starts with `evtc_`.
+
+#### 🔄 Return
+
+[DatapointResponse](./models/datapoint-response.ts)
+
+#### 🌐 Endpoint
+
+`/datapoints/{id}` `GET`
+
+[🔙 **Back to Table of Contents**](#table-of-contents)
+
+---
+
+
+### `humanloop.datapoints.update`
+
+Edit the input, messages and criteria fields of a datapoint. The fields passed in the request are the ones edited.  Passing `null` as a value for a field will delete that field. In order to signify not changing a field, it should be omitted from the request body.
+
+#### 🛠️ Usage
+
+```typescript
+const updateResponse = await humanloop.datapoints.update({
+  id: "id_example",
+});
+```
+
+#### ⚙️ Parameters
+
+##### id: `string`
+
+String ID of datapoint. Starts with `evtc_`.
+
+##### inputs: Record<string, `string`>
+
+The inputs to the prompt template for this datapoint.
+
+##### messages: [`ChatMessage`](./models/chat-message.ts)[]
+
+The chat messages for this datapoint.
+
+##### target: Record<string, [`Target`](./models/target.ts)>
+
+Object with criteria necessary to evaluate this datapoint.
+
+#### 🔄 Return
+
+[DatapointResponse](./models/datapoint-response.ts)
+
+#### 🌐 Endpoint
+
+`/datapoints/{id}` `PATCH`
+
+[🔙 **Back to Table of Contents**](#table-of-contents)
+
+---
+
+
+### `humanloop.datasets.create`
+
+Create a new dataset for a project.
+
+#### 🛠️ Usage
+
+```typescript
+const createResponse = await humanloop.datasets.create({
+  projectId: "projectId_example",
+  description: "description_example",
+  name: "name_example",
+});
+```
+
+#### ⚙️ Parameters
+
+##### description: `string`
+
+The description of the dataset.
+
+##### name: `string`
+
+The name of the dataset.
+
+##### projectId: `string`
+
+#### 🔄 Return
+
+[DatasetResponse](./models/dataset-response.ts)
+
+#### 🌐 Endpoint
+
+`/projects/{project_id}/datasets` `POST`
+
+[🔙 **Back to Table of Contents**](#table-of-contents)
+
+---
+
+
+### `humanloop.datasets.createDatapoint`
+
+Create a new testcase for a testset.
+
+#### 🛠️ Usage
+
+```typescript
+const createDatapointResponse = await humanloop.datasets.createDatapoint({
+  datasetId: "dataset_id_example",
+  requestBody: {
+    log_ids: ["log_ids_example"],
+  },
+});
+```
+
+#### ⚙️ Parameters
+
+##### datasetId: `string`
+
+String ID of dataset. Starts with `evts_`.
+
+##### requestBody: [`DatasetsCreateDatapointRequest`](./models/datasets-create-datapoint-request.ts)
+
+#### 🔄 Return
+
+[DatapointResponse](./models/datapoint-response.ts)
+
+#### 🌐 Endpoint
+
+`/datasets/{dataset_id}/datapoints` `POST`
+
+[🔙 **Back to Table of Contents**](#table-of-contents)
+
+---
+
+
+### `humanloop.datasets.delete`
+
+Delete a dataset by ID.
+
+#### 🛠️ Usage
+
+```typescript
+const deleteResponse = await humanloop.datasets.delete({
+  id: "id_example",
+});
+```
+
+#### ⚙️ Parameters
+
+##### id: `string`
+
+String ID of dataset. Starts with `evts_`.
+
+#### 🔄 Return
+
+[DatasetResponse](./models/dataset-response.ts)
+
+#### 🌐 Endpoint
+
+`/datasets/{id}` `DELETE`
+
+[🔙 **Back to Table of Contents**](#table-of-contents)
+
+---
+
+
+### `humanloop.datasets.get`
+
+Get a single dataset by ID.
+
+#### 🛠️ Usage
+
+```typescript
+const getResponse = await humanloop.datasets.get({
+  id: "id_example",
+});
+```
+
+#### ⚙️ Parameters
+
+##### id: `string`
+
+String ID of dataset. Starts with `evts_`.
+
+#### 🔄 Return
+
+[DatasetResponse](./models/dataset-response.ts)
+
+#### 🌐 Endpoint
+
+`/datasets/{id}` `GET`
+
+[🔙 **Back to Table of Contents**](#table-of-contents)
+
+---
+
+
+### `humanloop.datasets.listAllForProject`
+
+Get all datasets for a project.
+
+#### 🛠️ Usage
+
+```typescript
+const listAllForProjectResponse = await humanloop.datasets.listAllForProject({
+  projectId: "projectId_example",
+});
+```
+
+#### ⚙️ Parameters
+
+##### projectId: `string`
+
+#### 🔄 Return
+
+[DatasetResponse](./models/dataset-response.ts)
+
+#### 🌐 Endpoint
+
+`/projects/{project_id}/datasets` `GET`
+
+[🔙 **Back to Table of Contents**](#table-of-contents)
+
+---
+
+
+### `humanloop.datasets.listDatapoints`
+
+Get datapoints for a dataset.
+
+#### 🛠️ Usage
+
+```typescript
+const listDatapointsResponse = await humanloop.datasets.listDatapoints({
+  datasetId: "datasetId_example",
+  page: 0,
+  size: 50,
+});
+```
+
+#### ⚙️ Parameters
+
+##### datasetId: `string`
+
+String ID of dataset. Starts with `evts_`.
+
+##### page: `number`
+
+##### size: `number`
+
+#### 🌐 Endpoint
+
+`/datasets/{dataset_id}/datapoints` `GET`
+
+[🔙 **Back to Table of Contents**](#table-of-contents)
+
+---
+
+
+### `humanloop.datasets.update`
+
+Update a testset by ID.
+
+#### 🛠️ Usage
+
+```typescript
+const updateResponse = await humanloop.datasets.update({
+  id: "id_example",
+});
+```
+
+#### ⚙️ Parameters
+
+##### id: `string`
+
+String ID of testset. Starts with `evts_`.
+
+##### description: `string`
+
+The description of the dataset.
+
+##### name: `string`
+
+The name of the dataset.
+
+#### 🔄 Return
+
+[DatasetResponse](./models/dataset-response.ts)
+
+#### 🌐 Endpoint
+
+`/datasets/{id}` `PATCH`
+
+[🔙 **Back to Table of Contents**](#table-of-contents)
+
+---
+
+
 ### `humanloop.evaluations.create`
 
 Create an evaluation.
@@ -945,7 +1286,7 @@ const createResponse = await humanloop.evaluations.create({
   projectId: "projectId_example",
   config_id: "config_id_example",
   evaluator_ids: ["evaluator_ids_example"],
-  testset_id: "testset_id_example",
+  dataset_id: "dataset_id_example",
 });
 ```
 
@@ -957,11 +1298,11 @@ ID of the config to evaluate. Starts with `config_`.
 
 ##### evaluator_ids: `string`[]
 
-IDs of evaluators to run on the testset. IDs start with `evfn_`
+IDs of evaluators to run on the dataset. IDs start with `evfn_`
 
-##### testset_id: `string`
+##### dataset_id: `string`
 
-ID of the testset to use in this evaluation. Starts with `evts_`.
+ID of the dataset to use in this evaluation. Starts with `evts_`.
 
 ##### projectId: `string`
 
@@ -1054,14 +1395,14 @@ Whether to include evaluator aggregates in the response.
 ---
 
 
-### `humanloop.evaluations.listTestcases`
+### `humanloop.evaluations.listDatapoints`
 
 Get testcases by evaluation ID.
 
 #### 🛠️ Usage
 
 ```typescript
-const listTestcasesResponse = await humanloop.evaluations.listTestcases({
+const listDatapointsResponse = await humanloop.evaluations.listDatapoints({
   id: "id_example",
   page: 1,
   size: 10,
@@ -1084,7 +1425,7 @@ Number of evaluation results to retrieve.
 
 #### 🌐 Endpoint
 
-`/evaluations/{id}/testcases` `GET`
+`/evaluations/{id}/datapoints` `GET`
 
 [🔙 **Back to Table of Contents**](#table-of-contents)
 
@@ -1473,6 +1814,169 @@ If true, the value for this feedback is unset.
 #### 🌐 Endpoint
 
 `/feedback` `POST`
+
+[🔙 **Back to Table of Contents**](#table-of-contents)
+
+---
+
+
+### `humanloop.finetunes.create`
+
+Trigger the fine-tuning process for a specific base model and data snapshot.
+
+#### 🛠️ Usage
+
+```typescript
+const createResponse = await humanloop.finetunes.create({
+  projectId: "projectId_example",
+  name: "name_example",
+  dataset_id: "dataset_id_example",
+  config: {
+    base_model: "base_model_example",
+  },
+});
+```
+
+#### ⚙️ Parameters
+
+##### name: `string`
+
+User defined friendly name for a finetuning run
+
+##### dataset_id: `string`
+
+ID of dataset used for finetuning
+
+##### config: [`FinetuningConfigProperty`](./models/finetuning-config-property.ts)
+
+##### projectId: `string`
+
+##### metadata: `object`
+
+Any additional metadata that you would like to log for reference.
+
+##### provider_api_keys: [`ProviderAPIKeysProperty`](./models/provider-apikeys-property.ts)
+
+#### 🔄 Return
+
+[FinetuneResponse](./models/finetune-response.ts)
+
+#### 🌐 Endpoint
+
+`/projects/{project_id}/finetunes` `POST`
+
+[🔙 **Back to Table of Contents**](#table-of-contents)
+
+---
+
+
+### `humanloop.finetunes.listAllForProject`
+
+Get a list of all fine-tuned models associated to a given project.
+
+#### 🛠️ Usage
+
+```typescript
+const listAllForProjectResponse = await humanloop.finetunes.listAllForProject({
+  projectId: "projectId_example",
+});
+```
+
+#### ⚙️ Parameters
+
+##### projectId: `string`
+
+#### 🔄 Return
+
+[FinetuneResponse](./models/finetune-response.ts)
+
+#### 🌐 Endpoint
+
+`/projects/{project_id}/finetunes` `GET`
+
+[🔙 **Back to Table of Contents**](#table-of-contents)
+
+---
+
+
+### `humanloop.finetunes.summary`
+
+Checks data for errors and generates finetune data summary.  Does not actually trigger the finetuning process or persist the data.
+
+#### 🛠️ Usage
+
+```typescript
+const summaryResponse = await humanloop.finetunes.summary({
+  projectId: "projectId_example",
+  name: "name_example",
+  dataset_id: "dataset_id_example",
+  config: {
+    base_model: "base_model_example",
+  },
+});
+```
+
+#### ⚙️ Parameters
+
+##### name: `string`
+
+User defined friendly name for a finetuning run
+
+##### dataset_id: `string`
+
+ID of dataset used for finetuning
+
+##### config: [`FinetuningConfigProperty`](./models/finetuning-config-property.ts)
+
+##### projectId: `string`
+
+##### metadata: `object`
+
+Any additional metadata that you would like to log for reference.
+
+##### provider_api_keys: [`ProviderAPIKeysProperty`](./models/provider-apikeys-property.ts)
+
+#### 🔄 Return
+
+[FinetuneDataSummary](./models/finetune-data-summary.ts)
+
+#### 🌐 Endpoint
+
+`/projects/{project_id}/finetunes/summary` `POST`
+
+[🔙 **Back to Table of Contents**](#table-of-contents)
+
+---
+
+
+### `humanloop.finetunes.update`
+
+Update user-specified attributes of the specified finetuned models.
+
+#### 🛠️ Usage
+
+```typescript
+const updateResponse = await humanloop.finetunes.update({
+  id: "id_example",
+  projectId: "projectId_example",
+});
+```
+
+#### ⚙️ Parameters
+
+##### id: `string`
+
+##### projectId: `string`
+
+##### name: `string`
+
+#### 🔄 Return
+
+[FinetuneResponse](./models/finetune-response.ts)
+
+#### 🌐 Endpoint
+
+`/finetunes/{id}` `PATCH`
 
 [🔙 **Back to Table of Contents**](#table-of-contents)
 
@@ -2402,343 +2906,6 @@ Number of sessions to retrieve.
 #### 🌐 Endpoint
 
 `/sessions` `GET`
-
-[🔙 **Back to Table of Contents**](#table-of-contents)
-
----
-
-
-### `humanloop.testcases.delete`
-
-Delete a list of testsets by their IDs.
-
-#### 🛠️ Usage
-
-```typescript
-const deleteResponse = await humanloop.testcases.delete([
-  "requestBody_example",
-]);
-```
-
-#### ⚙️ Request Body
-
-`string`[]
-
-#### 🌐 Endpoint
-
-`/testcases` `DELETE`
-
-[🔙 **Back to Table of Contents**](#table-of-contents)
-
----
-
-
-### `humanloop.testcases.get`
-
-Get a testcase by ID.
-
-#### 🛠️ Usage
-
-```typescript
-const getResponse = await humanloop.testcases.get({
-  id: "id_example",
-});
-```
-
-#### ⚙️ Parameters
-
-##### id: `string`
-
-String ID of testcase. Starts with `evtc_`.
-
-#### 🔄 Return
-
-[TestcaseResponse](./models/testcase-response.ts)
-
-#### 🌐 Endpoint
-
-`/testcases/{id}` `GET`
-
-[🔙 **Back to Table of Contents**](#table-of-contents)
-
----
-
-
-### `humanloop.testcases.update`
-
-Edit the input, messages and criteria fields of a testcase. The fields passed in the request are the ones edited.  Passing `null` as a value for a field will delete that field. In order to signify not changing a field, it should be omitted from the request body.
-
-#### 🛠️ Usage
-
-```typescript
-const updateResponse = await humanloop.testcases.update({
-  id: "id_example",
-});
-```
-
-#### ⚙️ Parameters
-
-##### id: `string`
-
-String ID of testcase. Starts with `evtc_`.
-
-##### inputs: Record<string, `string`>
-
-The inputs to the prompt template for this testcase.
-
-##### messages: [`ChatMessage`](./models/chat-message.ts)[]
-
-The chat messages for this testcase.
-
-##### target: Record<string, [`Target`](./models/target.ts)>
-
-Object with criteria necessary to evaluate this testcase.
-
-#### 🔄 Return
-
-[TestcaseResponse](./models/testcase-response.ts)
-
-#### 🌐 Endpoint
-
-`/testcases/{id}` `PATCH`
-
-[🔙 **Back to Table of Contents**](#table-of-contents)
-
----
-
-
-### `humanloop.testsets.create`
-
-Create a new testset for a project.
-
-#### 🛠️ Usage
-
-```typescript
-const createResponse = await humanloop.testsets.create({
-  projectId: "projectId_example",
-  description: "description_example",
-  name: "name_example",
-});
-```
-
-#### ⚙️ Parameters
-
-##### description: `string`
-
-The description of the evaluation testset.
-
-##### name: `string`
-
-The name of the evaluation testset.
-
-##### projectId: `string`
-
-#### 🔄 Return
-
-[TestsetResponse](./models/testset-response.ts)
-
-#### 🌐 Endpoint
-
-`/projects/{project_id}/testsets` `POST`
-
-[🔙 **Back to Table of Contents**](#table-of-contents)
-
----
-
-
-### `humanloop.testsets.createTestcase`
-
-Create a new testcase for a testset.
-
-#### 🛠️ Usage
-
-```typescript
-const createTestcaseResponse = await humanloop.testsets.createTestcase({
-  testsetId: "testset_id_example",
-  requestBody: {
-    datapoint_ids: ["datapoint_ids_example"],
-  },
-});
-```
-
-#### ⚙️ Parameters
-
-##### testsetId: `string`
-
-String ID of testset. Starts with `evts_`.
-
-##### requestBody: [`TestsetsCreateTestcaseRequest`](./models/testsets-create-testcase-request.ts)
-
-#### 🔄 Return
-
-[TestcaseResponse](./models/testcase-response.ts)
-
-#### 🌐 Endpoint
-
-`/testsets/{testset_id}/testcases` `POST`
-
-[🔙 **Back to Table of Contents**](#table-of-contents)
-
----
-
-
-### `humanloop.testsets.delete`
-
-Delete a testset by ID.
-
-#### 🛠️ Usage
-
-```typescript
-const deleteResponse = await humanloop.testsets.delete({
-  id: "id_example",
-});
-```
-
-#### ⚙️ Parameters
-
-##### id: `string`
-
-String ID of testset. Starts with `evts_`.
-
-#### 🔄 Return
-
-[TestsetResponse](./models/testset-response.ts)
-
-#### 🌐 Endpoint
-
-`/testsets/{id}` `DELETE`
-
-[🔙 **Back to Table of Contents**](#table-of-contents)
-
----
-
-
-### `humanloop.testsets.get`
-
-Get a single testset by ID.
-
-#### 🛠️ Usage
-
-```typescript
-const getResponse = await humanloop.testsets.get({
-  id: "id_example",
-});
-```
-
-#### ⚙️ Parameters
-
-##### id: `string`
-
-String ID of testset. Starts with `evts_`.
-
-#### 🔄 Return
-
-[TestsetResponse](./models/testset-response.ts)
-
-#### 🌐 Endpoint
-
-`/testsets/{id}` `GET`
-
-[🔙 **Back to Table of Contents**](#table-of-contents)
-
----
-
-
-### `humanloop.testsets.listAllForProject`
-
-Get all testsets for a project.
-
-#### 🛠️ Usage
-
-```typescript
-const listAllForProjectResponse = await humanloop.testsets.listAllForProject({
-  projectId: "projectId_example",
-});
-```
-
-#### ⚙️ Parameters
-
-##### projectId: `string`
-
-#### 🔄 Return
-
-[TestsetResponse](./models/testset-response.ts)
-
-#### 🌐 Endpoint
-
-`/projects/{project_id}/testsets` `GET`
-
-[🔙 **Back to Table of Contents**](#table-of-contents)
-
----
-
-
-### `humanloop.testsets.listTestcases`
-
-Get testcases for a testset.
-
-#### 🛠️ Usage
-
-```typescript
-const listTestcasesResponse = await humanloop.testsets.listTestcases({
-  testsetId: "testsetId_example",
-  page: 0,
-  size: 50,
-});
-```
-
-#### ⚙️ Parameters
-
-##### testsetId: `string`
-
-String ID of testset. Starts with `evts_`.
-
-##### page: `number`
-
-##### size: `number`
-
-#### 🌐 Endpoint
-
-`/testsets/{testset_id}/testcases` `GET`
-
-[🔙 **Back to Table of Contents**](#table-of-contents)
-
----
-
-
-### `humanloop.testsets.update`
-
-Update a testset by ID.
-
-#### 🛠️ Usage
-
-```typescript
-const updateResponse = await humanloop.testsets.update({
-  id: "id_example",
-});
-```
-
-#### ⚙️ Parameters
-
-##### id: `string`
-
-String ID of testset. Starts with `evts_`.
-
-##### description: `string`
-
-The description of the evaluation testset.
-
-##### name: `string`
-
-The name of the evaluation testset.
-
-#### 🔄 Return
-
-[TestsetResponse](./models/testset-response.ts)
-
-#### 🌐 Endpoint
-
-`/testsets/{id}` `PATCH`
 
 [🔙 **Back to Table of Contents**](#table-of-contents)
 
