@@ -5,7 +5,7 @@ import {
   Humanloop,
   LogRequest,
   ModelConfigResponse,
-} from "./";
+} from "./index";
 import { OpenAI } from "openai";
 import { AxiosRequestConfig } from "axios";
 import { ChatCompletionMessageParam } from "openai/resources/chat";
