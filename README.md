@@ -55,6 +55,8 @@
   * [`humanloop.finetunes.listAllForProject`](#humanloopfinetuneslistallforproject)
   * [`humanloop.finetunes.summary`](#humanloopfinetunessummary)
   * [`humanloop.finetunes.update`](#humanloopfinetunesupdate)
+  * [`humanloop.logs.delete`](#humanlooplogsdelete)
+  * [`humanloop.logs.list`](#humanlooplogslist)
   * [`humanloop.log`](#humanlooplog)
   * [`humanloop.logs.update`](#humanlooplogsupdate)
   * [`humanloop.logs.updateByRef`](#humanlooplogsupdatebyref)
@@ -1983,6 +1985,68 @@ const updateResponse = await humanloop.finetunes.update({
 ---
 
 
+### `humanloop.logs.delete`
+
+Delete Logs
+
+#### 🛠️ Usage
+
+```typescript
+const deleteResponse = await humanloop.logs.delete({});
+```
+
+#### ⚙️ Parameters
+
+##### id: `string`[]
+
+#### 🌐 Endpoint
+
+`/logs` `DELETE`
+
+[🔙 **Back to Table of Contents**](#table-of-contents)
+
+---
+
+
+### `humanloop.logs.list`
+
+Retrieve paginated logs from the server.  Sorting and filtering are supported through query params. See docstring of get_sorted_filtered_project_data_from_query_params for more details.
+
+#### 🛠️ Usage
+
+```typescript
+const listResponse = await humanloop.logs.list({
+  projectId: "projectId_example",
+  size: 50,
+  page: 0,
+});
+```
+
+#### ⚙️ Parameters
+
+##### projectId: `string`
+
+##### search: `string`
+
+##### metadataSearch: `string`
+
+##### startDate: `string | Date`
+
+##### endDate: `string | Date`
+
+##### size: `number`
+
+##### page: `number`
+
+#### 🌐 Endpoint
+
+`/logs` `GET`
+
+[🔙 **Back to Table of Contents**](#table-of-contents)
+
+---
+
+
 ### `humanloop.log`
 
 Log a datapoint or array of datapoints to your Humanloop project.
@@ -2316,6 +2380,10 @@ Unique project name.
 ##### feedback_types: [`FeedbackTypeRequest`](./models/feedback-type-request.ts)[]
 
 Feedback types to be created.
+
+##### directory_id: `string`
+
+ID of directory to assign project to. Starts with `dir_`. If not provided, the project will be created in the root directory.
 
 #### 🔄 Return
 
@@ -2768,6 +2836,10 @@ ID for a config to set as the project\\\'s active deployment. Starts with \\\'co
 ##### positive_labels: [`PositiveLabel`](./models/positive-label.ts)[]
 
 The full list of labels to treat as positive user feedback.
+
+##### directory_id: `string`
+
+ID of directory to assign project to. Starts with `dir_`.
 
 #### 🔄 Return
 
