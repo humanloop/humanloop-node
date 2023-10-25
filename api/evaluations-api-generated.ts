@@ -65,7 +65,11 @@ import { EvaluatorResponse } from '../models';
 // @ts-ignore
 import { EvaluatorReturnTypeEnum } from '../models';
 // @ts-ignore
-import { FeedbackLabelsProperty } from '../models';
+import { FeedbackResponse } from '../models';
+// @ts-ignore
+import { FeedbackTypeProperty } from '../models';
+// @ts-ignore
+import { FeedbackValueProperty } from '../models';
 // @ts-ignore
 import { HTTPValidationError } from '../models';
 // @ts-ignore
@@ -73,7 +77,11 @@ import { LocationPropertyInner } from '../models';
 // @ts-ignore
 import { LogResponse } from '../models';
 // @ts-ignore
+import { MetricValueResponse } from '../models';
+// @ts-ignore
 import { ModelConfigEvaluatorAggregateResponse } from '../models';
+// @ts-ignore
+import { ObservabilityStatus } from '../models';
 // @ts-ignore
 import { PaginatedDataEvaluationDatapointSnapshotResponse } from '../models';
 // @ts-ignore
@@ -84,6 +92,10 @@ import { ProviderResponseProperty } from '../models';
 import { Target } from '../models';
 // @ts-ignore
 import { ToolCallProperty } from '../models';
+// @ts-ignore
+import { ToolCallProperty1 } from '../models';
+// @ts-ignore
+import { ToolResultResponse } from '../models';
 // @ts-ignore
 import { ValidationError } from '../models';
 // @ts-ignore

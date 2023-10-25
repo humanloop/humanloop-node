@@ -31,9 +31,17 @@ import { ChatMessage } from './chat-message';
 import { ChatRole } from './chat-role';
 import { ConfigProperty2 } from './config-property2';
 import { ConfigResponse } from './config-response';
-import { FeedbackLabelsProperty } from './feedback-labels-property';
+import { EvaluationResultResponse } from './evaluation-result-response';
+import { FeedbackResponse } from './feedback-response';
+import { FeedbackTypeProperty } from './feedback-type-property';
+import { FeedbackValueProperty } from './feedback-value-property';
+import { MetricValueResponse } from './metric-value-response';
+import { ObservabilityStatus } from './observability-status';
 import { ProviderResponseProperty } from './provider-response-property';
 import { ToolCallProperty } from './tool-call-property';
+import { ToolCallProperty1 } from './tool-call-property1';
+import { ToolResultResponse } from './tool-result-response';
+import { ValueProperty } from './value-property';
 
 /**
  * Request model for logging a datapoint.
@@ -96,6 +104,12 @@ export interface LogResponse {
      */
     'metadata'?: object;
     /**
+     * String ID of logged datapoint. Starts with `data_`.
+     * @type {string}
+     * @memberof LogResponse
+     */
+    'id': string;
+    /**
      * Unique user-provided string identifying the datapoint.
      * @type {string}
      * @memberof LogResponse
@@ -127,10 +141,10 @@ export interface LogResponse {
     'config': ConfigResponse;
     /**
      * 
-     * @type {FeedbackLabelsProperty}
+     * @type {Array<FeedbackResponse>}
      * @memberof LogResponse
      */
-    'feedback'?: FeedbackLabelsProperty;
+    'feedback'?: Array<FeedbackResponse>;
     /**
      * User defined timestamp for when the log was created. 
      * @type {string}
@@ -149,12 +163,6 @@ export interface LogResponse {
      * @memberof LogResponse
      */
     'duration'?: number;
-    /**
-     * String ID of logged datapoint. Starts with `data_`.
-     * @type {string}
-     * @memberof LogResponse
-     */
-    'id': string;
     /**
      * 
      * @type {ConfigProperty2}
@@ -191,5 +199,41 @@ export interface LogResponse {
      * @memberof LogResponse
      */
     'finish_reason'?: string;
+    /**
+     * 
+     * @type {Array<MetricValueResponse>}
+     * @memberof LogResponse
+     */
+    'metric_values'?: Array<MetricValueResponse>;
+    /**
+     * 
+     * @type {Array<ToolResultResponse>}
+     * @memberof LogResponse
+     */
+    'tools'?: Array<ToolResultResponse>;
+    /**
+     * 
+     * @type {ToolCallProperty1}
+     * @memberof LogResponse
+     */
+    'tool_call'?: ToolCallProperty1;
+    /**
+     * 
+     * @type {Array<EvaluationResultResponse>}
+     * @memberof LogResponse
+     */
+    'evaluation_results': Array<EvaluationResultResponse>;
+    /**
+     * 
+     * @type {ObservabilityStatus}
+     * @memberof LogResponse
+     */
+    'observability_status': ObservabilityStatus;
+    /**
+     * 
+     * @type {string}
+     * @memberof LogResponse
+     */
+    'updated_at': string;
 }
 
