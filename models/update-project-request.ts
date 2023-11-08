@@ -59,5 +59,11 @@ export interface UpdateProjectRequest {
      * @memberof UpdateProjectRequest
      */
     'positive_labels'?: Array<PositiveLabel>;
+    /**
+     * ID of directory to assign project to. Starts with `dir_`.
+     * @type {string}
+     * @memberof UpdateProjectRequest
+     */
+    'directory_id'?: string;
 }
 

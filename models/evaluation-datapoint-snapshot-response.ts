@@ -33,11 +33,17 @@ import { ConfigProperty2 } from './config-property2';
 import { ConfigResponse } from './config-response';
 import { DatapointResponse } from './datapoint-response';
 import { EvaluationResultResponse } from './evaluation-result-response';
-import { FeedbackLabelsProperty } from './feedback-labels-property';
+import { FeedbackResponse } from './feedback-response';
+import { FeedbackTypeProperty } from './feedback-type-property';
+import { FeedbackValueProperty } from './feedback-value-property';
 import { LogResponse } from './log-response';
+import { MetricValueResponse } from './metric-value-response';
+import { ObservabilityStatus } from './observability-status';
 import { ProviderResponseProperty } from './provider-response-property';
 import { Target } from './target';
 import { ToolCallProperty } from './tool-call-property';
+import { ToolCallProperty1 } from './tool-call-property1';
+import { ToolResultResponse } from './tool-result-response';
 import { ValueProperty } from './value-property';
 
 /**

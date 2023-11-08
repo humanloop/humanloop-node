@@ -61,6 +61,8 @@ import { EnvironmentProjectConfigResponse } from '../models';
 // @ts-ignore
 import { EnvironmentRequest } from '../models';
 // @ts-ignore
+import { EvaluationResultResponse } from '../models';
+// @ts-ignore
 import { EvaluatorArgumentsType } from '../models';
 // @ts-ignore
 import { EvaluatorResponse } from '../models';
@@ -71,13 +73,15 @@ import { FeedbackClass } from '../models';
 // @ts-ignore
 import { FeedbackLabelRequest } from '../models';
 // @ts-ignore
-import { FeedbackLabelsProperty } from '../models';
+import { FeedbackResponse } from '../models';
 // @ts-ignore
 import { FeedbackTypeModel } from '../models';
 // @ts-ignore
 import { FeedbackTypeProperty } from '../models';
 // @ts-ignore
 import { FeedbackTypeRequest } from '../models';
+// @ts-ignore
+import { FeedbackValueProperty } from '../models';
 // @ts-ignore
 import { GetModelConfigResponse } from '../models';
 // @ts-ignore
@@ -89,7 +93,11 @@ import { LocationPropertyInner } from '../models';
 // @ts-ignore
 import { LogResponse } from '../models';
 // @ts-ignore
+import { MetricValueResponse } from '../models';
+// @ts-ignore
 import { ModelConfigEvaluatorAggregateResponse } from '../models';
+// @ts-ignore
+import { ObservabilityStatus } from '../models';
 // @ts-ignore
 import { PaginatedDataLogResponse } from '../models';
 // @ts-ignore
@@ -113,9 +121,15 @@ import { SortOrder } from '../models';
 // @ts-ignore
 import { ToolCallProperty } from '../models';
 // @ts-ignore
+import { ToolCallProperty1 } from '../models';
+// @ts-ignore
+import { ToolResultResponse } from '../models';
+// @ts-ignore
 import { UpdateProjectRequest } from '../models';
 // @ts-ignore
 import { ValidationError } from '../models';
+// @ts-ignore
+import { ValueProperty } from '../models';
 import { paginate } from "../pagination/paginate";
 import { requestBeforeHook } from '../requestBeforeHook';
 /**
@@ -297,6 +311,48 @@ export const ProjectsApiAxiosParamCreator = function (configuration?: Configurat
                 localVarQueryParameter['environment'] = environment;
             }
 
+
+    
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            requestBeforeHook({
+                queryParameters: localVarQueryParameter,
+                requestConfig: localVarRequestOptions,
+                path: localVarPath,
+                configuration
+            });
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Delete a specific project.
+         * @summary Delete
+         * @param {string} id String ID of project. Starts with &#x60;pr_&#x60;.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        delete: async (id: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('delete', 'id', id)
+            const localVarPath = `/projects/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id !== undefined ? id : `-id-`)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions: AxiosRequestConfig = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = configuration && !isBrowser() ? { "User-Agent": configuration.userAgent } : {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication APIKeyHeader required
+            await setApiKeyToObject({ object: localVarHeaderParameter, keyParamName: "X-API-KEY", configuration })
 
     
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -556,7 +612,6 @@ export const ProjectsApiAxiosParamCreator = function (configuration?: Configurat
          * @summary List
          * @param {number} [page] Page offset for pagination.
          * @param {number} [size] Page size for pagination. Number of projects to fetch.
-         * @param {string} [organizationId] ID of organization that fetched projects belong to. Starts with &#x60;org_&#x60;.
          * @param {string} [filter] Case-insensitive filter for project name.
          * @param {string} [userFilter] Case-insensitive filter for users in the project. This filter matches against both email address and name of users.
          * @param {ProjectSortBy} [sortBy] Field to sort projects by
@@ -564,7 +619,7 @@ export const ProjectsApiAxiosParamCreator = function (configuration?: Configurat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        list: async (page?: number, size?: number, organizationId?: string, filter?: string, userFilter?: string, sortBy?: ProjectSortBy, order?: SortOrder, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        list: async (page?: number, size?: number, filter?: string, userFilter?: string, sortBy?: ProjectSortBy, order?: SortOrder, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/projects`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -585,10 +640,6 @@ export const ProjectsApiAxiosParamCreator = function (configuration?: Configurat
 
             if (size !== undefined) {
                 localVarQueryParameter['size'] = size;
-            }
-
-            if (organizationId !== undefined) {
-                localVarQueryParameter['organization_id'] = organizationId;
             }
 
             if (filter !== undefined) {
@@ -868,6 +919,17 @@ export const ProjectsApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
+         * Delete a specific project.
+         * @summary Delete
+         * @param {ProjectsApiDeleteRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async delete(requestParameters: ProjectsApiDeleteRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.delete(requestParameters.id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
          * Remove the model config deployed to environment.  This has no effect if the project does not have an active model config set.
          * @summary Delete Deployed Config
          * @param {ProjectsApiDeleteDeployedConfigRequest} requestParameters Request parameters.
@@ -930,7 +992,7 @@ export const ProjectsApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async list(requestParameters: ProjectsApiListRequest = {}, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginatedDataProjectResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.list(requestParameters.page, requestParameters.size, requestParameters.organizationId, requestParameters.filter, requestParameters.userFilter, requestParameters.sortBy, requestParameters.order, options);
+            const localVarAxiosArgs = await localVarAxiosParamCreator.list(requestParameters.page, requestParameters.size, requestParameters.filter, requestParameters.userFilter, requestParameters.sortBy, requestParameters.order, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -1026,6 +1088,16 @@ export const ProjectsApiFactory = function (configuration?: Configuration, baseP
          */
         deactivateExperiment(requestParameters: ProjectsApiDeactivateExperimentRequest, options?: AxiosRequestConfig): AxiosPromise<ProjectResponse> {
             return localVarFp.deactivateExperiment(requestParameters, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Delete a specific project.
+         * @summary Delete
+         * @param {ProjectsApiDeleteRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        delete(requestParameters: ProjectsApiDeleteRequest, options?: AxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.delete(requestParameters, options).then((request) => request(axios, basePath));
         },
         /**
          * Remove the model config deployed to environment.  This has no effect if the project does not have an active model config set.
@@ -1202,6 +1274,22 @@ export type ProjectsApiDeactivateExperimentRequest = {
 }
 
 /**
+ * Request parameters for delete operation in ProjectsApi.
+ * @export
+ * @interface ProjectsApiDeleteRequest
+ */
+export type ProjectsApiDeleteRequest = {
+    
+    /**
+    * String ID of project. Starts with `pr_`.
+    * @type {string}
+    * @memberof ProjectsApiDelete
+    */
+    readonly id: string
+    
+}
+
+/**
  * Request parameters for deleteDeployedConfig operation in ProjectsApi.
  * @export
  * @interface ProjectsApiDeleteDeployedConfigRequest
@@ -1329,13 +1417,6 @@ export type ProjectsApiListRequest = {
     * @memberof ProjectsApiList
     */
     readonly size?: number
-    
-    /**
-    * ID of organization that fetched projects belong to. Starts with `org_`.
-    * @type {string}
-    * @memberof ProjectsApiList
-    */
-    readonly organizationId?: string
     
     /**
     * Case-insensitive filter for project name.
@@ -1495,6 +1576,18 @@ export class ProjectsApiGenerated extends BaseAPI {
      */
     public deactivateExperiment(requestParameters: ProjectsApiDeactivateExperimentRequest, options?: AxiosRequestConfig) {
         return ProjectsApiFp(this.configuration).deactivateExperiment(requestParameters, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Delete a specific project.
+     * @summary Delete
+     * @param {ProjectsApiDeleteRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ProjectsApiGenerated
+     */
+    public delete(requestParameters: ProjectsApiDeleteRequest, options?: AxiosRequestConfig) {
+        return ProjectsApiFp(this.configuration).delete(requestParameters, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

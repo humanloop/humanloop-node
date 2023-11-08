@@ -106,6 +106,12 @@ export interface ProjectResponse {
      */
     'active_evaluators'?: Array<EvaluatorResponse>;
     /**
+     * String ID of the directory the project belongs to. Starts with `dir_`.
+     * @type {string}
+     * @memberof ProjectResponse
+     */
+    'directory_id'?: string;
+    /**
      * 
      * @type {string}
      * @memberof ProjectResponse

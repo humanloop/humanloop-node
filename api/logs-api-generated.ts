@@ -47,7 +47,15 @@ import { ConfigProperty2 } from '../models';
 // @ts-ignore
 import { ConfigResponse } from '../models';
 // @ts-ignore
+import { EvaluationResultResponse } from '../models';
+// @ts-ignore
 import { FeedbackLabelsProperty } from '../models';
+// @ts-ignore
+import { FeedbackResponse } from '../models';
+// @ts-ignore
+import { FeedbackTypeProperty } from '../models';
+// @ts-ignore
+import { FeedbackValueProperty } from '../models';
 // @ts-ignore
 import { HTTPValidationError } from '../models';
 // @ts-ignore
@@ -59,13 +67,25 @@ import { LogResponse } from '../models';
 // @ts-ignore
 import { LogsLogResponse } from '../models';
 // @ts-ignore
+import { MetricValueResponse } from '../models';
+// @ts-ignore
+import { ObservabilityStatus } from '../models';
+// @ts-ignore
+import { PaginatedDataLogResponse } from '../models';
+// @ts-ignore
 import { ProviderResponseProperty } from '../models';
 // @ts-ignore
 import { ToolCallProperty } from '../models';
 // @ts-ignore
+import { ToolCallProperty1 } from '../models';
+// @ts-ignore
+import { ToolResultResponse } from '../models';
+// @ts-ignore
 import { UpdateLogRequest } from '../models';
 // @ts-ignore
 import { ValidationError } from '../models';
+// @ts-ignore
+import { ValueProperty } from '../models';
 import { paginate } from "../pagination/paginate";
 import { requestBeforeHook } from '../requestBeforeHook';
 /**
@@ -74,6 +94,128 @@ import { requestBeforeHook } from '../requestBeforeHook';
  */
 export const LogsApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
+        /**
+         * 
+         * @summary Delete Logs
+         * @param {Array<string>} [id] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        delete: async (id?: Array<string>, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/logs`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions: AxiosRequestConfig = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = configuration && !isBrowser() ? { "User-Agent": configuration.userAgent } : {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication APIKeyHeader required
+            await setApiKeyToObject({ object: localVarHeaderParameter, keyParamName: "X-API-KEY", configuration })
+            if (id) {
+                localVarQueryParameter['id'] = id;
+            }
+
+
+    
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            requestBeforeHook({
+                queryParameters: localVarQueryParameter,
+                requestConfig: localVarRequestOptions,
+                path: localVarPath,
+                configuration
+            });
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Retrieve paginated logs from the server.  Sorting and filtering are supported through query params. See docstring of get_sorted_filtered_project_data_from_query_params for more details.
+         * @summary Get Logs
+         * @param {string} projectId 
+         * @param {string} [search] 
+         * @param {string} [metadataSearch] 
+         * @param {string | Date} [startDate] 
+         * @param {string | Date} [endDate] 
+         * @param {number} [size] 
+         * @param {number} [page] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        list: async (projectId: string, search?: string, metadataSearch?: string, startDate?: string | Date, endDate?: string | Date, size?: number, page?: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'projectId' is not null or undefined
+            assertParamExists('list', 'projectId', projectId)
+            const localVarPath = `/logs`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions: AxiosRequestConfig = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = configuration && !isBrowser() ? { "User-Agent": configuration.userAgent } : {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication APIKeyHeader required
+            await setApiKeyToObject({ object: localVarHeaderParameter, keyParamName: "X-API-KEY", configuration })
+            if (projectId !== undefined) {
+                localVarQueryParameter['project_id'] = projectId;
+            }
+
+            if (search !== undefined) {
+                localVarQueryParameter['search'] = search;
+            }
+
+            if (metadataSearch !== undefined) {
+                localVarQueryParameter['metadata_search'] = metadataSearch;
+            }
+
+            if (startDate !== undefined) {
+                localVarQueryParameter['start_date'] = (startDate as any instanceof Date) ?
+                    (startDate as any).toISOString().substr(0,10) :
+                    startDate;
+            }
+
+            if (endDate !== undefined) {
+                localVarQueryParameter['end_date'] = (endDate as any instanceof Date) ?
+                    (endDate as any).toISOString().substr(0,10) :
+                    endDate;
+            }
+
+            if (size !== undefined) {
+                localVarQueryParameter['size'] = size;
+            }
+
+            if (page !== undefined) {
+                localVarQueryParameter['page'] = page;
+            }
+
+
+    
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            requestBeforeHook({
+                queryParameters: localVarQueryParameter,
+                requestConfig: localVarRequestOptions,
+                path: localVarPath,
+                configuration
+            });
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
         /**
          * Log a datapoint or array of datapoints to your Humanloop project.
          * @summary Log
@@ -234,6 +376,28 @@ export const LogsApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = LogsApiAxiosParamCreator(configuration)
     return {
         /**
+         * 
+         * @summary Delete Logs
+         * @param {LogsApiDeleteRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async delete(requestParameters: LogsApiDeleteRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.delete(requestParameters.id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Retrieve paginated logs from the server.  Sorting and filtering are supported through query params. See docstring of get_sorted_filtered_project_data_from_query_params for more details.
+         * @summary Get Logs
+         * @param {LogsApiListRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async list(requestParameters: LogsApiListRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginatedDataLogResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.list(requestParameters.projectId, requestParameters.search, requestParameters.metadataSearch, requestParameters.startDate, requestParameters.endDate, requestParameters.size, requestParameters.page, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
          * Log a datapoint or array of datapoints to your Humanloop project.
          * @summary Log
          * @param {LogsApiLogRequest} requestParameters Request parameters.
@@ -277,6 +441,26 @@ export const LogsApiFactory = function (configuration?: Configuration, basePath?
     const localVarFp = LogsApiFp(configuration)
     return {
         /**
+         * 
+         * @summary Delete Logs
+         * @param {LogsApiDeleteRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        delete(requestParameters: LogsApiDeleteRequest, options?: AxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.delete(requestParameters, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Retrieve paginated logs from the server.  Sorting and filtering are supported through query params. See docstring of get_sorted_filtered_project_data_from_query_params for more details.
+         * @summary Get Logs
+         * @param {LogsApiListRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        list(requestParameters: LogsApiListRequest, options?: AxiosRequestConfig): AxiosPromise<PaginatedDataLogResponse> {
+            return localVarFp.list(requestParameters, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Log a datapoint or array of datapoints to your Humanloop project.
          * @summary Log
          * @param {LogsApiLogRequest} requestParameters Request parameters.
@@ -308,6 +492,80 @@ export const LogsApiFactory = function (configuration?: Configuration, basePath?
         },
     };
 };
+
+/**
+ * Request parameters for delete operation in LogsApi.
+ * @export
+ * @interface LogsApiDeleteRequest
+ */
+export type LogsApiDeleteRequest = {
+    
+    /**
+    * 
+    * @type {Array<string>}
+    * @memberof LogsApiDelete
+    */
+    readonly id?: Array<string>
+    
+}
+
+/**
+ * Request parameters for list operation in LogsApi.
+ * @export
+ * @interface LogsApiListRequest
+ */
+export type LogsApiListRequest = {
+    
+    /**
+    * 
+    * @type {string}
+    * @memberof LogsApiList
+    */
+    readonly projectId: string
+    
+    /**
+    * 
+    * @type {string}
+    * @memberof LogsApiList
+    */
+    readonly search?: string
+    
+    /**
+    * 
+    * @type {string}
+    * @memberof LogsApiList
+    */
+    readonly metadataSearch?: string
+    
+    /**
+    * 
+    * @type {string | Date}
+    * @memberof LogsApiList
+    */
+    readonly startDate?: string | Date
+    
+    /**
+    * 
+    * @type {string | Date}
+    * @memberof LogsApiList
+    */
+    readonly endDate?: string | Date
+    
+    /**
+    * 
+    * @type {number}
+    * @memberof LogsApiList
+    */
+    readonly size?: number
+    
+    /**
+    * 
+    * @type {number}
+    * @memberof LogsApiList
+    */
+    readonly page?: number
+    
+}
 
 /**
  * Request parameters for log operation in LogsApi.
@@ -357,6 +615,35 @@ export type LogsApiUpdateByRefRequest = {
  * @extends {BaseAPI}
  */
 export class LogsApiGenerated extends BaseAPI {
+    /**
+     * 
+     * @summary Delete Logs
+     * @param {LogsApiDeleteRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof LogsApiGenerated
+     */
+    public delete(requestParameters: LogsApiDeleteRequest, options?: AxiosRequestConfig) {
+        return LogsApiFp(this.configuration).delete(requestParameters, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Retrieve paginated logs from the server.  Sorting and filtering are supported through query params. See docstring of get_sorted_filtered_project_data_from_query_params for more details.
+     * @summary Get Logs
+     * @param {LogsApiListRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof LogsApiGenerated
+     */
+    public list(requestParameters: LogsApiListRequest, options?: AxiosRequestConfig) {
+        return paginate({
+            initialParameters: requestParameters,
+            request: (parameters: LogsApiListRequest) => {
+                return LogsApiFp(this.configuration).list(parameters, options).then((request) => request(this.axios, this.basePath));
+            },
+        });
+    }
+
     /**
      * Log a datapoint or array of datapoints to your Humanloop project.
      * @summary Log

@@ -8,6 +8,10 @@ describe("client", () => {
     basePath: "http://127.0.0.1:4010",
     openaiApiKey: "OPENAI_TEST_KEY",
   });
+  it('logs.delete', async () => {
+    const response = await humanloop.logs.delete({id: ['id']});
+    expect(response).not.toBeNull();
+  })
   it("list", async () => {
     let page = await humanloop.projects.list();
     const records = page.data.records;

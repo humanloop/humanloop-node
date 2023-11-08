@@ -118,7 +118,7 @@ export const FinetunesApiAxiosParamCreator = function (configuration?: Configura
         },
         /**
          * Get a list of all fine-tuned models associated to a given project.
-         * @summary List
+         * @summary List 
          * @param {string} projectId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -288,7 +288,7 @@ export const FinetunesApiFp = function(configuration?: Configuration) {
         },
         /**
          * Get a list of all fine-tuned models associated to a given project.
-         * @summary List
+         * @summary List 
          * @param {FinetunesApiListAllForProjectRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -341,7 +341,7 @@ export const FinetunesApiFactory = function (configuration?: Configuration, base
         },
         /**
          * Get a list of all fine-tuned models associated to a given project.
-         * @summary List
+         * @summary List 
          * @param {FinetunesApiListAllForProjectRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -464,7 +464,7 @@ export class FinetunesApiGenerated extends BaseAPI {
 
     /**
      * Get a list of all fine-tuned models associated to a given project.
-     * @summary List
+     * @summary List 
      * @param {FinetunesApiListAllForProjectRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
