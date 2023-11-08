@@ -168,7 +168,7 @@ export const ExperimentsApiAxiosParamCreator = function (configuration?: Configu
         },
         /**
          * Get an array of experiments associated to your project.
-         * @summary List
+         * @summary List 
          * @param {string} projectId String ID of project. Starts with &#x60;pr_&#x60;.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -334,7 +334,7 @@ export const ExperimentsApiFp = function(configuration?: Configuration) {
         },
         /**
          * Get an array of experiments associated to your project.
-         * @summary List
+         * @summary List 
          * @param {ExperimentsApiListRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -397,7 +397,7 @@ export const ExperimentsApiFactory = function (configuration?: Configuration, ba
         },
         /**
          * Get an array of experiments associated to your project.
-         * @summary List
+         * @summary List 
          * @param {ExperimentsApiListRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -541,7 +541,7 @@ export class ExperimentsApiGenerated extends BaseAPI {
 
     /**
      * Get an array of experiments associated to your project.
-     * @summary List
+     * @summary List 
      * @param {ExperimentsApiListRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}

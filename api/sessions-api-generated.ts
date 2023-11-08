@@ -140,7 +140,7 @@ export const SessionsApiAxiosParamCreator = function (configuration?: Configurat
         },
         /**
          * Get a page of sessions.
-         * @summary List
+         * @summary List 
          * @param {string} projectId String ID of project to return sessions for. Sessions that contain any datapoints associated to this project will be returned. Starts with &#x60;pr_&#x60;.
          * @param {number} [page] Page to fetch. Starts from 1.
          * @param {number} [size] Number of sessions to retrieve.
@@ -226,7 +226,7 @@ export const SessionsApiFp = function(configuration?: Configuration) {
         },
         /**
          * Get a page of sessions.
-         * @summary List
+         * @summary List 
          * @param {SessionsApiListRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -266,7 +266,7 @@ export const SessionsApiFactory = function (configuration?: Configuration, baseP
         },
         /**
          * Get a page of sessions.
-         * @summary List
+         * @summary List 
          * @param {SessionsApiListRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -355,7 +355,7 @@ export class SessionsApiGenerated extends BaseAPI {
 
     /**
      * Get a page of sessions.
-     * @summary List
+     * @summary List 
      * @param {SessionsApiListRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}

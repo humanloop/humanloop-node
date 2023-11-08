@@ -2,14 +2,14 @@
 
 [![Visit Humanloop](./header.png)](https://humanloop.com)
 
-# [Humanloop](https://humanloop.com)
+# [Humanloop](https://humanloop.com)<a id="humanloop"></a>
 
 [![npm](https://img.shields.io/badge/npm-v0.5.21-blue)](https://www.npmjs.com/package/humanloop/v/0.5.21)
 [![GitHub last commit](https://img.shields.io/github/last-commit/humanloop/humanloop-node.svg)](https://github.com/humanloop/humanloop-node/commits)
 
 </div>
 
-## Table of Contents
+## Table of Contents<a id="table-of-contents"></a>
 
 <!-- toc -->
 
@@ -55,6 +55,8 @@
   * [`humanloop.finetunes.listAllForProject`](#humanloopfinetuneslistallforproject)
   * [`humanloop.finetunes.summary`](#humanloopfinetunessummary)
   * [`humanloop.finetunes.update`](#humanloopfinetunesupdate)
+  * [`humanloop.logs.delete`](#humanlooplogsdelete)
+  * [`humanloop.logs.list`](#humanlooplogslist)
   * [`humanloop.log`](#humanlooplog)
   * [`humanloop.logs.update`](#humanlooplogsupdate)
   * [`humanloop.logs.updateByRef`](#humanlooplogsupdatebyref)
@@ -64,6 +66,7 @@
   * [`humanloop.projects.createFeedbackType`](#humanloopprojectscreatefeedbacktype)
   * [`humanloop.projects.deactivateConfig`](#humanloopprojectsdeactivateconfig)
   * [`humanloop.projects.deactivateExperiment`](#humanloopprojectsdeactivateexperiment)
+  * [`humanloop.projects.delete`](#humanloopprojectsdelete)
   * [`humanloop.projects.deleteDeployedConfig`](#humanloopprojectsdeletedeployedconfig)
   * [`humanloop.projects.deployConfig`](#humanloopprojectsdeployconfig)
   * [`humanloop.projects.export`](#humanloopprojectsexport)
@@ -80,23 +83,23 @@
 
 <!-- tocstop -->
 
-## Installing
+## Installing<a id="installing"></a>
 
-### npm
+### npm<a id="npm"></a>
 ```
 npm install humanloop --save
 ```
 
-### yarn
+### yarn<a id="yarn"></a>
 ```
 yarn add humanloop
 ```
 
-## Streaming Support
+## Streaming Support<a id="streaming-support"></a>
 
 This SDK supports streaming, see example usage in a NextJS application [here](https://github.com/konfig-dev/humanloop-streaming-example/blob/main/pages/api/edge-streaming.ts#L16)
 
-## Getting Started
+## Getting Started<a id="getting-started"></a>
 
 ```typescript
 import { Humanloop } from "humanloop";
@@ -186,14 +189,14 @@ const logResponse = await humanloop.log({
 console.log(logResponse);
 ```
 
-## Reference
+## Reference<a id="reference"></a>
 
 
-### `humanloop.chat`
+### `humanloop.chat`<a id="humanloopchat"></a>
 
 Get a chat response by providing details of the model configuration in the request.
 
-#### 🛠️ Usage
+#### 🛠️ Usage<a id="🛠️-usage"></a>
 
 ```typescript
 const createResponse = await humanloop.chat({
@@ -215,71 +218,71 @@ const createResponse = await humanloop.chat({
 });
 ```
 
-#### ⚙️ Parameters
+#### ⚙️ Parameters<a id="⚙️-parameters"></a>
 
-##### messages: [`ChatMessage`](./models/chat-message.ts)[]
+##### messages: [`ChatMessage`](./models/chat-message.ts)[]<a id="messages-chatmessagemodelschat-messagets"></a>
 
 The messages passed to the to provider chat endpoint.
 
-##### model_config: [`ModelConfigurationProperty`](./models/model-configuration-property.ts)
+##### model_config: [`ModelConfigurationProperty`](./models/model-configuration-property.ts)<a id="model_config-modelconfigurationpropertymodelsmodel-configuration-propertyts"></a>
 
-##### project: `string`
+##### project: `string`<a id="project-string"></a>
 
 Unique project name. If no project exists with this name, a new project will be created.
 
-##### project_id: `string`
+##### project_id: `string`<a id="project_id-string"></a>
 
 Unique ID of a project to associate to the log. Either this or `project` must be provided.
 
-##### session_id: `string`
+##### session_id: `string`<a id="session_id-string"></a>
 
 ID of the session to associate the datapoint.
 
-##### session_reference_id: `string`
+##### session_reference_id: `string`<a id="session_reference_id-string"></a>
 
 A unique string identifying the session to associate the datapoint to. Allows you to log multiple datapoints to a session (using an ID kept by your internal systems) by passing the same `session_reference_id` in subsequent log requests. Specify at most one of this or `session_id`.
 
-##### parent_id: `string`
+##### parent_id: `string`<a id="parent_id-string"></a>
 
 ID associated to the parent datapoint in a session.
 
-##### parent_reference_id: `string`
+##### parent_reference_id: `string`<a id="parent_reference_id-string"></a>
 
 A unique string identifying the previously-logged parent datapoint in a session. Allows you to log nested datapoints with your internal system IDs by passing the same reference ID as `parent_id` in a prior log request. Specify at most one of this or `parent_id`. Note that this cannot refer to a datapoint being logged in the same request.
 
-##### inputs: `object`
+##### inputs: `object`<a id="inputs-object"></a>
 
 The inputs passed to the prompt template.
 
-##### source: `string`
+##### source: `string`<a id="source-string"></a>
 
 Identifies where the model was called from.
 
-##### metadata: `object`
+##### metadata: `object`<a id="metadata-object"></a>
 
 Any additional metadata to record.
 
-##### provider_api_keys: [`ProviderAPIKeysProperty`](./models/provider-apikeys-property.ts)
+##### provider_api_keys: [`ProviderAPIKeysProperty`](./models/provider-apikeys-property.ts)<a id="provider_api_keys-providerapikeyspropertymodelsprovider-apikeys-propertyts"></a>
 
-##### num_samples: `number`
+##### num_samples: `number`<a id="num_samples-number"></a>
 
 The number of chat responses.
 
-##### stream: `boolean`
+##### stream: `boolean`<a id="stream-boolean"></a>
 
 If true, tokens will be sent as data-only server-sent events. If num_samples > 1, samples are streamed back independently.
 
-##### user: `string`
+##### user: `string`<a id="user-string"></a>
 
 End-user ID passed through to provider call.
 
-##### tool_call: [`ToolCallProperty1`](./models/tool-call-property1.ts)
+##### tool_call: [`ToolCallProperty1`](./models/tool-call-property1.ts)<a id="tool_call-toolcallproperty1modelstool-call-property1ts"></a>
 
-#### 🔄 Return
+#### 🔄 Return<a id="🔄-return"></a>
 
 [ChatResponse](./models/chat-response.ts)
 
-#### 🌐 Endpoint
+#### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
 `/chat` `POST`
 
@@ -288,11 +291,11 @@ End-user ID passed through to provider call.
 ---
 
 
-### `humanloop.chatDeployed`
+### `humanloop.chatDeployed`<a id="humanloopchatdeployed"></a>
 
 Get a chat response using the project\'s active deployment.  The active deployment can be a specific model configuration or an experiment.
 
-#### 🛠️ Usage
+#### 🛠️ Usage<a id="🛠️-usage"></a>
 
 ```typescript
 const createDeployedResponse = await humanloop.chatDeployed({
@@ -306,73 +309,73 @@ const createDeployedResponse = await humanloop.chatDeployed({
 });
 ```
 
-#### ⚙️ Parameters
+#### ⚙️ Parameters<a id="⚙️-parameters"></a>
 
-##### messages: [`ChatMessage`](./models/chat-message.ts)[]
+##### messages: [`ChatMessage`](./models/chat-message.ts)[]<a id="messages-chatmessagemodelschat-messagets"></a>
 
 The messages passed to the to provider chat endpoint.
 
-##### project: `string`
+##### project: `string`<a id="project-string"></a>
 
 Unique project name. If no project exists with this name, a new project will be created.
 
-##### project_id: `string`
+##### project_id: `string`<a id="project_id-string"></a>
 
 Unique ID of a project to associate to the log. Either this or `project` must be provided.
 
-##### session_id: `string`
+##### session_id: `string`<a id="session_id-string"></a>
 
 ID of the session to associate the datapoint.
 
-##### session_reference_id: `string`
+##### session_reference_id: `string`<a id="session_reference_id-string"></a>
 
 A unique string identifying the session to associate the datapoint to. Allows you to log multiple datapoints to a session (using an ID kept by your internal systems) by passing the same `session_reference_id` in subsequent log requests. Specify at most one of this or `session_id`.
 
-##### parent_id: `string`
+##### parent_id: `string`<a id="parent_id-string"></a>
 
 ID associated to the parent datapoint in a session.
 
-##### parent_reference_id: `string`
+##### parent_reference_id: `string`<a id="parent_reference_id-string"></a>
 
 A unique string identifying the previously-logged parent datapoint in a session. Allows you to log nested datapoints with your internal system IDs by passing the same reference ID as `parent_id` in a prior log request. Specify at most one of this or `parent_id`. Note that this cannot refer to a datapoint being logged in the same request.
 
-##### inputs: `object`
+##### inputs: `object`<a id="inputs-object"></a>
 
 The inputs passed to the prompt template.
 
-##### source: `string`
+##### source: `string`<a id="source-string"></a>
 
 Identifies where the model was called from.
 
-##### metadata: `object`
+##### metadata: `object`<a id="metadata-object"></a>
 
 Any additional metadata to record.
 
-##### provider_api_keys: [`ProviderAPIKeysProperty`](./models/provider-apikeys-property.ts)
+##### provider_api_keys: [`ProviderAPIKeysProperty`](./models/provider-apikeys-property.ts)<a id="provider_api_keys-providerapikeyspropertymodelsprovider-apikeys-propertyts"></a>
 
-##### num_samples: `number`
+##### num_samples: `number`<a id="num_samples-number"></a>
 
 The number of chat responses.
 
-##### stream: `boolean`
+##### stream: `boolean`<a id="stream-boolean"></a>
 
 If true, tokens will be sent as data-only server-sent events. If num_samples > 1, samples are streamed back independently.
 
-##### user: `string`
+##### user: `string`<a id="user-string"></a>
 
 End-user ID passed through to provider call.
 
-##### tool_call: [`ToolCallProperty1`](./models/tool-call-property1.ts)
+##### tool_call: [`ToolCallProperty1`](./models/tool-call-property1.ts)<a id="tool_call-toolcallproperty1modelstool-call-property1ts"></a>
 
-##### environment: `string`
+##### environment: `string`<a id="environment-string"></a>
 
 The environment name used to create a chat response. If not specified, the default environment will be used.
 
-#### 🔄 Return
+#### 🔄 Return<a id="🔄-return"></a>
 
 [ChatResponse](./models/chat-response.ts)
 
-#### 🌐 Endpoint
+#### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
 `/chat-deployed` `POST`
 
@@ -381,11 +384,11 @@ The environment name used to create a chat response. If not specified, the defau
 ---
 
 
-### `humanloop.chatExperiment`
+### `humanloop.chatExperiment`<a id="humanloopchatexperiment"></a>
 
 Get a chat response for a specific experiment.
 
-#### 🛠️ Usage
+#### 🛠️ Usage<a id="🛠️-usage"></a>
 
 ```typescript
 const createExperimentResponse = await humanloop.chatExperiment({
@@ -400,73 +403,73 @@ const createExperimentResponse = await humanloop.chatExperiment({
 });
 ```
 
-#### ⚙️ Parameters
+#### ⚙️ Parameters<a id="⚙️-parameters"></a>
 
-##### messages: [`ChatMessage`](./models/chat-message.ts)[]
+##### messages: [`ChatMessage`](./models/chat-message.ts)[]<a id="messages-chatmessagemodelschat-messagets"></a>
 
 The messages passed to the to provider chat endpoint.
 
-##### experiment_id: `string`
+##### experiment_id: `string`<a id="experiment_id-string"></a>
 
 If an experiment ID is provided a model configuration will be sampled from the experiments active model configurations.
 
-##### project: `string`
+##### project: `string`<a id="project-string"></a>
 
 Unique project name. If no project exists with this name, a new project will be created.
 
-##### project_id: `string`
+##### project_id: `string`<a id="project_id-string"></a>
 
 Unique ID of a project to associate to the log. Either this or `project` must be provided.
 
-##### session_id: `string`
+##### session_id: `string`<a id="session_id-string"></a>
 
 ID of the session to associate the datapoint.
 
-##### session_reference_id: `string`
+##### session_reference_id: `string`<a id="session_reference_id-string"></a>
 
 A unique string identifying the session to associate the datapoint to. Allows you to log multiple datapoints to a session (using an ID kept by your internal systems) by passing the same `session_reference_id` in subsequent log requests. Specify at most one of this or `session_id`.
 
-##### parent_id: `string`
+##### parent_id: `string`<a id="parent_id-string"></a>
 
 ID associated to the parent datapoint in a session.
 
-##### parent_reference_id: `string`
+##### parent_reference_id: `string`<a id="parent_reference_id-string"></a>
 
 A unique string identifying the previously-logged parent datapoint in a session. Allows you to log nested datapoints with your internal system IDs by passing the same reference ID as `parent_id` in a prior log request. Specify at most one of this or `parent_id`. Note that this cannot refer to a datapoint being logged in the same request.
 
-##### inputs: `object`
+##### inputs: `object`<a id="inputs-object"></a>
 
 The inputs passed to the prompt template.
 
-##### source: `string`
+##### source: `string`<a id="source-string"></a>
 
 Identifies where the model was called from.
 
-##### metadata: `object`
+##### metadata: `object`<a id="metadata-object"></a>
 
 Any additional metadata to record.
 
-##### provider_api_keys: [`ProviderAPIKeysProperty`](./models/provider-apikeys-property.ts)
+##### provider_api_keys: [`ProviderAPIKeysProperty`](./models/provider-apikeys-property.ts)<a id="provider_api_keys-providerapikeyspropertymodelsprovider-apikeys-propertyts"></a>
 
-##### num_samples: `number`
+##### num_samples: `number`<a id="num_samples-number"></a>
 
 The number of chat responses, where each chat response will use a model configuration sampled from the experiment.
 
-##### stream: `boolean`
+##### stream: `boolean`<a id="stream-boolean"></a>
 
 If true, tokens will be sent as data-only server-sent events. If num_samples > 1, samples are streamed back independently.
 
-##### user: `string`
+##### user: `string`<a id="user-string"></a>
 
 End-user ID passed through to provider call.
 
-##### tool_call: [`ToolCallProperty1`](./models/tool-call-property1.ts)
+##### tool_call: [`ToolCallProperty1`](./models/tool-call-property1.ts)<a id="tool_call-toolcallproperty1modelstool-call-property1ts"></a>
 
-#### 🔄 Return
+#### 🔄 Return<a id="🔄-return"></a>
 
 [ChatResponse](./models/chat-response.ts)
 
-#### 🌐 Endpoint
+#### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
 `/chat-experiment` `POST`
 
@@ -475,11 +478,11 @@ End-user ID passed through to provider call.
 ---
 
 
-### `humanloop.chatModelConfiguration`
+### `humanloop.chatModelConfiguration`<a id="humanloopchatmodelconfiguration"></a>
 
 Get chat response for a specific model configuration.
 
-#### 🛠️ Usage
+#### 🛠️ Usage<a id="🛠️-usage"></a>
 
 ```typescript
 const createModelConfigResponse = await humanloop.chatModelConfiguration({
@@ -494,73 +497,73 @@ const createModelConfigResponse = await humanloop.chatModelConfiguration({
 });
 ```
 
-#### ⚙️ Parameters
+#### ⚙️ Parameters<a id="⚙️-parameters"></a>
 
-##### messages: [`ChatMessage`](./models/chat-message.ts)[]
+##### messages: [`ChatMessage`](./models/chat-message.ts)[]<a id="messages-chatmessagemodelschat-messagets"></a>
 
 The messages passed to the to provider chat endpoint.
 
-##### model_config_id: `string`
+##### model_config_id: `string`<a id="model_config_id-string"></a>
 
 Identifies the model configuration used to create a chat response.
 
-##### project: `string`
+##### project: `string`<a id="project-string"></a>
 
 Unique project name. If no project exists with this name, a new project will be created.
 
-##### project_id: `string`
+##### project_id: `string`<a id="project_id-string"></a>
 
 Unique ID of a project to associate to the log. Either this or `project` must be provided.
 
-##### session_id: `string`
+##### session_id: `string`<a id="session_id-string"></a>
 
 ID of the session to associate the datapoint.
 
-##### session_reference_id: `string`
+##### session_reference_id: `string`<a id="session_reference_id-string"></a>
 
 A unique string identifying the session to associate the datapoint to. Allows you to log multiple datapoints to a session (using an ID kept by your internal systems) by passing the same `session_reference_id` in subsequent log requests. Specify at most one of this or `session_id`.
 
-##### parent_id: `string`
+##### parent_id: `string`<a id="parent_id-string"></a>
 
 ID associated to the parent datapoint in a session.
 
-##### parent_reference_id: `string`
+##### parent_reference_id: `string`<a id="parent_reference_id-string"></a>
 
 A unique string identifying the previously-logged parent datapoint in a session. Allows you to log nested datapoints with your internal system IDs by passing the same reference ID as `parent_id` in a prior log request. Specify at most one of this or `parent_id`. Note that this cannot refer to a datapoint being logged in the same request.
 
-##### inputs: `object`
+##### inputs: `object`<a id="inputs-object"></a>
 
 The inputs passed to the prompt template.
 
-##### source: `string`
+##### source: `string`<a id="source-string"></a>
 
 Identifies where the model was called from.
 
-##### metadata: `object`
+##### metadata: `object`<a id="metadata-object"></a>
 
 Any additional metadata to record.
 
-##### provider_api_keys: [`ProviderAPIKeysProperty`](./models/provider-apikeys-property.ts)
+##### provider_api_keys: [`ProviderAPIKeysProperty`](./models/provider-apikeys-property.ts)<a id="provider_api_keys-providerapikeyspropertymodelsprovider-apikeys-propertyts"></a>
 
-##### num_samples: `number`
+##### num_samples: `number`<a id="num_samples-number"></a>
 
 The number of chat responses.
 
-##### stream: `boolean`
+##### stream: `boolean`<a id="stream-boolean"></a>
 
 If true, tokens will be sent as data-only server-sent events. If num_samples > 1, samples are streamed back independently.
 
-##### user: `string`
+##### user: `string`<a id="user-string"></a>
 
 End-user ID passed through to provider call.
 
-##### tool_call: [`ToolCallProperty1`](./models/tool-call-property1.ts)
+##### tool_call: [`ToolCallProperty1`](./models/tool-call-property1.ts)<a id="tool_call-toolcallproperty1modelstool-call-property1ts"></a>
 
-#### 🔄 Return
+#### 🔄 Return<a id="🔄-return"></a>
 
 [ChatResponse](./models/chat-response.ts)
 
-#### 🌐 Endpoint
+#### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
 `/chat-model-config` `POST`
 
@@ -569,11 +572,11 @@ End-user ID passed through to provider call.
 ---
 
 
-### `humanloop.complete`
+### `humanloop.complete`<a id="humanloopcomplete"></a>
 
 Create a completion by providing details of the model configuration in the request.
 
-#### 🛠️ Usage
+#### 🛠️ Usage<a id="🛠️-usage"></a>
 
 ```typescript
 const createResponse = await humanloop.complete({
@@ -591,73 +594,73 @@ const createResponse = await humanloop.complete({
 });
 ```
 
-#### ⚙️ Parameters
+#### ⚙️ Parameters<a id="⚙️-parameters"></a>
 
-##### model_config: [`ModelConfigurationProperty1`](./models/model-configuration-property1.ts)
+##### model_config: [`ModelConfigurationProperty1`](./models/model-configuration-property1.ts)<a id="model_config-modelconfigurationproperty1modelsmodel-configuration-property1ts"></a>
 
-##### project: `string`
+##### project: `string`<a id="project-string"></a>
 
 Unique project name. If no project exists with this name, a new project will be created.
 
-##### project_id: `string`
+##### project_id: `string`<a id="project_id-string"></a>
 
 Unique ID of a project to associate to the log. Either this or `project` must be provided.
 
-##### session_id: `string`
+##### session_id: `string`<a id="session_id-string"></a>
 
 ID of the session to associate the datapoint.
 
-##### session_reference_id: `string`
+##### session_reference_id: `string`<a id="session_reference_id-string"></a>
 
 A unique string identifying the session to associate the datapoint to. Allows you to log multiple datapoints to a session (using an ID kept by your internal systems) by passing the same `session_reference_id` in subsequent log requests. Specify at most one of this or `session_id`.
 
-##### parent_id: `string`
+##### parent_id: `string`<a id="parent_id-string"></a>
 
 ID associated to the parent datapoint in a session.
 
-##### parent_reference_id: `string`
+##### parent_reference_id: `string`<a id="parent_reference_id-string"></a>
 
 A unique string identifying the previously-logged parent datapoint in a session. Allows you to log nested datapoints with your internal system IDs by passing the same reference ID as `parent_id` in a prior log request. Specify at most one of this or `parent_id`. Note that this cannot refer to a datapoint being logged in the same request.
 
-##### inputs: `object`
+##### inputs: `object`<a id="inputs-object"></a>
 
 The inputs passed to the prompt template.
 
-##### source: `string`
+##### source: `string`<a id="source-string"></a>
 
 Identifies where the model was called from.
 
-##### metadata: `object`
+##### metadata: `object`<a id="metadata-object"></a>
 
 Any additional metadata to record.
 
-##### provider_api_keys: [`ProviderAPIKeysProperty`](./models/provider-apikeys-property.ts)
+##### provider_api_keys: [`ProviderAPIKeysProperty`](./models/provider-apikeys-property.ts)<a id="provider_api_keys-providerapikeyspropertymodelsprovider-apikeys-propertyts"></a>
 
-##### num_samples: `number`
+##### num_samples: `number`<a id="num_samples-number"></a>
 
 The number of generations.
 
-##### logprobs: `number`
+##### logprobs: `number`<a id="logprobs-number"></a>
 
 Include the log probabilities of the top n tokens in the provider_response
 
-##### stream: `boolean`
+##### stream: `boolean`<a id="stream-boolean"></a>
 
 If true, tokens will be sent as data-only server-sent events. If num_samples > 1, samples are streamed back independently.
 
-##### suffix: `string`
+##### suffix: `string`<a id="suffix-string"></a>
 
 The suffix that comes after a completion of inserted text. Useful for completions that act like inserts.
 
-##### user: `string`
+##### user: `string`<a id="user-string"></a>
 
 End-user ID passed through to provider call.
 
-#### 🔄 Return
+#### 🔄 Return<a id="🔄-return"></a>
 
 [CompletionResponse](./models/completion-response.ts)
 
-#### 🌐 Endpoint
+#### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
 `/completion` `POST`
 
@@ -666,11 +669,11 @@ End-user ID passed through to provider call.
 ---
 
 
-### `humanloop.completeDeployed`
+### `humanloop.completeDeployed`<a id="humanloopcompletedeployed"></a>
 
 Create a completion using the project\'s active deployment.  The active deployment can be a specific model configuration or an experiment.
 
-#### 🛠️ Usage
+#### 🛠️ Usage<a id="🛠️-usage"></a>
 
 ```typescript
 const createDeployedResponse = await humanloop.completeDeployed({
@@ -679,75 +682,75 @@ const createDeployedResponse = await humanloop.completeDeployed({
 });
 ```
 
-#### ⚙️ Parameters
+#### ⚙️ Parameters<a id="⚙️-parameters"></a>
 
-##### project: `string`
+##### project: `string`<a id="project-string"></a>
 
 Unique project name. If no project exists with this name, a new project will be created.
 
-##### project_id: `string`
+##### project_id: `string`<a id="project_id-string"></a>
 
 Unique ID of a project to associate to the log. Either this or `project` must be provided.
 
-##### session_id: `string`
+##### session_id: `string`<a id="session_id-string"></a>
 
 ID of the session to associate the datapoint.
 
-##### session_reference_id: `string`
+##### session_reference_id: `string`<a id="session_reference_id-string"></a>
 
 A unique string identifying the session to associate the datapoint to. Allows you to log multiple datapoints to a session (using an ID kept by your internal systems) by passing the same `session_reference_id` in subsequent log requests. Specify at most one of this or `session_id`.
 
-##### parent_id: `string`
+##### parent_id: `string`<a id="parent_id-string"></a>
 
 ID associated to the parent datapoint in a session.
 
-##### parent_reference_id: `string`
+##### parent_reference_id: `string`<a id="parent_reference_id-string"></a>
 
 A unique string identifying the previously-logged parent datapoint in a session. Allows you to log nested datapoints with your internal system IDs by passing the same reference ID as `parent_id` in a prior log request. Specify at most one of this or `parent_id`. Note that this cannot refer to a datapoint being logged in the same request.
 
-##### inputs: `object`
+##### inputs: `object`<a id="inputs-object"></a>
 
 The inputs passed to the prompt template.
 
-##### source: `string`
+##### source: `string`<a id="source-string"></a>
 
 Identifies where the model was called from.
 
-##### metadata: `object`
+##### metadata: `object`<a id="metadata-object"></a>
 
 Any additional metadata to record.
 
-##### provider_api_keys: [`ProviderAPIKeysProperty`](./models/provider-apikeys-property.ts)
+##### provider_api_keys: [`ProviderAPIKeysProperty`](./models/provider-apikeys-property.ts)<a id="provider_api_keys-providerapikeyspropertymodelsprovider-apikeys-propertyts"></a>
 
-##### num_samples: `number`
+##### num_samples: `number`<a id="num_samples-number"></a>
 
 The number of generations.
 
-##### logprobs: `number`
+##### logprobs: `number`<a id="logprobs-number"></a>
 
 Include the log probabilities of the top n tokens in the provider_response
 
-##### stream: `boolean`
+##### stream: `boolean`<a id="stream-boolean"></a>
 
 If true, tokens will be sent as data-only server-sent events. If num_samples > 1, samples are streamed back independently.
 
-##### suffix: `string`
+##### suffix: `string`<a id="suffix-string"></a>
 
 The suffix that comes after a completion of inserted text. Useful for completions that act like inserts.
 
-##### user: `string`
+##### user: `string`<a id="user-string"></a>
 
 End-user ID passed through to provider call.
 
-##### environment: `string`
+##### environment: `string`<a id="environment-string"></a>
 
 The environment name used to create a chat response. If not specified, the default environment will be used.
 
-#### 🔄 Return
+#### 🔄 Return<a id="🔄-return"></a>
 
 [CompletionResponse](./models/completion-response.ts)
 
-#### 🌐 Endpoint
+#### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
 `/completion-deployed` `POST`
 
@@ -756,11 +759,11 @@ The environment name used to create a chat response. If not specified, the defau
 ---
 
 
-### `humanloop.completeExperiment`
+### `humanloop.completeExperiment`<a id="humanloopcompleteexperiment"></a>
 
 Create a completion for a specific experiment.
 
-#### 🛠️ Usage
+#### 🛠️ Usage<a id="🛠️-usage"></a>
 
 ```typescript
 const createExperimentResponse = await humanloop.completeExperiment({
@@ -770,75 +773,75 @@ const createExperimentResponse = await humanloop.completeExperiment({
 });
 ```
 
-#### ⚙️ Parameters
+#### ⚙️ Parameters<a id="⚙️-parameters"></a>
 
-##### experiment_id: `string`
+##### experiment_id: `string`<a id="experiment_id-string"></a>
 
 If an experiment ID is provided a model configuration will be sampled from the experiments active model configurations.
 
-##### project: `string`
+##### project: `string`<a id="project-string"></a>
 
 Unique project name. If no project exists with this name, a new project will be created.
 
-##### project_id: `string`
+##### project_id: `string`<a id="project_id-string"></a>
 
 Unique ID of a project to associate to the log. Either this or `project` must be provided.
 
-##### session_id: `string`
+##### session_id: `string`<a id="session_id-string"></a>
 
 ID of the session to associate the datapoint.
 
-##### session_reference_id: `string`
+##### session_reference_id: `string`<a id="session_reference_id-string"></a>
 
 A unique string identifying the session to associate the datapoint to. Allows you to log multiple datapoints to a session (using an ID kept by your internal systems) by passing the same `session_reference_id` in subsequent log requests. Specify at most one of this or `session_id`.
 
-##### parent_id: `string`
+##### parent_id: `string`<a id="parent_id-string"></a>
 
 ID associated to the parent datapoint in a session.
 
-##### parent_reference_id: `string`
+##### parent_reference_id: `string`<a id="parent_reference_id-string"></a>
 
 A unique string identifying the previously-logged parent datapoint in a session. Allows you to log nested datapoints with your internal system IDs by passing the same reference ID as `parent_id` in a prior log request. Specify at most one of this or `parent_id`. Note that this cannot refer to a datapoint being logged in the same request.
 
-##### inputs: `object`
+##### inputs: `object`<a id="inputs-object"></a>
 
 The inputs passed to the prompt template.
 
-##### source: `string`
+##### source: `string`<a id="source-string"></a>
 
 Identifies where the model was called from.
 
-##### metadata: `object`
+##### metadata: `object`<a id="metadata-object"></a>
 
 Any additional metadata to record.
 
-##### provider_api_keys: [`ProviderAPIKeysProperty`](./models/provider-apikeys-property.ts)
+##### provider_api_keys: [`ProviderAPIKeysProperty`](./models/provider-apikeys-property.ts)<a id="provider_api_keys-providerapikeyspropertymodelsprovider-apikeys-propertyts"></a>
 
-##### num_samples: `number`
+##### num_samples: `number`<a id="num_samples-number"></a>
 
 The number of chat responses, where each chat response will use a model configuration sampled from the experiment.
 
-##### logprobs: `number`
+##### logprobs: `number`<a id="logprobs-number"></a>
 
 Include the log probabilities of the top n tokens in the provider_response
 
-##### stream: `boolean`
+##### stream: `boolean`<a id="stream-boolean"></a>
 
 If true, tokens will be sent as data-only server-sent events. If num_samples > 1, samples are streamed back independently.
 
-##### suffix: `string`
+##### suffix: `string`<a id="suffix-string"></a>
 
 The suffix that comes after a completion of inserted text. Useful for completions that act like inserts.
 
-##### user: `string`
+##### user: `string`<a id="user-string"></a>
 
 End-user ID passed through to provider call.
 
-#### 🔄 Return
+#### 🔄 Return<a id="🔄-return"></a>
 
 [CompletionResponse](./models/completion-response.ts)
 
-#### 🌐 Endpoint
+#### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
 `/completion-experiment` `POST`
 
@@ -847,11 +850,11 @@ End-user ID passed through to provider call.
 ---
 
 
-### `humanloop.completeModelConfiguration`
+### `humanloop.completeModelConfiguration`<a id="humanloopcompletemodelconfiguration"></a>
 
 Create a completion for a specific model configuration.
 
-#### 🛠️ Usage
+#### 🛠️ Usage<a id="🛠️-usage"></a>
 
 ```typescript
 const createModelConfigResponse = await humanloop.completeModelConfiguration({
@@ -861,75 +864,75 @@ const createModelConfigResponse = await humanloop.completeModelConfiguration({
 });
 ```
 
-#### ⚙️ Parameters
+#### ⚙️ Parameters<a id="⚙️-parameters"></a>
 
-##### model_config_id: `string`
+##### model_config_id: `string`<a id="model_config_id-string"></a>
 
 Identifies the model configuration used to create a chat response.
 
-##### project: `string`
+##### project: `string`<a id="project-string"></a>
 
 Unique project name. If no project exists with this name, a new project will be created.
 
-##### project_id: `string`
+##### project_id: `string`<a id="project_id-string"></a>
 
 Unique ID of a project to associate to the log. Either this or `project` must be provided.
 
-##### session_id: `string`
+##### session_id: `string`<a id="session_id-string"></a>
 
 ID of the session to associate the datapoint.
 
-##### session_reference_id: `string`
+##### session_reference_id: `string`<a id="session_reference_id-string"></a>
 
 A unique string identifying the session to associate the datapoint to. Allows you to log multiple datapoints to a session (using an ID kept by your internal systems) by passing the same `session_reference_id` in subsequent log requests. Specify at most one of this or `session_id`.
 
-##### parent_id: `string`
+##### parent_id: `string`<a id="parent_id-string"></a>
 
 ID associated to the parent datapoint in a session.
 
-##### parent_reference_id: `string`
+##### parent_reference_id: `string`<a id="parent_reference_id-string"></a>
 
 A unique string identifying the previously-logged parent datapoint in a session. Allows you to log nested datapoints with your internal system IDs by passing the same reference ID as `parent_id` in a prior log request. Specify at most one of this or `parent_id`. Note that this cannot refer to a datapoint being logged in the same request.
 
-##### inputs: `object`
+##### inputs: `object`<a id="inputs-object"></a>
 
 The inputs passed to the prompt template.
 
-##### source: `string`
+##### source: `string`<a id="source-string"></a>
 
 Identifies where the model was called from.
 
-##### metadata: `object`
+##### metadata: `object`<a id="metadata-object"></a>
 
 Any additional metadata to record.
 
-##### provider_api_keys: [`ProviderAPIKeysProperty`](./models/provider-apikeys-property.ts)
+##### provider_api_keys: [`ProviderAPIKeysProperty`](./models/provider-apikeys-property.ts)<a id="provider_api_keys-providerapikeyspropertymodelsprovider-apikeys-propertyts"></a>
 
-##### num_samples: `number`
+##### num_samples: `number`<a id="num_samples-number"></a>
 
 The number of generations.
 
-##### logprobs: `number`
+##### logprobs: `number`<a id="logprobs-number"></a>
 
 Include the log probabilities of the top n tokens in the provider_response
 
-##### stream: `boolean`
+##### stream: `boolean`<a id="stream-boolean"></a>
 
 If true, tokens will be sent as data-only server-sent events. If num_samples > 1, samples are streamed back independently.
 
-##### suffix: `string`
+##### suffix: `string`<a id="suffix-string"></a>
 
 The suffix that comes after a completion of inserted text. Useful for completions that act like inserts.
 
-##### user: `string`
+##### user: `string`<a id="user-string"></a>
 
 End-user ID passed through to provider call.
 
-#### 🔄 Return
+#### 🔄 Return<a id="🔄-return"></a>
 
 [CompletionResponse](./models/completion-response.ts)
 
-#### 🌐 Endpoint
+#### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
 `/completion-model-config` `POST`
 
@@ -938,11 +941,11 @@ End-user ID passed through to provider call.
 ---
 
 
-### `humanloop.datapoints.delete`
+### `humanloop.datapoints.delete`<a id="humanloopdatapointsdelete"></a>
 
 Delete a list of testsets by their IDs.
 
-#### 🛠️ Usage
+#### 🛠️ Usage<a id="🛠️-usage"></a>
 
 ```typescript
 const deleteResponse = await humanloop.datapoints.delete([
@@ -950,11 +953,11 @@ const deleteResponse = await humanloop.datapoints.delete([
 ]);
 ```
 
-#### ⚙️ Request Body
+#### ⚙️ Request Body<a id="⚙️-request-body"></a>
 
 `string`[]
 
-#### 🌐 Endpoint
+#### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
 `/datapoints` `DELETE`
 
@@ -963,11 +966,11 @@ const deleteResponse = await humanloop.datapoints.delete([
 ---
 
 
-### `humanloop.datapoints.get`
+### `humanloop.datapoints.get`<a id="humanloopdatapointsget"></a>
 
 Get a datapoint by ID.
 
-#### 🛠️ Usage
+#### 🛠️ Usage<a id="🛠️-usage"></a>
 
 ```typescript
 const getResponse = await humanloop.datapoints.get({
@@ -975,17 +978,17 @@ const getResponse = await humanloop.datapoints.get({
 });
 ```
 
-#### ⚙️ Parameters
+#### ⚙️ Parameters<a id="⚙️-parameters"></a>
 
-##### id: `string`
+##### id: `string`<a id="id-string"></a>
 
 String ID of datapoint. Starts with `evtc_`.
 
-#### 🔄 Return
+#### 🔄 Return<a id="🔄-return"></a>
 
 [DatapointResponse](./models/datapoint-response.ts)
 
-#### 🌐 Endpoint
+#### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
 `/datapoints/{id}` `GET`
 
@@ -994,11 +997,11 @@ String ID of datapoint. Starts with `evtc_`.
 ---
 
 
-### `humanloop.datapoints.update`
+### `humanloop.datapoints.update`<a id="humanloopdatapointsupdate"></a>
 
 Edit the input, messages and criteria fields of a datapoint. The fields passed in the request are the ones edited.  Passing `null` as a value for a field will delete that field. In order to signify not changing a field, it should be omitted from the request body.
 
-#### 🛠️ Usage
+#### 🛠️ Usage<a id="🛠️-usage"></a>
 
 ```typescript
 const updateResponse = await humanloop.datapoints.update({
@@ -1006,29 +1009,29 @@ const updateResponse = await humanloop.datapoints.update({
 });
 ```
 
-#### ⚙️ Parameters
+#### ⚙️ Parameters<a id="⚙️-parameters"></a>
 
-##### id: `string`
+##### id: `string`<a id="id-string"></a>
 
 String ID of datapoint. Starts with `evtc_`.
 
-##### inputs: Record<string, `string`>
+##### inputs: Record<string, `string`><a id="inputs-record"></a>
 
 The inputs to the prompt template for this datapoint.
 
-##### messages: [`ChatMessage`](./models/chat-message.ts)[]
+##### messages: [`ChatMessage`](./models/chat-message.ts)[]<a id="messages-chatmessagemodelschat-messagets"></a>
 
 The chat messages for this datapoint.
 
-##### target: Record<string, [`Target`](./models/target.ts)>
+##### target: Record<string, [`Target`](./models/target.ts)><a id="target-record"></a>
 
 Object with criteria necessary to evaluate this datapoint.
 
-#### 🔄 Return
+#### 🔄 Return<a id="🔄-return"></a>
 
 [DatapointResponse](./models/datapoint-response.ts)
 
-#### 🌐 Endpoint
+#### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
 `/datapoints/{id}` `PATCH`
 
@@ -1037,11 +1040,11 @@ Object with criteria necessary to evaluate this datapoint.
 ---
 
 
-### `humanloop.datasets.create`
+### `humanloop.datasets.create`<a id="humanloopdatasetscreate"></a>
 
 Create a new dataset for a project.
 
-#### 🛠️ Usage
+#### 🛠️ Usage<a id="🛠️-usage"></a>
 
 ```typescript
 const createResponse = await humanloop.datasets.create({
@@ -1051,23 +1054,23 @@ const createResponse = await humanloop.datasets.create({
 });
 ```
 
-#### ⚙️ Parameters
+#### ⚙️ Parameters<a id="⚙️-parameters"></a>
 
-##### description: `string`
+##### description: `string`<a id="description-string"></a>
 
 The description of the dataset.
 
-##### name: `string`
+##### name: `string`<a id="name-string"></a>
 
 The name of the dataset.
 
-##### projectId: `string`
+##### projectId: `string`<a id="projectid-string"></a>
 
-#### 🔄 Return
+#### 🔄 Return<a id="🔄-return"></a>
 
 [DatasetResponse](./models/dataset-response.ts)
 
-#### 🌐 Endpoint
+#### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
 `/projects/{project_id}/datasets` `POST`
 
@@ -1076,11 +1079,11 @@ The name of the dataset.
 ---
 
 
-### `humanloop.datasets.createDatapoint`
+### `humanloop.datasets.createDatapoint`<a id="humanloopdatasetscreatedatapoint"></a>
 
 Create a new testcase for a testset.
 
-#### 🛠️ Usage
+#### 🛠️ Usage<a id="🛠️-usage"></a>
 
 ```typescript
 const createDatapointResponse = await humanloop.datasets.createDatapoint({
@@ -1091,19 +1094,19 @@ const createDatapointResponse = await humanloop.datasets.createDatapoint({
 });
 ```
 
-#### ⚙️ Parameters
+#### ⚙️ Parameters<a id="⚙️-parameters"></a>
 
-##### datasetId: `string`
+##### datasetId: `string`<a id="datasetid-string"></a>
 
 String ID of dataset. Starts with `evts_`.
 
-##### requestBody: [`DatasetsCreateDatapointRequest`](./models/datasets-create-datapoint-request.ts)
+##### requestBody: [`DatasetsCreateDatapointRequest`](./models/datasets-create-datapoint-request.ts)<a id="requestbody-datasetscreatedatapointrequestmodelsdatasets-create-datapoint-requestts"></a>
 
-#### 🔄 Return
+#### 🔄 Return<a id="🔄-return"></a>
 
 [DatapointResponse](./models/datapoint-response.ts)
 
-#### 🌐 Endpoint
+#### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
 `/datasets/{dataset_id}/datapoints` `POST`
 
@@ -1112,11 +1115,11 @@ String ID of dataset. Starts with `evts_`.
 ---
 
 
-### `humanloop.datasets.delete`
+### `humanloop.datasets.delete`<a id="humanloopdatasetsdelete"></a>
 
 Delete a dataset by ID.
 
-#### 🛠️ Usage
+#### 🛠️ Usage<a id="🛠️-usage"></a>
 
 ```typescript
 const deleteResponse = await humanloop.datasets.delete({
@@ -1124,17 +1127,17 @@ const deleteResponse = await humanloop.datasets.delete({
 });
 ```
 
-#### ⚙️ Parameters
+#### ⚙️ Parameters<a id="⚙️-parameters"></a>
 
-##### id: `string`
+##### id: `string`<a id="id-string"></a>
 
 String ID of dataset. Starts with `evts_`.
 
-#### 🔄 Return
+#### 🔄 Return<a id="🔄-return"></a>
 
 [DatasetResponse](./models/dataset-response.ts)
 
-#### 🌐 Endpoint
+#### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
 `/datasets/{id}` `DELETE`
 
@@ -1143,11 +1146,11 @@ String ID of dataset. Starts with `evts_`.
 ---
 
 
-### `humanloop.datasets.get`
+### `humanloop.datasets.get`<a id="humanloopdatasetsget"></a>
 
 Get a single dataset by ID.
 
-#### 🛠️ Usage
+#### 🛠️ Usage<a id="🛠️-usage"></a>
 
 ```typescript
 const getResponse = await humanloop.datasets.get({
@@ -1155,17 +1158,17 @@ const getResponse = await humanloop.datasets.get({
 });
 ```
 
-#### ⚙️ Parameters
+#### ⚙️ Parameters<a id="⚙️-parameters"></a>
 
-##### id: `string`
+##### id: `string`<a id="id-string"></a>
 
 String ID of dataset. Starts with `evts_`.
 
-#### 🔄 Return
+#### 🔄 Return<a id="🔄-return"></a>
 
 [DatasetResponse](./models/dataset-response.ts)
 
-#### 🌐 Endpoint
+#### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
 `/datasets/{id}` `GET`
 
@@ -1174,11 +1177,11 @@ String ID of dataset. Starts with `evts_`.
 ---
 
 
-### `humanloop.datasets.listAllForProject`
+### `humanloop.datasets.listAllForProject`<a id="humanloopdatasetslistallforproject"></a>
 
 Get all datasets for a project.
 
-#### 🛠️ Usage
+#### 🛠️ Usage<a id="🛠️-usage"></a>
 
 ```typescript
 const listAllForProjectResponse = await humanloop.datasets.listAllForProject({
@@ -1186,15 +1189,15 @@ const listAllForProjectResponse = await humanloop.datasets.listAllForProject({
 });
 ```
 
-#### ⚙️ Parameters
+#### ⚙️ Parameters<a id="⚙️-parameters"></a>
 
-##### projectId: `string`
+##### projectId: `string`<a id="projectid-string"></a>
 
-#### 🔄 Return
+#### 🔄 Return<a id="🔄-return"></a>
 
 [DatasetResponse](./models/dataset-response.ts)
 
-#### 🌐 Endpoint
+#### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
 `/projects/{project_id}/datasets` `GET`
 
@@ -1203,11 +1206,11 @@ const listAllForProjectResponse = await humanloop.datasets.listAllForProject({
 ---
 
 
-### `humanloop.datasets.listDatapoints`
+### `humanloop.datasets.listDatapoints`<a id="humanloopdatasetslistdatapoints"></a>
 
 Get datapoints for a dataset.
 
-#### 🛠️ Usage
+#### 🛠️ Usage<a id="🛠️-usage"></a>
 
 ```typescript
 const listDatapointsResponse = await humanloop.datasets.listDatapoints({
@@ -1217,17 +1220,17 @@ const listDatapointsResponse = await humanloop.datasets.listDatapoints({
 });
 ```
 
-#### ⚙️ Parameters
+#### ⚙️ Parameters<a id="⚙️-parameters"></a>
 
-##### datasetId: `string`
+##### datasetId: `string`<a id="datasetid-string"></a>
 
 String ID of dataset. Starts with `evts_`.
 
-##### page: `number`
+##### page: `number`<a id="page-number"></a>
 
-##### size: `number`
+##### size: `number`<a id="size-number"></a>
 
-#### 🌐 Endpoint
+#### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
 `/datasets/{dataset_id}/datapoints` `GET`
 
@@ -1236,11 +1239,11 @@ String ID of dataset. Starts with `evts_`.
 ---
 
 
-### `humanloop.datasets.update`
+### `humanloop.datasets.update`<a id="humanloopdatasetsupdate"></a>
 
 Update a testset by ID.
 
-#### 🛠️ Usage
+#### 🛠️ Usage<a id="🛠️-usage"></a>
 
 ```typescript
 const updateResponse = await humanloop.datasets.update({
@@ -1248,25 +1251,25 @@ const updateResponse = await humanloop.datasets.update({
 });
 ```
 
-#### ⚙️ Parameters
+#### ⚙️ Parameters<a id="⚙️-parameters"></a>
 
-##### id: `string`
+##### id: `string`<a id="id-string"></a>
 
 String ID of testset. Starts with `evts_`.
 
-##### description: `string`
+##### description: `string`<a id="description-string"></a>
 
 The description of the dataset.
 
-##### name: `string`
+##### name: `string`<a id="name-string"></a>
 
 The name of the dataset.
 
-#### 🔄 Return
+#### 🔄 Return<a id="🔄-return"></a>
 
 [DatasetResponse](./models/dataset-response.ts)
 
-#### 🌐 Endpoint
+#### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
 `/datasets/{id}` `PATCH`
 
@@ -1275,11 +1278,11 @@ The name of the dataset.
 ---
 
 
-### `humanloop.evaluations.create`
+### `humanloop.evaluations.create`<a id="humanloopevaluationscreate"></a>
 
 Create an evaluation.
 
-#### 🛠️ Usage
+#### 🛠️ Usage<a id="🛠️-usage"></a>
 
 ```typescript
 const createResponse = await humanloop.evaluations.create({
@@ -1290,31 +1293,31 @@ const createResponse = await humanloop.evaluations.create({
 });
 ```
 
-#### ⚙️ Parameters
+#### ⚙️ Parameters<a id="⚙️-parameters"></a>
 
-##### config_id: `string`
+##### config_id: `string`<a id="config_id-string"></a>
 
 ID of the config to evaluate. Starts with `config_`.
 
-##### evaluator_ids: `string`[]
+##### evaluator_ids: `string`[]<a id="evaluator_ids-string"></a>
 
 IDs of evaluators to run on the dataset. IDs start with `evfn_`
 
-##### dataset_id: `string`
+##### dataset_id: `string`<a id="dataset_id-string"></a>
 
 ID of the dataset to use in this evaluation. Starts with `evts_`.
 
-##### projectId: `string`
+##### projectId: `string`<a id="projectid-string"></a>
 
 String ID of project. Starts with `pr_`.
 
-##### provider_api_keys: [`ProviderAPIKeysProperty1`](./models/provider-apikeys-property1.ts)
+##### provider_api_keys: [`ProviderAPIKeysProperty1`](./models/provider-apikeys-property1.ts)<a id="provider_api_keys-providerapikeysproperty1modelsprovider-apikeys-property1ts"></a>
 
-#### 🔄 Return
+#### 🔄 Return<a id="🔄-return"></a>
 
 [EvaluationResponse](./models/evaluation-response.ts)
 
-#### 🌐 Endpoint
+#### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
 `/projects/{project_id}/evaluations` `POST`
 
@@ -1323,11 +1326,11 @@ String ID of project. Starts with `pr_`.
 ---
 
 
-### `humanloop.evaluations.get`
+### `humanloop.evaluations.get`<a id="humanloopevaluationsget"></a>
 
 Get evaluation by ID.
 
-#### 🛠️ Usage
+#### 🛠️ Usage<a id="🛠️-usage"></a>
 
 ```typescript
 const getResponse = await humanloop.evaluations.get({
@@ -1335,21 +1338,21 @@ const getResponse = await humanloop.evaluations.get({
 });
 ```
 
-#### ⚙️ Parameters
+#### ⚙️ Parameters<a id="⚙️-parameters"></a>
 
-##### id: `string`
+##### id: `string`<a id="id-string"></a>
 
 String ID of evaluation run. Starts with `ev_`.
 
-##### evaluatorAggregates: `boolean`
+##### evaluatorAggregates: `boolean`<a id="evaluatoraggregates-boolean"></a>
 
 Whether to include evaluator aggregates in the response.
 
-#### 🔄 Return
+#### 🔄 Return<a id="🔄-return"></a>
 
 [EvaluationResponse](./models/evaluation-response.ts)
 
-#### 🌐 Endpoint
+#### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
 `/evaluations/{id}` `GET`
 
@@ -1358,11 +1361,11 @@ Whether to include evaluator aggregates in the response.
 ---
 
 
-### `humanloop.evaluations.listAllForProject`
+### `humanloop.evaluations.listAllForProject`<a id="humanloopevaluationslistallforproject"></a>
 
 Get all the evaluations associated with your project.
 
-#### 🛠️ Usage
+#### 🛠️ Usage<a id="🛠️-usage"></a>
 
 ```typescript
 const listAllForProjectResponse = await humanloop.evaluations.listAllForProject(
@@ -1372,21 +1375,21 @@ const listAllForProjectResponse = await humanloop.evaluations.listAllForProject(
 );
 ```
 
-#### ⚙️ Parameters
+#### ⚙️ Parameters<a id="⚙️-parameters"></a>
 
-##### projectId: `string`
+##### projectId: `string`<a id="projectid-string"></a>
 
 String ID of project. Starts with `pr_`.
 
-##### evaluatorAggregates: `boolean`
+##### evaluatorAggregates: `boolean`<a id="evaluatoraggregates-boolean"></a>
 
 Whether to include evaluator aggregates in the response.
 
-#### 🔄 Return
+#### 🔄 Return<a id="🔄-return"></a>
 
 [EvaluationResponse](./models/evaluation-response.ts)
 
-#### 🌐 Endpoint
+#### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
 `/projects/{project_id}/evaluations` `GET`
 
@@ -1395,11 +1398,11 @@ Whether to include evaluator aggregates in the response.
 ---
 
 
-### `humanloop.evaluations.listDatapoints`
+### `humanloop.evaluations.listDatapoints`<a id="humanloopevaluationslistdatapoints"></a>
 
 Get testcases by evaluation ID.
 
-#### 🛠️ Usage
+#### 🛠️ Usage<a id="🛠️-usage"></a>
 
 ```typescript
 const listDatapointsResponse = await humanloop.evaluations.listDatapoints({
@@ -1409,21 +1412,21 @@ const listDatapointsResponse = await humanloop.evaluations.listDatapoints({
 });
 ```
 
-#### ⚙️ Parameters
+#### ⚙️ Parameters<a id="⚙️-parameters"></a>
 
-##### id: `string`
+##### id: `string`<a id="id-string"></a>
 
 String ID of evaluation. Starts with `ev_`.
 
-##### page: `number`
+##### page: `number`<a id="page-number"></a>
 
 Page to fetch. Starts from 1.
 
-##### size: `number`
+##### size: `number`<a id="size-number"></a>
 
 Number of evaluation results to retrieve.
 
-#### 🌐 Endpoint
+#### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
 `/evaluations/{id}/datapoints` `GET`
 
@@ -1432,11 +1435,11 @@ Number of evaluation results to retrieve.
 ---
 
 
-### `humanloop.evaluators.create`
+### `humanloop.evaluators.create`<a id="humanloopevaluatorscreate"></a>
 
 Create an evaluator within your organization.
 
-#### 🛠️ Usage
+#### 🛠️ Usage<a id="🛠️-usage"></a>
 
 ```typescript
 const createResponse = await humanloop.evaluators.create({
@@ -1448,33 +1451,33 @@ const createResponse = await humanloop.evaluators.create({
 });
 ```
 
-#### ⚙️ Parameters
+#### ⚙️ Parameters<a id="⚙️-parameters"></a>
 
-##### description: `string`
+##### description: `string`<a id="description-string"></a>
 
 The description of the evaluator.
 
-##### name: `string`
+##### name: `string`<a id="name-string"></a>
 
 The name of the evaluator.
 
-##### code: `string`
+##### code: `string`<a id="code-string"></a>
 
 The code for the evaluator. This code will be executed in a sandboxed environment.
 
-##### arguments_type: [`EvaluatorArgumentsType`](./models/evaluator-arguments-type.ts)
+##### arguments_type: [`EvaluatorArgumentsType`](./models/evaluator-arguments-type.ts)<a id="arguments_type-evaluatorargumentstypemodelsevaluator-arguments-typets"></a>
 
 Whether this evaluator is target-free or target-required.
 
-##### return_type: [`EvaluatorReturnTypeEnum`](./models/evaluator-return-type-enum.ts)
+##### return_type: [`EvaluatorReturnTypeEnum`](./models/evaluator-return-type-enum.ts)<a id="return_type-evaluatorreturntypeenummodelsevaluator-return-type-enumts"></a>
 
 The type of the return value of the evaluator.
 
-#### 🔄 Return
+#### 🔄 Return<a id="🔄-return"></a>
 
 [EvaluatorResponse](./models/evaluator-response.ts)
 
-#### 🌐 Endpoint
+#### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
 `/evaluators` `POST`
 
@@ -1483,11 +1486,11 @@ The type of the return value of the evaluator.
 ---
 
 
-### `humanloop.evaluators.delete`
+### `humanloop.evaluators.delete`<a id="humanloopevaluatorsdelete"></a>
 
 Delete an evaluator within your organization.
 
-#### 🛠️ Usage
+#### 🛠️ Usage<a id="🛠️-usage"></a>
 
 ```typescript
 const deleteResponse = await humanloop.evaluators.delete({
@@ -1495,11 +1498,11 @@ const deleteResponse = await humanloop.evaluators.delete({
 });
 ```
 
-#### ⚙️ Parameters
+#### ⚙️ Parameters<a id="⚙️-parameters"></a>
 
-##### id: `string`
+##### id: `string`<a id="id-string"></a>
 
-#### 🌐 Endpoint
+#### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
 `/evaluators/{id}` `DELETE`
 
@@ -1508,21 +1511,21 @@ const deleteResponse = await humanloop.evaluators.delete({
 ---
 
 
-### `humanloop.evaluators.list`
+### `humanloop.evaluators.list`<a id="humanloopevaluatorslist"></a>
 
 Get all evaluators within your organization.
 
-#### 🛠️ Usage
+#### 🛠️ Usage<a id="🛠️-usage"></a>
 
 ```typescript
 const listResponse = await humanloop.evaluators.list();
 ```
 
-#### 🔄 Return
+#### 🔄 Return<a id="🔄-return"></a>
 
 [EvaluatorResponse](./models/evaluator-response.ts)
 
-#### 🌐 Endpoint
+#### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
 `/evaluators` `GET`
 
@@ -1531,11 +1534,11 @@ const listResponse = await humanloop.evaluators.list();
 ---
 
 
-### `humanloop.evaluators.update`
+### `humanloop.evaluators.update`<a id="humanloopevaluatorsupdate"></a>
 
 Update an evaluator within your organization.
 
-#### 🛠️ Usage
+#### 🛠️ Usage<a id="🛠️-usage"></a>
 
 ```typescript
 const updateResponse = await humanloop.evaluators.update({
@@ -1543,35 +1546,35 @@ const updateResponse = await humanloop.evaluators.update({
 });
 ```
 
-#### ⚙️ Parameters
+#### ⚙️ Parameters<a id="⚙️-parameters"></a>
 
-##### id: `string`
+##### id: `string`<a id="id-string"></a>
 
-##### description: `string`
+##### description: `string`<a id="description-string"></a>
 
 The description of the evaluator.
 
-##### name: `string`
+##### name: `string`<a id="name-string"></a>
 
 The name of the evaluator.
 
-##### code: `string`
+##### code: `string`<a id="code-string"></a>
 
 The code for the evaluator. This code will be executed in a sandboxed environment.
 
-##### arguments_type: [`EvaluatorArgumentsType`](./models/evaluator-arguments-type.ts)
+##### arguments_type: [`EvaluatorArgumentsType`](./models/evaluator-arguments-type.ts)<a id="arguments_type-evaluatorargumentstypemodelsevaluator-arguments-typets"></a>
 
 Whether this evaluator is target-free or target-required.
 
-##### return_type: [`EvaluatorReturnTypeEnum`](./models/evaluator-return-type-enum.ts)
+##### return_type: [`EvaluatorReturnTypeEnum`](./models/evaluator-return-type-enum.ts)<a id="return_type-evaluatorreturntypeenummodelsevaluator-return-type-enumts"></a>
 
 The type of the return value of the evaluator.
 
-#### 🔄 Return
+#### 🔄 Return<a id="🔄-return"></a>
 
 [EvaluatorResponse](./models/evaluator-response.ts)
 
-#### 🌐 Endpoint
+#### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
 `/evaluators/{id}` `PATCH`
 
@@ -1580,11 +1583,11 @@ The type of the return value of the evaluator.
 ---
 
 
-### `humanloop.experiments.create`
+### `humanloop.experiments.create`<a id="humanloopexperimentscreate"></a>
 
 Create an experiment for your project.  You can optionally specify IDs of your project\'s model configs to include in the experiment, along with a set of labels to consider as positive feedback and whether the experiment should be set as active.
 
-#### 🛠️ Usage
+#### 🛠️ Usage<a id="🛠️-usage"></a>
 
 ```typescript
 const createResponse = await humanloop.experiments.create({
@@ -1600,33 +1603,33 @@ const createResponse = await humanloop.experiments.create({
 });
 ```
 
-#### ⚙️ Parameters
+#### ⚙️ Parameters<a id="⚙️-parameters"></a>
 
-##### name: `string`
+##### name: `string`<a id="name-string"></a>
 
 Name of experiment.
 
-##### positive_labels: [`PositiveLabel`](./models/positive-label.ts)[]
+##### positive_labels: [`PositiveLabel`](./models/positive-label.ts)[]<a id="positive_labels-positivelabelmodelspositive-labelts"></a>
 
 Feedback labels to treat as positive user feedback. Used to monitor the performance of model configs in the experiment.
 
-##### projectId: `string`
+##### projectId: `string`<a id="projectid-string"></a>
 
 String ID of project. Starts with `pr_`.
 
-##### config_ids: `string`[]
+##### config_ids: `string`[]<a id="config_ids-string"></a>
 
 Configs to add to this experiment. Further configs can be added later.
 
-##### set_active: `boolean`
+##### set_active: `boolean`<a id="set_active-boolean"></a>
 
 Whether to set the created project as the project\\\'s active experiment.
 
-#### 🔄 Return
+#### 🔄 Return<a id="🔄-return"></a>
 
 [ExperimentResponse](./models/experiment-response.ts)
 
-#### 🌐 Endpoint
+#### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
 `/projects/{project_id}/experiments` `POST`
 
@@ -1635,11 +1638,11 @@ Whether to set the created project as the project\\\'s active experiment.
 ---
 
 
-### `humanloop.experiments.delete`
+### `humanloop.experiments.delete`<a id="humanloopexperimentsdelete"></a>
 
 Delete the experiment with the specified ID.
 
-#### 🛠️ Usage
+#### 🛠️ Usage<a id="🛠️-usage"></a>
 
 ```typescript
 const deleteResponse = await humanloop.experiments.delete({
@@ -1647,13 +1650,13 @@ const deleteResponse = await humanloop.experiments.delete({
 });
 ```
 
-#### ⚙️ Parameters
+#### ⚙️ Parameters<a id="⚙️-parameters"></a>
 
-##### experimentId: `string`
+##### experimentId: `string`<a id="experimentid-string"></a>
 
 String ID of experiment. Starts with `exp_`.
 
-#### 🌐 Endpoint
+#### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
 `/experiments/{experiment_id}` `DELETE`
 
@@ -1662,11 +1665,11 @@ String ID of experiment. Starts with `exp_`.
 ---
 
 
-### `humanloop.experiments.list`
+### `humanloop.experiments.list`<a id="humanloopexperimentslist"></a>
 
 Get an array of experiments associated to your project.
 
-#### 🛠️ Usage
+#### 🛠️ Usage<a id="🛠️-usage"></a>
 
 ```typescript
 const listResponse = await humanloop.experiments.list({
@@ -1674,17 +1677,17 @@ const listResponse = await humanloop.experiments.list({
 });
 ```
 
-#### ⚙️ Parameters
+#### ⚙️ Parameters<a id="⚙️-parameters"></a>
 
-##### projectId: `string`
+##### projectId: `string`<a id="projectid-string"></a>
 
 String ID of project. Starts with `pr_`.
 
-#### 🔄 Return
+#### 🔄 Return<a id="🔄-return"></a>
 
 [ExperimentResponse](./models/experiment-response.ts)
 
-#### 🌐 Endpoint
+#### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
 `/projects/{project_id}/experiments` `GET`
 
@@ -1693,11 +1696,11 @@ String ID of project. Starts with `pr_`.
 ---
 
 
-### `humanloop.experiments.sample`
+### `humanloop.experiments.sample`<a id="humanloopexperimentssample"></a>
 
 Samples a model config from the experiment\'s active model configs.
 
-#### 🛠️ Usage
+#### 🛠️ Usage<a id="🛠️-usage"></a>
 
 ```typescript
 const sampleResponse = await humanloop.experiments.sample({
@@ -1705,17 +1708,17 @@ const sampleResponse = await humanloop.experiments.sample({
 });
 ```
 
-#### ⚙️ Parameters
+#### ⚙️ Parameters<a id="⚙️-parameters"></a>
 
-##### experimentId: `string`
+##### experimentId: `string`<a id="experimentid-string"></a>
 
 String ID of experiment. Starts with `exp_`.
 
-#### 🔄 Return
+#### 🔄 Return<a id="🔄-return"></a>
 
 [GetModelConfigResponse](./models/get-model-config-response.ts)
 
-#### 🌐 Endpoint
+#### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
 `/experiments/{experiment_id}/model-config` `GET`
 
@@ -1724,11 +1727,11 @@ String ID of experiment. Starts with `exp_`.
 ---
 
 
-### `humanloop.experiments.update`
+### `humanloop.experiments.update`<a id="humanloopexperimentsupdate"></a>
 
 Update your experiment, including registering and de-registering model configs.
 
-#### 🛠️ Usage
+#### 🛠️ Usage<a id="🛠️-usage"></a>
 
 ```typescript
 const updateResponse = await humanloop.experiments.update({
@@ -1736,33 +1739,33 @@ const updateResponse = await humanloop.experiments.update({
 });
 ```
 
-#### ⚙️ Parameters
+#### ⚙️ Parameters<a id="⚙️-parameters"></a>
 
-##### experimentId: `string`
+##### experimentId: `string`<a id="experimentid-string"></a>
 
 String ID of experiment. Starts with `exp_`.
 
-##### name: `string`
+##### name: `string`<a id="name-string"></a>
 
 Name of experiment.
 
-##### positive_labels: [`PositiveLabel`](./models/positive-label.ts)[]
+##### positive_labels: [`PositiveLabel`](./models/positive-label.ts)[]<a id="positive_labels-positivelabelmodelspositive-labelts"></a>
 
 Feedback labels to treat as positive user feedback. Used to monitor the performance of model configs in the experiment.
 
-##### config_ids_to_register: `string`[]
+##### config_ids_to_register: `string`[]<a id="config_ids_to_register-string"></a>
 
 Model configs to add to this experiment.
 
-##### config_ids_to_deregister: `string`[]
+##### config_ids_to_deregister: `string`[]<a id="config_ids_to_deregister-string"></a>
 
 Model configs in this experiment to be deactivated.
 
-#### 🔄 Return
+#### 🔄 Return<a id="🔄-return"></a>
 
 [ExperimentResponse](./models/experiment-response.ts)
 
-#### 🌐 Endpoint
+#### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
 `/experiments/{experiment_id}` `PATCH`
 
@@ -1771,11 +1774,11 @@ Model configs in this experiment to be deactivated.
 ---
 
 
-### `humanloop.feedback`
+### `humanloop.feedback`<a id="humanloopfeedback"></a>
 
 Submit an array of feedback for existing `data_ids`
 
-#### 🛠️ Usage
+#### 🛠️ Usage<a id="🛠️-usage"></a>
 
 ```typescript
 const feedbackResponse = await humanloop.feedback({
@@ -1783,35 +1786,35 @@ const feedbackResponse = await humanloop.feedback({
 });
 ```
 
-#### ⚙️ Parameters
+#### ⚙️ Parameters<a id="⚙️-parameters"></a>
 
-##### type: [`FeedbackTypeProperty`](./models/feedback-type-property.ts)
+##### type: [`FeedbackTypeProperty`](./models/feedback-type-property.ts)<a id="type-feedbacktypepropertymodelsfeedback-type-propertyts"></a>
 
-##### value: `string`
+##### value: `string`<a id="value-string"></a>
 
 The feedback value to be set. This field should be left blank when unsetting \\\'rating\\\', \\\'correction\\\' or \\\'comment\\\', but is required otherwise.
 
-##### data_id: `string`
+##### data_id: `string`<a id="data_id-string"></a>
 
 ID to associate the feedback to a previously logged datapoint.
 
-##### user: `string`
+##### user: `string`<a id="user-string"></a>
 
 A unique identifier to who provided the feedback.
 
-##### created_at: `string`
+##### created_at: `string`<a id="created_at-string"></a>
 
 User defined timestamp for when the feedback was created. 
 
-##### unset: `boolean`
+##### unset: `boolean`<a id="unset-boolean"></a>
 
 If true, the value for this feedback is unset.
 
-#### 🔄 Return
+#### 🔄 Return<a id="🔄-return"></a>
 
 [FeedbackSubmitResponse](./models/feedback-submit-response.ts)
 
-#### 🌐 Endpoint
+#### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
 `/feedback` `POST`
 
@@ -1820,11 +1823,11 @@ If true, the value for this feedback is unset.
 ---
 
 
-### `humanloop.finetunes.create`
+### `humanloop.finetunes.create`<a id="humanloopfinetunescreate"></a>
 
 Trigger the fine-tuning process for a specific base model and data snapshot.
 
-#### 🛠️ Usage
+#### 🛠️ Usage<a id="🛠️-usage"></a>
 
 ```typescript
 const createResponse = await humanloop.finetunes.create({
@@ -1837,31 +1840,31 @@ const createResponse = await humanloop.finetunes.create({
 });
 ```
 
-#### ⚙️ Parameters
+#### ⚙️ Parameters<a id="⚙️-parameters"></a>
 
-##### name: `string`
+##### name: `string`<a id="name-string"></a>
 
 User defined friendly name for a finetuning run
 
-##### dataset_id: `string`
+##### dataset_id: `string`<a id="dataset_id-string"></a>
 
 ID of dataset used for finetuning
 
-##### config: [`FinetuningConfigProperty`](./models/finetuning-config-property.ts)
+##### config: [`FinetuningConfigProperty`](./models/finetuning-config-property.ts)<a id="config-finetuningconfigpropertymodelsfinetuning-config-propertyts"></a>
 
-##### projectId: `string`
+##### projectId: `string`<a id="projectid-string"></a>
 
-##### metadata: `object`
+##### metadata: `object`<a id="metadata-object"></a>
 
 Any additional metadata that you would like to log for reference.
 
-##### provider_api_keys: [`ProviderAPIKeysProperty`](./models/provider-apikeys-property.ts)
+##### provider_api_keys: [`ProviderAPIKeysProperty`](./models/provider-apikeys-property.ts)<a id="provider_api_keys-providerapikeyspropertymodelsprovider-apikeys-propertyts"></a>
 
-#### 🔄 Return
+#### 🔄 Return<a id="🔄-return"></a>
 
 [FinetuneResponse](./models/finetune-response.ts)
 
-#### 🌐 Endpoint
+#### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
 `/projects/{project_id}/finetunes` `POST`
 
@@ -1870,11 +1873,11 @@ Any additional metadata that you would like to log for reference.
 ---
 
 
-### `humanloop.finetunes.listAllForProject`
+### `humanloop.finetunes.listAllForProject`<a id="humanloopfinetuneslistallforproject"></a>
 
 Get a list of all fine-tuned models associated to a given project.
 
-#### 🛠️ Usage
+#### 🛠️ Usage<a id="🛠️-usage"></a>
 
 ```typescript
 const listAllForProjectResponse = await humanloop.finetunes.listAllForProject({
@@ -1882,15 +1885,15 @@ const listAllForProjectResponse = await humanloop.finetunes.listAllForProject({
 });
 ```
 
-#### ⚙️ Parameters
+#### ⚙️ Parameters<a id="⚙️-parameters"></a>
 
-##### projectId: `string`
+##### projectId: `string`<a id="projectid-string"></a>
 
-#### 🔄 Return
+#### 🔄 Return<a id="🔄-return"></a>
 
 [FinetuneResponse](./models/finetune-response.ts)
 
-#### 🌐 Endpoint
+#### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
 `/projects/{project_id}/finetunes` `GET`
 
@@ -1899,11 +1902,11 @@ const listAllForProjectResponse = await humanloop.finetunes.listAllForProject({
 ---
 
 
-### `humanloop.finetunes.summary`
+### `humanloop.finetunes.summary`<a id="humanloopfinetunessummary"></a>
 
 Checks data for errors and generates finetune data summary.  Does not actually trigger the finetuning process or persist the data.
 
-#### 🛠️ Usage
+#### 🛠️ Usage<a id="🛠️-usage"></a>
 
 ```typescript
 const summaryResponse = await humanloop.finetunes.summary({
@@ -1916,31 +1919,31 @@ const summaryResponse = await humanloop.finetunes.summary({
 });
 ```
 
-#### ⚙️ Parameters
+#### ⚙️ Parameters<a id="⚙️-parameters"></a>
 
-##### name: `string`
+##### name: `string`<a id="name-string"></a>
 
 User defined friendly name for a finetuning run
 
-##### dataset_id: `string`
+##### dataset_id: `string`<a id="dataset_id-string"></a>
 
 ID of dataset used for finetuning
 
-##### config: [`FinetuningConfigProperty`](./models/finetuning-config-property.ts)
+##### config: [`FinetuningConfigProperty`](./models/finetuning-config-property.ts)<a id="config-finetuningconfigpropertymodelsfinetuning-config-propertyts"></a>
 
-##### projectId: `string`
+##### projectId: `string`<a id="projectid-string"></a>
 
-##### metadata: `object`
+##### metadata: `object`<a id="metadata-object"></a>
 
 Any additional metadata that you would like to log for reference.
 
-##### provider_api_keys: [`ProviderAPIKeysProperty`](./models/provider-apikeys-property.ts)
+##### provider_api_keys: [`ProviderAPIKeysProperty`](./models/provider-apikeys-property.ts)<a id="provider_api_keys-providerapikeyspropertymodelsprovider-apikeys-propertyts"></a>
 
-#### 🔄 Return
+#### 🔄 Return<a id="🔄-return"></a>
 
 [FinetuneDataSummary](./models/finetune-data-summary.ts)
 
-#### 🌐 Endpoint
+#### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
 `/projects/{project_id}/finetunes/summary` `POST`
 
@@ -1949,11 +1952,11 @@ Any additional metadata that you would like to log for reference.
 ---
 
 
-### `humanloop.finetunes.update`
+### `humanloop.finetunes.update`<a id="humanloopfinetunesupdate"></a>
 
 Update user-specified attributes of the specified finetuned models.
 
-#### 🛠️ Usage
+#### 🛠️ Usage<a id="🛠️-usage"></a>
 
 ```typescript
 const updateResponse = await humanloop.finetunes.update({
@@ -1962,19 +1965,19 @@ const updateResponse = await humanloop.finetunes.update({
 });
 ```
 
-#### ⚙️ Parameters
+#### ⚙️ Parameters<a id="⚙️-parameters"></a>
 
-##### id: `string`
+##### id: `string`<a id="id-string"></a>
 
-##### projectId: `string`
+##### projectId: `string`<a id="projectid-string"></a>
 
-##### name: `string`
+##### name: `string`<a id="name-string"></a>
 
-#### 🔄 Return
+#### 🔄 Return<a id="🔄-return"></a>
 
 [FinetuneResponse](./models/finetune-response.ts)
 
-#### 🌐 Endpoint
+#### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
 `/finetunes/{id}` `PATCH`
 
@@ -1983,91 +1986,153 @@ const updateResponse = await humanloop.finetunes.update({
 ---
 
 
-### `humanloop.log`
+### `humanloop.logs.delete`<a id="humanlooplogsdelete"></a>
+
+Delete Logs
+
+#### 🛠️ Usage<a id="🛠️-usage"></a>
+
+```typescript
+const deleteResponse = await humanloop.logs.delete({});
+```
+
+#### ⚙️ Parameters<a id="⚙️-parameters"></a>
+
+##### id: `string`[]<a id="id-string"></a>
+
+#### 🌐 Endpoint<a id="🌐-endpoint"></a>
+
+`/logs` `DELETE`
+
+[🔙 **Back to Table of Contents**](#table-of-contents)
+
+---
+
+
+### `humanloop.logs.list`<a id="humanlooplogslist"></a>
+
+Retrieve paginated logs from the server.  Sorting and filtering are supported through query params. See docstring of get_sorted_filtered_project_data_from_query_params for more details.
+
+#### 🛠️ Usage<a id="🛠️-usage"></a>
+
+```typescript
+const listResponse = await humanloop.logs.list({
+  projectId: "projectId_example",
+  size: 50,
+  page: 0,
+});
+```
+
+#### ⚙️ Parameters<a id="⚙️-parameters"></a>
+
+##### projectId: `string`<a id="projectid-string"></a>
+
+##### search: `string`<a id="search-string"></a>
+
+##### metadataSearch: `string`<a id="metadatasearch-string"></a>
+
+##### startDate: `string | Date`<a id="startdate-string--date"></a>
+
+##### endDate: `string | Date`<a id="enddate-string--date"></a>
+
+##### size: `number`<a id="size-number"></a>
+
+##### page: `number`<a id="page-number"></a>
+
+#### 🌐 Endpoint<a id="🌐-endpoint"></a>
+
+`/logs` `GET`
+
+[🔙 **Back to Table of Contents**](#table-of-contents)
+
+---
+
+
+### `humanloop.log`<a id="humanlooplog"></a>
 
 Log a datapoint or array of datapoints to your Humanloop project.
 
-#### 🛠️ Usage
+#### 🛠️ Usage<a id="🛠️-usage"></a>
 
 ```typescript
 const logResponse = await humanloop.log({});
 ```
 
-#### ⚙️ Parameters
+#### ⚙️ Parameters<a id="⚙️-parameters"></a>
 
-##### project: `string`
+##### project: `string`<a id="project-string"></a>
 
 Unique project name. If no project exists with this name, a new project will be created.
 
-##### project_id: `string`
+##### project_id: `string`<a id="project_id-string"></a>
 
 Unique ID of a project to associate to the log. Either this or `project` must be provided.
 
-##### session_id: `string`
+##### session_id: `string`<a id="session_id-string"></a>
 
 ID of the session to associate the datapoint.
 
-##### session_reference_id: `string`
+##### session_reference_id: `string`<a id="session_reference_id-string"></a>
 
 A unique string identifying the session to associate the datapoint to. Allows you to log multiple datapoints to a session (using an ID kept by your internal systems) by passing the same `session_reference_id` in subsequent log requests. Specify at most one of this or `session_id`.
 
-##### parent_id: `string`
+##### parent_id: `string`<a id="parent_id-string"></a>
 
 ID associated to the parent datapoint in a session.
 
-##### parent_reference_id: `string`
+##### parent_reference_id: `string`<a id="parent_reference_id-string"></a>
 
 A unique string identifying the previously-logged parent datapoint in a session. Allows you to log nested datapoints with your internal system IDs by passing the same reference ID as `parent_id` in a prior log request. Specify at most one of this or `parent_id`. Note that this cannot refer to a datapoint being logged in the same request.
 
-##### inputs: `object`
+##### inputs: `object`<a id="inputs-object"></a>
 
 The inputs passed to the prompt template.
 
-##### source: `string`
+##### source: `string`<a id="source-string"></a>
 
 Identifies where the model was called from.
 
-##### metadata: `object`
+##### metadata: `object`<a id="metadata-object"></a>
 
 Any additional metadata to record.
 
-##### reference_id: `string`
+##### reference_id: `string`<a id="reference_id-string"></a>
 
 A unique string to reference the datapoint. Allows you to log nested datapoints with your internal system IDs by passing the same reference ID as `parent_id` in a subsequent log request.
 
-##### trial_id: `string`
+##### trial_id: `string`<a id="trial_id-string"></a>
 
 Unique ID of an experiment trial to associate to the log.
 
-##### messages: [`ChatMessage`](./models/chat-message.ts)[]
+##### messages: [`ChatMessage`](./models/chat-message.ts)[]<a id="messages-chatmessagemodelschat-messagets"></a>
 
 The messages passed to the to provider chat endpoint.
 
-##### output: `string`
+##### output: `string`<a id="output-string"></a>
 
 Generated output from your model for the provided inputs. Can be `None` if logging an error, or if logging a parent datapoint with the intention to populate it later
 
-##### config: [`ConfigProperty1`](./models/config-property1.ts)
+##### config: [`ConfigProperty1`](./models/config-property1.ts)<a id="config-configproperty1modelsconfig-property1ts"></a>
 
-##### feedback: [`FeedbackLabelsProperty`](./models/feedback-labels-property.ts)
+##### feedback: [`FeedbackLabelsProperty`](./models/feedback-labels-property.ts)<a id="feedback-feedbacklabelspropertymodelsfeedback-labels-propertyts"></a>
 
-##### created_at: `string`
+##### created_at: `string`<a id="created_at-string"></a>
 
 User defined timestamp for when the log was created. 
 
-##### error: `string`
+##### error: `string`<a id="error-string"></a>
 
 Error message if the log is an error.
 
-##### duration: `number`
+##### duration: `number`<a id="duration-number"></a>
 
 Duration of the logged event in seconds.
 
-#### 🔄 Return
+#### 🔄 Return<a id="🔄-return"></a>
 
 [LogsLogResponse](./models/logs-log-response.ts)
 
-#### 🌐 Endpoint
+#### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
 `/logs` `POST`
 
@@ -2076,11 +2141,11 @@ Duration of the logged event in seconds.
 ---
 
 
-### `humanloop.logs.update`
+### `humanloop.logs.update`<a id="humanlooplogsupdate"></a>
 
 Update a logged datapoint in your Humanloop project.
 
-#### 🛠️ Usage
+#### 🛠️ Usage<a id="🛠️-usage"></a>
 
 ```typescript
 const updateResponse = await humanloop.logs.update({
@@ -2088,29 +2153,29 @@ const updateResponse = await humanloop.logs.update({
 });
 ```
 
-#### ⚙️ Parameters
+#### ⚙️ Parameters<a id="⚙️-parameters"></a>
 
-##### id: `string`
+##### id: `string`<a id="id-string"></a>
 
 String ID of logged datapoint to return. Starts with `data_`.
 
-##### output: `string`
+##### output: `string`<a id="output-string"></a>
 
 Generated output from your model for the provided inputs.
 
-##### error: `string`
+##### error: `string`<a id="error-string"></a>
 
 Error message if the log is an error.
 
-##### duration: `number`
+##### duration: `number`<a id="duration-number"></a>
 
 Duration of the logged event in seconds.
 
-#### 🔄 Return
+#### 🔄 Return<a id="🔄-return"></a>
 
 [LogResponse](./models/log-response.ts)
 
-#### 🌐 Endpoint
+#### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
 `/logs/{id}` `PATCH`
 
@@ -2119,11 +2184,11 @@ Duration of the logged event in seconds.
 ---
 
 
-### `humanloop.logs.updateByRef`
+### `humanloop.logs.updateByRef`<a id="humanlooplogsupdatebyref"></a>
 
 Update a logged datapoint by its reference ID.  The `reference_id` query parameter must be provided, and refers to the `reference_id` of a previously-logged datapoint.
 
-#### 🛠️ Usage
+#### 🛠️ Usage<a id="🛠️-usage"></a>
 
 ```typescript
 const updateByRefResponse = await humanloop.logs.updateByRef({
@@ -2131,29 +2196,29 @@ const updateByRefResponse = await humanloop.logs.updateByRef({
 });
 ```
 
-#### ⚙️ Parameters
+#### ⚙️ Parameters<a id="⚙️-parameters"></a>
 
-##### referenceId: `string`
+##### referenceId: `string`<a id="referenceid-string"></a>
 
 A unique string to reference the datapoint. Identifies the logged datapoint created with the same `reference_id`.
 
-##### output: `string`
+##### output: `string`<a id="output-string"></a>
 
 Generated output from your model for the provided inputs.
 
-##### error: `string`
+##### error: `string`<a id="error-string"></a>
 
 Error message if the log is an error.
 
-##### duration: `number`
+##### duration: `number`<a id="duration-number"></a>
 
 Duration of the logged event in seconds.
 
-#### 🔄 Return
+#### 🔄 Return<a id="🔄-return"></a>
 
 [LogResponse](./models/log-response.ts)
 
-#### 🌐 Endpoint
+#### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
 `/logs` `PATCH`
 
@@ -2162,11 +2227,11 @@ Duration of the logged event in seconds.
 ---
 
 
-### `humanloop.modelConfigs.get`
+### `humanloop.modelConfigs.get`<a id="humanloopmodelconfigsget"></a>
 
 Get a specific model config by ID.
 
-#### 🛠️ Usage
+#### 🛠️ Usage<a id="🛠️-usage"></a>
 
 ```typescript
 const getResponse = await humanloop.modelConfigs.get({
@@ -2174,17 +2239,17 @@ const getResponse = await humanloop.modelConfigs.get({
 });
 ```
 
-#### ⚙️ Parameters
+#### ⚙️ Parameters<a id="⚙️-parameters"></a>
 
-##### id: `string`
+##### id: `string`<a id="id-string"></a>
 
 String ID of the model config. Starts with `config_`.
 
-#### 🔄 Return
+#### 🔄 Return<a id="🔄-return"></a>
 
 [ModelConfigResponse](./models/model-config-response.ts)
 
-#### 🌐 Endpoint
+#### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
 `/model-configs/{id}` `GET`
 
@@ -2193,11 +2258,11 @@ String ID of the model config. Starts with `config_`.
 ---
 
 
-### `humanloop.modelConfigs.register`
+### `humanloop.modelConfigs.register`<a id="humanloopmodelconfigsregister"></a>
 
 Register a model config to a project and optionally add it to an experiment.  If the project name provided does not exist, a new project will be created automatically.  If an experiment name is provided, the specified experiment must already exist. Otherwise, an error will be raised.  If the model config is the first to be associated to the project, it will be set as the active model config.
 
-#### 🛠️ Usage
+#### 🛠️ Usage<a id="🛠️-usage"></a>
 
 ```typescript
 const registerResponse = await humanloop.modelConfigs.register({
@@ -2210,83 +2275,83 @@ const registerResponse = await humanloop.modelConfigs.register({
 });
 ```
 
-#### ⚙️ Parameters
+#### ⚙️ Parameters<a id="⚙️-parameters"></a>
 
-##### model: `string`
+##### model: `string`<a id="model-string"></a>
 
 The model instance used. E.g. text-davinci-002.
 
-##### description: `string`
+##### description: `string`<a id="description-string"></a>
 
 A description of the model config.
 
-##### name: `string`
+##### name: `string`<a id="name-string"></a>
 
 A friendly display name for the model config. If not provided, a name will be generated.
 
-##### provider: [`ModelProviders`](./models/model-providers.ts)
+##### provider: [`ModelProviders`](./models/model-providers.ts)<a id="provider-modelprovidersmodelsmodel-providersts"></a>
 
 The company providing the underlying model service.
 
-##### max_tokens: `number`
+##### max_tokens: `number`<a id="max_tokens-number"></a>
 
 The maximum number of tokens to generate. Provide max_tokens=-1 to dynamically calculate the maximum number of tokens to generate given the length of the prompt
 
-##### temperature: `number`
+##### temperature: `number`<a id="temperature-number"></a>
 
 What sampling temperature to use when making a generation. Higher values means the model will be more creative.
 
-##### top_p: `number`
+##### top_p: `number`<a id="top_p-number"></a>
 
 An alternative to sampling with temperature, called nucleus sampling, where the model considers the results of the tokens with top_p probability mass.
 
-##### stop: [`StopSequenceSProperty`](./models/stop-sequence-sproperty.ts)
+##### stop: [`StopSequenceSProperty`](./models/stop-sequence-sproperty.ts)<a id="stop-stopsequencespropertymodelsstop-sequence-spropertyts"></a>
 
-##### presence_penalty: `number`
+##### presence_penalty: `number`<a id="presence_penalty-number"></a>
 
 Number between -2.0 and 2.0. Positive values penalize new tokens based on whether they appear in the generation so far.
 
-##### frequency_penalty: `number`
+##### frequency_penalty: `number`<a id="frequency_penalty-number"></a>
 
 Number between -2.0 and 2.0. Positive values penalize new tokens based on how frequently they appear in the generation so far.
 
-##### other: `object`
+##### other: `object`<a id="other-object"></a>
 
 Other parameter values to be passed to the provider call.
 
-##### project: `string`
+##### project: `string`<a id="project-string"></a>
 
 Unique project name. If it does not exist, a new project will be created.
 
-##### project_id: `string`
+##### project_id: `string`<a id="project_id-string"></a>
 
 Unique project ID
 
-##### experiment: `string`
+##### experiment: `string`<a id="experiment-string"></a>
 
 If specified, the model config will be added to this experiment. Experiments are used for A/B testing and optimizing hyperparameters.
 
-##### prompt_template: `string`
+##### prompt_template: `string`<a id="prompt_template-string"></a>
 
 Prompt template that will take your specified inputs to form your final request to the provider model. NB: Input variables within the prompt template should be specified with syntax: {{INPUT_NAME}}.
 
-##### chat_template: [`ChatMessage`](./models/chat-message.ts)[]
+##### chat_template: [`ChatMessage`](./models/chat-message.ts)[]<a id="chat_template-chatmessagemodelschat-messagets"></a>
 
 Messages prepended to the list of messages sent to the provider. These messages that will take your specified inputs to form your final request to the provider model. NB: Input variables within the prompt template should be specified with syntax: {{INPUT_NAME}}.
 
-##### endpoint: [`ModelEndpoints`](./models/model-endpoints.ts)
+##### endpoint: [`ModelEndpoints`](./models/model-endpoints.ts)<a id="endpoint-modelendpointsmodelsmodel-endpointsts"></a>
 
 Which of the providers model endpoints to use. For example Complete or Edit.
 
-##### tools: [`ModelConfigToolRequest`](./models/model-config-tool-request.ts)[]
+##### tools: [`ModelConfigToolRequest`](./models/model-config-tool-request.ts)[]<a id="tools-modelconfigtoolrequestmodelsmodel-config-tool-requestts"></a>
 
 Make tools available to OpenAIs chat model as functions.
 
-#### 🔄 Return
+#### 🔄 Return<a id="🔄-return"></a>
 
 [ProjectConfigResponse](./models/project-config-response.ts)
 
-#### 🌐 Endpoint
+#### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
 `/model-configs` `POST`
 
@@ -2295,11 +2360,11 @@ Make tools available to OpenAIs chat model as functions.
 ---
 
 
-### `humanloop.projects.create`
+### `humanloop.projects.create`<a id="humanloopprojectscreate"></a>
 
 Create a new project.
 
-#### 🛠️ Usage
+#### 🛠️ Usage<a id="🛠️-usage"></a>
 
 ```typescript
 const createResponse = await humanloop.projects.create({
@@ -2307,21 +2372,25 @@ const createResponse = await humanloop.projects.create({
 });
 ```
 
-#### ⚙️ Parameters
+#### ⚙️ Parameters<a id="⚙️-parameters"></a>
 
-##### name: `string`
+##### name: `string`<a id="name-string"></a>
 
 Unique project name.
 
-##### feedback_types: [`FeedbackTypeRequest`](./models/feedback-type-request.ts)[]
+##### feedback_types: [`FeedbackTypeRequest`](./models/feedback-type-request.ts)[]<a id="feedback_types-feedbacktyperequestmodelsfeedback-type-requestts"></a>
 
 Feedback types to be created.
 
-#### 🔄 Return
+##### directory_id: `string`<a id="directory_id-string"></a>
+
+ID of directory to assign project to. Starts with `dir_`. If not provided, the project will be created in the root directory.
+
+#### 🔄 Return<a id="🔄-return"></a>
 
 [ProjectResponse](./models/project-response.ts)
 
-#### 🌐 Endpoint
+#### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
 `/projects` `POST`
 
@@ -2330,11 +2399,11 @@ Feedback types to be created.
 ---
 
 
-### `humanloop.projects.createFeedbackType`
+### `humanloop.projects.createFeedbackType`<a id="humanloopprojectscreatefeedbacktype"></a>
 
 Create Feedback Type
 
-#### 🛠️ Usage
+#### 🛠️ Usage<a id="🛠️-usage"></a>
 
 ```typescript
 const createFeedbackTypeResponse = await humanloop.projects.createFeedbackType({
@@ -2343,29 +2412,29 @@ const createFeedbackTypeResponse = await humanloop.projects.createFeedbackType({
 });
 ```
 
-#### ⚙️ Parameters
+#### ⚙️ Parameters<a id="⚙️-parameters"></a>
 
-##### type: `string`
+##### type: `string`<a id="type-string"></a>
 
 The type of feedback to update.
 
-##### id: `string`
+##### id: `string`<a id="id-string"></a>
 
 String ID of project. Starts with `pr_`.
 
-##### values: [`FeedbackLabelRequest`](./models/feedback-label-request.ts)[]
+##### values: [`FeedbackLabelRequest`](./models/feedback-label-request.ts)[]<a id="values-feedbacklabelrequestmodelsfeedback-label-requestts"></a>
 
 The feedback values to be available. This field should only be populated when updating a \\\'select\\\' or \\\'multi_select\\\' feedback class.
 
-##### class: [`FeedbackClass`](./models/feedback-class.ts)
+##### class: [`FeedbackClass`](./models/feedback-class.ts)<a id="class-feedbackclassmodelsfeedback-classts"></a>
 
 The data type associated to this feedback type; whether it is a \\\'text\\\'/\\\'select\\\'/\\\'multi_select\\\'. This is optional when updating the default feedback types (i.e. when `type` is \\\'rating\\\', \\\'action\\\' or \\\'issue\\\').
 
-#### 🔄 Return
+#### 🔄 Return<a id="🔄-return"></a>
 
 [FeedbackTypeModel](./models/feedback-type-model.ts)
 
-#### 🌐 Endpoint
+#### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
 `/projects/{id}/feedback-types` `POST`
 
@@ -2374,11 +2443,11 @@ The data type associated to this feedback type; whether it is a \\\'text\\\'/\\\
 ---
 
 
-### `humanloop.projects.deactivateConfig`
+### `humanloop.projects.deactivateConfig`<a id="humanloopprojectsdeactivateconfig"></a>
 
 Remove the project\'s active config, if set.  This has no effect if the project does not have an active model config set.
 
-#### 🛠️ Usage
+#### 🛠️ Usage<a id="🛠️-usage"></a>
 
 ```typescript
 const deactivateConfigResponse = await humanloop.projects.deactivateConfig({
@@ -2386,21 +2455,21 @@ const deactivateConfigResponse = await humanloop.projects.deactivateConfig({
 });
 ```
 
-#### ⚙️ Parameters
+#### ⚙️ Parameters<a id="⚙️-parameters"></a>
 
-##### id: `string`
+##### id: `string`<a id="id-string"></a>
 
 String ID of project. Starts with `pr_`.
 
-##### environment: `string`
+##### environment: `string`<a id="environment-string"></a>
 
 Name for the environment. E.g. \'producton\'. If not provided, will delete the active config for the default environment.
 
-#### 🔄 Return
+#### 🔄 Return<a id="🔄-return"></a>
 
 [ProjectResponse](./models/project-response.ts)
 
-#### 🌐 Endpoint
+#### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
 `/projects/{id}/active-config` `DELETE`
 
@@ -2409,11 +2478,11 @@ Name for the environment. E.g. \'producton\'. If not provided, will delete the a
 ---
 
 
-### `humanloop.projects.deactivateExperiment`
+### `humanloop.projects.deactivateExperiment`<a id="humanloopprojectsdeactivateexperiment"></a>
 
 Remove the project\'s active experiment, if set.  This has no effect if the project does not have an active experiment set.
 
-#### 🛠️ Usage
+#### 🛠️ Usage<a id="🛠️-usage"></a>
 
 ```typescript
 const deactivateExperimentResponse =
@@ -2422,21 +2491,21 @@ const deactivateExperimentResponse =
   });
 ```
 
-#### ⚙️ Parameters
+#### ⚙️ Parameters<a id="⚙️-parameters"></a>
 
-##### id: `string`
+##### id: `string`<a id="id-string"></a>
 
 String ID of project. Starts with `pr_`.
 
-##### environment: `string`
+##### environment: `string`<a id="environment-string"></a>
 
 Name for the environment. E.g. \'producton\'. If not provided, will return the experiment for the default environment.
 
-#### 🔄 Return
+#### 🔄 Return<a id="🔄-return"></a>
 
 [ProjectResponse](./models/project-response.ts)
 
-#### 🌐 Endpoint
+#### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
 `/projects/{id}/active-experiment` `DELETE`
 
@@ -2445,11 +2514,38 @@ Name for the environment. E.g. \'producton\'. If not provided, will return the e
 ---
 
 
-### `humanloop.projects.deleteDeployedConfig`
+### `humanloop.projects.delete`<a id="humanloopprojectsdelete"></a>
+
+Delete a specific project.
+
+#### 🛠️ Usage<a id="🛠️-usage"></a>
+
+```typescript
+const deleteResponse = await humanloop.projects.delete({
+  id: "id_example",
+});
+```
+
+#### ⚙️ Parameters<a id="⚙️-parameters"></a>
+
+##### id: `string`<a id="id-string"></a>
+
+String ID of project. Starts with `pr_`.
+
+#### 🌐 Endpoint<a id="🌐-endpoint"></a>
+
+`/projects/{id}` `DELETE`
+
+[🔙 **Back to Table of Contents**](#table-of-contents)
+
+---
+
+
+### `humanloop.projects.deleteDeployedConfig`<a id="humanloopprojectsdeletedeployedconfig"></a>
 
 Remove the model config deployed to environment.  This has no effect if the project does not have an active model config set.
 
-#### 🛠️ Usage
+#### 🛠️ Usage<a id="🛠️-usage"></a>
 
 ```typescript
 const deleteDeployedConfigResponse =
@@ -2459,13 +2555,13 @@ const deleteDeployedConfigResponse =
   });
 ```
 
-#### ⚙️ Parameters
+#### ⚙️ Parameters<a id="⚙️-parameters"></a>
 
-##### projectId: `string`
+##### projectId: `string`<a id="projectid-string"></a>
 
-##### environmentId: `string`
+##### environmentId: `string`<a id="environmentid-string"></a>
 
-#### 🌐 Endpoint
+#### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
 `/projects/{project_id}/deployed-config/{environment_id}` `DELETE`
 
@@ -2474,11 +2570,11 @@ const deleteDeployedConfigResponse =
 ---
 
 
-### `humanloop.projects.deployConfig`
+### `humanloop.projects.deployConfig`<a id="humanloopprojectsdeployconfig"></a>
 
 Deploy a model config to an environment.  If the environment already has a model config deployed, it will be replaced.
 
-#### 🛠️ Usage
+#### 🛠️ Usage<a id="🛠️-usage"></a>
 
 ```typescript
 const deployConfigResponse = await humanloop.projects.deployConfig({
@@ -2486,27 +2582,27 @@ const deployConfigResponse = await humanloop.projects.deployConfig({
 });
 ```
 
-#### ⚙️ Parameters
+#### ⚙️ Parameters<a id="⚙️-parameters"></a>
 
-##### projectId: `string`
+##### projectId: `string`<a id="projectid-string"></a>
 
-##### config_id: `string`
+##### config_id: `string`<a id="config_id-string"></a>
 
 Model config unique identifier generated by Humanloop.
 
-##### experiment_id: `string`
+##### experiment_id: `string`<a id="experiment_id-string"></a>
 
 String ID of experiment. Starts with `exp_`.
 
-##### environments: [`EnvironmentRequest`](./models/environment-request.ts)[]
+##### environments: [`EnvironmentRequest`](./models/environment-request.ts)[]<a id="environments-environmentrequestmodelsenvironment-requestts"></a>
 
 List of environments to associate with the model config.
 
-#### 🔄 Return
+#### 🔄 Return<a id="🔄-return"></a>
 
 [EnvironmentProjectConfigResponse](./models/environment-project-config-response.ts)
 
-#### 🌐 Endpoint
+#### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
 `/projects/{project_id}/deploy-config` `PATCH`
 
@@ -2515,11 +2611,11 @@ List of environments to associate with the model config.
 ---
 
 
-### `humanloop.projects.export`
+### `humanloop.projects.export`<a id="humanloopprojectsexport"></a>
 
 Export all logged datapoints associated to your project.  Results are paginated and sorts the datapoints based on `created_at` in descending order.
 
-#### 🛠️ Usage
+#### 🛠️ Usage<a id="🛠️-usage"></a>
 
 ```typescript
 const exportResponse = await humanloop.projects.export({
@@ -2529,21 +2625,21 @@ const exportResponse = await humanloop.projects.export({
 });
 ```
 
-#### ⚙️ Parameters
+#### ⚙️ Parameters<a id="⚙️-parameters"></a>
 
-##### id: `string`
+##### id: `string`<a id="id-string"></a>
 
 String ID of project. Starts with `pr_`.
 
-##### page: `number`
+##### page: `number`<a id="page-number"></a>
 
 Page offset for pagination.
 
-##### size: `number`
+##### size: `number`<a id="size-number"></a>
 
 Page size for pagination. Number of logs to export.
 
-#### 🌐 Endpoint
+#### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
 `/projects/{id}/export` `POST`
 
@@ -2552,11 +2648,11 @@ Page size for pagination. Number of logs to export.
 ---
 
 
-### `humanloop.projects.get`
+### `humanloop.projects.get`<a id="humanloopprojectsget"></a>
 
 Get a specific project.
 
-#### 🛠️ Usage
+#### 🛠️ Usage<a id="🛠️-usage"></a>
 
 ```typescript
 const getResponse = await humanloop.projects.get({
@@ -2564,17 +2660,17 @@ const getResponse = await humanloop.projects.get({
 });
 ```
 
-#### ⚙️ Parameters
+#### ⚙️ Parameters<a id="⚙️-parameters"></a>
 
-##### id: `string`
+##### id: `string`<a id="id-string"></a>
 
 String ID of project. Starts with `pr_`.
 
-#### 🔄 Return
+#### 🔄 Return<a id="🔄-return"></a>
 
 [ProjectResponse](./models/project-response.ts)
 
-#### 🌐 Endpoint
+#### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
 `/projects/{id}` `GET`
 
@@ -2583,11 +2679,11 @@ String ID of project. Starts with `pr_`.
 ---
 
 
-### `humanloop.projects.getActiveConfig`
+### `humanloop.projects.getActiveConfig`<a id="humanloopprojectsgetactiveconfig"></a>
 
 Retrieves a config to use to execute your model.  A config will be selected based on the project\'s active config/experiment settings.
 
-#### 🛠️ Usage
+#### 🛠️ Usage<a id="🛠️-usage"></a>
 
 ```typescript
 const getActiveConfigResponse = await humanloop.projects.getActiveConfig({
@@ -2595,21 +2691,21 @@ const getActiveConfigResponse = await humanloop.projects.getActiveConfig({
 });
 ```
 
-#### ⚙️ Parameters
+#### ⚙️ Parameters<a id="⚙️-parameters"></a>
 
-##### id: `string`
+##### id: `string`<a id="id-string"></a>
 
 String ID of project. Starts with `pr_`.
 
-##### environment: `string`
+##### environment: `string`<a id="environment-string"></a>
 
 Name for the environment. E.g. \'producton\'. If not provided, will return the active config for the default environment.
 
-#### 🔄 Return
+#### 🔄 Return<a id="🔄-return"></a>
 
 [GetModelConfigResponse](./models/get-model-config-response.ts)
 
-#### 🌐 Endpoint
+#### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
 `/projects/{id}/active-config` `GET`
 
@@ -2618,11 +2714,11 @@ Name for the environment. E.g. \'producton\'. If not provided, will return the a
 ---
 
 
-### `humanloop.projects.list`
+### `humanloop.projects.list`<a id="humanloopprojectslist"></a>
 
 Get a paginated list of projects.
 
-#### 🛠️ Usage
+#### 🛠️ Usage<a id="🛠️-usage"></a>
 
 ```typescript
 const listResponse = await humanloop.projects.list({
@@ -2631,37 +2727,33 @@ const listResponse = await humanloop.projects.list({
 });
 ```
 
-#### ⚙️ Parameters
+#### ⚙️ Parameters<a id="⚙️-parameters"></a>
 
-##### page: `number`
+##### page: `number`<a id="page-number"></a>
 
 Page offset for pagination.
 
-##### size: `number`
+##### size: `number`<a id="size-number"></a>
 
 Page size for pagination. Number of projects to fetch.
 
-##### organizationId: `string`
-
-ID of organization that fetched projects belong to. Starts with `org_`.
-
-##### filter: `string`
+##### filter: `string`<a id="filter-string"></a>
 
 Case-insensitive filter for project name.
 
-##### userFilter: `string`
+##### userFilter: `string`<a id="userfilter-string"></a>
 
 Case-insensitive filter for users in the project. This filter matches against both email address and name of users.
 
-##### sortBy: [`ProjectSortBy`](./models/project-sort-by.ts)
+##### sortBy: [`ProjectSortBy`](./models/project-sort-by.ts)<a id="sortby-projectsortbymodelsproject-sort-byts"></a>
 
 Field to sort projects by
 
-##### order: [`SortOrder`](./models/sort-order.ts)
+##### order: [`SortOrder`](./models/sort-order.ts)<a id="order-sortordermodelssort-orderts"></a>
 
 Direction to sort by.
 
-#### 🌐 Endpoint
+#### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
 `/projects` `GET`
 
@@ -2670,11 +2762,11 @@ Direction to sort by.
 ---
 
 
-### `humanloop.projects.listConfigs`
+### `humanloop.projects.listConfigs`<a id="humanloopprojectslistconfigs"></a>
 
 Get an array of configs associated to your project.
 
-#### 🛠️ Usage
+#### 🛠️ Usage<a id="🛠️-usage"></a>
 
 ```typescript
 const listConfigsResponse = await humanloop.projects.listConfigs({
@@ -2682,19 +2774,19 @@ const listConfigsResponse = await humanloop.projects.listConfigs({
 });
 ```
 
-#### ⚙️ Parameters
+#### ⚙️ Parameters<a id="⚙️-parameters"></a>
 
-##### id: `string`
+##### id: `string`<a id="id-string"></a>
 
 String ID of project. Starts with `pr_`.
 
-##### evaluationAggregates: `boolean`
+##### evaluationAggregates: `boolean`<a id="evaluationaggregates-boolean"></a>
 
-#### 🔄 Return
+#### 🔄 Return<a id="🔄-return"></a>
 
 [ProjectConfigResponse](./models/project-config-response.ts)
 
-#### 🌐 Endpoint
+#### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
 `/projects/{id}/configs` `GET`
 
@@ -2703,11 +2795,11 @@ String ID of project. Starts with `pr_`.
 ---
 
 
-### `humanloop.projects.listDeployedConfigs`
+### `humanloop.projects.listDeployedConfigs`<a id="humanloopprojectslistdeployedconfigs"></a>
 
 Get an array of environments with the deployed configs associated to your project.
 
-#### 🛠️ Usage
+#### 🛠️ Usage<a id="🛠️-usage"></a>
 
 ```typescript
 const listDeployedConfigsResponse =
@@ -2716,17 +2808,17 @@ const listDeployedConfigsResponse =
   });
 ```
 
-#### ⚙️ Parameters
+#### ⚙️ Parameters<a id="⚙️-parameters"></a>
 
-##### id: `string`
+##### id: `string`<a id="id-string"></a>
 
 String ID of project. Starts with `pr_`.
 
-#### 🔄 Return
+#### 🔄 Return<a id="🔄-return"></a>
 
 [EnvironmentProjectConfigResponse](./models/environment-project-config-response.ts)
 
-#### 🌐 Endpoint
+#### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
 `/projects/{id}/deployed-configs` `GET`
 
@@ -2735,11 +2827,11 @@ String ID of project. Starts with `pr_`.
 ---
 
 
-### `humanloop.projects.update`
+### `humanloop.projects.update`<a id="humanloopprojectsupdate"></a>
 
 Update a specific project.  Set the project\'s active model config/experiment by passing either `active_experiment_id` or `active_model_config_id`. These will be set to the Default environment unless a list of environments are also passed in specifically detailing which environments to assign the active config or experiment.  Set the feedback labels to be treated as positive user feedback used in calculating top-level project metrics by passing a list of labels in `positive_labels`.
 
-#### 🛠️ Usage
+#### 🛠️ Usage<a id="🛠️-usage"></a>
 
 ```typescript
 const updateResponse = await humanloop.projects.update({
@@ -2747,33 +2839,37 @@ const updateResponse = await humanloop.projects.update({
 });
 ```
 
-#### ⚙️ Parameters
+#### ⚙️ Parameters<a id="⚙️-parameters"></a>
 
-##### id: `string`
+##### id: `string`<a id="id-string"></a>
 
 String ID of project. Starts with `pr_`.
 
-##### name: `string`
+##### name: `string`<a id="name-string"></a>
 
 The new unique project name. Caution, if you are using the project name as the unique identifier in your API calls, changing the name will break the calls.
 
-##### active_experiment_id: `string`
+##### active_experiment_id: `string`<a id="active_experiment_id-string"></a>
 
 ID for an experiment to set as the project\\\'s active deployment. Starts with \\\'exp_\\\'. At most one of \\\'active_experiment_id\\\' and \\\'active_model_config_id\\\' can be set.
 
-##### active_config_id: `string`
+##### active_config_id: `string`<a id="active_config_id-string"></a>
 
 ID for a config to set as the project\\\'s active deployment. Starts with \\\'config_\\\'. At most one of \\\'active_experiment_id\\\' and \\\'active_config_id\\\' can be set.
 
-##### positive_labels: [`PositiveLabel`](./models/positive-label.ts)[]
+##### positive_labels: [`PositiveLabel`](./models/positive-label.ts)[]<a id="positive_labels-positivelabelmodelspositive-labelts"></a>
 
 The full list of labels to treat as positive user feedback.
 
-#### 🔄 Return
+##### directory_id: `string`<a id="directory_id-string"></a>
+
+ID of directory to assign project to. Starts with `dir_`.
+
+#### 🔄 Return<a id="🔄-return"></a>
 
 [ProjectResponse](./models/project-response.ts)
 
-#### 🌐 Endpoint
+#### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
 `/projects/{id}` `PATCH`
 
@@ -2782,11 +2878,11 @@ The full list of labels to treat as positive user feedback.
 ---
 
 
-### `humanloop.projects.updateFeedbackTypes`
+### `humanloop.projects.updateFeedbackTypes`<a id="humanloopprojectsupdatefeedbacktypes"></a>
 
 Update feedback types.  Allows enabling the available feedback types and setting status of feedback types/categorical values.  This behaves like an upsert; any feedback categorical values that do not already exist in the project will be created.
 
-#### 🛠️ Usage
+#### 🛠️ Usage<a id="🛠️-usage"></a>
 
 ```typescript
 const updateFeedbackTypesResponse =
@@ -2800,19 +2896,19 @@ const updateFeedbackTypesResponse =
   });
 ```
 
-#### ⚙️ Parameters
+#### ⚙️ Parameters<a id="⚙️-parameters"></a>
 
-##### id: `string`
+##### id: `string`<a id="id-string"></a>
 
 String ID of project. Starts with `pr_`.
 
-##### requestBody: [`FeedbackTypeRequest`](./models/feedback-type-request.ts)[]
+##### requestBody: [`FeedbackTypeRequest`](./models/feedback-type-request.ts)[]<a id="requestbody-feedbacktyperequestmodelsfeedback-type-requestts"></a>
 
-#### 🔄 Return
+#### 🔄 Return<a id="🔄-return"></a>
 
 [FeedbackTypeModel](./models/feedback-type-model.ts)
 
-#### 🌐 Endpoint
+#### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
 `/projects/{id}/feedback-types` `PATCH`
 
@@ -2821,21 +2917,21 @@ String ID of project. Starts with `pr_`.
 ---
 
 
-### `humanloop.sessions.create`
+### `humanloop.sessions.create`<a id="humanloopsessionscreate"></a>
 
 Create a new session.  Returns a session ID that can be used to log datapoints to the session.
 
-#### 🛠️ Usage
+#### 🛠️ Usage<a id="🛠️-usage"></a>
 
 ```typescript
 const createResponse = await humanloop.sessions.create();
 ```
 
-#### 🔄 Return
+#### 🔄 Return<a id="🔄-return"></a>
 
 [CreateSessionResponse](./models/create-session-response.ts)
 
-#### 🌐 Endpoint
+#### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
 `/sessions` `POST`
 
@@ -2844,11 +2940,11 @@ const createResponse = await humanloop.sessions.create();
 ---
 
 
-### `humanloop.sessions.get`
+### `humanloop.sessions.get`<a id="humanloopsessionsget"></a>
 
 Get a session by ID.
 
-#### 🛠️ Usage
+#### 🛠️ Usage<a id="🛠️-usage"></a>
 
 ```typescript
 const getResponse = await humanloop.sessions.get({
@@ -2856,17 +2952,17 @@ const getResponse = await humanloop.sessions.get({
 });
 ```
 
-#### ⚙️ Parameters
+#### ⚙️ Parameters<a id="⚙️-parameters"></a>
 
-##### id: `string`
+##### id: `string`<a id="id-string"></a>
 
 String ID of session to return. Starts with `sesh_`.
 
-#### 🔄 Return
+#### 🔄 Return<a id="🔄-return"></a>
 
 [SessionResponse](./models/session-response.ts)
 
-#### 🌐 Endpoint
+#### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
 `/sessions/{id}` `GET`
 
@@ -2875,11 +2971,11 @@ String ID of session to return. Starts with `sesh_`.
 ---
 
 
-### `humanloop.sessions.list`
+### `humanloop.sessions.list`<a id="humanloopsessionslist"></a>
 
 Get a page of sessions.
 
-#### 🛠️ Usage
+#### 🛠️ Usage<a id="🛠️-usage"></a>
 
 ```typescript
 const listResponse = await humanloop.sessions.list({
@@ -2889,21 +2985,21 @@ const listResponse = await humanloop.sessions.list({
 });
 ```
 
-#### ⚙️ Parameters
+#### ⚙️ Parameters<a id="⚙️-parameters"></a>
 
-##### projectId: `string`
+##### projectId: `string`<a id="projectid-string"></a>
 
 String ID of project to return sessions for. Sessions that contain any datapoints associated to this project will be returned. Starts with `pr_`.
 
-##### page: `number`
+##### page: `number`<a id="page-number"></a>
 
 Page to fetch. Starts from 1.
 
-##### size: `number`
+##### size: `number`<a id="size-number"></a>
 
 Number of sessions to retrieve.
 
-#### 🌐 Endpoint
+#### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
 `/sessions` `GET`
 
@@ -2912,5 +3008,5 @@ Number of sessions to retrieve.
 ---
 
 
-## Author
+## Author<a id="author"></a>
 This TypeScript package is automatically generated by [Konfig](https://konfigthis.com)
