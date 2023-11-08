@@ -4,7 +4,7 @@
 
 # [Humanloop](https://humanloop.com)<a id="humanloop"></a>
 
-[![npm](https://img.shields.io/badge/npm-v0.5.21-blue)](https://www.npmjs.com/package/humanloop/v/0.5.21)
+[![npm](https://img.shields.io/badge/npm-v0.5.22-blue)](https://www.npmjs.com/package/humanloop/v/0.5.22)
 [![GitHub last commit](https://img.shields.io/github/last-commit/humanloop/humanloop-node.svg)](https://github.com/humanloop/humanloop-node/commits)
 
 </div>
@@ -13,9 +13,7 @@
 
 <!-- toc -->
 
-- [Installing](#installing)
-  * [npm](#npm)
-  * [yarn](#yarn)
+- [Installation](#installation)
 - [Streaming Support](#streaming-support)
 - [Getting Started](#getting-started)
 - [Reference](#reference)
@@ -83,17 +81,38 @@
 
 <!-- tocstop -->
 
-## Installing<a id="installing"></a>
+## Installation<a id="installation"></a>
 
-### npm<a id="npm"></a>
-```
-npm install humanloop --save
+<table>
+<tr>
+<th width="292px"><code>npm</code></th>
+<th width="293px"><code>pnpm</code></th>
+<th width="292px"><code>yarn</code></th>
+</tr>
+<tr>
+<td>
+
+```bash
+npm i humanloop
 ```
 
-### yarn<a id="yarn"></a>
+</td>
+<td>
+
+```bash
+pnpm i humanloop
 ```
+
+</td>
+<td>
+
+```bash
 yarn add humanloop
 ```
+
+</td>
+</tr>
+</table>
 
 ## Streaming Support<a id="streaming-support"></a>
 
