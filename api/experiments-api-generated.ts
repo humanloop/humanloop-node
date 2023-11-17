@@ -67,6 +67,7 @@ import { UpdateExperimentRequest } from '../models';
 // @ts-ignore
 import { ValidationError } from '../models';
 import { paginate } from "../pagination/paginate";
+import type * as buffer from "buffer"
 import { requestBeforeHook } from '../requestBeforeHook';
 /**
  * ExperimentsApi - axios parameter creator

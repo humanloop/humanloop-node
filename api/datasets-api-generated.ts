@@ -63,6 +63,7 @@ import { UpdateDatasetRequest } from '../models';
 // @ts-ignore
 import { ValidationError } from '../models';
 import { paginate } from "../pagination/paginate";
+import type * as buffer from "buffer"
 import { requestBeforeHook } from '../requestBeforeHook';
 /**
  * DatasetsApi - axios parameter creator

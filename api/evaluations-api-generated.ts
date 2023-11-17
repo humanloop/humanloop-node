@@ -101,6 +101,7 @@ import { ValidationError } from '../models';
 // @ts-ignore
 import { ValueProperty } from '../models';
 import { paginate } from "../pagination/paginate";
+import type * as buffer from "buffer"
 import { requestBeforeHook } from '../requestBeforeHook';
 /**
  * EvaluationsApi - axios parameter creator

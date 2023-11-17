@@ -51,6 +51,7 @@ import { SessionResponse } from '../models';
 // @ts-ignore
 import { ValidationError } from '../models';
 import { paginate } from "../pagination/paginate";
+import type * as buffer from "buffer"
 import { requestBeforeHook } from '../requestBeforeHook';
 /**
  * SessionsApi - axios parameter creator

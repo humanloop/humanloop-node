@@ -53,6 +53,7 @@ import { UpdateEvaluatorRequest } from '../models';
 // @ts-ignore
 import { ValidationError } from '../models';
 import { paginate } from "../pagination/paginate";
+import type * as buffer from "buffer"
 import { requestBeforeHook } from '../requestBeforeHook';
 /**
  * EvaluatorsApi - axios parameter creator
