@@ -4,7 +4,7 @@
 
 # [Humanloop](https://humanloop.com)<a id="humanloop"></a>
 
-[![npm](https://img.shields.io/badge/npm-v0.5.22-blue)](https://www.npmjs.com/package/humanloop/v/0.5.22)
+[![npm](https://img.shields.io/badge/npm-v0.5.23-blue)](https://www.npmjs.com/package/humanloop/v/0.5.23)
 [![GitHub last commit](https://img.shields.io/github/last-commit/humanloop/humanloop-node.svg)](https://github.com/humanloop/humanloop-node/commits)
 
 </div>
