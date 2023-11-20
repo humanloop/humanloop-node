@@ -30,6 +30,9 @@ import type * as buffer from "buffer"
 
 import { EvaluatorArgumentsType } from './evaluator-arguments-type';
 import { EvaluatorReturnTypeEnum } from './evaluator-return-type-enum';
+import { EvaluatorType } from './evaluator-type';
+import { LoggingProjectProperty } from './logging-project-property';
+import { ModelConfigProperty2 } from './model-config-property2';
 
 /**
  * 
@@ -50,12 +53,6 @@ export interface EvaluatorResponse {
      */
     'name': string;
     /**
-     * The code for the evaluator. This code will be executed in a sandboxed environment.
-     * @type {string}
-     * @memberof EvaluatorResponse
-     */
-    'code': string;
-    /**
      * Whether this evaluator is target-free or target-required.
      * @type {EvaluatorArgumentsType}
      * @memberof EvaluatorResponse
@@ -67,6 +64,24 @@ export interface EvaluatorResponse {
      * @memberof EvaluatorResponse
      */
     'return_type': EvaluatorReturnTypeEnum;
+    /**
+     * The code for the evaluator. This code will be executed in a sandboxed environment.
+     * @type {string}
+     * @memberof EvaluatorResponse
+     */
+    'code'?: string;
+    /**
+     * 
+     * @type {ModelConfigProperty2}
+     * @memberof EvaluatorResponse
+     */
+    'model_config'?: ModelConfigProperty2;
+    /**
+     * The type of the evaluator.
+     * @type {EvaluatorType}
+     * @memberof EvaluatorResponse
+     */
+    'type': EvaluatorType;
     /**
      * Unique ID for the evaluator. Starts with `evfn_`.
      * @type {string}
@@ -85,5 +100,11 @@ export interface EvaluatorResponse {
      * @memberof EvaluatorResponse
      */
     'updated_at': string;
+    /**
+     * 
+     * @type {LoggingProjectProperty}
+     * @memberof EvaluatorResponse
+     */
+    'logging_project'?: LoggingProjectProperty;
 }
 

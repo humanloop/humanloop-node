@@ -30,7 +30,6 @@ import type * as buffer from "buffer"
 
 import { CategoricalFeedbackLabel } from './categorical-feedback-label';
 import { FeedbackTypeProperty } from './feedback-type-property';
-import { LabelSentiment } from './label-sentiment';
 
 /**
  * 

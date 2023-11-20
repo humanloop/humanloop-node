@@ -121,6 +121,12 @@ export interface CompletionExperimentRequest {
      */
     'suffix'?: string;
     /**
+     * If specified, model will make a best effort to sample deterministically, but it is not guaranteed.
+     * @type {number}
+     * @memberof CompletionExperimentRequest
+     */
+    'seed'?: number;
+    /**
      * End-user ID passed through to provider call.
      * @type {string}
      * @memberof CompletionExperimentRequest

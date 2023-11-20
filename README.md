@@ -41,6 +41,7 @@
   * [`humanloop.evaluations.listDatapoints`](#humanloopevaluationslistdatapoints)
   * [`humanloop.evaluators.create`](#humanloopevaluatorscreate)
   * [`humanloop.evaluators.delete`](#humanloopevaluatorsdelete)
+  * [`humanloop.evaluators.get`](#humanloopevaluatorsget)
   * [`humanloop.evaluators.list`](#humanloopevaluatorslist)
   * [`humanloop.evaluators.update`](#humanloopevaluatorsupdate)
   * [`humanloop.experiments.create`](#humanloopexperimentscreate)
@@ -221,7 +222,7 @@ Get a chat response by providing details of the model configuration in the reque
 const createResponse = await humanloop.chat({
   messages: [
     {
-      role: "user",
+      role: "string_example",
     },
   ],
   num_samples: 1,
@@ -295,7 +296,15 @@ If true, tokens will be sent as data-only server-sent events. If num_samples > 1
 
 End-user ID passed through to provider call.
 
+##### tool_choice: [`ToolChoiceProperty`](./models/tool-choice-property.ts)<a id="tool_choice-toolchoicepropertymodelstool-choice-propertyts"></a>
+
 ##### tool_call: [`ToolCallProperty1`](./models/tool-call-property1.ts)<a id="tool_call-toolcallproperty1modelstool-call-property1ts"></a>
+
+##### seed: `number`<a id="seed-number"></a>
+
+If specified, model will make a best effort to sample deterministically, but it is not guaranteed.
+
+##### response_format: [`ResponseFormatProperty`](./models/response-format-property.ts)<a id="response_format-responseformatpropertymodelsresponse-format-propertyts"></a>
 
 #### 🔄 Return<a id="🔄-return"></a>
 
@@ -320,7 +329,7 @@ Get a chat response using the project\'s active deployment.  The active deployme
 const createDeployedResponse = await humanloop.chatDeployed({
   messages: [
     {
-      role: "user",
+      role: "string_example",
     },
   ],
   num_samples: 1,
@@ -384,7 +393,15 @@ If true, tokens will be sent as data-only server-sent events. If num_samples > 1
 
 End-user ID passed through to provider call.
 
+##### tool_choice: [`ToolChoiceProperty`](./models/tool-choice-property.ts)<a id="tool_choice-toolchoicepropertymodelstool-choice-propertyts"></a>
+
 ##### tool_call: [`ToolCallProperty1`](./models/tool-call-property1.ts)<a id="tool_call-toolcallproperty1modelstool-call-property1ts"></a>
+
+##### seed: `number`<a id="seed-number"></a>
+
+If specified, model will make a best effort to sample deterministically, but it is not guaranteed.
+
+##### response_format: [`ResponseFormatProperty`](./models/response-format-property.ts)<a id="response_format-responseformatpropertymodelsresponse-format-propertyts"></a>
 
 ##### environment: `string`<a id="environment-string"></a>
 
@@ -413,7 +430,7 @@ Get a chat response for a specific experiment.
 const createExperimentResponse = await humanloop.chatExperiment({
   messages: [
     {
-      role: "user",
+      role: "string_example",
     },
   ],
   num_samples: 1,
@@ -482,7 +499,15 @@ If true, tokens will be sent as data-only server-sent events. If num_samples > 1
 
 End-user ID passed through to provider call.
 
+##### tool_choice: [`ToolChoiceProperty`](./models/tool-choice-property.ts)<a id="tool_choice-toolchoicepropertymodelstool-choice-propertyts"></a>
+
 ##### tool_call: [`ToolCallProperty1`](./models/tool-call-property1.ts)<a id="tool_call-toolcallproperty1modelstool-call-property1ts"></a>
+
+##### seed: `number`<a id="seed-number"></a>
+
+If specified, model will make a best effort to sample deterministically, but it is not guaranteed.
+
+##### response_format: [`ResponseFormatProperty`](./models/response-format-property.ts)<a id="response_format-responseformatpropertymodelsresponse-format-propertyts"></a>
 
 #### 🔄 Return<a id="🔄-return"></a>
 
@@ -507,7 +532,7 @@ Get chat response for a specific model configuration.
 const createModelConfigResponse = await humanloop.chatModelConfiguration({
   messages: [
     {
-      role: "user",
+      role: "string_example",
     },
   ],
   num_samples: 1,
@@ -576,7 +601,15 @@ If true, tokens will be sent as data-only server-sent events. If num_samples > 1
 
 End-user ID passed through to provider call.
 
+##### tool_choice: [`ToolChoiceProperty`](./models/tool-choice-property.ts)<a id="tool_choice-toolchoicepropertymodelstool-choice-propertyts"></a>
+
 ##### tool_call: [`ToolCallProperty1`](./models/tool-call-property1.ts)<a id="tool_call-toolcallproperty1modelstool-call-property1ts"></a>
+
+##### seed: `number`<a id="seed-number"></a>
+
+If specified, model will make a best effort to sample deterministically, but it is not guaranteed.
+
+##### response_format: [`ResponseFormatProperty`](./models/response-format-property.ts)<a id="response_format-responseformatpropertymodelsresponse-format-propertyts"></a>
 
 #### 🔄 Return<a id="🔄-return"></a>
 
@@ -671,6 +704,10 @@ If true, tokens will be sent as data-only server-sent events. If num_samples > 1
 
 The suffix that comes after a completion of inserted text. Useful for completions that act like inserts.
 
+##### seed: `number`<a id="seed-number"></a>
+
+If specified, model will make a best effort to sample deterministically, but it is not guaranteed.
+
 ##### user: `string`<a id="user-string"></a>
 
 End-user ID passed through to provider call.
@@ -756,6 +793,10 @@ If true, tokens will be sent as data-only server-sent events. If num_samples > 1
 ##### suffix: `string`<a id="suffix-string"></a>
 
 The suffix that comes after a completion of inserted text. Useful for completions that act like inserts.
+
+##### seed: `number`<a id="seed-number"></a>
+
+If specified, model will make a best effort to sample deterministically, but it is not guaranteed.
 
 ##### user: `string`<a id="user-string"></a>
 
@@ -852,6 +893,10 @@ If true, tokens will be sent as data-only server-sent events. If num_samples > 1
 
 The suffix that comes after a completion of inserted text. Useful for completions that act like inserts.
 
+##### seed: `number`<a id="seed-number"></a>
+
+If specified, model will make a best effort to sample deterministically, but it is not guaranteed.
+
 ##### user: `string`<a id="user-string"></a>
 
 End-user ID passed through to provider call.
@@ -942,6 +987,10 @@ If true, tokens will be sent as data-only server-sent events. If num_samples > 1
 ##### suffix: `string`<a id="suffix-string"></a>
 
 The suffix that comes after a completion of inserted text. Useful for completions that act like inserts.
+
+##### seed: `number`<a id="seed-number"></a>
+
+If specified, model will make a best effort to sample deterministically, but it is not guaranteed.
 
 ##### user: `string`<a id="user-string"></a>
 
@@ -1464,9 +1513,9 @@ Create an evaluator within your organization.
 const createResponse = await humanloop.evaluators.create({
   description: "description_example",
   name: "name_example",
-  code: "code_example",
   arguments_type: "string_example",
   return_type: "string_example",
+  type: "string_example",
 });
 ```
 
@@ -1480,10 +1529,6 @@ The description of the evaluator.
 
 The name of the evaluator.
 
-##### code: `string`<a id="code-string"></a>
-
-The code for the evaluator. This code will be executed in a sandboxed environment.
-
 ##### arguments_type: [`EvaluatorArgumentsType`](./models/evaluator-arguments-type.ts)<a id="arguments_type-evaluatorargumentstypemodelsevaluator-arguments-typets"></a>
 
 Whether this evaluator is target-free or target-required.
@@ -1491,6 +1536,16 @@ Whether this evaluator is target-free or target-required.
 ##### return_type: [`EvaluatorReturnTypeEnum`](./models/evaluator-return-type-enum.ts)<a id="return_type-evaluatorreturntypeenummodelsevaluator-return-type-enumts"></a>
 
 The type of the return value of the evaluator.
+
+##### type: [`EvaluatorType`](./models/evaluator-type.ts)<a id="type-evaluatortypemodelsevaluator-typets"></a>
+
+The type of the evaluator.
+
+##### code: `string`<a id="code-string"></a>
+
+The code for the evaluator. This code will be executed in a sandboxed environment.
+
+##### model_config: [`ModelConfigurationProperty1`](./models/model-configuration-property1.ts)<a id="model_config-modelconfigurationproperty1modelsmodel-configuration-property1ts"></a>
 
 #### 🔄 Return<a id="🔄-return"></a>
 
@@ -1524,6 +1579,35 @@ const deleteResponse = await humanloop.evaluators.delete({
 #### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
 `/evaluators/{id}` `DELETE`
+
+[🔙 **Back to Table of Contents**](#table-of-contents)
+
+---
+
+
+### `humanloop.evaluators.get`<a id="humanloopevaluatorsget"></a>
+
+Get an evaluator within your organization.
+
+#### 🛠️ Usage<a id="🛠️-usage"></a>
+
+```typescript
+const getResponse = await humanloop.evaluators.get({
+  id: "id_example",
+});
+```
+
+#### ⚙️ Parameters<a id="⚙️-parameters"></a>
+
+##### id: `string`<a id="id-string"></a>
+
+#### 🔄 Return<a id="🔄-return"></a>
+
+[EvaluatorResponse](./models/evaluator-response.ts)
+
+#### 🌐 Endpoint<a id="🌐-endpoint"></a>
+
+`/evaluators/{id}` `GET`
 
 [🔙 **Back to Table of Contents**](#table-of-contents)
 
@@ -1577,10 +1661,6 @@ The description of the evaluator.
 
 The name of the evaluator.
 
-##### code: `string`<a id="code-string"></a>
-
-The code for the evaluator. This code will be executed in a sandboxed environment.
-
 ##### arguments_type: [`EvaluatorArgumentsType`](./models/evaluator-arguments-type.ts)<a id="arguments_type-evaluatorargumentstypemodelsevaluator-arguments-typets"></a>
 
 Whether this evaluator is target-free or target-required.
@@ -1588,6 +1668,12 @@ Whether this evaluator is target-free or target-required.
 ##### return_type: [`EvaluatorReturnTypeEnum`](./models/evaluator-return-type-enum.ts)<a id="return_type-evaluatorreturntypeenummodelsevaluator-return-type-enumts"></a>
 
 The type of the return value of the evaluator.
+
+##### code: `string`<a id="code-string"></a>
+
+The code for the evaluator. This code will be executed in a sandboxed environment.
+
+##### model_config: [`ModelConfigurationProperty1`](./models/model-configuration-property1.ts)<a id="model_config-modelconfigurationproperty1modelsmodel-configuration-property1ts"></a>
 
 #### 🔄 Return<a id="🔄-return"></a>
 
@@ -2338,6 +2424,10 @@ Number between -2.0 and 2.0. Positive values penalize new tokens based on how fr
 
 Other parameter values to be passed to the provider call.
 
+##### seed: `number`<a id="seed-number"></a>
+
+If specified, model will make a best effort to sample deterministically, but it is not guaranteed.
+
 ##### project: `string`<a id="project-string"></a>
 
 Unique project name. If it does not exist, a new project will be created.
@@ -2365,6 +2455,8 @@ Which of the providers model endpoints to use. For example Complete or Edit.
 ##### tools: [`ModelConfigToolRequest`](./models/model-config-tool-request.ts)[]<a id="tools-modelconfigtoolrequestmodelsmodel-config-tool-requestts"></a>
 
 Make tools available to OpenAIs chat model as functions.
+
+##### response_format: [`ResponseFormatProperty`](./models/response-format-property.ts)<a id="response_format-responseformatpropertymodelsresponse-format-propertyts"></a>
 
 #### 🔄 Return<a id="🔄-return"></a>
 

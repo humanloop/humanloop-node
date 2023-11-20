@@ -106,6 +106,12 @@ export interface ModelConfigurationProperty1 {
      */
     'other'?: object;
     /**
+     * If specified, model will make a best effort to sample deterministically, but it is not guaranteed.
+     * @type {number}
+     * @memberof ModelConfigurationProperty1
+     */
+    'seed'?: number;
+    /**
      * The provider model endpoint used.
      * @type {ModelEndpoints}
      * @memberof ModelConfigurationProperty1
