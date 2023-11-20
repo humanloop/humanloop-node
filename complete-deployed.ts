@@ -4,8 +4,8 @@ import {
   DataResponse,
   Humanloop,
   LogRequest,
-  ModelConfigResponse,
 } from "./index";
+import { ModelConfigResponse } from "./models/model-config-response";
 import { OpenAI } from "openai";
 import { AxiosRequestConfig } from "axios";
 import { ChatCompletionMessageParam } from "openai/resources/chat";

@@ -8,11 +8,17 @@ describe("client", () => {
     basePath: "http://127.0.0.1:4010",
     openaiApiKey: "OPENAI_TEST_KEY",
   });
-  it('logs.delete', async () => {
-    const response = await humanloop.logs.delete({id: ['id']});
+  it("logs.delete", async () => {
+    const response = await humanloop.logs.delete({ id: ["id"] });
     expect(response).not.toBeNull();
-  })
-  it("list", async () => {
+  });
+
+  // Started causing errors in mock server so skipping now:
+  /*
+  [2:46:37 PM] › [HTTP SERVER] get /projects ✖  error     Request terminated with error: Error: Error: Prop not found: __bundled__ (#/__bundled__/items)
+    at Object.getLocalRef (/Users/dylanhuang/.nvm/versions/node/v18.15.0/lib/node_modules/konfig-cli/node_modules/json-schema-faker/dist/main.cjs:939:13)
+  */
+  it.skip("list", async () => {
     let page = await humanloop.projects.list();
     const records = page.data.records;
     while (page.hasNext()) {
@@ -118,8 +124,10 @@ describe("client", () => {
     const responseNoProxy = await humanloop.completeDeployedNoProxy(params);
     console.log(JSON.stringify(response.data, null, 2));
     console.log(JSON.stringify(responseNoProxy.data, null, 2));
-    expect(response.data.data[0].model_config_id).toEqual(responseNoProxy.data[0].model_config_id);
-    configCache.dispose()
+    expect(response.data.data[0].model_config_id).toEqual(
+      responseNoProxy.data[0].model_config_id
+    );
+    configCache.dispose();
   });
   it("completeDeployed", async () => {
     const humanloop = new Humanloop({

@@ -31,6 +31,7 @@ import type * as buffer from "buffer"
 
 /**
  * @type ToolCallProperty1
+ * NB: Deprecated with new tool_choice. Controls how the model uses tools. The following options are supported: \'none\' forces the model to not call a tool; the default when no tools are provided as part of the model config. \'auto\' the model can decide to call one of the provided tools; the default when tools are provided as part of the model config. Providing {\'name\': <TOOL_NAME>} forces the model to use the provided tool of the same name.
  * @export
  */
 export type ToolCallProperty1 = string | any;

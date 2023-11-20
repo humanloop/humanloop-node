@@ -41,15 +41,9 @@ import { CreateSessionResponse } from '../models';
 // @ts-ignore
 import { HTTPValidationError } from '../models';
 // @ts-ignore
-import { LocationPropertyInner } from '../models';
-// @ts-ignore
 import { PaginatedDataSessionResponse } from '../models';
 // @ts-ignore
-import { SessionProjectResponse } from '../models';
-// @ts-ignore
 import { SessionResponse } from '../models';
-// @ts-ignore
-import { ValidationError } from '../models';
 import { paginate } from "../pagination/paginate";
 import type * as buffer from "buffer"
 import { requestBeforeHook } from '../requestBeforeHook';

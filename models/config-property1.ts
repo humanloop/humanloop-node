@@ -30,14 +30,12 @@ import type * as buffer from "buffer"
 
 import { AgentConfigRequest } from './agent-config-request';
 import { ChatMessage } from './chat-message';
-import { ChatRole } from './chat-role';
 import { GenericConfigRequest } from './generic-config-request';
 import { ModelConfigProperty } from './model-config-property';
 import { ModelConfigRequest } from './model-config-request';
 import { ModelEndpoints } from './model-endpoints';
 import { ModelProviders } from './model-providers';
 import { StopSequenceSProperty } from './stop-sequence-sproperty';
-import { ToolCallProperty } from './tool-call-property';
 import { ToolConfigRequest } from './tool-config-request';
 
 /**

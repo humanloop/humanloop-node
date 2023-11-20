@@ -37,69 +37,15 @@ import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObj
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
 // @ts-ignore
-import { ChatMessage } from '../models';
-// @ts-ignore
-import { ChatRole } from '../models';
-// @ts-ignore
-import { ConfigProperty2 } from '../models';
-// @ts-ignore
-import { ConfigResponse } from '../models';
-// @ts-ignore
 import { CreateEvaluationRequest } from '../models';
-// @ts-ignore
-import { DatapointResponse } from '../models';
-// @ts-ignore
-import { DatasetResponse } from '../models';
-// @ts-ignore
-import { EvaluationDatapointSnapshotResponse } from '../models';
 // @ts-ignore
 import { EvaluationResponse } from '../models';
 // @ts-ignore
-import { EvaluationResultResponse } from '../models';
-// @ts-ignore
-import { EvaluationStatus } from '../models';
-// @ts-ignore
-import { EvaluatorArgumentsType } from '../models';
-// @ts-ignore
-import { EvaluatorResponse } from '../models';
-// @ts-ignore
-import { EvaluatorReturnTypeEnum } from '../models';
-// @ts-ignore
-import { FeedbackResponse } from '../models';
-// @ts-ignore
-import { FeedbackTypeProperty } from '../models';
-// @ts-ignore
-import { FeedbackValueProperty } from '../models';
-// @ts-ignore
 import { HTTPValidationError } from '../models';
-// @ts-ignore
-import { LocationPropertyInner } from '../models';
-// @ts-ignore
-import { LogResponse } from '../models';
-// @ts-ignore
-import { MetricValueResponse } from '../models';
-// @ts-ignore
-import { ModelConfigEvaluatorAggregateResponse } from '../models';
-// @ts-ignore
-import { ObservabilityStatus } from '../models';
 // @ts-ignore
 import { PaginatedDataEvaluationDatapointSnapshotResponse } from '../models';
 // @ts-ignore
 import { ProviderAPIKeysProperty1 } from '../models';
-// @ts-ignore
-import { ProviderResponseProperty } from '../models';
-// @ts-ignore
-import { Target } from '../models';
-// @ts-ignore
-import { ToolCallProperty } from '../models';
-// @ts-ignore
-import { ToolCallProperty1 } from '../models';
-// @ts-ignore
-import { ToolResultResponse } from '../models';
-// @ts-ignore
-import { ValidationError } from '../models';
-// @ts-ignore
-import { ValueProperty } from '../models';
 import { paginate } from "../pagination/paginate";
 import type * as buffer from "buffer"
 import { requestBeforeHook } from '../requestBeforeHook';

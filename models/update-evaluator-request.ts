@@ -30,6 +30,7 @@ import type * as buffer from "buffer"
 
 import { EvaluatorArgumentsType } from './evaluator-arguments-type';
 import { EvaluatorReturnTypeEnum } from './evaluator-return-type-enum';
+import { ModelConfigurationProperty1 } from './model-configuration-property1';
 
 /**
  * 
@@ -50,12 +51,6 @@ export interface UpdateEvaluatorRequest {
      */
     'name'?: string;
     /**
-     * The code for the evaluator. This code will be executed in a sandboxed environment.
-     * @type {string}
-     * @memberof UpdateEvaluatorRequest
-     */
-    'code'?: string;
-    /**
      * Whether this evaluator is target-free or target-required.
      * @type {EvaluatorArgumentsType}
      * @memberof UpdateEvaluatorRequest
@@ -67,5 +62,17 @@ export interface UpdateEvaluatorRequest {
      * @memberof UpdateEvaluatorRequest
      */
     'return_type'?: EvaluatorReturnTypeEnum;
+    /**
+     * The code for the evaluator. This code will be executed in a sandboxed environment.
+     * @type {string}
+     * @memberof UpdateEvaluatorRequest
+     */
+    'code'?: string;
+    /**
+     * 
+     * @type {ModelConfigurationProperty1}
+     * @memberof UpdateEvaluatorRequest
+     */
+    'model_config'?: ModelConfigurationProperty1;
 }
 
