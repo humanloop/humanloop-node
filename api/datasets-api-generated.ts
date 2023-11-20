@@ -39,8 +39,6 @@ import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } fr
 // @ts-ignore
 import { ChatMessage } from '../models';
 // @ts-ignore
-import { ChatRole } from '../models';
-// @ts-ignore
 import { CreateDatasetRequest } from '../models';
 // @ts-ignore
 import { DatapointResponse } from '../models';
@@ -51,17 +49,11 @@ import { DatasetsCreateDatapointRequest } from '../models';
 // @ts-ignore
 import { HTTPValidationError } from '../models';
 // @ts-ignore
-import { LocationPropertyInner } from '../models';
-// @ts-ignore
 import { PaginatedDataDatapointResponse } from '../models';
 // @ts-ignore
 import { Target } from '../models';
 // @ts-ignore
-import { ToolCallProperty } from '../models';
-// @ts-ignore
 import { UpdateDatasetRequest } from '../models';
-// @ts-ignore
-import { ValidationError } from '../models';
 import { paginate } from "../pagination/paginate";
 import type * as buffer from "buffer"
 import { requestBeforeHook } from '../requestBeforeHook';

@@ -31,9 +31,7 @@ import type * as buffer from "buffer"
 import { ConfigResponse } from './config-response';
 import { DatasetResponse } from './dataset-response';
 import { EvaluationStatus } from './evaluation-status';
-import { EvaluatorArgumentsType } from './evaluator-arguments-type';
 import { EvaluatorResponse } from './evaluator-response';
-import { EvaluatorReturnTypeEnum } from './evaluator-return-type-enum';
 import { ModelConfigEvaluatorAggregateResponse } from './model-config-evaluator-aggregate-response';
 
 /**

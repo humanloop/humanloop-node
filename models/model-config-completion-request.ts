@@ -105,6 +105,12 @@ export interface ModelConfigCompletionRequest {
      */
     'other'?: object;
     /**
+     * If specified, model will make a best effort to sample deterministically, but it is not guaranteed.
+     * @type {number}
+     * @memberof ModelConfigCompletionRequest
+     */
+    'seed'?: number;
+    /**
      * The provider model endpoint used.
      * @type {ModelEndpoints}
      * @memberof ModelConfigCompletionRequest

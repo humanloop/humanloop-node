@@ -39,15 +39,7 @@ import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } fr
 // @ts-ignore
 import { ChatMessage } from '../models';
 // @ts-ignore
-import { ChatRole } from '../models';
-// @ts-ignore
-import { ConfigResponse } from '../models';
-// @ts-ignore
 import { HTTPValidationError } from '../models';
-// @ts-ignore
-import { LocationPropertyInner } from '../models';
-// @ts-ignore
-import { ModelConfigEvaluatorAggregateResponse } from '../models';
 // @ts-ignore
 import { ModelConfigResponse } from '../models';
 // @ts-ignore
@@ -59,17 +51,11 @@ import { ModelProviders } from '../models';
 // @ts-ignore
 import { ProjectConfigResponse } from '../models';
 // @ts-ignore
-import { ProjectModelConfigFeedbackStatsResponse } from '../models';
-// @ts-ignore
 import { ProjectModelConfigRequest } from '../models';
 // @ts-ignore
+import { ResponseFormatProperty } from '../models';
+// @ts-ignore
 import { StopSequenceSProperty } from '../models';
-// @ts-ignore
-import { ToolCallProperty } from '../models';
-// @ts-ignore
-import { ToolConfigResponse } from '../models';
-// @ts-ignore
-import { ValidationError } from '../models';
 import { paginate } from "../pagination/paginate";
 import type * as buffer from "buffer"
 import { requestBeforeHook } from '../requestBeforeHook';

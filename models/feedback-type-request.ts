@@ -30,7 +30,6 @@ import type * as buffer from "buffer"
 
 import { FeedbackClass } from './feedback-class';
 import { FeedbackLabelRequest } from './feedback-label-request';
-import { LabelSentiment } from './label-sentiment';
 
 /**
  * 

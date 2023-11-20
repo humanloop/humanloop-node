@@ -45,13 +45,13 @@ import { EvaluatorResponse } from '../models';
 // @ts-ignore
 import { EvaluatorReturnTypeEnum } from '../models';
 // @ts-ignore
+import { EvaluatorType } from '../models';
+// @ts-ignore
 import { HTTPValidationError } from '../models';
 // @ts-ignore
-import { LocationPropertyInner } from '../models';
+import { ModelConfigurationProperty1 } from '../models';
 // @ts-ignore
 import { UpdateEvaluatorRequest } from '../models';
-// @ts-ignore
-import { ValidationError } from '../models';
 import { paginate } from "../pagination/paginate";
 import type * as buffer from "buffer"
 import { requestBeforeHook } from '../requestBeforeHook';
@@ -127,6 +127,48 @@ export const EvaluatorsApiAxiosParamCreator = function (configuration?: Configur
             }
 
             const localVarRequestOptions: AxiosRequestConfig = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = configuration && !isBrowser() ? { "User-Agent": configuration.userAgent } : {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication APIKeyHeader required
+            await setApiKeyToObject({ object: localVarHeaderParameter, keyParamName: "X-API-KEY", configuration })
+
+    
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            requestBeforeHook({
+                queryParameters: localVarQueryParameter,
+                requestConfig: localVarRequestOptions,
+                path: localVarPath,
+                configuration
+            });
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Get an evaluator within your organization.
+         * @summary Get
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        get: async (id: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('get', 'id', id)
+            const localVarPath = `/evaluators/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id !== undefined ? id : `-id-`)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions: AxiosRequestConfig = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = configuration && !isBrowser() ? { "User-Agent": configuration.userAgent } : {} as any;
             const localVarQueryParameter = {} as any;
 
@@ -270,6 +312,17 @@ export const EvaluatorsApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
+         * Get an evaluator within your organization.
+         * @summary Get
+         * @param {EvaluatorsApiGetRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async get(requestParameters: EvaluatorsApiGetRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<EvaluatorResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.get(requestParameters.id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
          * Get all evaluators within your organization.
          * @summary List 
          * @param {*} [options] Override http request option.
@@ -321,6 +374,16 @@ export const EvaluatorsApiFactory = function (configuration?: Configuration, bas
             return localVarFp.delete(requestParameters, options).then((request) => request(axios, basePath));
         },
         /**
+         * Get an evaluator within your organization.
+         * @summary Get
+         * @param {EvaluatorsApiGetRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        get(requestParameters: EvaluatorsApiGetRequest, options?: AxiosRequestConfig): AxiosPromise<EvaluatorResponse> {
+            return localVarFp.get(requestParameters, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Get all evaluators within your organization.
          * @summary List 
          * @param {*} [options] Override http request option.
@@ -362,6 +425,22 @@ export type EvaluatorsApiDeleteRequest = {
     * 
     * @type {string}
     * @memberof EvaluatorsApiDelete
+    */
+    readonly id: string
+    
+}
+
+/**
+ * Request parameters for get operation in EvaluatorsApi.
+ * @export
+ * @interface EvaluatorsApiGetRequest
+ */
+export type EvaluatorsApiGetRequest = {
+    
+    /**
+    * 
+    * @type {string}
+    * @memberof EvaluatorsApiGet
     */
     readonly id: string
     
@@ -412,6 +491,18 @@ export class EvaluatorsApiGenerated extends BaseAPI {
      */
     public delete(requestParameters: EvaluatorsApiDeleteRequest, options?: AxiosRequestConfig) {
         return EvaluatorsApiFp(this.configuration).delete(requestParameters, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Get an evaluator within your organization.
+     * @summary Get
+     * @param {EvaluatorsApiGetRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof EvaluatorsApiGenerated
+     */
+    public get(requestParameters: EvaluatorsApiGetRequest, options?: AxiosRequestConfig) {
+        return EvaluatorsApiFp(this.configuration).get(requestParameters, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

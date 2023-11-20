@@ -33,90 +33,91 @@ import { ActiveExperimentProperty } from './active-experiment-property';
 import { ConfigType } from './config-type';
 import { EvaluatorResponse } from './evaluator-response';
 import { FeedbackTypeModel } from './feedback-type-model';
+import { ProjectResponse } from './project-response';
 import { ProjectUserResponse } from './project-user-response';
 
 /**
- * 
+ * The project where the evaluator logs are stored.
  * @export
- * @interface ProjectResponse
+ * @interface LoggingProjectProperty
  */
-export interface ProjectResponse {
+export interface LoggingProjectProperty {
     /**
      * Project ID
      * @type {string}
-     * @memberof ProjectResponse
+     * @memberof LoggingProjectProperty
      */
     'id': string;
     /**
      * Unique project name.
      * @type {string}
-     * @memberof ProjectResponse
+     * @memberof LoggingProjectProperty
      */
     'name': string;
     /**
      * 
      * @type {ActiveExperimentProperty}
-     * @memberof ProjectResponse
+     * @memberof LoggingProjectProperty
      */
     'active_experiment'?: ActiveExperimentProperty;
     /**
      * 
      * @type {ActiveConfigProperty}
-     * @memberof ProjectResponse
+     * @memberof LoggingProjectProperty
      */
     'active_config'?: ActiveConfigProperty;
     /**
      * Users associated to the project.
      * @type {Array<ProjectUserResponse>}
-     * @memberof ProjectResponse
+     * @memberof LoggingProjectProperty
      */
     'users': Array<ProjectUserResponse>;
     /**
      * The count of datapoints that have been logged to the project.
      * @type {number}
-     * @memberof ProjectResponse
+     * @memberof LoggingProjectProperty
      */
     'data_count': number;
     /**
      * 
      * @type {Array<FeedbackTypeModel>}
-     * @memberof ProjectResponse
+     * @memberof LoggingProjectProperty
      */
     'feedback_types': Array<FeedbackTypeModel>;
     /**
      * Unique ID of the team the project belongs to. Starts with `tm_`.
      * @type {string}
-     * @memberof ProjectResponse
+     * @memberof LoggingProjectProperty
      */
     'team_id': string;
     /**
      * 
      * @type {ConfigType}
-     * @memberof ProjectResponse
+     * @memberof LoggingProjectProperty
      */
     'config_type'?: ConfigType;
     /**
      * Evaluators that have been set as active for the project.
      * @type {Array<EvaluatorResponse>}
-     * @memberof ProjectResponse
+     * @memberof LoggingProjectProperty
      */
     'active_evaluators'?: Array<EvaluatorResponse>;
     /**
      * String ID of the directory the project belongs to. Starts with `dir_`.
      * @type {string}
-     * @memberof ProjectResponse
+     * @memberof LoggingProjectProperty
      */
     'directory_id'?: string;
     /**
      * 
      * @type {string}
-     * @memberof ProjectResponse
+     * @memberof LoggingProjectProperty
      */
     'created_at': string;
     /**
      * 
      * @type {string}
-     * @memberof ProjectResponse
+     * @memberof LoggingProjectProperty
      */
     'updated_at': string;
 }
