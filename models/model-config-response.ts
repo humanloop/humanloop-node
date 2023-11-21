@@ -126,6 +126,12 @@ export interface ModelConfigResponse {
      */
     'seed'?: number;
     /**
+     * 
+     * @type {ResponseFormatProperty}
+     * @memberof ModelConfigResponse
+     */
+    'response_format'?: ResponseFormatProperty;
+    /**
      * Prompt template that will take your specified inputs to form your final request to the model. NB: Input variables within the prompt template should be specified with syntax: {{INPUT_NAME}}.
      * @type {string}
      * @memberof ModelConfigResponse
@@ -149,12 +155,6 @@ export interface ModelConfigResponse {
      * @memberof ModelConfigResponse
      */
     'endpoint'?: ModelEndpoints;
-    /**
-     * 
-     * @type {ResponseFormatProperty}
-     * @memberof ModelConfigResponse
-     */
-    'response_format'?: ResponseFormatProperty;
 }
 
 type ModelConfigResponseTypeEnum = 'model'

@@ -114,6 +114,12 @@ export interface ModelConfigChatRequest {
      */
     'seed'?: number;
     /**
+     * 
+     * @type {ResponseFormatProperty}
+     * @memberof ModelConfigChatRequest
+     */
+    'response_format'?: ResponseFormatProperty;
+    /**
      * The provider model endpoint used.
      * @type {ModelEndpoints}
      * @memberof ModelConfigChatRequest
@@ -131,11 +137,5 @@ export interface ModelConfigChatRequest {
      * @memberof ModelConfigChatRequest
      */
     'tools'?: Array<ModelConfigToolRequest>;
-    /**
-     * 
-     * @type {ResponseFormatProperty}
-     * @memberof ModelConfigChatRequest
-     */
-    'response_format'?: ResponseFormatProperty;
 }
 

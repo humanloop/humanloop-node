@@ -114,6 +114,12 @@ export interface ProjectModelConfigRequest {
      */
     'seed'?: number;
     /**
+     * 
+     * @type {ResponseFormatProperty}
+     * @memberof ProjectModelConfigRequest
+     */
+    'response_format'?: ResponseFormatProperty;
+    /**
      * Unique project name. If it does not exist, a new project will be created.
      * @type {string}
      * @memberof ProjectModelConfigRequest
@@ -155,11 +161,5 @@ export interface ProjectModelConfigRequest {
      * @memberof ProjectModelConfigRequest
      */
     'tools'?: Array<ModelConfigToolRequest>;
-    /**
-     * 
-     * @type {ResponseFormatProperty}
-     * @memberof ProjectModelConfigRequest
-     */
-    'response_format'?: ResponseFormatProperty;
 }
 

@@ -2428,6 +2428,8 @@ Other parameter values to be passed to the provider call.
 
 If specified, model will make a best effort to sample deterministically, but it is not guaranteed.
 
+##### response_format: [`ResponseFormatProperty`](./models/response-format-property.ts)<a id="response_format-responseformatpropertymodelsresponse-format-propertyts"></a>
+
 ##### project: `string`<a id="project-string"></a>
 
 Unique project name. If it does not exist, a new project will be created.
@@ -2455,8 +2457,6 @@ Which of the providers model endpoints to use. For example Complete or Edit.
 ##### tools: [`ModelConfigToolRequest`](./models/model-config-tool-request.ts)[]<a id="tools-modelconfigtoolrequestmodelsmodel-config-tool-requestts"></a>
 
 Make tools available to OpenAIs chat model as functions.
-
-##### response_format: [`ResponseFormatProperty`](./models/response-format-property.ts)<a id="response_format-responseformatpropertymodelsresponse-format-propertyts"></a>
 
 #### 🔄 Return<a id="🔄-return"></a>
 

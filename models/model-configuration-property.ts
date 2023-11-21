@@ -115,6 +115,12 @@ export interface ModelConfigurationProperty {
      */
     'seed'?: number;
     /**
+     * 
+     * @type {ResponseFormatProperty}
+     * @memberof ModelConfigurationProperty
+     */
+    'response_format'?: ResponseFormatProperty;
+    /**
      * The provider model endpoint used.
      * @type {ModelEndpoints}
      * @memberof ModelConfigurationProperty
@@ -132,11 +138,5 @@ export interface ModelConfigurationProperty {
      * @memberof ModelConfigurationProperty
      */
     'tools'?: Array<ModelConfigToolRequest>;
-    /**
-     * 
-     * @type {ResponseFormatProperty}
-     * @memberof ModelConfigurationProperty
-     */
-    'response_format'?: ResponseFormatProperty;
 }
 

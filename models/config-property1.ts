@@ -35,6 +35,7 @@ import { ModelConfigProperty } from './model-config-property';
 import { ModelConfigRequest } from './model-config-request';
 import { ModelEndpoints } from './model-endpoints';
 import { ModelProviders } from './model-providers';
+import { ResponseFormatProperty } from './response-format-property';
 import { StopSequenceSProperty } from './stop-sequence-sproperty';
 import { ToolConfigRequest } from './tool-config-request';
 

@@ -32,6 +32,7 @@ import { ChatMessage } from './chat-message';
 import { ModelConfigToolRequest } from './model-config-tool-request';
 import { ModelEndpoints } from './model-endpoints';
 import { ModelProviders } from './model-providers';
+import { ResponseFormatProperty } from './response-format-property';
 import { StopSequenceSProperty } from './stop-sequence-sproperty';
 
 /**
@@ -112,6 +113,12 @@ export interface ModelConfigRequest {
      * @memberof ModelConfigRequest
      */
     'seed'?: number;
+    /**
+     * 
+     * @type {ResponseFormatProperty}
+     * @memberof ModelConfigRequest
+     */
+    'response_format'?: ResponseFormatProperty;
     /**
      * The provider model endpoint used.
      * @type {ModelEndpoints}
