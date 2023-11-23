@@ -33,6 +33,6 @@ import type * as buffer from "buffer"
  * @type Target
  * @export
  */
-export type Target = object | Array<any> | boolean | number | string;
+export type Target = string | number | boolean | object | Array<any>;
 
 
