@@ -1298,6 +1298,10 @@ String ID of dataset. Starts with `evts_`.
 
 ##### size: `number`<a id="size-number"></a>
 
+#### 🔄 Return<a id="🔄-return"></a>
+
+[PaginatedData_DatapointResponse_](./models/paginated-data-datapoint-response.ts)
+
 #### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
 `/datasets/{dataset_id}/datapoints` `GET`
@@ -1493,6 +1497,10 @@ Page to fetch. Starts from 1.
 ##### size: `number`<a id="size-number"></a>
 
 Number of evaluation results to retrieve.
+
+#### 🔄 Return<a id="🔄-return"></a>
+
+[PaginatedData_EvaluationDatapointSnapshotResponse_](./models/paginated-data-evaluation-datapoint-snapshot-response.ts)
 
 #### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
@@ -2144,6 +2152,10 @@ const listResponse = await humanloop.logs.list({
 
 ##### page: `number`<a id="page-number"></a>
 
+#### 🔄 Return<a id="🔄-return"></a>
+
+[PaginatedData_LogResponse_](./models/paginated-data-log-response.ts)
+
 #### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
 `/logs` `GET`
@@ -2750,6 +2762,10 @@ Page offset for pagination.
 
 Page size for pagination. Number of logs to export.
 
+#### 🔄 Return<a id="🔄-return"></a>
+
+[PaginatedData_LogResponse_](./models/paginated-data-log-response.ts)
+
 #### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
 `/projects/{id}/export` `POST`
@@ -2863,6 +2879,10 @@ Field to sort projects by
 ##### order: [`SortOrder`](./models/sort-order.ts)<a id="order-sortordermodelssort-orderts"></a>
 
 Direction to sort by.
+
+#### 🔄 Return<a id="🔄-return"></a>
+
+[PaginatedData_ProjectResponse_](./models/paginated-data-project-response.ts)
 
 #### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
@@ -3109,6 +3129,10 @@ Page to fetch. Starts from 1.
 ##### size: `number`<a id="size-number"></a>
 
 Number of sessions to retrieve.
+
+#### 🔄 Return<a id="🔄-return"></a>
+
+[PaginatedData_SessionResponse_](./models/paginated-data-session-response.ts)
 
 #### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
