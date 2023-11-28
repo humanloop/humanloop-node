@@ -39,13 +39,23 @@ import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } fr
 // @ts-ignore
 import { CreateEvaluationRequest } from '../models';
 // @ts-ignore
+import { CreateEvaluationResultLogRequest } from '../models';
+// @ts-ignore
 import { EvaluationResponse } from '../models';
+// @ts-ignore
+import { EvaluationResultResponse } from '../models';
+// @ts-ignore
+import { EvaluationStatus } from '../models';
 // @ts-ignore
 import { HTTPValidationError } from '../models';
 // @ts-ignore
 import { PaginatedDataEvaluationDatapointSnapshotResponse } from '../models';
 // @ts-ignore
 import { ProviderAPIKeysProperty1 } from '../models';
+// @ts-ignore
+import { UpdateEvaluationStatusRequest } from '../models';
+// @ts-ignore
+import { ValueProperty } from '../models';
 import { paginate } from "../pagination/paginate";
 import type * as buffer from "buffer"
 import { requestBeforeHook } from '../requestBeforeHook';
@@ -251,6 +261,106 @@ export const EvaluationsApiAxiosParamCreator = function (configuration?: Configu
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * Log an evaluation result to an evaluation run.  The run must have status \'running\' and the `evaluator_id` of the result must be one of the `evaluator_id`s associated with the run.
+         * @summary Log Result
+         * @param {string} evaluationRunExternalId ID of the evaluation run. Starts with &#x60;evrun_&#x60;.
+         * @param {CreateEvaluationResultLogRequest} createEvaluationResultLogRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        logResult: async (evaluationRunExternalId: string, createEvaluationResultLogRequest: CreateEvaluationResultLogRequest, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'evaluationRunExternalId' is not null or undefined
+            assertParamExists('logResult', 'evaluationRunExternalId', evaluationRunExternalId)
+            // verify required parameter 'createEvaluationResultLogRequest' is not null or undefined
+            assertParamExists('logResult', 'createEvaluationResultLogRequest', createEvaluationResultLogRequest)
+            const localVarPath = `/evaluations/{evaluation_run_external_id}/result`
+                .replace(`{${"evaluation_run_external_id"}}`, encodeURIComponent(String(evaluationRunExternalId !== undefined ? evaluationRunExternalId : `-evaluation_run_external_id-`)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions: AxiosRequestConfig = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = configuration && !isBrowser() ? { "User-Agent": configuration.userAgent } : {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication APIKeyHeader required
+            await setApiKeyToObject({ object: localVarHeaderParameter, keyParamName: "X-API-KEY", configuration })
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            requestBeforeHook({
+                requestBody: createEvaluationResultLogRequest,
+                queryParameters: localVarQueryParameter,
+                requestConfig: localVarRequestOptions,
+                path: localVarPath,
+                configuration
+            });
+            localVarRequestOptions.data = serializeDataIfNeeded(createEvaluationResultLogRequest, localVarRequestOptions, configuration)
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Update the status of an evaluation run.  Can only be used to update the status of an evaluation run that uses external evaluators. The evaluation must currently have status \'running\'.
+         * @summary Update Status
+         * @param {string} id String ID of evaluation run. Starts with &#x60;ev_&#x60;.
+         * @param {UpdateEvaluationStatusRequest} updateEvaluationStatusRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateStatus: async (id: string, updateEvaluationStatusRequest: UpdateEvaluationStatusRequest, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('updateStatus', 'id', id)
+            // verify required parameter 'updateEvaluationStatusRequest' is not null or undefined
+            assertParamExists('updateStatus', 'updateEvaluationStatusRequest', updateEvaluationStatusRequest)
+            const localVarPath = `/evaluations/{id}/status`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id !== undefined ? id : `-id-`)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions: AxiosRequestConfig = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = configuration && !isBrowser() ? { "User-Agent": configuration.userAgent } : {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication APIKeyHeader required
+            await setApiKeyToObject({ object: localVarHeaderParameter, keyParamName: "X-API-KEY", configuration })
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            requestBeforeHook({
+                requestBody: updateEvaluationStatusRequest,
+                queryParameters: localVarQueryParameter,
+                requestConfig: localVarRequestOptions,
+                path: localVarPath,
+                configuration
+            });
+            localVarRequestOptions.data = serializeDataIfNeeded(updateEvaluationStatusRequest, localVarRequestOptions, configuration)
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -305,6 +415,28 @@ export const EvaluationsApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.listDatapoints(requestParameters.id, requestParameters.page, requestParameters.size, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
+        /**
+         * Log an evaluation result to an evaluation run.  The run must have status \'running\' and the `evaluator_id` of the result must be one of the `evaluator_id`s associated with the run.
+         * @summary Log Result
+         * @param {EvaluationsApiLogResultRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async logResult(requestParameters: EvaluationsApiLogResultRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<EvaluationResultResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.logResult(requestParameters.evaluationRunExternalId, requestParameters, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Update the status of an evaluation run.  Can only be used to update the status of an evaluation run that uses external evaluators. The evaluation must currently have status \'running\'.
+         * @summary Update Status
+         * @param {EvaluationsApiUpdateStatusRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async updateStatus(requestParameters: EvaluationsApiUpdateStatusRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<EvaluationResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateStatus(requestParameters.id, requestParameters, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
     }
 };
 
@@ -354,6 +486,26 @@ export const EvaluationsApiFactory = function (configuration?: Configuration, ba
          */
         listDatapoints(requestParameters: EvaluationsApiListDatapointsRequest, options?: AxiosRequestConfig): AxiosPromise<PaginatedDataEvaluationDatapointSnapshotResponse> {
             return localVarFp.listDatapoints(requestParameters, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Log an evaluation result to an evaluation run.  The run must have status \'running\' and the `evaluator_id` of the result must be one of the `evaluator_id`s associated with the run.
+         * @summary Log Result
+         * @param {EvaluationsApiLogResultRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        logResult(requestParameters: EvaluationsApiLogResultRequest, options?: AxiosRequestConfig): AxiosPromise<EvaluationResultResponse> {
+            return localVarFp.logResult(requestParameters, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Update the status of an evaluation run.  Can only be used to update the status of an evaluation run that uses external evaluators. The evaluation must currently have status \'running\'.
+         * @summary Update Status
+         * @param {EvaluationsApiUpdateStatusRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateStatus(requestParameters: EvaluationsApiUpdateStatusRequest, options?: AxiosRequestConfig): AxiosPromise<EvaluationResponse> {
+            return localVarFp.updateStatus(requestParameters, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -451,6 +603,38 @@ export type EvaluationsApiListDatapointsRequest = {
 }
 
 /**
+ * Request parameters for logResult operation in EvaluationsApi.
+ * @export
+ * @interface EvaluationsApiLogResultRequest
+ */
+export type EvaluationsApiLogResultRequest = {
+    
+    /**
+    * ID of the evaluation run. Starts with `evrun_`.
+    * @type {string}
+    * @memberof EvaluationsApiLogResult
+    */
+    readonly evaluationRunExternalId: string
+    
+} & CreateEvaluationResultLogRequest
+
+/**
+ * Request parameters for updateStatus operation in EvaluationsApi.
+ * @export
+ * @interface EvaluationsApiUpdateStatusRequest
+ */
+export type EvaluationsApiUpdateStatusRequest = {
+    
+    /**
+    * String ID of evaluation run. Starts with `ev_`.
+    * @type {string}
+    * @memberof EvaluationsApiUpdateStatus
+    */
+    readonly id: string
+    
+} & UpdateEvaluationStatusRequest
+
+/**
  * EvaluationsApiGenerated - object-oriented interface
  * @export
  * @class EvaluationsApiGenerated
@@ -508,5 +692,29 @@ export class EvaluationsApiGenerated extends BaseAPI {
                 return EvaluationsApiFp(this.configuration).listDatapoints(parameters, options).then((request) => request(this.axios, this.basePath));
             },
         });
+    }
+
+    /**
+     * Log an evaluation result to an evaluation run.  The run must have status \'running\' and the `evaluator_id` of the result must be one of the `evaluator_id`s associated with the run.
+     * @summary Log Result
+     * @param {EvaluationsApiLogResultRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof EvaluationsApiGenerated
+     */
+    public logResult(requestParameters: EvaluationsApiLogResultRequest, options?: AxiosRequestConfig) {
+        return EvaluationsApiFp(this.configuration).logResult(requestParameters, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Update the status of an evaluation run.  Can only be used to update the status of an evaluation run that uses external evaluators. The evaluation must currently have status \'running\'.
+     * @summary Update Status
+     * @param {EvaluationsApiUpdateStatusRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof EvaluationsApiGenerated
+     */
+    public updateStatus(requestParameters: EvaluationsApiUpdateStatusRequest, options?: AxiosRequestConfig) {
+        return EvaluationsApiFp(this.configuration).updateStatus(requestParameters, options).then((request) => request(this.axios, this.basePath));
     }
 }

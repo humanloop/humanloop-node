@@ -95,6 +95,12 @@ export interface ChatExperimentRequest {
      */
     'metadata'?: object;
     /**
+     * ID of the source datapoint if this is a log derived from a datapoint in a dataset.
+     * @type {string}
+     * @memberof ChatExperimentRequest
+     */
+    'source_datapoint_id'?: string;
+    /**
      * The messages passed to the to provider chat endpoint.
      * @type {Array<ChatMessage>}
      * @memberof ChatExperimentRequest
