@@ -91,6 +91,12 @@ export interface CompletionExperimentRequest {
      */
     'metadata'?: object;
     /**
+     * ID of the source datapoint if this is a log derived from a datapoint in a dataset.
+     * @type {string}
+     * @memberof CompletionExperimentRequest
+     */
+    'source_datapoint_id'?: string;
+    /**
      * 
      * @type {ProviderAPIKeysProperty}
      * @memberof CompletionExperimentRequest

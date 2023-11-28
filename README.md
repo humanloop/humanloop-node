@@ -39,6 +39,8 @@
   * [`humanloop.evaluations.get`](#humanloopevaluationsget)
   * [`humanloop.evaluations.listAllForProject`](#humanloopevaluationslistallforproject)
   * [`humanloop.evaluations.listDatapoints`](#humanloopevaluationslistdatapoints)
+  * [`humanloop.evaluations.logResult`](#humanloopevaluationslogresult)
+  * [`humanloop.evaluations.updateStatus`](#humanloopevaluationsupdatestatus)
   * [`humanloop.evaluators.create`](#humanloopevaluatorscreate)
   * [`humanloop.evaluators.delete`](#humanloopevaluatorsdelete)
   * [`humanloop.evaluators.get`](#humanloopevaluatorsget)
@@ -282,6 +284,10 @@ Identifies where the model was called from.
 
 Any additional metadata to record.
 
+##### source_datapoint_id: `string`<a id="source_datapoint_id-string"></a>
+
+ID of the source datapoint if this is a log derived from a datapoint in a dataset.
+
 ##### provider_api_keys: [`ProviderAPIKeysProperty`](./models/provider-apikeys-property.ts)<a id="provider_api_keys-providerapikeyspropertymodelsprovider-apikeys-propertyts"></a>
 
 ##### num_samples: `number`<a id="num_samples-number"></a>
@@ -378,6 +384,10 @@ Identifies where the model was called from.
 ##### metadata: `object`<a id="metadata-object"></a>
 
 Any additional metadata to record.
+
+##### source_datapoint_id: `string`<a id="source_datapoint_id-string"></a>
+
+ID of the source datapoint if this is a log derived from a datapoint in a dataset.
 
 ##### provider_api_keys: [`ProviderAPIKeysProperty`](./models/provider-apikeys-property.ts)<a id="provider_api_keys-providerapikeyspropertymodelsprovider-apikeys-propertyts"></a>
 
@@ -485,6 +495,10 @@ Identifies where the model was called from.
 
 Any additional metadata to record.
 
+##### source_datapoint_id: `string`<a id="source_datapoint_id-string"></a>
+
+ID of the source datapoint if this is a log derived from a datapoint in a dataset.
+
 ##### provider_api_keys: [`ProviderAPIKeysProperty`](./models/provider-apikeys-property.ts)<a id="provider_api_keys-providerapikeyspropertymodelsprovider-apikeys-propertyts"></a>
 
 ##### num_samples: `number`<a id="num_samples-number"></a>
@@ -587,6 +601,10 @@ Identifies where the model was called from.
 
 Any additional metadata to record.
 
+##### source_datapoint_id: `string`<a id="source_datapoint_id-string"></a>
+
+ID of the source datapoint if this is a log derived from a datapoint in a dataset.
+
 ##### provider_api_keys: [`ProviderAPIKeysProperty`](./models/provider-apikeys-property.ts)<a id="provider_api_keys-providerapikeyspropertymodelsprovider-apikeys-propertyts"></a>
 
 ##### num_samples: `number`<a id="num_samples-number"></a>
@@ -686,6 +704,10 @@ Identifies where the model was called from.
 
 Any additional metadata to record.
 
+##### source_datapoint_id: `string`<a id="source_datapoint_id-string"></a>
+
+ID of the source datapoint if this is a log derived from a datapoint in a dataset.
+
 ##### provider_api_keys: [`ProviderAPIKeysProperty`](./models/provider-apikeys-property.ts)<a id="provider_api_keys-providerapikeyspropertymodelsprovider-apikeys-propertyts"></a>
 
 ##### num_samples: `number`<a id="num_samples-number"></a>
@@ -775,6 +797,10 @@ Identifies where the model was called from.
 ##### metadata: `object`<a id="metadata-object"></a>
 
 Any additional metadata to record.
+
+##### source_datapoint_id: `string`<a id="source_datapoint_id-string"></a>
+
+ID of the source datapoint if this is a log derived from a datapoint in a dataset.
 
 ##### provider_api_keys: [`ProviderAPIKeysProperty`](./models/provider-apikeys-property.ts)<a id="provider_api_keys-providerapikeyspropertymodelsprovider-apikeys-propertyts"></a>
 
@@ -875,6 +901,10 @@ Identifies where the model was called from.
 
 Any additional metadata to record.
 
+##### source_datapoint_id: `string`<a id="source_datapoint_id-string"></a>
+
+ID of the source datapoint if this is a log derived from a datapoint in a dataset.
+
 ##### provider_api_keys: [`ProviderAPIKeysProperty`](./models/provider-apikeys-property.ts)<a id="provider_api_keys-providerapikeyspropertymodelsprovider-apikeys-propertyts"></a>
 
 ##### num_samples: `number`<a id="num_samples-number"></a>
@@ -969,6 +999,10 @@ Identifies where the model was called from.
 ##### metadata: `object`<a id="metadata-object"></a>
 
 Any additional metadata to record.
+
+##### source_datapoint_id: `string`<a id="source_datapoint_id-string"></a>
+
+ID of the source datapoint if this is a log derived from a datapoint in a dataset.
 
 ##### provider_api_keys: [`ProviderAPIKeysProperty`](./models/provider-apikeys-property.ts)<a id="provider_api_keys-providerapikeyspropertymodelsprovider-apikeys-propertyts"></a>
 
@@ -1505,6 +1539,89 @@ Number of evaluation results to retrieve.
 #### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
 `/evaluations/{id}/datapoints` `GET`
+
+[🔙 **Back to Table of Contents**](#table-of-contents)
+
+---
+
+
+### `humanloop.evaluations.logResult`<a id="humanloopevaluationslogresult"></a>
+
+Log an evaluation result to an evaluation run.  The run must have status \'running\' and the `evaluator_id` of the result must be one of the `evaluator_id`s associated with the run.
+
+#### 🛠️ Usage<a id="🛠️-usage"></a>
+
+```typescript
+const logResultResponse = await humanloop.evaluations.logResult({
+  evaluationRunExternalId: "evaluationRunExternalId_example",
+  log_id: "log_id_example",
+  evaluator_id: "evaluator_id_example",
+});
+```
+
+#### ⚙️ Parameters<a id="⚙️-parameters"></a>
+
+##### log_id: `string`<a id="log_id-string"></a>
+
+The log that was evaluated. Must have as its `source_datapoint_id` one of the datapoints in the dataset being evaluated.
+
+##### evaluator_id: `string`<a id="evaluator_id-string"></a>
+
+ID of the evaluator that evaluated the log. Starts with `evfn_`. Must be one of the evaluator IDs associated with the evaluation run being logged to.
+
+##### evaluationRunExternalId: `string`<a id="evaluationrunexternalid-string"></a>
+
+ID of the evaluation run. Starts with `evrun_`.
+
+##### result: [`ValueProperty`](./models/value-property.ts)<a id="result-valuepropertymodelsvalue-propertyts"></a>
+
+##### error: `string`<a id="error-string"></a>
+
+An error that occurred during evaluation.
+
+#### 🔄 Return<a id="🔄-return"></a>
+
+[EvaluationResultResponse](./models/evaluation-result-response.ts)
+
+#### 🌐 Endpoint<a id="🌐-endpoint"></a>
+
+`/evaluations/{evaluation_run_external_id}/result` `POST`
+
+[🔙 **Back to Table of Contents**](#table-of-contents)
+
+---
+
+
+### `humanloop.evaluations.updateStatus`<a id="humanloopevaluationsupdatestatus"></a>
+
+Update the status of an evaluation run.  Can only be used to update the status of an evaluation run that uses external evaluators. The evaluation must currently have status \'running\'.
+
+#### 🛠️ Usage<a id="🛠️-usage"></a>
+
+```typescript
+const updateStatusResponse = await humanloop.evaluations.updateStatus({
+  id: "id_example",
+  status: "string_example",
+});
+```
+
+#### ⚙️ Parameters<a id="⚙️-parameters"></a>
+
+##### status: [`EvaluationStatus`](./models/evaluation-status.ts)<a id="status-evaluationstatusmodelsevaluation-statusts"></a>
+
+The new status of the evaluation.
+
+##### id: `string`<a id="id-string"></a>
+
+String ID of evaluation run. Starts with `ev_`.
+
+#### 🔄 Return<a id="🔄-return"></a>
+
+[EvaluationResponse](./models/evaluation-response.ts)
+
+#### 🌐 Endpoint<a id="🌐-endpoint"></a>
+
+`/evaluations/{id}/status` `PATCH`
 
 [🔙 **Back to Table of Contents**](#table-of-contents)
 
@@ -2212,6 +2329,10 @@ Identifies where the model was called from.
 ##### metadata: `object`<a id="metadata-object"></a>
 
 Any additional metadata to record.
+
+##### source_datapoint_id: `string`<a id="source_datapoint_id-string"></a>
+
+ID of the source datapoint if this is a log derived from a datapoint in a dataset.
 
 ##### reference_id: `string`<a id="reference_id-string"></a>
 

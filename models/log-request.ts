@@ -93,6 +93,12 @@ export interface LogRequest {
      */
     'metadata'?: object;
     /**
+     * ID of the source datapoint if this is a log derived from a datapoint in a dataset.
+     * @type {string}
+     * @memberof LogRequest
+     */
+    'source_datapoint_id'?: string;
+    /**
      * A unique string to reference the datapoint. Allows you to log nested datapoints with your internal system IDs by passing the same reference ID as `parent_id` in a subsequent log request.
      * @type {string}
      * @memberof LogRequest

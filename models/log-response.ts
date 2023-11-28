@@ -101,6 +101,12 @@ export interface LogResponse {
      */
     'metadata'?: object;
     /**
+     * ID of the source datapoint if this is a log derived from a datapoint in a dataset.
+     * @type {string}
+     * @memberof LogResponse
+     */
+    'source_datapoint_id'?: string;
+    /**
      * String ID of logged datapoint. Starts with `data_`.
      * @type {string}
      * @memberof LogResponse

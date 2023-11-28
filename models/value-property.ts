@@ -31,6 +31,7 @@ import type * as buffer from "buffer"
 
 /**
  * @type ValueProperty
+ * The result value of the evaluation.
  * @export
  */
 export type ValueProperty = boolean | number;

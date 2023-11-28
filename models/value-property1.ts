@@ -30,9 +30,9 @@ import type * as buffer from "buffer"
 
 
 /**
- * An enumeration.
+ * @type ValueProperty1
  * @export
- * @enum {string}
  */
-export type EvaluatorType = 'python' | 'llm' | 'external'
+export type ValueProperty1 = boolean | number;
+
 

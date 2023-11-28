@@ -91,6 +91,12 @@ export interface CompletionDeployedRequest {
      */
     'metadata'?: object;
     /**
+     * ID of the source datapoint if this is a log derived from a datapoint in a dataset.
+     * @type {string}
+     * @memberof CompletionDeployedRequest
+     */
+    'source_datapoint_id'?: string;
+    /**
      * 
      * @type {ProviderAPIKeysProperty}
      * @memberof CompletionDeployedRequest
