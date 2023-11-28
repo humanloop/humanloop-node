@@ -1300,7 +1300,7 @@ String ID of dataset. Starts with `evts_`.
 
 #### 🔄 Return<a id="🔄-return"></a>
 
-[PaginatedData_DatapointResponse_](./models/paginated-data-datapoint-response.ts)
+[PaginatedDataDatapointResponse](./models/paginated-data-datapoint-response.ts)
 
 #### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
@@ -1500,7 +1500,7 @@ Number of evaluation results to retrieve.
 
 #### 🔄 Return<a id="🔄-return"></a>
 
-[PaginatedData_EvaluationDatapointSnapshotResponse_](./models/paginated-data-evaluation-datapoint-snapshot-response.ts)
+[PaginatedDataEvaluationDatapointSnapshotResponse](./models/paginated-data-evaluation-datapoint-snapshot-response.ts)
 
 #### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
@@ -2154,7 +2154,7 @@ const listResponse = await humanloop.logs.list({
 
 #### 🔄 Return<a id="🔄-return"></a>
 
-[PaginatedData_LogResponse_](./models/paginated-data-log-response.ts)
+[PaginatedDataLogResponse](./models/paginated-data-log-response.ts)
 
 #### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
@@ -2764,7 +2764,7 @@ Page size for pagination. Number of logs to export.
 
 #### 🔄 Return<a id="🔄-return"></a>
 
-[PaginatedData_LogResponse_](./models/paginated-data-log-response.ts)
+[PaginatedDataLogResponse](./models/paginated-data-log-response.ts)
 
 #### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
@@ -2882,7 +2882,7 @@ Direction to sort by.
 
 #### 🔄 Return<a id="🔄-return"></a>
 
-[PaginatedData_ProjectResponse_](./models/paginated-data-project-response.ts)
+[PaginatedDataProjectResponse](./models/paginated-data-project-response.ts)
 
 #### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
@@ -3132,7 +3132,7 @@ Number of sessions to retrieve.
 
 #### 🔄 Return<a id="🔄-return"></a>
 
-[PaginatedData_SessionResponse_](./models/paginated-data-session-response.ts)
+[PaginatedDataSessionResponse](./models/paginated-data-session-response.ts)
 
 #### 🌐 Endpoint<a id="🌐-endpoint"></a>
 

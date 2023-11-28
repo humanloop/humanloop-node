@@ -35,6 +35,7 @@ import { EvaluationResultResponse } from './evaluation-result-response';
 import { FeedbackResponse } from './feedback-response';
 import { MetricValueResponse } from './metric-value-response';
 import { ObservabilityStatus } from './observability-status';
+import { OutputMessageProperty } from './output-message-property';
 import { ProviderResponseProperty } from './provider-response-property';
 import { ToolChoiceProperty } from './tool-choice-property';
 import { ToolResultResponse } from './tool-result-response';
@@ -213,6 +214,12 @@ export interface LogResponse {
      * @memberof LogResponse
      */
     'tool_choice'?: ToolChoiceProperty;
+    /**
+     * 
+     * @type {OutputMessageProperty}
+     * @memberof LogResponse
+     */
+    'output_message'?: OutputMessageProperty;
     /**
      * 
      * @type {Array<EvaluationResultResponse>}

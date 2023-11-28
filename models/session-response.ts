@@ -78,5 +78,11 @@ export interface SessionResponse {
      * @memberof SessionResponse
      */
     'created_at': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SessionResponse
+     */
+    'updated_at': string;
 }
 

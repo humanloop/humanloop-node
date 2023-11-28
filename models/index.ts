@@ -104,6 +104,7 @@ export * from './model-configuration-property1';
 export * from './model-endpoints';
 export * from './model-providers';
 export * from './observability-status';
+export * from './output-message-property';
 export * from './paginated-data-datapoint-response';
 export * from './paginated-data-evaluation-datapoint-snapshot-response';
 export * from './paginated-data-log-response';
