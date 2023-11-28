@@ -1,6 +1,6 @@
 {
   "name": "humanloop",
-  "version": "0.5.27",
+  "version": "0.5.28",
   "description": "Client for Humanloop API",
   "author": "Konfig",
   "engines": {
