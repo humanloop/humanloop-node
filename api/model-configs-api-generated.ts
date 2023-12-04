@@ -37,6 +37,8 @@ import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObj
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
 // @ts-ignore
+import { BodyModelConfigsDeserialize } from '../models';
+// @ts-ignore
 import { ChatMessage } from '../models';
 // @ts-ignore
 import { HTTPValidationError } from '../models';
@@ -44,6 +46,8 @@ import { HTTPValidationError } from '../models';
 import { ModelConfigResponse } from '../models';
 // @ts-ignore
 import { ModelConfigToolRequest } from '../models';
+// @ts-ignore
+import { ModelConfigsSerializeRequest } from '../models';
 // @ts-ignore
 import { ModelEndpoints } from '../models';
 // @ts-ignore
@@ -65,6 +69,94 @@ import { requestBeforeHook } from '../requestBeforeHook';
  */
 export const ModelConfigsApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
+        /**
+         * Deserialize a model config from a .prompt file format.
+         * @summary Deserialize
+         * @param {BodyModelConfigsDeserialize} bodyModelConfigsDeserialize 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deserialize: async (bodyModelConfigsDeserialize: BodyModelConfigsDeserialize, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'bodyModelConfigsDeserialize' is not null or undefined
+            assertParamExists('deserialize', 'bodyModelConfigsDeserialize', bodyModelConfigsDeserialize)
+            const localVarPath = `/model-configs/deserialize`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions: AxiosRequestConfig = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = configuration && !isBrowser() ? { "User-Agent": configuration.userAgent } : {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication APIKeyHeader required
+            await setApiKeyToObject({ object: localVarHeaderParameter, keyParamName: "X-API-KEY", configuration })
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            requestBeforeHook({
+                requestBody: bodyModelConfigsDeserialize,
+                queryParameters: localVarQueryParameter,
+                requestConfig: localVarRequestOptions,
+                path: localVarPath,
+                configuration
+            });
+            localVarRequestOptions.data = serializeDataIfNeeded(bodyModelConfigsDeserialize, localVarRequestOptions, configuration)
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Export a model config to a .prompt file by ID.
+         * @summary Export by ID
+         * @param {string} id String ID of the model config. Starts with &#x60;config_&#x60;.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        export: async (id: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('export', 'id', id)
+            const localVarPath = `/model-configs/{id}/export`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id !== undefined ? id : `-id-`)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions: AxiosRequestConfig = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = configuration && !isBrowser() ? { "User-Agent": configuration.userAgent } : {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication APIKeyHeader required
+            await setApiKeyToObject({ object: localVarHeaderParameter, keyParamName: "X-API-KEY", configuration })
+
+    
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            requestBeforeHook({
+                queryParameters: localVarQueryParameter,
+                requestConfig: localVarRequestOptions,
+                path: localVarPath,
+                configuration
+            });
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
         /**
          * Get a specific model config by ID.
          * @summary Get
@@ -153,6 +245,52 @@ export const ModelConfigsApiAxiosParamCreator = function (configuration?: Config
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * Serialize a model config to a .prompt file format.
+         * @summary Serialize
+         * @param {ModelConfigsSerializeRequest} modelConfigsSerializeRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        serialize: async (modelConfigsSerializeRequest: ModelConfigsSerializeRequest, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'modelConfigsSerializeRequest' is not null or undefined
+            assertParamExists('serialize', 'modelConfigsSerializeRequest', modelConfigsSerializeRequest)
+            const localVarPath = `/model-configs/serialize`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions: AxiosRequestConfig = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = configuration && !isBrowser() ? { "User-Agent": configuration.userAgent } : {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication APIKeyHeader required
+            await setApiKeyToObject({ object: localVarHeaderParameter, keyParamName: "X-API-KEY", configuration })
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            requestBeforeHook({
+                requestBody: modelConfigsSerializeRequest,
+                queryParameters: localVarQueryParameter,
+                requestConfig: localVarRequestOptions,
+                path: localVarPath,
+                configuration
+            });
+            localVarRequestOptions.data = serializeDataIfNeeded(modelConfigsSerializeRequest, localVarRequestOptions, configuration)
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -163,6 +301,28 @@ export const ModelConfigsApiAxiosParamCreator = function (configuration?: Config
 export const ModelConfigsApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = ModelConfigsApiAxiosParamCreator(configuration)
     return {
+        /**
+         * Deserialize a model config from a .prompt file format.
+         * @summary Deserialize
+         * @param {ModelConfigsApiDeserializeRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async deserialize(requestParameters: ModelConfigsApiDeserializeRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ModelConfigResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deserialize(requestParameters, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Export a model config to a .prompt file by ID.
+         * @summary Export by ID
+         * @param {ModelConfigsApiExportRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async export(requestParameters: ModelConfigsApiExportRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.export(requestParameters.id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
         /**
          * Get a specific model config by ID.
          * @summary Get
@@ -185,6 +345,17 @@ export const ModelConfigsApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.register(requestParameters, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
+        /**
+         * Serialize a model config to a .prompt file format.
+         * @summary Serialize
+         * @param {ModelConfigsApiSerializeRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async serialize(requestParameters: ModelConfigsApiSerializeRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.serialize(requestParameters, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
     }
 };
 
@@ -195,6 +366,26 @@ export const ModelConfigsApiFp = function(configuration?: Configuration) {
 export const ModelConfigsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = ModelConfigsApiFp(configuration)
     return {
+        /**
+         * Deserialize a model config from a .prompt file format.
+         * @summary Deserialize
+         * @param {ModelConfigsApiDeserializeRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deserialize(requestParameters: ModelConfigsApiDeserializeRequest, options?: AxiosRequestConfig): AxiosPromise<ModelConfigResponse> {
+            return localVarFp.deserialize(requestParameters, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Export a model config to a .prompt file by ID.
+         * @summary Export by ID
+         * @param {ModelConfigsApiExportRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        export(requestParameters: ModelConfigsApiExportRequest, options?: AxiosRequestConfig): AxiosPromise<string> {
+            return localVarFp.export(requestParameters, options).then((request) => request(axios, basePath));
+        },
         /**
          * Get a specific model config by ID.
          * @summary Get
@@ -215,8 +406,43 @@ export const ModelConfigsApiFactory = function (configuration?: Configuration, b
         register(requestParameters: ModelConfigsApiRegisterRequest, options?: AxiosRequestConfig): AxiosPromise<ProjectConfigResponse> {
             return localVarFp.register(requestParameters, options).then((request) => request(axios, basePath));
         },
+        /**
+         * Serialize a model config to a .prompt file format.
+         * @summary Serialize
+         * @param {ModelConfigsApiSerializeRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        serialize(requestParameters: ModelConfigsApiSerializeRequest, options?: AxiosRequestConfig): AxiosPromise<string> {
+            return localVarFp.serialize(requestParameters, options).then((request) => request(axios, basePath));
+        },
     };
 };
+
+/**
+ * Request parameters for deserialize operation in ModelConfigsApi.
+ * @export
+ * @interface ModelConfigsApiDeserializeRequest
+ */
+export type ModelConfigsApiDeserializeRequest = {
+    
+} & BodyModelConfigsDeserialize
+
+/**
+ * Request parameters for export operation in ModelConfigsApi.
+ * @export
+ * @interface ModelConfigsApiExportRequest
+ */
+export type ModelConfigsApiExportRequest = {
+    
+    /**
+    * String ID of the model config. Starts with `config_`.
+    * @type {string}
+    * @memberof ModelConfigsApiExport
+    */
+    readonly id: string
+    
+}
 
 /**
  * Request parameters for get operation in ModelConfigsApi.
@@ -244,12 +470,45 @@ export type ModelConfigsApiRegisterRequest = {
 } & ProjectModelConfigRequest
 
 /**
+ * Request parameters for serialize operation in ModelConfigsApi.
+ * @export
+ * @interface ModelConfigsApiSerializeRequest
+ */
+export type ModelConfigsApiSerializeRequest = {
+    
+} & ModelConfigsSerializeRequest
+
+/**
  * ModelConfigsApiGenerated - object-oriented interface
  * @export
  * @class ModelConfigsApiGenerated
  * @extends {BaseAPI}
  */
 export class ModelConfigsApiGenerated extends BaseAPI {
+    /**
+     * Deserialize a model config from a .prompt file format.
+     * @summary Deserialize
+     * @param {ModelConfigsApiDeserializeRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ModelConfigsApiGenerated
+     */
+    public deserialize(requestParameters: ModelConfigsApiDeserializeRequest, options?: AxiosRequestConfig) {
+        return ModelConfigsApiFp(this.configuration).deserialize(requestParameters, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Export a model config to a .prompt file by ID.
+     * @summary Export by ID
+     * @param {ModelConfigsApiExportRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ModelConfigsApiGenerated
+     */
+    public export(requestParameters: ModelConfigsApiExportRequest, options?: AxiosRequestConfig) {
+        return ModelConfigsApiFp(this.configuration).export(requestParameters, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * Get a specific model config by ID.
      * @summary Get
@@ -272,5 +531,17 @@ export class ModelConfigsApiGenerated extends BaseAPI {
      */
     public register(requestParameters: ModelConfigsApiRegisterRequest, options?: AxiosRequestConfig) {
         return ModelConfigsApiFp(this.configuration).register(requestParameters, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Serialize a model config to a .prompt file format.
+     * @summary Serialize
+     * @param {ModelConfigsApiSerializeRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ModelConfigsApiGenerated
+     */
+    public serialize(requestParameters: ModelConfigsApiSerializeRequest, options?: AxiosRequestConfig) {
+        return ModelConfigsApiFp(this.configuration).serialize(requestParameters, options).then((request) => request(this.axios, this.basePath));
     }
 }

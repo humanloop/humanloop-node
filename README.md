@@ -61,8 +61,11 @@
   * [`humanloop.log`](#humanlooplog)
   * [`humanloop.logs.update`](#humanlooplogsupdate)
   * [`humanloop.logs.updateByRef`](#humanlooplogsupdatebyref)
+  * [`humanloop.modelConfigs.deserialize`](#humanloopmodelconfigsdeserialize)
+  * [`humanloop.modelConfigs.export`](#humanloopmodelconfigsexport)
   * [`humanloop.modelConfigs.get`](#humanloopmodelconfigsget)
   * [`humanloop.modelConfigs.register`](#humanloopmodelconfigsregister)
+  * [`humanloop.modelConfigs.serialize`](#humanloopmodelconfigsserialize)
   * [`humanloop.projects.create`](#humanloopprojectscreate)
   * [`humanloop.projects.createFeedbackType`](#humanloopprojectscreatefeedbacktype)
   * [`humanloop.projects.deactivateConfig`](#humanloopprojectsdeactivateconfig)
@@ -2465,6 +2468,62 @@ Duration of the logged event in seconds.
 ---
 
 
+### `humanloop.modelConfigs.deserialize`<a id="humanloopmodelconfigsdeserialize"></a>
+
+Deserialize a model config from a .prompt file format.
+
+#### 🛠️ Usage<a id="🛠️-usage"></a>
+
+```typescript
+const deserializeResponse = await humanloop.modelConfigs.deserialize({
+  config: "config_example",
+});
+```
+
+#### ⚙️ Parameters<a id="⚙️-parameters"></a>
+
+##### config: `string`<a id="config-string"></a>
+
+#### 🔄 Return<a id="🔄-return"></a>
+
+[ModelConfigResponse](./models/model-config-response.ts)
+
+#### 🌐 Endpoint<a id="🌐-endpoint"></a>
+
+`/model-configs/deserialize` `POST`
+
+[🔙 **Back to Table of Contents**](#table-of-contents)
+
+---
+
+
+### `humanloop.modelConfigs.export`<a id="humanloopmodelconfigsexport"></a>
+
+Export a model config to a .prompt file by ID.
+
+#### 🛠️ Usage<a id="🛠️-usage"></a>
+
+```typescript
+const exportResponse = await humanloop.modelConfigs.export({
+  id: "id_example",
+});
+```
+
+#### ⚙️ Parameters<a id="⚙️-parameters"></a>
+
+##### id: `string`<a id="id-string"></a>
+
+String ID of the model config. Starts with `config_`.
+
+#### 🌐 Endpoint<a id="🌐-endpoint"></a>
+
+`/model-configs/{id}/export` `POST`
+
+[🔙 **Back to Table of Contents**](#table-of-contents)
+
+---
+
+
 ### `humanloop.modelConfigs.get`<a id="humanloopmodelconfigsget"></a>
 
 Get a specific model config by ID.
@@ -2598,6 +2657,98 @@ Make tools available to OpenAIs chat model as functions.
 #### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
 `/model-configs` `POST`
+
+[🔙 **Back to Table of Contents**](#table-of-contents)
+
+---
+
+
+### `humanloop.modelConfigs.serialize`<a id="humanloopmodelconfigsserialize"></a>
+
+Serialize a model config to a .prompt file format.
+
+#### 🛠️ Usage<a id="🛠️-usage"></a>
+
+```typescript
+const serializeResponse = await humanloop.modelConfigs.serialize({
+  model: "model_example",
+  max_tokens: -1,
+  temperature: 1,
+  top_p: 1,
+  presence_penalty: 0,
+  frequency_penalty: 0,
+});
+```
+
+#### ⚙️ Parameters<a id="⚙️-parameters"></a>
+
+##### description: `string`<a id="description-string"></a>
+
+A description of the model config.
+
+##### name: `string`<a id="name-string"></a>
+
+A friendly display name for the model config. If not provided, a name will be generated.
+
+##### provider: [`ModelProviders`](./models/model-providers.ts)<a id="provider-modelprovidersmodelsmodel-providersts"></a>
+
+The company providing the underlying model service.
+
+##### model: `string`<a id="model-string"></a>
+
+The model instance used. E.g. text-davinci-002.
+
+##### max_tokens: `number`<a id="max_tokens-number"></a>
+
+The maximum number of tokens to generate. Provide max_tokens=-1 to dynamically calculate the maximum number of tokens to generate given the length of the prompt
+
+##### temperature: `number`<a id="temperature-number"></a>
+
+What sampling temperature to use when making a generation. Higher values means the model will be more creative.
+
+##### top_p: `number`<a id="top_p-number"></a>
+
+An alternative to sampling with temperature, called nucleus sampling, where the model considers the results of the tokens with top_p probability mass.
+
+##### stop: [`StopSequenceSProperty`](./models/stop-sequence-sproperty.ts)<a id="stop-stopsequencespropertymodelsstop-sequence-spropertyts"></a>
+
+##### presence_penalty: `number`<a id="presence_penalty-number"></a>
+
+Number between -2.0 and 2.0. Positive values penalize new tokens based on whether they appear in the generation so far.
+
+##### frequency_penalty: `number`<a id="frequency_penalty-number"></a>
+
+Number between -2.0 and 2.0. Positive values penalize new tokens based on how frequently they appear in the generation so far.
+
+##### other: `object`<a id="other-object"></a>
+
+Other parameter values to be passed to the provider call.
+
+##### seed: `number`<a id="seed-number"></a>
+
+If specified, model will make a best effort to sample deterministically, but it is not guaranteed.
+
+##### response_format: [`ResponseFormatProperty`](./models/response-format-property.ts)<a id="response_format-responseformatpropertymodelsresponse-format-propertyts"></a>
+
+##### endpoint: [`ModelEndpoints`](./models/model-endpoints.ts)<a id="endpoint-modelendpointsmodelsmodel-endpointsts"></a>
+
+The provider model endpoint used.
+
+##### chat_template: [`ChatMessage`](./models/chat-message.ts)[]<a id="chat_template-chatmessagemodelschat-messagets"></a>
+
+Messages prepended to the list of messages sent to the provider. These messages that will take your specified inputs to form your final request to the provider model. Input variables within the template should be specified with syntax: {{INPUT_NAME}}.
+
+##### tools: [`ModelConfigToolRequest`](./models/model-config-tool-request.ts)[]<a id="tools-modelconfigtoolrequestmodelsmodel-config-tool-requestts"></a>
+
+Make tools available to OpenAIs chat model as functions.
+
+##### prompt_template: `string`<a id="prompt_template-string"></a>
+
+Prompt template that will take your specified inputs to form your final request to the model. Input variables within the prompt template should be specified with syntax: {{INPUT_NAME}}.
+
+#### 🌐 Endpoint<a id="🌐-endpoint"></a>
+
+`/model-configs/serialize` `POST`
 
 [🔙 **Back to Table of Contents**](#table-of-contents)
 
