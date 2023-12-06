@@ -233,14 +233,35 @@ export function createOnParse({
   return (event) => {
     if (event.type === "event") {
       const data = event.data;
-
       try {
         const json = JSON.parse(data);
-        const output = json.data[0].output;
-        const id = json.data[0].id;
+        const chunk = json.data[0];
+        const {
+          output,
+          id,
+          index,
+          finish_reason,
+          model_config_id,
+          tool_calls,
+          output_message,
+          tool_results,
+        } = chunk;
+        const project_id = json["project_id"];
         if (output === undefined) return;
         if (id === undefined) return;
-        const queue = encoder.encode(JSON.stringify({ output, id }));
+        const queue = encoder.encode(
+          JSON.stringify({
+            output,
+            id,
+            index,
+            finish_reason,
+            model_config_id,
+            tool_calls,
+            output_message,
+            project_id,
+            tool_results,
+          })
+        );
         controller.enqueue(queue);
       } catch (e) {
         // catch silently

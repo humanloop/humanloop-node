@@ -81,6 +81,33 @@ describe("client", () => {
       page = await page.next();
     }
   });
+
+  it("completeStream", async () => {
+    const humanloop = new Humanloop({
+      apiKey: process.env.HUMANLOOP_API_KEY,
+      basePath: "https://neostaging.humanloop.ml/v4",
+      openaiApiKey: process.env.OPENAI_API_KEY,
+    });
+    const response = await humanloop.completeStream({
+      project: "konfig-dev-001",
+      model_config: {
+        model: "gpt-3.5-turbo",
+        prompt_template: "{{message}}",
+      },
+      inputs: {
+        message: "Hello!",
+      },
+    });
+    const decoder = new TextDecoder();
+    const reader = response.data.getReader();
+    let done = false;
+    while (!done) {
+      const { value, done: doneReading } = await reader.read();
+      done = doneReading;
+      console.log(decoder.decode(value));
+    }
+  });
+
   it("chatStream", async () => {
     const humanloop = new Humanloop({
       apiKey: process.env.HUMANLOOP_API_KEY,
@@ -103,6 +130,63 @@ describe("client", () => {
       const { value, done: doneReading } = await reader.read();
       done = doneReading;
       console.log(decoder.decode(value));
+    }
+  });
+
+  it("chatStreamWithToolcall", async () => {
+    const humanloop = new Humanloop({
+      apiKey: process.env.HUMANLOOP_API_KEY,
+      basePath: "https://neostaging.humanloop.ml/v4",
+      openaiApiKey: process.env.OPENAI_API_KEY,
+    });
+    const response = await humanloop.chatStream({
+      project: "konfig-dev-001",
+      model_config: {
+        model: "gpt-3.5-turbo",
+        temperature: 1,
+        tools: [
+          {
+            name: "get_current_weather",
+            description: "Get the current weather in a given location",
+            parameters: {
+              type: "object",
+              properties: {
+                location: {
+                  type: "string",
+                  name: "Location",
+                  description: "The city and state, e.g. San Francisco, CA",
+                },
+                unit: {
+                  type: "string",
+                  name: "Unit",
+                  enum: ["celsius", "fahrenheit"],
+                },
+              },
+              required: ["location"],
+            },
+          },
+        ],
+        max_tokens: 90,
+      },
+      messages: [
+        {
+          role: "user",
+          content: "What is the weather in London today and for the next week?",
+        },
+      ],
+    });
+
+    const decoder = new TextDecoder();
+    const reader = response.data.getReader();
+    let done = false;
+    while (!done) {
+      const { value, done: doneReading } = await reader.read();
+      done = doneReading;
+      const decoded = decoder.decode(value);
+      console.log(decoded);
+      if (decoded !== "") {
+        expect(JSON.parse(decoded).project_id).not.toBeNull();
+      }
     }
   });
 
