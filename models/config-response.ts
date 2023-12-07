@@ -39,6 +39,7 @@ import { ResponseFormatProperty } from './response-format-property';
 import { StopSequenceSProperty } from './stop-sequence-sproperty';
 import { ToolConfigRequest } from './tool-config-request';
 import { ToolConfigResponse } from './tool-config-response';
+import { ToolSource } from './tool-source';
 
 /**
  * @type ConfigResponse

@@ -35,6 +35,7 @@ import { ModelProviders } from './model-providers';
 import { ResponseFormatProperty } from './response-format-property';
 import { StopSequenceSProperty } from './stop-sequence-sproperty';
 import { ToolConfigResponse } from './tool-config-response';
+import { ToolResponse } from './tool-response';
 
 /**
  * The model config defining the LLM evaluator.
@@ -145,11 +146,18 @@ export interface ModelConfigProperty2 {
      */
     'chat_template'?: Array<ChatMessage>;
     /**
-     * Definition of tools shown to the model.
+     * NB: Deprecated with tools field. Definition of tools shown to the model.
      * @type {Array<ToolConfigResponse>}
      * @memberof ModelConfigProperty2
+     * @deprecated
      */
     'tool_configs'?: Array<ToolConfigResponse>;
+    /**
+     * Tools shown to the model.
+     * @type {Array<ToolResponse>}
+     * @memberof ModelConfigProperty2
+     */
+    'tools'?: Array<ToolResponse>;
     /**
      * The provider model endpoint used.
      * @type {ModelEndpoints}

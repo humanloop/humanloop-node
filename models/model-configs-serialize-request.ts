@@ -31,11 +31,11 @@ import type * as buffer from "buffer"
 import { ChatMessage } from './chat-message';
 import { ModelConfigChatRequest } from './model-config-chat-request';
 import { ModelConfigCompletionRequest } from './model-config-completion-request';
-import { ModelConfigToolRequest } from './model-config-tool-request';
 import { ModelEndpoints } from './model-endpoints';
 import { ModelProviders } from './model-providers';
 import { ResponseFormatProperty } from './response-format-property';
 import { StopSequenceSProperty } from './stop-sequence-sproperty';
+import { ToolsEquivalentToOpenAIFunctionsPropertyInner } from './tools-equivalent-to-open-aifunctions-property-inner';
 
 /**
  * @type ModelConfigsSerializeRequest

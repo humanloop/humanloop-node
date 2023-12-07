@@ -2646,7 +2646,7 @@ Messages prepended to the list of messages sent to the provider. These messages 
 
 Which of the providers model endpoints to use. For example Complete or Edit.
 
-##### tools: [`ModelConfigToolRequest`](./models/model-config-tool-request.ts)[]<a id="tools-modelconfigtoolrequestmodelsmodel-config-tool-requestts"></a>
+##### tools: [`ToolsEquivalentToOpenAIFunctionsPropertyInner`](./models/tools-equivalent-to-open-aifunctions-property-inner.ts)[]<a id="tools-toolsequivalenttoopenaifunctionspropertyinnermodelstools-equivalent-to-open-aifunctions-property-innerts"></a>
 
 Make tools available to OpenAIs chat model as functions.
 
@@ -2738,7 +2738,7 @@ The provider model endpoint used.
 
 Messages prepended to the list of messages sent to the provider. These messages that will take your specified inputs to form your final request to the provider model. Input variables within the template should be specified with syntax: {{INPUT_NAME}}.
 
-##### tools: [`ModelConfigToolRequest`](./models/model-config-tool-request.ts)[]<a id="tools-modelconfigtoolrequestmodelsmodel-config-tool-requestts"></a>
+##### tools: [`ToolsEquivalentToOpenAIFunctionsPropertyInner`](./models/tools-equivalent-to-open-aifunctions-property-inner.ts)[]<a id="tools-toolsequivalenttoopenaifunctionspropertyinnermodelstools-equivalent-to-open-aifunctions-property-innerts"></a>
 
 Make tools available to OpenAIs chat model as functions.
 

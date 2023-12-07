@@ -47,13 +47,13 @@ import { ToolResultResponse } from './tool-result-response';
  */
 export interface LogResponse {
     /**
-     * Unique project name. If no project exists with this name, a new project will be created.
+     * The name of the project associated with this log
      * @type {string}
      * @memberof LogResponse
      */
     'project'?: string;
     /**
-     * Unique ID of a project to associate to the log. Either this or `project` must be provided.
+     * The unique ID of the project associated with this log.
      * @type {string}
      * @memberof LogResponse
      */

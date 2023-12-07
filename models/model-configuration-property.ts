@@ -30,11 +30,11 @@ import type * as buffer from "buffer"
 
 import { ChatMessage } from './chat-message';
 import { ModelConfigChatRequest } from './model-config-chat-request';
-import { ModelConfigToolRequest } from './model-config-tool-request';
 import { ModelEndpoints } from './model-endpoints';
 import { ModelProviders } from './model-providers';
 import { ResponseFormatProperty } from './response-format-property';
 import { StopSequenceSProperty } from './stop-sequence-sproperty';
+import { ToolsEquivalentToOpenAIFunctionsPropertyInner } from './tools-equivalent-to-open-aifunctions-property-inner';
 
 /**
  * The model configuration used to create a chat response.
@@ -134,9 +134,9 @@ export interface ModelConfigurationProperty {
     'chat_template'?: Array<ChatMessage>;
     /**
      * Make tools available to OpenAIs chat model as functions.
-     * @type {Array<ModelConfigToolRequest>}
+     * @type {Array<ToolsEquivalentToOpenAIFunctionsPropertyInner>}
      * @memberof ModelConfigurationProperty
      */
-    'tools'?: Array<ModelConfigToolRequest>;
+    'tools'?: Array<ToolsEquivalentToOpenAIFunctionsPropertyInner>;
 }
 

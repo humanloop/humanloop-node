@@ -45,8 +45,6 @@ import { HTTPValidationError } from '../models';
 // @ts-ignore
 import { ModelConfigResponse } from '../models';
 // @ts-ignore
-import { ModelConfigToolRequest } from '../models';
-// @ts-ignore
 import { ModelConfigsSerializeRequest } from '../models';
 // @ts-ignore
 import { ModelEndpoints } from '../models';
@@ -60,6 +58,8 @@ import { ProjectModelConfigRequest } from '../models';
 import { ResponseFormatProperty } from '../models';
 // @ts-ignore
 import { StopSequenceSProperty } from '../models';
+// @ts-ignore
+import { ToolsEquivalentToOpenAIFunctionsPropertyInner } from '../models';
 import { paginate } from "../pagination/paginate";
 import type * as buffer from "buffer"
 import { requestBeforeHook } from '../requestBeforeHook';

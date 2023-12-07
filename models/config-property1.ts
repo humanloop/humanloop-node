@@ -38,6 +38,7 @@ import { ModelProviders } from './model-providers';
 import { ResponseFormatProperty } from './response-format-property';
 import { StopSequenceSProperty } from './stop-sequence-sproperty';
 import { ToolConfigRequest } from './tool-config-request';
+import { ToolSource } from './tool-source';
 
 /**
  * @type ConfigProperty1

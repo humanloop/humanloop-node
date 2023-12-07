@@ -34,6 +34,7 @@ import { ModelProviders } from './model-providers';
 import { ResponseFormatProperty } from './response-format-property';
 import { StopSequenceSProperty } from './stop-sequence-sproperty';
 import { ToolConfigResponse } from './tool-config-response';
+import { ToolResponse } from './tool-response';
 
 /**
  * Model config request.  Contains fields that are common to all (i.e. both chat and complete) endpoints.
@@ -144,11 +145,18 @@ export interface ModelConfigResponse {
      */
     'chat_template'?: Array<ChatMessage>;
     /**
-     * Definition of tools shown to the model.
+     * NB: Deprecated with tools field. Definition of tools shown to the model.
      * @type {Array<ToolConfigResponse>}
      * @memberof ModelConfigResponse
+     * @deprecated
      */
     'tool_configs'?: Array<ToolConfigResponse>;
+    /**
+     * Tools shown to the model.
+     * @type {Array<ToolResponse>}
+     * @memberof ModelConfigResponse
+     */
+    'tools'?: Array<ToolResponse>;
     /**
      * The provider model endpoint used.
      * @type {ModelEndpoints}
