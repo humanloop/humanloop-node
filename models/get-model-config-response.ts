@@ -104,5 +104,11 @@ export interface GetModelConfigResponse {
      * @memberof GetModelConfigResponse
      */
     'trial_id'?: string;
+    /**
+     * ID of environment to reference in subsequent log calls.
+     * @type {string}
+     * @memberof GetModelConfigResponse
+     */
+    'environment_id'?: string;
 }
 

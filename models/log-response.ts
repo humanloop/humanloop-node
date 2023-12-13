@@ -137,11 +137,23 @@ export interface LogResponse {
      */
     'output'?: string;
     /**
+     * Unique ID of a config to associate to the log.
+     * @type {string}
+     * @memberof LogResponse
+     */
+    'config_id'?: string;
+    /**
      * 
      * @type {ConfigResponse}
      * @memberof LogResponse
      */
     'config': ConfigResponse;
+    /**
+     * The environment name used to create the log.
+     * @type {string}
+     * @memberof LogResponse
+     */
+    'environment'?: string;
     /**
      * 
      * @type {Array<FeedbackResponse>}
@@ -166,6 +178,12 @@ export interface LogResponse {
      * @memberof LogResponse
      */
     'duration'?: number;
+    /**
+     * 
+     * @type {OutputMessageProperty}
+     * @memberof LogResponse
+     */
+    'output_message'?: OutputMessageProperty;
     /**
      * 
      * @type {ConfigProperty2}
@@ -220,12 +238,6 @@ export interface LogResponse {
      * @memberof LogResponse
      */
     'tool_choice'?: ToolChoiceProperty;
-    /**
-     * 
-     * @type {OutputMessageProperty}
-     * @memberof LogResponse
-     */
-    'output_message'?: OutputMessageProperty;
     /**
      * 
      * @type {Array<EvaluationResultResponse>}

@@ -42,7 +42,7 @@ import { ToolSource } from './tool-source';
 
 /**
  * @type ConfigProperty1
- * The model config used for this generation. Required unless `trial_id` is provided.
+ * The model config used for this generation. Required unless `config_id` or `trial_id` is provided.
  * @export
  */
 export type ConfigProperty1 = { type: 'agent' } & AgentConfigRequest | { type: 'generic' } & GenericConfigRequest | { type: 'model' } & ModelConfigRequest | { type: 'tool' } & ToolConfigRequest;

@@ -31,6 +31,7 @@ import type * as buffer from "buffer"
 import { ChatMessage } from './chat-message';
 import { ConfigProperty1 } from './config-property1';
 import { FeedbackLabelsProperty } from './feedback-labels-property';
+import { OutputMessageProperty } from './output-message-property';
 
 /**
  * Request model for logging a datapoint.
@@ -123,11 +124,23 @@ export interface LogRequest {
      */
     'output'?: string;
     /**
+     * Unique ID of a config to associate to the log.
+     * @type {string}
+     * @memberof LogRequest
+     */
+    'config_id'?: string;
+    /**
      * 
      * @type {ConfigProperty1}
      * @memberof LogRequest
      */
     'config'?: ConfigProperty1;
+    /**
+     * The environment name used to create the log.
+     * @type {string}
+     * @memberof LogRequest
+     */
+    'environment'?: string;
     /**
      * 
      * @type {FeedbackLabelsProperty}
@@ -152,5 +165,11 @@ export interface LogRequest {
      * @memberof LogRequest
      */
     'duration'?: number;
+    /**
+     * 
+     * @type {OutputMessageProperty}
+     * @memberof LogRequest
+     */
+    'output_message'?: OutputMessageProperty;
 }
 

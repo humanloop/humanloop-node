@@ -2353,7 +2353,15 @@ The messages passed to the to provider chat endpoint.
 
 Generated output from your model for the provided inputs. Can be `None` if logging an error, or if logging a parent datapoint with the intention to populate it later
 
+##### config_id: `string`<a id="config_id-string"></a>
+
+Unique ID of a config to associate to the log.
+
 ##### config: [`ConfigProperty1`](./models/config-property1.ts)<a id="config-configproperty1modelsconfig-property1ts"></a>
+
+##### environment: `string`<a id="environment-string"></a>
+
+The environment name used to create the log.
 
 ##### feedback: [`FeedbackLabelsProperty`](./models/feedback-labels-property.ts)<a id="feedback-feedbacklabelspropertymodelsfeedback-labels-propertyts"></a>
 
@@ -2368,6 +2376,8 @@ Error message if the log is an error.
 ##### duration: `number`<a id="duration-number"></a>
 
 Duration of the logged event in seconds.
+
+##### output_message: [`OutputMessageProperty`](./models/output-message-property.ts)<a id="output_message-outputmessagepropertymodelsoutput-message-propertyts"></a>
 
 #### 🔄 Return<a id="🔄-return"></a>
 
@@ -2858,7 +2868,7 @@ String ID of project. Starts with `pr_`.
 
 ##### environment: `string`<a id="environment-string"></a>
 
-Name for the environment. E.g. \'producton\'. If not provided, will delete the active config for the default environment.
+Name for the environment. E.g. \'production\'. If not provided, will delete the active config for the default environment.
 
 #### 🔄 Return<a id="🔄-return"></a>
 

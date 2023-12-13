@@ -51,6 +51,8 @@ import { LogResponse } from '../models';
 // @ts-ignore
 import { LogsLogResponse } from '../models';
 // @ts-ignore
+import { OutputMessageProperty } from '../models';
+// @ts-ignore
 import { PaginatedDataLogResponse } from '../models';
 // @ts-ignore
 import { UpdateLogRequest } from '../models';

@@ -32,6 +32,7 @@ import { ChatMessage } from './chat-message';
 import { ConfigProperty1 } from './config-property1';
 import { FeedbackLabelsProperty } from './feedback-labels-property';
 import { LogRequest } from './log-request';
+import { OutputMessageProperty } from './output-message-property';
 
 /**
  * @type LogDatapointRequest

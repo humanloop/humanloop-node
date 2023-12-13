@@ -181,7 +181,7 @@ export const ProjectsApiAxiosParamCreator = function (configuration?: Configurat
          * Remove the project\'s active config, if set.  This has no effect if the project does not have an active model config set.
          * @summary Deactivate Config
          * @param {string} id String ID of project. Starts with &#x60;pr_&#x60;.
-         * @param {string} [environment] Name for the environment. E.g. \&#39;producton\&#39;. If not provided, will delete the active config for the default environment.
+         * @param {string} [environment] Name for the environment. E.g. \&#39;production\&#39;. If not provided, will delete the active config for the default environment.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -1185,7 +1185,7 @@ export type ProjectsApiDeactivateConfigRequest = {
     readonly id: string
     
     /**
-    * Name for the environment. E.g. \'producton\'. If not provided, will delete the active config for the default environment.
+    * Name for the environment. E.g. \'production\'. If not provided, will delete the active config for the default environment.
     * @type {string}
     * @memberof ProjectsApiDeactivateConfig
     */
