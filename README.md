@@ -1597,7 +1597,7 @@ An error that occurred during evaluation.
 
 ### `humanloop.evaluations.updateStatus`<a id="humanloopevaluationsupdatestatus"></a>
 
-Update the status of an evaluation run.  Can only be used to update the status of an evaluation run that uses external evaluators. The evaluation must currently have status \'running\'.
+Update the status of an evaluation run.  Can only be used to update the status of an evaluation run that uses external or human evaluators. The evaluation must currently have status \'running\' if swithcing to completed, or it must have status \'completed\' if switching back to \'running\'.
 
 #### 🛠️ Usage<a id="🛠️-usage"></a>
 

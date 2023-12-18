@@ -312,7 +312,7 @@ export const EvaluationsApiAxiosParamCreator = function (configuration?: Configu
             };
         },
         /**
-         * Update the status of an evaluation run.  Can only be used to update the status of an evaluation run that uses external evaluators. The evaluation must currently have status \'running\'.
+         * Update the status of an evaluation run.  Can only be used to update the status of an evaluation run that uses external or human evaluators. The evaluation must currently have status \'running\' if swithcing to completed, or it must have status \'completed\' if switching back to \'running\'.
          * @summary Update Status
          * @param {string} id String ID of evaluation run. Starts with &#x60;ev_&#x60;.
          * @param {UpdateEvaluationStatusRequest} updateEvaluationStatusRequest 
@@ -427,7 +427,7 @@ export const EvaluationsApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * Update the status of an evaluation run.  Can only be used to update the status of an evaluation run that uses external evaluators. The evaluation must currently have status \'running\'.
+         * Update the status of an evaluation run.  Can only be used to update the status of an evaluation run that uses external or human evaluators. The evaluation must currently have status \'running\' if swithcing to completed, or it must have status \'completed\' if switching back to \'running\'.
          * @summary Update Status
          * @param {EvaluationsApiUpdateStatusRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
@@ -498,7 +498,7 @@ export const EvaluationsApiFactory = function (configuration?: Configuration, ba
             return localVarFp.logResult(requestParameters, options).then((request) => request(axios, basePath));
         },
         /**
-         * Update the status of an evaluation run.  Can only be used to update the status of an evaluation run that uses external evaluators. The evaluation must currently have status \'running\'.
+         * Update the status of an evaluation run.  Can only be used to update the status of an evaluation run that uses external or human evaluators. The evaluation must currently have status \'running\' if swithcing to completed, or it must have status \'completed\' if switching back to \'running\'.
          * @summary Update Status
          * @param {EvaluationsApiUpdateStatusRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
@@ -707,7 +707,7 @@ export class EvaluationsApiGenerated extends BaseAPI {
     }
 
     /**
-     * Update the status of an evaluation run.  Can only be used to update the status of an evaluation run that uses external evaluators. The evaluation must currently have status \'running\'.
+     * Update the status of an evaluation run.  Can only be used to update the status of an evaluation run that uses external or human evaluators. The evaluation must currently have status \'running\' if swithcing to completed, or it must have status \'completed\' if switching back to \'running\'.
      * @summary Update Status
      * @param {EvaluationsApiUpdateStatusRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
