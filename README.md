@@ -225,13 +225,14 @@ Get a chat response by providing details of the model configuration in the reque
 
 ```typescript
 const createResponse = await humanloop.chat({
+  num_samples: 1,
+  stream: false,
+  return_inputs: true,
   messages: [
     {
       role: "string_example",
     },
   ],
-  num_samples: 1,
-  stream: false,
   model_config: {
     model: "model_example",
     max_tokens: -1,
@@ -295,7 +296,7 @@ ID of the source datapoint if this is a log derived from a datapoint in a datase
 
 ##### num_samples: `number`<a id="num_samples-number"></a>
 
-The number of chat responses.
+The number of generations.
 
 ##### stream: `boolean`<a id="stream-boolean"></a>
 
@@ -305,13 +306,17 @@ If true, tokens will be sent as data-only server-sent events. If num_samples > 1
 
 End-user ID passed through to provider call.
 
-##### tool_choice: [`ToolChoiceProperty`](./models/tool-choice-property.ts)<a id="tool_choice-toolchoicepropertymodelstool-choice-propertyts"></a>
-
-##### tool_call: [`ToolCallProperty1`](./models/tool-call-property1.ts)<a id="tool_call-toolcallproperty1modelstool-call-property1ts"></a>
-
 ##### seed: `number`<a id="seed-number"></a>
 
 If specified, model will make a best effort to sample deterministically, but it is not guaranteed.
+
+##### return_inputs: `boolean`<a id="return_inputs-boolean"></a>
+
+Whether to return the inputs in the response. If false, the response will contain an empty dictionary under inputs. This is useful for reducing the size of the response. Defaults to true.
+
+##### tool_choice: [`ToolChoiceProperty`](./models/tool-choice-property.ts)<a id="tool_choice-toolchoicepropertymodelstool-choice-propertyts"></a>
+
+##### tool_call: [`ToolCallProperty1`](./models/tool-call-property1.ts)<a id="tool_call-toolcallproperty1modelstool-call-property1ts"></a>
 
 ##### response_format: [`ResponseFormatProperty`](./models/response-format-property.ts)<a id="response_format-responseformatpropertymodelsresponse-format-propertyts"></a>
 
@@ -336,13 +341,14 @@ Get a chat response using the project\'s active deployment.  The active deployme
 
 ```typescript
 const createDeployedResponse = await humanloop.chatDeployed({
+  num_samples: 1,
+  stream: false,
+  return_inputs: true,
   messages: [
     {
       role: "string_example",
     },
   ],
-  num_samples: 1,
-  stream: false,
 });
 ```
 
@@ -396,7 +402,7 @@ ID of the source datapoint if this is a log derived from a datapoint in a datase
 
 ##### num_samples: `number`<a id="num_samples-number"></a>
 
-The number of chat responses.
+The number of generations.
 
 ##### stream: `boolean`<a id="stream-boolean"></a>
 
@@ -406,13 +412,17 @@ If true, tokens will be sent as data-only server-sent events. If num_samples > 1
 
 End-user ID passed through to provider call.
 
-##### tool_choice: [`ToolChoiceProperty`](./models/tool-choice-property.ts)<a id="tool_choice-toolchoicepropertymodelstool-choice-propertyts"></a>
-
-##### tool_call: [`ToolCallProperty1`](./models/tool-call-property1.ts)<a id="tool_call-toolcallproperty1modelstool-call-property1ts"></a>
-
 ##### seed: `number`<a id="seed-number"></a>
 
 If specified, model will make a best effort to sample deterministically, but it is not guaranteed.
+
+##### return_inputs: `boolean`<a id="return_inputs-boolean"></a>
+
+Whether to return the inputs in the response. If false, the response will contain an empty dictionary under inputs. This is useful for reducing the size of the response. Defaults to true.
+
+##### tool_choice: [`ToolChoiceProperty`](./models/tool-choice-property.ts)<a id="tool_choice-toolchoicepropertymodelstool-choice-propertyts"></a>
+
+##### tool_call: [`ToolCallProperty1`](./models/tool-call-property1.ts)<a id="tool_call-toolcallproperty1modelstool-call-property1ts"></a>
 
 ##### response_format: [`ResponseFormatProperty`](./models/response-format-property.ts)<a id="response_format-responseformatpropertymodelsresponse-format-propertyts"></a>
 
@@ -441,13 +451,14 @@ Get a chat response for a specific experiment.
 
 ```typescript
 const createExperimentResponse = await humanloop.chatExperiment({
+  num_samples: 1,
+  stream: false,
+  return_inputs: true,
   messages: [
     {
       role: "string_example",
     },
   ],
-  num_samples: 1,
-  stream: false,
   experiment_id: "experiment_id_example",
 });
 ```
@@ -516,13 +527,17 @@ If true, tokens will be sent as data-only server-sent events. If num_samples > 1
 
 End-user ID passed through to provider call.
 
-##### tool_choice: [`ToolChoiceProperty`](./models/tool-choice-property.ts)<a id="tool_choice-toolchoicepropertymodelstool-choice-propertyts"></a>
-
-##### tool_call: [`ToolCallProperty1`](./models/tool-call-property1.ts)<a id="tool_call-toolcallproperty1modelstool-call-property1ts"></a>
-
 ##### seed: `number`<a id="seed-number"></a>
 
 If specified, model will make a best effort to sample deterministically, but it is not guaranteed.
+
+##### return_inputs: `boolean`<a id="return_inputs-boolean"></a>
+
+Whether to return the inputs in the response. If false, the response will contain an empty dictionary under inputs. This is useful for reducing the size of the response. Defaults to true.
+
+##### tool_choice: [`ToolChoiceProperty`](./models/tool-choice-property.ts)<a id="tool_choice-toolchoicepropertymodelstool-choice-propertyts"></a>
+
+##### tool_call: [`ToolCallProperty1`](./models/tool-call-property1.ts)<a id="tool_call-toolcallproperty1modelstool-call-property1ts"></a>
 
 ##### response_format: [`ResponseFormatProperty`](./models/response-format-property.ts)<a id="response_format-responseformatpropertymodelsresponse-format-propertyts"></a>
 
@@ -547,13 +562,14 @@ Get chat response for a specific model configuration.
 
 ```typescript
 const createModelConfigResponse = await humanloop.chatModelConfiguration({
+  num_samples: 1,
+  stream: false,
+  return_inputs: true,
   messages: [
     {
       role: "string_example",
     },
   ],
-  num_samples: 1,
-  stream: false,
   model_config_id: "model_config_id_example",
 });
 ```
@@ -612,7 +628,7 @@ ID of the source datapoint if this is a log derived from a datapoint in a datase
 
 ##### num_samples: `number`<a id="num_samples-number"></a>
 
-The number of chat responses.
+The number of generations.
 
 ##### stream: `boolean`<a id="stream-boolean"></a>
 
@@ -622,13 +638,17 @@ If true, tokens will be sent as data-only server-sent events. If num_samples > 1
 
 End-user ID passed through to provider call.
 
-##### tool_choice: [`ToolChoiceProperty`](./models/tool-choice-property.ts)<a id="tool_choice-toolchoicepropertymodelstool-choice-propertyts"></a>
-
-##### tool_call: [`ToolCallProperty1`](./models/tool-call-property1.ts)<a id="tool_call-toolcallproperty1modelstool-call-property1ts"></a>
-
 ##### seed: `number`<a id="seed-number"></a>
 
 If specified, model will make a best effort to sample deterministically, but it is not guaranteed.
+
+##### return_inputs: `boolean`<a id="return_inputs-boolean"></a>
+
+Whether to return the inputs in the response. If false, the response will contain an empty dictionary under inputs. This is useful for reducing the size of the response. Defaults to true.
+
+##### tool_choice: [`ToolChoiceProperty`](./models/tool-choice-property.ts)<a id="tool_choice-toolchoicepropertymodelstool-choice-propertyts"></a>
+
+##### tool_call: [`ToolCallProperty1`](./models/tool-call-property1.ts)<a id="tool_call-toolcallproperty1modelstool-call-property1ts"></a>
 
 ##### response_format: [`ResponseFormatProperty`](./models/response-format-property.ts)<a id="response_format-responseformatpropertymodelsresponse-format-propertyts"></a>
 
@@ -655,6 +675,7 @@ Create a completion by providing details of the model configuration in the reque
 const createResponse = await humanloop.complete({
   num_samples: 1,
   stream: false,
+  return_inputs: true,
   model_config: {
     model: "model_example",
     max_tokens: -1,
@@ -717,25 +738,29 @@ ID of the source datapoint if this is a log derived from a datapoint in a datase
 
 The number of generations.
 
-##### logprobs: `number`<a id="logprobs-number"></a>
-
-Include the log probabilities of the top n tokens in the provider_response
-
 ##### stream: `boolean`<a id="stream-boolean"></a>
 
 If true, tokens will be sent as data-only server-sent events. If num_samples > 1, samples are streamed back independently.
 
-##### suffix: `string`<a id="suffix-string"></a>
+##### user: `string`<a id="user-string"></a>
 
-The suffix that comes after a completion of inserted text. Useful for completions that act like inserts.
+End-user ID passed through to provider call.
 
 ##### seed: `number`<a id="seed-number"></a>
 
 If specified, model will make a best effort to sample deterministically, but it is not guaranteed.
 
-##### user: `string`<a id="user-string"></a>
+##### return_inputs: `boolean`<a id="return_inputs-boolean"></a>
 
-End-user ID passed through to provider call.
+Whether to return the inputs in the response. If false, the response will contain an empty dictionary under inputs. This is useful for reducing the size of the response. Defaults to true.
+
+##### logprobs: `number`<a id="logprobs-number"></a>
+
+Include the log probabilities of the top n tokens in the provider_response
+
+##### suffix: `string`<a id="suffix-string"></a>
+
+The suffix that comes after a completion of inserted text. Useful for completions that act like inserts.
 
 #### 🔄 Return<a id="🔄-return"></a>
 
@@ -760,6 +785,7 @@ Create a completion using the project\'s active deployment.  The active deployme
 const createDeployedResponse = await humanloop.completeDeployed({
   num_samples: 1,
   stream: false,
+  return_inputs: true,
 });
 ```
 
@@ -811,25 +837,29 @@ ID of the source datapoint if this is a log derived from a datapoint in a datase
 
 The number of generations.
 
-##### logprobs: `number`<a id="logprobs-number"></a>
-
-Include the log probabilities of the top n tokens in the provider_response
-
 ##### stream: `boolean`<a id="stream-boolean"></a>
 
 If true, tokens will be sent as data-only server-sent events. If num_samples > 1, samples are streamed back independently.
 
-##### suffix: `string`<a id="suffix-string"></a>
+##### user: `string`<a id="user-string"></a>
 
-The suffix that comes after a completion of inserted text. Useful for completions that act like inserts.
+End-user ID passed through to provider call.
 
 ##### seed: `number`<a id="seed-number"></a>
 
 If specified, model will make a best effort to sample deterministically, but it is not guaranteed.
 
-##### user: `string`<a id="user-string"></a>
+##### return_inputs: `boolean`<a id="return_inputs-boolean"></a>
 
-End-user ID passed through to provider call.
+Whether to return the inputs in the response. If false, the response will contain an empty dictionary under inputs. This is useful for reducing the size of the response. Defaults to true.
+
+##### logprobs: `number`<a id="logprobs-number"></a>
+
+Include the log probabilities of the top n tokens in the provider_response
+
+##### suffix: `string`<a id="suffix-string"></a>
+
+The suffix that comes after a completion of inserted text. Useful for completions that act like inserts.
 
 ##### environment: `string`<a id="environment-string"></a>
 
@@ -858,6 +888,7 @@ Create a completion for a specific experiment.
 const createExperimentResponse = await humanloop.completeExperiment({
   num_samples: 1,
   stream: false,
+  return_inputs: true,
   experiment_id: "experiment_id_example",
 });
 ```
@@ -914,25 +945,29 @@ ID of the source datapoint if this is a log derived from a datapoint in a datase
 
 The number of chat responses, where each chat response will use a model configuration sampled from the experiment.
 
-##### logprobs: `number`<a id="logprobs-number"></a>
-
-Include the log probabilities of the top n tokens in the provider_response
-
 ##### stream: `boolean`<a id="stream-boolean"></a>
 
 If true, tokens will be sent as data-only server-sent events. If num_samples > 1, samples are streamed back independently.
 
-##### suffix: `string`<a id="suffix-string"></a>
+##### user: `string`<a id="user-string"></a>
 
-The suffix that comes after a completion of inserted text. Useful for completions that act like inserts.
+End-user ID passed through to provider call.
 
 ##### seed: `number`<a id="seed-number"></a>
 
 If specified, model will make a best effort to sample deterministically, but it is not guaranteed.
 
-##### user: `string`<a id="user-string"></a>
+##### return_inputs: `boolean`<a id="return_inputs-boolean"></a>
 
-End-user ID passed through to provider call.
+Whether to return the inputs in the response. If false, the response will contain an empty dictionary under inputs. This is useful for reducing the size of the response. Defaults to true.
+
+##### logprobs: `number`<a id="logprobs-number"></a>
+
+Include the log probabilities of the top n tokens in the provider_response
+
+##### suffix: `string`<a id="suffix-string"></a>
+
+The suffix that comes after a completion of inserted text. Useful for completions that act like inserts.
 
 #### 🔄 Return<a id="🔄-return"></a>
 
@@ -957,6 +992,7 @@ Create a completion for a specific model configuration.
 const createModelConfigResponse = await humanloop.completeModelConfiguration({
   num_samples: 1,
   stream: false,
+  return_inputs: true,
   model_config_id: "model_config_id_example",
 });
 ```
@@ -1013,25 +1049,29 @@ ID of the source datapoint if this is a log derived from a datapoint in a datase
 
 The number of generations.
 
-##### logprobs: `number`<a id="logprobs-number"></a>
-
-Include the log probabilities of the top n tokens in the provider_response
-
 ##### stream: `boolean`<a id="stream-boolean"></a>
 
 If true, tokens will be sent as data-only server-sent events. If num_samples > 1, samples are streamed back independently.
 
-##### suffix: `string`<a id="suffix-string"></a>
+##### user: `string`<a id="user-string"></a>
 
-The suffix that comes after a completion of inserted text. Useful for completions that act like inserts.
+End-user ID passed through to provider call.
 
 ##### seed: `number`<a id="seed-number"></a>
 
 If specified, model will make a best effort to sample deterministically, but it is not guaranteed.
 
-##### user: `string`<a id="user-string"></a>
+##### return_inputs: `boolean`<a id="return_inputs-boolean"></a>
 
-End-user ID passed through to provider call.
+Whether to return the inputs in the response. If false, the response will contain an empty dictionary under inputs. This is useful for reducing the size of the response. Defaults to true.
+
+##### logprobs: `number`<a id="logprobs-number"></a>
+
+Include the log probabilities of the top n tokens in the provider_response
+
+##### suffix: `string`<a id="suffix-string"></a>
+
+The suffix that comes after a completion of inserted text. Useful for completions that act like inserts.
 
 #### 🔄 Return<a id="🔄-return"></a>
 

@@ -101,12 +101,6 @@ export interface ChatExperimentRequest {
      */
     'source_datapoint_id'?: string;
     /**
-     * The messages passed to the to provider chat endpoint.
-     * @type {Array<ChatMessage>}
-     * @memberof ChatExperimentRequest
-     */
-    'messages': Array<ChatMessage>;
-    /**
      * 
      * @type {ProviderAPIKeysProperty}
      * @memberof ChatExperimentRequest
@@ -131,6 +125,24 @@ export interface ChatExperimentRequest {
      */
     'user'?: string;
     /**
+     * If specified, model will make a best effort to sample deterministically, but it is not guaranteed.
+     * @type {number}
+     * @memberof ChatExperimentRequest
+     */
+    'seed'?: number;
+    /**
+     * Whether to return the inputs in the response. If false, the response will contain an empty dictionary under inputs. This is useful for reducing the size of the response. Defaults to true.
+     * @type {boolean}
+     * @memberof ChatExperimentRequest
+     */
+    'return_inputs'?: boolean;
+    /**
+     * The messages passed to the to provider chat endpoint.
+     * @type {Array<ChatMessage>}
+     * @memberof ChatExperimentRequest
+     */
+    'messages': Array<ChatMessage>;
+    /**
      * 
      * @type {ToolChoiceProperty}
      * @memberof ChatExperimentRequest
@@ -143,12 +155,6 @@ export interface ChatExperimentRequest {
      * @deprecated
      */
     'tool_call'?: ToolCallProperty1;
-    /**
-     * If specified, model will make a best effort to sample deterministically, but it is not guaranteed.
-     * @type {number}
-     * @memberof ChatExperimentRequest
-     */
-    'seed'?: number;
     /**
      * 
      * @type {ResponseFormatProperty}

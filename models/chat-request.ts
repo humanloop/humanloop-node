@@ -102,19 +102,13 @@ export interface ChatRequest {
      */
     'source_datapoint_id'?: string;
     /**
-     * The messages passed to the to provider chat endpoint.
-     * @type {Array<ChatMessage>}
-     * @memberof ChatRequest
-     */
-    'messages': Array<ChatMessage>;
-    /**
      * 
      * @type {ProviderAPIKeysProperty}
      * @memberof ChatRequest
      */
     'provider_api_keys'?: ProviderAPIKeysProperty;
     /**
-     * The number of chat responses.
+     * The number of generations.
      * @type {number}
      * @memberof ChatRequest
      */
@@ -132,6 +126,24 @@ export interface ChatRequest {
      */
     'user'?: string;
     /**
+     * If specified, model will make a best effort to sample deterministically, but it is not guaranteed.
+     * @type {number}
+     * @memberof ChatRequest
+     */
+    'seed'?: number;
+    /**
+     * Whether to return the inputs in the response. If false, the response will contain an empty dictionary under inputs. This is useful for reducing the size of the response. Defaults to true.
+     * @type {boolean}
+     * @memberof ChatRequest
+     */
+    'return_inputs'?: boolean;
+    /**
+     * The messages passed to the to provider chat endpoint.
+     * @type {Array<ChatMessage>}
+     * @memberof ChatRequest
+     */
+    'messages': Array<ChatMessage>;
+    /**
      * 
      * @type {ToolChoiceProperty}
      * @memberof ChatRequest
@@ -144,12 +156,6 @@ export interface ChatRequest {
      * @deprecated
      */
     'tool_call'?: ToolCallProperty1;
-    /**
-     * If specified, model will make a best effort to sample deterministically, but it is not guaranteed.
-     * @type {number}
-     * @memberof ChatRequest
-     */
-    'seed'?: number;
     /**
      * 
      * @type {ResponseFormatProperty}

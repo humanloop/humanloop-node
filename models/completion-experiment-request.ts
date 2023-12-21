@@ -109,23 +109,17 @@ export interface CompletionExperimentRequest {
      */
     'num_samples'?: number;
     /**
-     * Include the log probabilities of the top n tokens in the provider_response
-     * @type {number}
-     * @memberof CompletionExperimentRequest
-     */
-    'logprobs'?: number;
-    /**
      * If true, tokens will be sent as data-only server-sent events. If num_samples > 1, samples are streamed back independently.
      * @type {boolean}
      * @memberof CompletionExperimentRequest
      */
     'stream'?: boolean;
     /**
-     * The suffix that comes after a completion of inserted text. Useful for completions that act like inserts.
+     * End-user ID passed through to provider call.
      * @type {string}
      * @memberof CompletionExperimentRequest
      */
-    'suffix'?: string;
+    'user'?: string;
     /**
      * If specified, model will make a best effort to sample deterministically, but it is not guaranteed.
      * @type {number}
@@ -133,11 +127,23 @@ export interface CompletionExperimentRequest {
      */
     'seed'?: number;
     /**
-     * End-user ID passed through to provider call.
+     * Whether to return the inputs in the response. If false, the response will contain an empty dictionary under inputs. This is useful for reducing the size of the response. Defaults to true.
+     * @type {boolean}
+     * @memberof CompletionExperimentRequest
+     */
+    'return_inputs'?: boolean;
+    /**
+     * Include the log probabilities of the top n tokens in the provider_response
+     * @type {number}
+     * @memberof CompletionExperimentRequest
+     */
+    'logprobs'?: number;
+    /**
+     * The suffix that comes after a completion of inserted text. Useful for completions that act like inserts.
      * @type {string}
      * @memberof CompletionExperimentRequest
      */
-    'user'?: string;
+    'suffix'?: string;
     /**
      * If an experiment ID is provided a model configuration will be sampled from the experiments active model configurations.
      * @type {string}

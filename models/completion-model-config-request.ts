@@ -109,23 +109,17 @@ export interface CompletionModelConfigRequest {
      */
     'num_samples'?: number;
     /**
-     * Include the log probabilities of the top n tokens in the provider_response
-     * @type {number}
-     * @memberof CompletionModelConfigRequest
-     */
-    'logprobs'?: number;
-    /**
      * If true, tokens will be sent as data-only server-sent events. If num_samples > 1, samples are streamed back independently.
      * @type {boolean}
      * @memberof CompletionModelConfigRequest
      */
     'stream'?: boolean;
     /**
-     * The suffix that comes after a completion of inserted text. Useful for completions that act like inserts.
+     * End-user ID passed through to provider call.
      * @type {string}
      * @memberof CompletionModelConfigRequest
      */
-    'suffix'?: string;
+    'user'?: string;
     /**
      * If specified, model will make a best effort to sample deterministically, but it is not guaranteed.
      * @type {number}
@@ -133,11 +127,23 @@ export interface CompletionModelConfigRequest {
      */
     'seed'?: number;
     /**
-     * End-user ID passed through to provider call.
+     * Whether to return the inputs in the response. If false, the response will contain an empty dictionary under inputs. This is useful for reducing the size of the response. Defaults to true.
+     * @type {boolean}
+     * @memberof CompletionModelConfigRequest
+     */
+    'return_inputs'?: boolean;
+    /**
+     * Include the log probabilities of the top n tokens in the provider_response
+     * @type {number}
+     * @memberof CompletionModelConfigRequest
+     */
+    'logprobs'?: number;
+    /**
+     * The suffix that comes after a completion of inserted text. Useful for completions that act like inserts.
      * @type {string}
      * @memberof CompletionModelConfigRequest
      */
-    'user'?: string;
+    'suffix'?: string;
     /**
      * Identifies the model configuration used to create a chat response.
      * @type {string}
