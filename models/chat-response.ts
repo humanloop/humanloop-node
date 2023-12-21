@@ -93,6 +93,12 @@ export interface ChatResponse {
      */
     'provider_responses': Array<any>;
     /**
+     * ID of the session if it belongs to one.
+     * @type {string}
+     * @memberof ChatResponse
+     */
+    'session_id'?: string;
+    /**
      * 
      * @type {ToolChoiceProperty}
      * @memberof ChatResponse

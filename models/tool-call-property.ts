@@ -31,7 +31,7 @@ import type * as buffer from "buffer"
 import { FunctionTool } from './function-tool';
 
 /**
- * JSON definition of the tool to call and the corresponding argument values. Will be populated when finish_reason=\'tool_call\'.
+ * Deprecated: Please use tool_calls field within the output_message.JSON definition of the tool to call and the corresponding argument values. Will be populated when finish_reason=\'tool_call\'.
  * @export
  * @interface ToolCallProperty
  */

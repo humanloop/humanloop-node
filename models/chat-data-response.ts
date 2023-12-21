@@ -102,7 +102,7 @@ export interface ChatDataResponse {
      */
     'tool_call'?: ToolCallProperty;
     /**
-     * JSON definition of the tools to call and the corresponding argument values. Will be populated when finish_reason=\'tool_call\'.
+     * Deprecated: Please use tool_calls field within the output_message.JSON definition of the tools to call and the corresponding argument values. Will be populated when finish_reason=\'tool_call\'.
      * @type {Array<ToolCall>}
      * @memberof ChatDataResponse
      */

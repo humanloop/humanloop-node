@@ -91,5 +91,11 @@ export interface CompletionResponse {
      * @memberof CompletionResponse
      */
     'provider_responses': Array<any>;
+    /**
+     * ID of the session if it belongs to one.
+     * @type {string}
+     * @memberof CompletionResponse
+     */
+    'session_id'?: string;
 }
 
