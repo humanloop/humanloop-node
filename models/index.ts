@@ -2,6 +2,7 @@ export * from './active-config-property';
 export * from './active-experiment-property';
 export * from './agent-config-request';
 export * from './agent-config-response';
+export * from './aggregate-value-property';
 export * from './base-metric-response';
 export * from './body-model-configs-deserialize';
 export * from './categorical-feedback-label';
