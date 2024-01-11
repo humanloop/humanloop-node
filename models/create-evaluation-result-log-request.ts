@@ -31,7 +31,7 @@ import type * as buffer from "buffer"
 import { ValueProperty } from './value-property';
 
 /**
- * An evaluation result log.
+ * Provide an externally performed evaluation result for a log in an evaluation.
  * @export
  * @interface CreateEvaluationResultLogRequest
  */

@@ -38,7 +38,8 @@
   * [`humanloop.evaluations.get`](#humanloopevaluationsget)
   * [`humanloop.evaluations.listAllForProject`](#humanloopevaluationslistallforproject)
   * [`humanloop.evaluations.listDatapoints`](#humanloopevaluationslistdatapoints)
-  * [`humanloop.evaluations.logResult`](#humanloopevaluationslogresult)
+  * [`humanloop.evaluations.log`](#humanloopevaluationslog)
+  * [`humanloop.evaluations.result`](#humanloopevaluationsresult)
   * [`humanloop.evaluations.updateStatus`](#humanloopevaluationsupdatestatus)
   * [`humanloop.evaluators.create`](#humanloopevaluatorscreate)
   * [`humanloop.evaluators.delete`](#humanloopevaluatorsdelete)
@@ -1438,6 +1439,8 @@ const createResponse = await humanloop.evaluations.create({
   config_id: "config_id_example",
   evaluator_ids: ["evaluator_ids_example"],
   dataset_id: "dataset_id_example",
+  max_concurrency: 5,
+  hl_generated: true,
 });
 ```
 
@@ -1460,6 +1463,14 @@ ID of the dataset to use in this evaluation. Starts with `evts_`.
 String ID of project. Starts with `pr_`.
 
 ##### provider_api_keys: [`ProviderAPIKeysProperty1`](./models/provider-apikeys-property1.ts)<a id="provider_api_keys-providerapikeysproperty1modelsprovider-apikeys-property1ts"></a>
+
+##### max_concurrency: `number`<a id="max_concurrency-number"></a>
+
+The maximum number of concurrent generations to run. A higher value will result in faster completion of the evaluation but may place higher load on your provider rate-limits. 
+
+##### hl_generated: `boolean`<a id="hl_generated-boolean"></a>
+
+Whether the log generations for this evaluation should be performed by Humanloop. If `False`, the log generations should be submitted by the user via the API.
 
 #### 🔄 Return<a id="🔄-return"></a>
 
@@ -1587,15 +1598,54 @@ Number of evaluation results to retrieve.
 ---
 
 
-### `humanloop.evaluations.logResult`<a id="humanloopevaluationslogresult"></a>
+### `humanloop.evaluations.log`<a id="humanloopevaluationslog"></a>
 
-Log an evaluation result to an evaluation run.  The run must have status \'running\' and the `evaluator_id` of the result must be one of the `evaluator_id`s associated with the run.
+Log an external generation to an evaluation run for a datapoint.  The run must have status \'running\'.
 
 #### 🛠️ Usage<a id="🛠️-usage"></a>
 
 ```typescript
-const logResultResponse = await humanloop.evaluations.logResult({
-  evaluationRunExternalId: "evaluationRunExternalId_example",
+const logResponse = await humanloop.evaluations.log({
+  evaluationId: "evaluationId_example",
+  datapoint_id: "datapoint_id_example",
+  log: {},
+});
+```
+
+#### ⚙️ Parameters<a id="⚙️-parameters"></a>
+
+##### datapoint_id: `string`<a id="datapoint_id-string"></a>
+
+The datapoint for which a log was generated. Must be one of the datapoints in the dataset being evaluated.
+
+##### log: [`LogProperty`](./models/log-property.ts)<a id="log-logpropertymodelslog-propertyts"></a>
+
+##### evaluationId: `string`<a id="evaluationid-string"></a>
+
+ID of the evaluation run. Starts with `evrun_`.
+
+#### 🔄 Return<a id="🔄-return"></a>
+
+[CreateLogResponse](./models/create-log-response.ts)
+
+#### 🌐 Endpoint<a id="🌐-endpoint"></a>
+
+`/evaluations/{evaluation_id}/log` `POST`
+
+[🔙 **Back to Table of Contents**](#table-of-contents)
+
+---
+
+
+### `humanloop.evaluations.result`<a id="humanloopevaluationsresult"></a>
+
+Log an evaluation result to an evaluation run.  The run must have status \'running\'. One of `result` or `error` must be provided.
+
+#### 🛠️ Usage<a id="🛠️-usage"></a>
+
+```typescript
+const resultResponse = await humanloop.evaluations.result({
+  evaluationId: "evaluationId_example",
   log_id: "log_id_example",
   evaluator_id: "evaluator_id_example",
 });
@@ -1611,7 +1661,7 @@ The log that was evaluated. Must have as its `source_datapoint_id` one of the da
 
 ID of the evaluator that evaluated the log. Starts with `evfn_`. Must be one of the evaluator IDs associated with the evaluation run being logged to.
 
-##### evaluationRunExternalId: `string`<a id="evaluationrunexternalid-string"></a>
+##### evaluationId: `string`<a id="evaluationid-string"></a>
 
 ID of the evaluation run. Starts with `evrun_`.
 
@@ -1627,7 +1677,7 @@ An error that occurred during evaluation.
 
 #### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
-`/evaluations/{evaluation_run_external_id}/result` `POST`
+`/evaluations/{evaluation_id}/result` `POST`
 
 [🔙 **Back to Table of Contents**](#table-of-contents)
 

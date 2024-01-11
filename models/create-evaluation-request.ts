@@ -60,5 +60,17 @@ export interface CreateEvaluationRequest {
      * @memberof CreateEvaluationRequest
      */
     'provider_api_keys'?: ProviderAPIKeysProperty1;
+    /**
+     * The maximum number of concurrent generations to run. A higher value will result in faster completion of the evaluation but may place higher load on your provider rate-limits. 
+     * @type {number}
+     * @memberof CreateEvaluationRequest
+     */
+    'max_concurrency'?: number;
+    /**
+     * Whether the log generations for this evaluation should be performed by Humanloop. If `False`, the log generations should be submitted by the user via the API.
+     * @type {boolean}
+     * @memberof CreateEvaluationRequest
+     */
+    'hl_generated'?: boolean;
 }
 
