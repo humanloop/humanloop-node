@@ -32,7 +32,7 @@ import { EvaluatorArgumentsType } from './evaluator-arguments-type';
 import { EvaluatorReturnTypeEnum } from './evaluator-return-type-enum';
 import { EvaluatorType } from './evaluator-type';
 import { LoggingProjectProperty } from './logging-project-property';
-import { ModelConfigProperty2 } from './model-config-property2';
+import { ModelConfigProperty1 } from './model-config-property1';
 
 /**
  * 
@@ -72,10 +72,10 @@ export interface EvaluatorResponse {
     'code'?: string;
     /**
      * 
-     * @type {ModelConfigProperty2}
+     * @type {ModelConfigProperty1}
      * @memberof EvaluatorResponse
      */
-    'model_config'?: ModelConfigProperty2;
+    'model_config'?: ModelConfigProperty1;
     /**
      * The type of the evaluator.
      * @type {EvaluatorType}

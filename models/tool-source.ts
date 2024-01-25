@@ -30,7 +30,7 @@ import type * as buffer from "buffer"
 
 
 /**
- * Source of tool, either defined at the organization level or inline.
+ * Source of tool. Used to differentiate between tools and tool versions when they are combined in a list.  V4 uses organization and inline. Those are deprecated and will be removed in favour of tool and tool_version.
  * @export
  * @enum {string}
  */

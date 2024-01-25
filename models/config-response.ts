@@ -31,7 +31,7 @@ import type * as buffer from "buffer"
 import { AgentConfigResponse } from './agent-config-response';
 import { ChatMessage } from './chat-message';
 import { GenericConfigResponse } from './generic-config-response';
-import { ModelConfigProperty1 } from './model-config-property1';
+import { ModelConfigProperty } from './model-config-property';
 import { ModelConfigResponse } from './model-config-response';
 import { ModelEndpoints } from './model-endpoints';
 import { ModelProviders } from './model-providers';

@@ -37,7 +37,7 @@ import { StopSequenceSProperty } from './stop-sequence-sproperty';
 import { ToolsEquivalentToOpenAIFunctionsPropertyInner } from './tools-equivalent-to-open-aifunctions-property-inner';
 
 /**
- * Model config to associate with the agent.
+ * Model config associated with the agent.
  * @export
  * @interface ModelConfigProperty
  */

@@ -3008,7 +3008,7 @@ Name for the environment. E.g. \'producton\'. If not provided, will return the e
 
 ### `humanloop.projects.delete`<a id="humanloopprojectsdelete"></a>
 
-Delete a specific project.
+Delete a specific file.
 
 #### 🛠️ Usage<a id="🛠️-usage"></a>
 
@@ -3035,7 +3035,7 @@ String ID of project. Starts with `pr_`.
 
 ### `humanloop.projects.deleteDeployedConfig`<a id="humanloopprojectsdeletedeployedconfig"></a>
 
-Remove the model config deployed to environment.  This has no effect if the project does not have an active model config set.
+Remove the verion deployed to environment.  This has no effect if the project does not have an active version set.
 
 #### 🛠️ Usage<a id="🛠️-usage"></a>
 
@@ -3212,7 +3212,7 @@ Name for the environment. E.g. \'producton\'. If not provided, will return the a
 
 ### `humanloop.projects.list`<a id="humanloopprojectslist"></a>
 
-Get a paginated list of projects.
+Get a paginated list of files.
 
 #### 🛠️ Usage<a id="🛠️-usage"></a>
 
@@ -3264,7 +3264,7 @@ Direction to sort by.
 
 ### `humanloop.projects.listConfigs`<a id="humanloopprojectslistconfigs"></a>
 
-Get an array of configs associated to your project.
+Get an array of versions associated to your file.
 
 #### 🛠️ Usage<a id="🛠️-usage"></a>
 

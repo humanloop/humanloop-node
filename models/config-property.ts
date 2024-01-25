@@ -30,7 +30,7 @@ import type * as buffer from "buffer"
 
 import { ChatMessage } from './chat-message';
 import { ConfigResponse } from './config-response';
-import { ModelConfigProperty1 } from './model-config-property1';
+import { ModelConfigProperty } from './model-config-property';
 import { ModelEndpoints } from './model-endpoints';
 import { ModelProviders } from './model-providers';
 import { ResponseFormatProperty } from './response-format-property';

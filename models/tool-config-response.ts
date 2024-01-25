@@ -73,7 +73,7 @@ export interface ToolConfigResponse {
      */
     'name': string;
     /**
-     * Source of the tool. If defined at an organization level will be \'organiztion\' else \'inline\'.
+     * Source of the tool. If defined at an organization level will be \'organization\' else \'inline\'.
      * @type {ToolSource}
      * @memberof ToolConfigResponse
      */

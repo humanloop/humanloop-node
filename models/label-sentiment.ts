@@ -30,7 +30,7 @@ import type * as buffer from "buffer"
 
 
 /**
- * How a label should be treated in calculating model config performance.  Used by a project\'s PAPV metric.
+ * How a label should be treated in calculating Version performance.  Used by a File\'s PAPV (Positive Action Per View) metric.
  * @export
  * @enum {string}
  */

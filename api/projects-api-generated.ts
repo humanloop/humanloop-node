@@ -272,7 +272,7 @@ export const ProjectsApiAxiosParamCreator = function (configuration?: Configurat
             };
         },
         /**
-         * Delete a specific project.
+         * Delete a specific file.
          * @summary Delete
          * @param {string} id String ID of project. Starts with &#x60;pr_&#x60;.
          * @param {*} [options] Override http request option.
@@ -314,7 +314,7 @@ export const ProjectsApiAxiosParamCreator = function (configuration?: Configurat
             };
         },
         /**
-         * Remove the model config deployed to environment.  This has no effect if the project does not have an active model config set.
+         * Remove the verion deployed to environment.  This has no effect if the project does not have an active version set.
          * @summary Delete Deployed Config
          * @param {string} projectId 
          * @param {string} environmentId 
@@ -551,7 +551,7 @@ export const ProjectsApiAxiosParamCreator = function (configuration?: Configurat
             };
         },
         /**
-         * Get a paginated list of projects.
+         * Get a paginated list of files.
          * @summary List
          * @param {number} [page] Page offset for pagination.
          * @param {number} [size] Page size for pagination. Number of projects to fetch.
@@ -619,7 +619,7 @@ export const ProjectsApiAxiosParamCreator = function (configuration?: Configurat
             };
         },
         /**
-         * Get an array of configs associated to your project.
+         * Get an array of versions associated to your file.
          * @summary List Configs
          * @param {string} id String ID of project. Starts with &#x60;pr_&#x60;.
          * @param {boolean} [evaluationAggregates] 
@@ -862,7 +862,7 @@ export const ProjectsApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * Delete a specific project.
+         * Delete a specific file.
          * @summary Delete
          * @param {ProjectsApiDeleteRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
@@ -873,7 +873,7 @@ export const ProjectsApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * Remove the model config deployed to environment.  This has no effect if the project does not have an active model config set.
+         * Remove the verion deployed to environment.  This has no effect if the project does not have an active version set.
          * @summary Delete Deployed Config
          * @param {ProjectsApiDeleteDeployedConfigRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
@@ -928,7 +928,7 @@ export const ProjectsApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * Get a paginated list of projects.
+         * Get a paginated list of files.
          * @summary List
          * @param {ProjectsApiListRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
@@ -939,7 +939,7 @@ export const ProjectsApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * Get an array of configs associated to your project.
+         * Get an array of versions associated to your file.
          * @summary List Configs
          * @param {ProjectsApiListConfigsRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
@@ -1033,7 +1033,7 @@ export const ProjectsApiFactory = function (configuration?: Configuration, baseP
             return localVarFp.deactivateExperiment(requestParameters, options).then((request) => request(axios, basePath));
         },
         /**
-         * Delete a specific project.
+         * Delete a specific file.
          * @summary Delete
          * @param {ProjectsApiDeleteRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
@@ -1043,7 +1043,7 @@ export const ProjectsApiFactory = function (configuration?: Configuration, baseP
             return localVarFp.delete(requestParameters, options).then((request) => request(axios, basePath));
         },
         /**
-         * Remove the model config deployed to environment.  This has no effect if the project does not have an active model config set.
+         * Remove the verion deployed to environment.  This has no effect if the project does not have an active version set.
          * @summary Delete Deployed Config
          * @param {ProjectsApiDeleteDeployedConfigRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
@@ -1093,7 +1093,7 @@ export const ProjectsApiFactory = function (configuration?: Configuration, baseP
             return localVarFp.getActiveConfig(requestParameters, options).then((request) => request(axios, basePath));
         },
         /**
-         * Get a paginated list of projects.
+         * Get a paginated list of files.
          * @summary List
          * @param {ProjectsApiListRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
@@ -1103,7 +1103,7 @@ export const ProjectsApiFactory = function (configuration?: Configuration, baseP
             return localVarFp.list(requestParameters, options).then((request) => request(axios, basePath));
         },
         /**
-         * Get an array of configs associated to your project.
+         * Get an array of versions associated to your file.
          * @summary List Configs
          * @param {ProjectsApiListConfigsRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
@@ -1522,7 +1522,7 @@ export class ProjectsApiGenerated extends BaseAPI {
     }
 
     /**
-     * Delete a specific project.
+     * Delete a specific file.
      * @summary Delete
      * @param {ProjectsApiDeleteRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -1534,7 +1534,7 @@ export class ProjectsApiGenerated extends BaseAPI {
     }
 
     /**
-     * Remove the model config deployed to environment.  This has no effect if the project does not have an active model config set.
+     * Remove the verion deployed to environment.  This has no effect if the project does not have an active version set.
      * @summary Delete Deployed Config
      * @param {ProjectsApiDeleteDeployedConfigRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -1599,7 +1599,7 @@ export class ProjectsApiGenerated extends BaseAPI {
     }
 
     /**
-     * Get a paginated list of projects.
+     * Get a paginated list of files.
      * @summary List
      * @param {ProjectsApiListRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
@@ -1616,7 +1616,7 @@ export class ProjectsApiGenerated extends BaseAPI {
     }
 
     /**
-     * Get an array of configs associated to your project.
+     * Get an array of versions associated to your file.
      * @summary List Configs
      * @param {ProjectsApiListConfigsRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
