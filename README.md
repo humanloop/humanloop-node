@@ -4,7 +4,7 @@
 
 # [Humanloop](https://humanloop.com)<a id="humanloop"></a>
 
-[![npm](https://img.shields.io/badge/npm-v0.6.2-blue)](https://www.npmjs.com/package/humanloop/v/0.6.2)
+[![npm](https://img.shields.io/badge/npm-v0.6.3-blue)](https://www.npmjs.com/package/humanloop/v/0.6.3)
 
 </div>
 
@@ -132,8 +132,6 @@ import { Humanloop } from "humanloop";
 const humanloop = new Humanloop({
   // Defining the base path is optional and defaults to https://api.humanloop.com/v4
   // basePath: "https://api.humanloop.com/v4",
-  // Use native Fetch API instead of axios
-  // useFetch: true,
   openaiApiKey: "openaiApiKey",
   anthropicApiKey: "anthropicApiKey",
   apiKey: "API_KEY",
