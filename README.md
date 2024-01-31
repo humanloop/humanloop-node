@@ -34,6 +34,7 @@
   * [`humanloop.datasets.listAllForProject`](#humanloopdatasetslistallforproject)
   * [`humanloop.datasets.listDatapoints`](#humanloopdatasetslistdatapoints)
   * [`humanloop.datasets.update`](#humanloopdatasetsupdate)
+  * [`humanloop.evaluations.addEvaluators`](#humanloopevaluationsaddevaluators)
   * [`humanloop.evaluations.create`](#humanloopevaluationscreate)
   * [`humanloop.evaluations.get`](#humanloopevaluationsget)
   * [`humanloop.evaluations.listAllForProject`](#humanloopevaluationslistallforproject)
@@ -1419,6 +1420,42 @@ The name of the dataset.
 #### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
 `/datasets/{id}` `PATCH`
+
+[🔙 **Back to Table of Contents**](#table-of-contents)
+
+---
+
+
+### `humanloop.evaluations.addEvaluators`<a id="humanloopevaluationsaddevaluators"></a>
+
+Add evaluators to an existing evaluation run.
+
+#### 🛠️ Usage<a id="🛠️-usage"></a>
+
+```typescript
+const addEvaluatorsResponse = await humanloop.evaluations.addEvaluators({
+  id: "id_example",
+  evaluator_ids: ["evaluator_ids_example"],
+});
+```
+
+#### ⚙️ Parameters<a id="⚙️-parameters"></a>
+
+##### evaluator_ids: `string`[]<a id="evaluator_ids-string"></a>
+
+IDs of evaluators to add to the evaluation run. IDs start with `evfn_`
+
+##### id: `string`<a id="id-string"></a>
+
+String ID of evaluation run. Starts with `ev_`.
+
+#### 🔄 Return<a id="🔄-return"></a>
+
+[EvaluationResponse](./models/evaluation-response.ts)
+
+#### 🌐 Endpoint<a id="🌐-endpoint"></a>
+
+`/evaluations/{id}/evaluators` `PATCH`
 
 [🔙 **Back to Table of Contents**](#table-of-contents)
 

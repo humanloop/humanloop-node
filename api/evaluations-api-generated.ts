@@ -37,6 +37,8 @@ import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObj
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
 // @ts-ignore
+import { AddEvaluatorsRequest } from '../models';
+// @ts-ignore
 import { CreateEvaluationLogRequest } from '../models';
 // @ts-ignore
 import { CreateEvaluationRequest } from '../models';
@@ -71,6 +73,56 @@ import { requestBeforeHook } from '../requestBeforeHook';
  */
 export const EvaluationsApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
+        /**
+         * Add evaluators to an existing evaluation run.
+         * @summary Add Evaluators
+         * @param {string} id String ID of evaluation run. Starts with &#x60;ev_&#x60;.
+         * @param {AddEvaluatorsRequest} addEvaluatorsRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        addEvaluators: async (id: string, addEvaluatorsRequest: AddEvaluatorsRequest, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('addEvaluators', 'id', id)
+            // verify required parameter 'addEvaluatorsRequest' is not null or undefined
+            assertParamExists('addEvaluators', 'addEvaluatorsRequest', addEvaluatorsRequest)
+            const localVarPath = `/evaluations/{id}/evaluators`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id !== undefined ? id : `-id-`)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions: AxiosRequestConfig = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = configuration && !isBrowser() ? { "User-Agent": configuration.userAgent } : {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication APIKeyHeader required
+            await setApiKeyToObject({ object: localVarHeaderParameter, keyParamName: "X-API-KEY", configuration })
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            requestBeforeHook({
+                requestBody: addEvaluatorsRequest,
+                queryParameters: localVarQueryParameter,
+                requestConfig: localVarRequestOptions,
+                path: localVarPath,
+                configuration
+            });
+            localVarRequestOptions.data = serializeDataIfNeeded(addEvaluatorsRequest, localVarRequestOptions, configuration)
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
         /**
          * Create an evaluation.
          * @summary Create
@@ -428,6 +480,17 @@ export const EvaluationsApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = EvaluationsApiAxiosParamCreator(configuration)
     return {
         /**
+         * Add evaluators to an existing evaluation run.
+         * @summary Add Evaluators
+         * @param {EvaluationsApiAddEvaluatorsRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async addEvaluators(requestParameters: EvaluationsApiAddEvaluatorsRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<EvaluationResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.addEvaluators(requestParameters.id, requestParameters, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
          * Create an evaluation.
          * @summary Create
          * @param {EvaluationsApiCreateRequest} requestParameters Request parameters.
@@ -515,6 +578,16 @@ export const EvaluationsApiFactory = function (configuration?: Configuration, ba
     const localVarFp = EvaluationsApiFp(configuration)
     return {
         /**
+         * Add evaluators to an existing evaluation run.
+         * @summary Add Evaluators
+         * @param {EvaluationsApiAddEvaluatorsRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        addEvaluators(requestParameters: EvaluationsApiAddEvaluatorsRequest, options?: AxiosRequestConfig): AxiosPromise<EvaluationResponse> {
+            return localVarFp.addEvaluators(requestParameters, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Create an evaluation.
          * @summary Create
          * @param {EvaluationsApiCreateRequest} requestParameters Request parameters.
@@ -586,6 +659,22 @@ export const EvaluationsApiFactory = function (configuration?: Configuration, ba
         },
     };
 };
+
+/**
+ * Request parameters for addEvaluators operation in EvaluationsApi.
+ * @export
+ * @interface EvaluationsApiAddEvaluatorsRequest
+ */
+export type EvaluationsApiAddEvaluatorsRequest = {
+    
+    /**
+    * String ID of evaluation run. Starts with `ev_`.
+    * @type {string}
+    * @memberof EvaluationsApiAddEvaluators
+    */
+    readonly id: string
+    
+} & AddEvaluatorsRequest
 
 /**
  * Request parameters for create operation in EvaluationsApi.
@@ -734,6 +823,18 @@ export type EvaluationsApiUpdateStatusRequest = {
  * @extends {BaseAPI}
  */
 export class EvaluationsApiGenerated extends BaseAPI {
+    /**
+     * Add evaluators to an existing evaluation run.
+     * @summary Add Evaluators
+     * @param {EvaluationsApiAddEvaluatorsRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof EvaluationsApiGenerated
+     */
+    public addEvaluators(requestParameters: EvaluationsApiAddEvaluatorsRequest, options?: AxiosRequestConfig) {
+        return EvaluationsApiFp(this.configuration).addEvaluators(requestParameters, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * Create an evaluation.
      * @summary Create

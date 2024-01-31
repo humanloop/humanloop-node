@@ -1,5 +1,6 @@
 export * from './active-config-property';
 export * from './active-experiment-property';
+export * from './add-evaluators-request';
 export * from './agent-config-response';
 export * from './aggregate-value-property';
 export * from './base-metric-response';

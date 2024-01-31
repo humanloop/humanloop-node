@@ -32,20 +32,14 @@ import type * as buffer from "buffer"
 /**
  * 
  * @export
- * @interface EnvironmentRequest
+ * @interface AddEvaluatorsRequest
  */
-export interface EnvironmentRequest {
+export interface AddEvaluatorsRequest {
     /**
-     * String ID of the environment. Starts with `env_`.
-     * @type {string}
-     * @memberof EnvironmentRequest
+     * IDs of evaluators to add to the evaluation run. IDs start with `evfn_`
+     * @type {Array<string>}
+     * @memberof AddEvaluatorsRequest
      */
-    'id': string;
-    /**
-     * The environment name.
-     * @type {string}
-     * @memberof EnvironmentRequest
-     */
-    'name'?: string;
+    'evaluator_ids': Array<string>;
 }
 
