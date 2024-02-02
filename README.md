@@ -58,6 +58,7 @@
   * [`humanloop.finetunes.summary`](#humanloopfinetunessummary)
   * [`humanloop.finetunes.update`](#humanloopfinetunesupdate)
   * [`humanloop.logs.delete`](#humanlooplogsdelete)
+  * [`humanloop.logs.get`](#humanlooplogsget)
   * [`humanloop.logs.list`](#humanlooplogslist)
   * [`humanloop.log`](#humanlooplog)
   * [`humanloop.logs.update`](#humanlooplogsupdate)
@@ -224,6 +225,7 @@ Get a chat response by providing details of the model configuration in the reque
 
 ```typescript
 const createResponse = await humanloop.chat({
+  save: true,
   num_samples: 1,
   stream: false,
   return_inputs: true,
@@ -287,6 +289,10 @@ Identifies where the model was called from.
 
 Any additional metadata to record.
 
+##### save: `boolean`<a id="save-boolean"></a>
+
+Whether the request/response payloads will be stored on Humanloop.
+
 ##### source_datapoint_id: `string`<a id="source_datapoint_id-string"></a>
 
 ID of the source datapoint if this is a log derived from a datapoint in a dataset.
@@ -307,7 +313,7 @@ End-user ID passed through to provider call.
 
 ##### seed: `number`<a id="seed-number"></a>
 
-If specified, model will make a best effort to sample deterministically, but it is not guaranteed.
+Deprecated field: the seed is instead set as part of the request.config object.
 
 ##### return_inputs: `boolean`<a id="return_inputs-boolean"></a>
 
@@ -340,6 +346,7 @@ Get a chat response using the project\'s active deployment.  The active deployme
 
 ```typescript
 const createDeployedResponse = await humanloop.chatDeployed({
+  save: true,
   num_samples: 1,
   stream: false,
   return_inputs: true,
@@ -393,6 +400,10 @@ Identifies where the model was called from.
 
 Any additional metadata to record.
 
+##### save: `boolean`<a id="save-boolean"></a>
+
+Whether the request/response payloads will be stored on Humanloop.
+
 ##### source_datapoint_id: `string`<a id="source_datapoint_id-string"></a>
 
 ID of the source datapoint if this is a log derived from a datapoint in a dataset.
@@ -413,7 +424,7 @@ End-user ID passed through to provider call.
 
 ##### seed: `number`<a id="seed-number"></a>
 
-If specified, model will make a best effort to sample deterministically, but it is not guaranteed.
+Deprecated field: the seed is instead set as part of the request.config object.
 
 ##### return_inputs: `boolean`<a id="return_inputs-boolean"></a>
 
@@ -450,6 +461,7 @@ Get a chat response for a specific experiment.
 
 ```typescript
 const createExperimentResponse = await humanloop.chatExperiment({
+  save: true,
   num_samples: 1,
   stream: false,
   return_inputs: true,
@@ -508,6 +520,10 @@ Identifies where the model was called from.
 
 Any additional metadata to record.
 
+##### save: `boolean`<a id="save-boolean"></a>
+
+Whether the request/response payloads will be stored on Humanloop.
+
 ##### source_datapoint_id: `string`<a id="source_datapoint_id-string"></a>
 
 ID of the source datapoint if this is a log derived from a datapoint in a dataset.
@@ -528,7 +544,7 @@ End-user ID passed through to provider call.
 
 ##### seed: `number`<a id="seed-number"></a>
 
-If specified, model will make a best effort to sample deterministically, but it is not guaranteed.
+Deprecated field: the seed is instead set as part of the request.config object.
 
 ##### return_inputs: `boolean`<a id="return_inputs-boolean"></a>
 
@@ -561,6 +577,7 @@ Get chat response for a specific model configuration.
 
 ```typescript
 const createModelConfigResponse = await humanloop.chatModelConfiguration({
+  save: true,
   num_samples: 1,
   stream: false,
   return_inputs: true,
@@ -619,6 +636,10 @@ Identifies where the model was called from.
 
 Any additional metadata to record.
 
+##### save: `boolean`<a id="save-boolean"></a>
+
+Whether the request/response payloads will be stored on Humanloop.
+
 ##### source_datapoint_id: `string`<a id="source_datapoint_id-string"></a>
 
 ID of the source datapoint if this is a log derived from a datapoint in a dataset.
@@ -639,7 +660,7 @@ End-user ID passed through to provider call.
 
 ##### seed: `number`<a id="seed-number"></a>
 
-If specified, model will make a best effort to sample deterministically, but it is not guaranteed.
+Deprecated field: the seed is instead set as part of the request.config object.
 
 ##### return_inputs: `boolean`<a id="return_inputs-boolean"></a>
 
@@ -672,6 +693,7 @@ Create a completion by providing details of the model configuration in the reque
 
 ```typescript
 const createResponse = await humanloop.complete({
+  save: true,
   num_samples: 1,
   stream: false,
   return_inputs: true,
@@ -727,6 +749,10 @@ Identifies where the model was called from.
 
 Any additional metadata to record.
 
+##### save: `boolean`<a id="save-boolean"></a>
+
+Whether the request/response payloads will be stored on Humanloop.
+
 ##### source_datapoint_id: `string`<a id="source_datapoint_id-string"></a>
 
 ID of the source datapoint if this is a log derived from a datapoint in a dataset.
@@ -747,7 +773,7 @@ End-user ID passed through to provider call.
 
 ##### seed: `number`<a id="seed-number"></a>
 
-If specified, model will make a best effort to sample deterministically, but it is not guaranteed.
+Deprecated field: the seed is instead set as part of the request.config object.
 
 ##### return_inputs: `boolean`<a id="return_inputs-boolean"></a>
 
@@ -782,6 +808,7 @@ Create a completion using the project\'s active deployment.  The active deployme
 
 ```typescript
 const createDeployedResponse = await humanloop.completeDeployed({
+  save: true,
   num_samples: 1,
   stream: false,
   return_inputs: true,
@@ -826,6 +853,10 @@ Identifies where the model was called from.
 
 Any additional metadata to record.
 
+##### save: `boolean`<a id="save-boolean"></a>
+
+Whether the request/response payloads will be stored on Humanloop.
+
 ##### source_datapoint_id: `string`<a id="source_datapoint_id-string"></a>
 
 ID of the source datapoint if this is a log derived from a datapoint in a dataset.
@@ -846,7 +877,7 @@ End-user ID passed through to provider call.
 
 ##### seed: `number`<a id="seed-number"></a>
 
-If specified, model will make a best effort to sample deterministically, but it is not guaranteed.
+Deprecated field: the seed is instead set as part of the request.config object.
 
 ##### return_inputs: `boolean`<a id="return_inputs-boolean"></a>
 
@@ -885,6 +916,7 @@ Create a completion for a specific experiment.
 
 ```typescript
 const createExperimentResponse = await humanloop.completeExperiment({
+  save: true,
   num_samples: 1,
   stream: false,
   return_inputs: true,
@@ -934,6 +966,10 @@ Identifies where the model was called from.
 
 Any additional metadata to record.
 
+##### save: `boolean`<a id="save-boolean"></a>
+
+Whether the request/response payloads will be stored on Humanloop.
+
 ##### source_datapoint_id: `string`<a id="source_datapoint_id-string"></a>
 
 ID of the source datapoint if this is a log derived from a datapoint in a dataset.
@@ -954,7 +990,7 @@ End-user ID passed through to provider call.
 
 ##### seed: `number`<a id="seed-number"></a>
 
-If specified, model will make a best effort to sample deterministically, but it is not guaranteed.
+Deprecated field: the seed is instead set as part of the request.config object.
 
 ##### return_inputs: `boolean`<a id="return_inputs-boolean"></a>
 
@@ -989,6 +1025,7 @@ Create a completion for a specific model configuration.
 
 ```typescript
 const createModelConfigResponse = await humanloop.completeModelConfiguration({
+  save: true,
   num_samples: 1,
   stream: false,
   return_inputs: true,
@@ -1038,6 +1075,10 @@ Identifies where the model was called from.
 
 Any additional metadata to record.
 
+##### save: `boolean`<a id="save-boolean"></a>
+
+Whether the request/response payloads will be stored on Humanloop.
+
 ##### source_datapoint_id: `string`<a id="source_datapoint_id-string"></a>
 
 ID of the source datapoint if this is a log derived from a datapoint in a dataset.
@@ -1058,7 +1099,7 @@ End-user ID passed through to provider call.
 
 ##### seed: `number`<a id="seed-number"></a>
 
-If specified, model will make a best effort to sample deterministically, but it is not guaranteed.
+Deprecated field: the seed is instead set as part of the request.config object.
 
 ##### return_inputs: `boolean`<a id="return_inputs-boolean"></a>
 
@@ -1643,7 +1684,9 @@ Log an external generation to an evaluation run for a datapoint.  The run must h
 const logResponse = await humanloop.evaluations.log({
   evaluationId: "evaluationId_example",
   datapoint_id: "datapoint_id_example",
-  log: {},
+  log: {
+    save: true,
+  },
 });
 ```
 
@@ -2345,7 +2388,7 @@ const updateResponse = await humanloop.finetunes.update({
 
 ### `humanloop.logs.delete`<a id="humanlooplogsdelete"></a>
 
-Delete Logs
+Delete
 
 #### 🛠️ Usage<a id="🛠️-usage"></a>
 
@@ -2360,6 +2403,37 @@ const deleteResponse = await humanloop.logs.delete({});
 #### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
 `/logs` `DELETE`
+
+[🔙 **Back to Table of Contents**](#table-of-contents)
+
+---
+
+
+### `humanloop.logs.get`<a id="humanlooplogsget"></a>
+
+Retrieve a log by log id.
+
+#### 🛠️ Usage<a id="🛠️-usage"></a>
+
+```typescript
+const getResponse = await humanloop.logs.get({
+  id: "id_example",
+});
+```
+
+#### ⚙️ Parameters<a id="⚙️-parameters"></a>
+
+##### id: `string`<a id="id-string"></a>
+
+String ID of log to return. Starts with `data_`.
+
+#### 🔄 Return<a id="🔄-return"></a>
+
+[LogResponse](./models/log-response.ts)
+
+#### 🌐 Endpoint<a id="🌐-endpoint"></a>
+
+`/logs/{id}` `GET`
 
 [🔙 **Back to Table of Contents**](#table-of-contents)
 
@@ -2416,7 +2490,9 @@ Log a datapoint or array of datapoints to your Humanloop project.
 #### 🛠️ Usage<a id="🛠️-usage"></a>
 
 ```typescript
-const logResponse = await humanloop.log({});
+const logResponse = await humanloop.log({
+  save: true,
+});
 ```
 
 #### ⚙️ Parameters<a id="⚙️-parameters"></a>
@@ -2456,6 +2532,10 @@ Identifies where the model was called from.
 ##### metadata: `object`<a id="metadata-object"></a>
 
 Any additional metadata to record.
+
+##### save: `boolean`<a id="save-boolean"></a>
+
+Whether the request/response payloads will be stored on Humanloop.
 
 ##### source_datapoint_id: `string`<a id="source_datapoint_id-string"></a>
 
@@ -2502,6 +2582,22 @@ Error message if the log is an error.
 Duration of the logged event in seconds.
 
 ##### output_message: [`OutputMessageProperty`](./models/output-message-property.ts)<a id="output_message-outputmessagepropertymodelsoutput-message-propertyts"></a>
+
+##### prompt_tokens: `number`<a id="prompt_tokens-number"></a>
+
+Number of tokens in the prompt used to generate the output.
+
+##### output_tokens: `number`<a id="output_tokens-number"></a>
+
+Number of tokens in the output generated by the model.
+
+##### provider_request: `object`<a id="provider_request-object"></a>
+
+Raw request sent to provider.
+
+##### provider_response: `object`<a id="provider_response-object"></a>
+
+Raw response received the provider.
 
 #### 🔄 Return<a id="🔄-return"></a>
 

@@ -92,6 +92,12 @@ export interface CompletionResponse {
      */
     'provider_responses': Array<any>;
     /**
+     * The raw request sent to the model provider.
+     * @type {object}
+     * @memberof CompletionResponse
+     */
+    'provider_request'?: object;
+    /**
      * ID of the session if it belongs to one.
      * @type {string}
      * @memberof CompletionResponse

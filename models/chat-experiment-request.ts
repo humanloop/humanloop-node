@@ -95,6 +95,12 @@ export interface ChatExperimentRequest {
      */
     'metadata'?: object;
     /**
+     * Whether the request/response payloads will be stored on Humanloop.
+     * @type {boolean}
+     * @memberof ChatExperimentRequest
+     */
+    'save'?: boolean;
+    /**
      * ID of the source datapoint if this is a log derived from a datapoint in a dataset.
      * @type {string}
      * @memberof ChatExperimentRequest
@@ -125,9 +131,10 @@ export interface ChatExperimentRequest {
      */
     'user'?: string;
     /**
-     * If specified, model will make a best effort to sample deterministically, but it is not guaranteed.
+     * Deprecated field: the seed is instead set as part of the request.config object.
      * @type {number}
      * @memberof ChatExperimentRequest
+     * @deprecated
      */
     'seed'?: number;
     /**

@@ -67,7 +67,7 @@ export const LogsApiAxiosParamCreator = function (configuration?: Configuration)
     return {
         /**
          * 
-         * @summary Delete Logs
+         * @summary Delete
          * @param {Array<string>} [id] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -109,8 +109,50 @@ export const LogsApiAxiosParamCreator = function (configuration?: Configuration)
             };
         },
         /**
+         * Retrieve a log by log id.
+         * @summary Get
+         * @param {string} id String ID of log to return. Starts with &#x60;data_&#x60;.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        get: async (id: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('get', 'id', id)
+            const localVarPath = `/logs/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id !== undefined ? id : `-id-`)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions: AxiosRequestConfig = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = configuration && !isBrowser() ? { "User-Agent": configuration.userAgent } : {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication APIKeyHeader required
+            await setApiKeyToObject({ object: localVarHeaderParameter, keyParamName: "X-API-KEY", configuration })
+
+    
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            requestBeforeHook({
+                queryParameters: localVarQueryParameter,
+                requestConfig: localVarRequestOptions,
+                path: localVarPath,
+                configuration
+            });
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Retrieve paginated logs from the server.  Sorting and filtering are supported through query params. See docstring of get_sorted_filtered_project_data_from_query_params for more details.
-         * @summary Get Logs
+         * @summary List 
          * @param {string} projectId 
          * @param {string} [search] 
          * @param {string} [metadataSearch] 
@@ -285,7 +327,7 @@ export const LogsApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * Update a logged datapoint by its reference ID.  The `reference_id` query parameter must be provided, and refers to the `reference_id` of a previously-logged datapoint.
-         * @summary Update By Reference Id
+         * @summary Update By Reference
          * @param {string} referenceId A unique string to reference the datapoint. Identifies the logged datapoint created with the same &#x60;reference_id&#x60;.
          * @param {UpdateLogRequest} updateLogRequest 
          * @param {*} [options] Override http request option.
@@ -348,7 +390,7 @@ export const LogsApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @summary Delete Logs
+         * @summary Delete
          * @param {LogsApiDeleteRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -358,8 +400,19 @@ export const LogsApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
+         * Retrieve a log by log id.
+         * @summary Get
+         * @param {LogsApiGetRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async get(requestParameters: LogsApiGetRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<LogResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.get(requestParameters.id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
          * Retrieve paginated logs from the server.  Sorting and filtering are supported through query params. See docstring of get_sorted_filtered_project_data_from_query_params for more details.
-         * @summary Get Logs
+         * @summary List 
          * @param {LogsApiListRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -392,7 +445,7 @@ export const LogsApiFp = function(configuration?: Configuration) {
         },
         /**
          * Update a logged datapoint by its reference ID.  The `reference_id` query parameter must be provided, and refers to the `reference_id` of a previously-logged datapoint.
-         * @summary Update By Reference Id
+         * @summary Update By Reference
          * @param {LogsApiUpdateByRefRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -413,7 +466,7 @@ export const LogsApiFactory = function (configuration?: Configuration, basePath?
     return {
         /**
          * 
-         * @summary Delete Logs
+         * @summary Delete
          * @param {LogsApiDeleteRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -422,8 +475,18 @@ export const LogsApiFactory = function (configuration?: Configuration, basePath?
             return localVarFp.delete(requestParameters, options).then((request) => request(axios, basePath));
         },
         /**
+         * Retrieve a log by log id.
+         * @summary Get
+         * @param {LogsApiGetRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        get(requestParameters: LogsApiGetRequest, options?: AxiosRequestConfig): AxiosPromise<LogResponse> {
+            return localVarFp.get(requestParameters, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Retrieve paginated logs from the server.  Sorting and filtering are supported through query params. See docstring of get_sorted_filtered_project_data_from_query_params for more details.
-         * @summary Get Logs
+         * @summary List 
          * @param {LogsApiListRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -453,7 +516,7 @@ export const LogsApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * Update a logged datapoint by its reference ID.  The `reference_id` query parameter must be provided, and refers to the `reference_id` of a previously-logged datapoint.
-         * @summary Update By Reference Id
+         * @summary Update By Reference
          * @param {LogsApiUpdateByRefRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -477,6 +540,22 @@ export type LogsApiDeleteRequest = {
     * @memberof LogsApiDelete
     */
     readonly id?: Array<string>
+    
+}
+
+/**
+ * Request parameters for get operation in LogsApi.
+ * @export
+ * @interface LogsApiGetRequest
+ */
+export type LogsApiGetRequest = {
+    
+    /**
+    * String ID of log to return. Starts with `data_`.
+    * @type {string}
+    * @memberof LogsApiGet
+    */
+    readonly id: string
     
 }
 
@@ -588,7 +667,7 @@ export type LogsApiUpdateByRefRequest = {
 export class LogsApiGenerated extends BaseAPI {
     /**
      * 
-     * @summary Delete Logs
+     * @summary Delete
      * @param {LogsApiDeleteRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -599,8 +678,20 @@ export class LogsApiGenerated extends BaseAPI {
     }
 
     /**
+     * Retrieve a log by log id.
+     * @summary Get
+     * @param {LogsApiGetRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof LogsApiGenerated
+     */
+    public get(requestParameters: LogsApiGetRequest, options?: AxiosRequestConfig) {
+        return LogsApiFp(this.configuration).get(requestParameters, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
      * Retrieve paginated logs from the server.  Sorting and filtering are supported through query params. See docstring of get_sorted_filtered_project_data_from_query_params for more details.
-     * @summary Get Logs
+     * @summary List 
      * @param {LogsApiListRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -641,7 +732,7 @@ export class LogsApiGenerated extends BaseAPI {
 
     /**
      * Update a logged datapoint by its reference ID.  The `reference_id` query parameter must be provided, and refers to the `reference_id` of a previously-logged datapoint.
-     * @summary Update By Reference Id
+     * @summary Update By Reference
      * @param {LogsApiUpdateByRefRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}

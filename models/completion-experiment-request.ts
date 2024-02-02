@@ -91,6 +91,12 @@ export interface CompletionExperimentRequest {
      */
     'metadata'?: object;
     /**
+     * Whether the request/response payloads will be stored on Humanloop.
+     * @type {boolean}
+     * @memberof CompletionExperimentRequest
+     */
+    'save'?: boolean;
+    /**
      * ID of the source datapoint if this is a log derived from a datapoint in a dataset.
      * @type {string}
      * @memberof CompletionExperimentRequest
@@ -121,9 +127,10 @@ export interface CompletionExperimentRequest {
      */
     'user'?: string;
     /**
-     * If specified, model will make a best effort to sample deterministically, but it is not guaranteed.
+     * Deprecated field: the seed is instead set as part of the request.config object.
      * @type {number}
      * @memberof CompletionExperimentRequest
+     * @deprecated
      */
     'seed'?: number;
     /**

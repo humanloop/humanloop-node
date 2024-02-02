@@ -93,6 +93,12 @@ export interface ChatResponse {
      */
     'provider_responses': Array<any>;
     /**
+     * The raw request sent to the model provider.
+     * @type {object}
+     * @memberof ChatResponse
+     */
+    'provider_request'?: object;
+    /**
      * ID of the session if it belongs to one.
      * @type {string}
      * @memberof ChatResponse
