@@ -30,6 +30,7 @@ import type * as buffer from "buffer"
 
 import { AgentConfigResponse } from './agent-config-response';
 import { ChatMessageWithToolCall } from './chat-message-with-tool-call';
+import { CreatedByProperty } from './created-by-property';
 import { GenericConfigResponse } from './generic-config-response';
 import { ModelConfigProperty } from './model-config-property';
 import { ModelConfigResponse } from './model-config-response';
