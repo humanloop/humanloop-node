@@ -37,7 +37,7 @@ import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObj
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
 // @ts-ignore
-import { ChatMessage } from '../models';
+import { ChatMessageWithToolCall } from '../models';
 // @ts-ignore
 import { ConfigProperty1 } from '../models';
 // @ts-ignore
@@ -86,7 +86,7 @@ export const LogsApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarQueryParameter = {} as any;
 
             // authentication APIKeyHeader required
-            await setApiKeyToObject({ object: localVarHeaderParameter, keyParamName: "X-API-KEY", configuration })
+            await setApiKeyToObject({ object: localVarHeaderParameter, key: "X-API-KEY", keyParamName: "xAPIKEY", configuration })
             if (id) {
                 localVarQueryParameter['id'] = id;
             }
@@ -132,7 +132,7 @@ export const LogsApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarQueryParameter = {} as any;
 
             // authentication APIKeyHeader required
-            await setApiKeyToObject({ object: localVarHeaderParameter, keyParamName: "X-API-KEY", configuration })
+            await setApiKeyToObject({ object: localVarHeaderParameter, key: "X-API-KEY", keyParamName: "xAPIKEY", configuration })
 
     
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -151,7 +151,7 @@ export const LogsApiAxiosParamCreator = function (configuration?: Configuration)
             };
         },
         /**
-         * Retrieve paginated logs from the server.  Sorting and filtering are supported through query params. See docstring of get_sorted_filtered_project_data_from_query_params for more details.
+         * Retrieve paginated logs from the server.  Sorting and filtering are supported through query params.  Sorting is supported for the `source`, `model`, `timestamp`, and `feedback-{output_name}` columns. Specify sorting with the `sort` query param, with values `{column}.{ordering}`. E.g. ?sort=source.asc&sort=model.desc will yield a multi-column sort. First by source then by model.  Filtering is supported for the `source`, `model`, `feedback-{output_name}`, `evaluator-{evaluator_external_id}` columns.  Specify filtering with the `source_filter`, `model_filter`, `feedback-{output.name}_filter` and `evaluator-{evaluator_external_id}_filter` query params.  E.g. ?source_filter=AI&source_filter=user_1234&feedback-explicit_filter=good will only show rows where the source is \"AI\" or \"user_1234\", and where the latest feedback for the \"explicit\" output group is \"good\".  An additional date range filter is supported for the `Timestamp` column (i.e. `Log.created_at`). These are supported through the `start_date` and `end_date` query parameters.  Searching is supported for the model inputs and output. Specify a search term with the `search` query param. E.g. ?search=hello%20there will cause a case-insensitive search across model inputs and output.
          * @summary List 
          * @param {string} projectId 
          * @param {string} [search] 
@@ -179,7 +179,7 @@ export const LogsApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarQueryParameter = {} as any;
 
             // authentication APIKeyHeader required
-            await setApiKeyToObject({ object: localVarHeaderParameter, keyParamName: "X-API-KEY", configuration })
+            await setApiKeyToObject({ object: localVarHeaderParameter, key: "X-API-KEY", keyParamName: "xAPIKEY", configuration })
             if (projectId !== undefined) {
                 localVarQueryParameter['project_id'] = projectId;
             }
@@ -252,7 +252,7 @@ export const LogsApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarQueryParameter = {} as any;
 
             // authentication APIKeyHeader required
-            await setApiKeyToObject({ object: localVarHeaderParameter, keyParamName: "X-API-KEY", configuration })
+            await setApiKeyToObject({ object: localVarHeaderParameter, key: "X-API-KEY", keyParamName: "xAPIKEY", configuration })
 
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
@@ -302,7 +302,7 @@ export const LogsApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarQueryParameter = {} as any;
 
             // authentication APIKeyHeader required
-            await setApiKeyToObject({ object: localVarHeaderParameter, keyParamName: "X-API-KEY", configuration })
+            await setApiKeyToObject({ object: localVarHeaderParameter, key: "X-API-KEY", keyParamName: "xAPIKEY", configuration })
 
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
@@ -351,7 +351,7 @@ export const LogsApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarQueryParameter = {} as any;
 
             // authentication APIKeyHeader required
-            await setApiKeyToObject({ object: localVarHeaderParameter, keyParamName: "X-API-KEY", configuration })
+            await setApiKeyToObject({ object: localVarHeaderParameter, key: "X-API-KEY", keyParamName: "xAPIKEY", configuration })
             if (referenceId !== undefined) {
                 localVarQueryParameter['reference_id'] = referenceId;
             }
@@ -411,7 +411,7 @@ export const LogsApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * Retrieve paginated logs from the server.  Sorting and filtering are supported through query params. See docstring of get_sorted_filtered_project_data_from_query_params for more details.
+         * Retrieve paginated logs from the server.  Sorting and filtering are supported through query params.  Sorting is supported for the `source`, `model`, `timestamp`, and `feedback-{output_name}` columns. Specify sorting with the `sort` query param, with values `{column}.{ordering}`. E.g. ?sort=source.asc&sort=model.desc will yield a multi-column sort. First by source then by model.  Filtering is supported for the `source`, `model`, `feedback-{output_name}`, `evaluator-{evaluator_external_id}` columns.  Specify filtering with the `source_filter`, `model_filter`, `feedback-{output.name}_filter` and `evaluator-{evaluator_external_id}_filter` query params.  E.g. ?source_filter=AI&source_filter=user_1234&feedback-explicit_filter=good will only show rows where the source is \"AI\" or \"user_1234\", and where the latest feedback for the \"explicit\" output group is \"good\".  An additional date range filter is supported for the `Timestamp` column (i.e. `Log.created_at`). These are supported through the `start_date` and `end_date` query parameters.  Searching is supported for the model inputs and output. Specify a search term with the `search` query param. E.g. ?search=hello%20there will cause a case-insensitive search across model inputs and output.
          * @summary List 
          * @param {LogsApiListRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
@@ -485,7 +485,7 @@ export const LogsApiFactory = function (configuration?: Configuration, basePath?
             return localVarFp.get(requestParameters, options).then((request) => request(axios, basePath));
         },
         /**
-         * Retrieve paginated logs from the server.  Sorting and filtering are supported through query params. See docstring of get_sorted_filtered_project_data_from_query_params for more details.
+         * Retrieve paginated logs from the server.  Sorting and filtering are supported through query params.  Sorting is supported for the `source`, `model`, `timestamp`, and `feedback-{output_name}` columns. Specify sorting with the `sort` query param, with values `{column}.{ordering}`. E.g. ?sort=source.asc&sort=model.desc will yield a multi-column sort. First by source then by model.  Filtering is supported for the `source`, `model`, `feedback-{output_name}`, `evaluator-{evaluator_external_id}` columns.  Specify filtering with the `source_filter`, `model_filter`, `feedback-{output.name}_filter` and `evaluator-{evaluator_external_id}_filter` query params.  E.g. ?source_filter=AI&source_filter=user_1234&feedback-explicit_filter=good will only show rows where the source is \"AI\" or \"user_1234\", and where the latest feedback for the \"explicit\" output group is \"good\".  An additional date range filter is supported for the `Timestamp` column (i.e. `Log.created_at`). These are supported through the `start_date` and `end_date` query parameters.  Searching is supported for the model inputs and output. Specify a search term with the `search` query param. E.g. ?search=hello%20there will cause a case-insensitive search across model inputs and output.
          * @summary List 
          * @param {LogsApiListRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
@@ -690,7 +690,7 @@ export class LogsApiGenerated extends BaseAPI {
     }
 
     /**
-     * Retrieve paginated logs from the server.  Sorting and filtering are supported through query params. See docstring of get_sorted_filtered_project_data_from_query_params for more details.
+     * Retrieve paginated logs from the server.  Sorting and filtering are supported through query params.  Sorting is supported for the `source`, `model`, `timestamp`, and `feedback-{output_name}` columns. Specify sorting with the `sort` query param, with values `{column}.{ordering}`. E.g. ?sort=source.asc&sort=model.desc will yield a multi-column sort. First by source then by model.  Filtering is supported for the `source`, `model`, `feedback-{output_name}`, `evaluator-{evaluator_external_id}` columns.  Specify filtering with the `source_filter`, `model_filter`, `feedback-{output.name}_filter` and `evaluator-{evaluator_external_id}_filter` query params.  E.g. ?source_filter=AI&source_filter=user_1234&feedback-explicit_filter=good will only show rows where the source is \"AI\" or \"user_1234\", and where the latest feedback for the \"explicit\" output group is \"good\".  An additional date range filter is supported for the `Timestamp` column (i.e. `Log.created_at`). These are supported through the `start_date` and `end_date` query parameters.  Searching is supported for the model inputs and output. Specify a search term with the `search` query param. E.g. ?search=hello%20there will cause a case-insensitive search across model inputs and output.
      * @summary List 
      * @param {LogsApiListRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.

@@ -37,6 +37,7 @@
   * [`humanloop.evaluations.addEvaluators`](#humanloopevaluationsaddevaluators)
   * [`humanloop.evaluations.create`](#humanloopevaluationscreate)
   * [`humanloop.evaluations.get`](#humanloopevaluationsget)
+  * [`humanloop.evaluations.list`](#humanloopevaluationslist)
   * [`humanloop.evaluations.listAllForProject`](#humanloopevaluationslistallforproject)
   * [`humanloop.evaluations.listDatapoints`](#humanloopevaluationslistdatapoints)
   * [`humanloop.evaluations.log`](#humanloopevaluationslog)
@@ -247,7 +248,7 @@ const createResponse = await humanloop.chat({
 
 #### ⚙️ Parameters<a id="⚙️-parameters"></a>
 
-##### messages: [`ChatMessage`](./models/chat-message.ts)[]<a id="messages-chatmessagemodelschat-messagets"></a>
+##### messages: [`ChatMessageWithToolCall`](./models/chat-message-with-tool-call.ts)[]<a id="messages-chatmessagewithtoolcallmodelschat-message-with-tool-callts"></a>
 
 The messages passed to the to provider chat endpoint.
 
@@ -362,7 +363,7 @@ const createDeployedResponse = await humanloop.chatDeployed({
 
 #### ⚙️ Parameters<a id="⚙️-parameters"></a>
 
-##### messages: [`ChatMessage`](./models/chat-message.ts)[]<a id="messages-chatmessagemodelschat-messagets"></a>
+##### messages: [`ChatMessageWithToolCall`](./models/chat-message-with-tool-call.ts)[]<a id="messages-chatmessagewithtoolcallmodelschat-message-with-tool-callts"></a>
 
 The messages passed to the to provider chat endpoint.
 
@@ -478,7 +479,7 @@ const createExperimentResponse = await humanloop.chatExperiment({
 
 #### ⚙️ Parameters<a id="⚙️-parameters"></a>
 
-##### messages: [`ChatMessage`](./models/chat-message.ts)[]<a id="messages-chatmessagemodelschat-messagets"></a>
+##### messages: [`ChatMessageWithToolCall`](./models/chat-message-with-tool-call.ts)[]<a id="messages-chatmessagewithtoolcallmodelschat-message-with-tool-callts"></a>
 
 The messages passed to the to provider chat endpoint.
 
@@ -594,7 +595,7 @@ const createModelConfigResponse = await humanloop.chatModelConfiguration({
 
 #### ⚙️ Parameters<a id="⚙️-parameters"></a>
 
-##### messages: [`ChatMessage`](./models/chat-message.ts)[]<a id="messages-chatmessagemodelschat-messagets"></a>
+##### messages: [`ChatMessageWithToolCall`](./models/chat-message-with-tool-call.ts)[]<a id="messages-chatmessagewithtoolcallmodelschat-message-with-tool-callts"></a>
 
 The messages passed to the to provider chat endpoint.
 
@@ -1212,7 +1213,7 @@ String ID of datapoint. Starts with `evtc_`.
 
 The inputs to the prompt template for this datapoint.
 
-##### messages: [`ChatMessage`](./models/chat-message.ts)[]<a id="messages-chatmessagemodelschat-messagets"></a>
+##### messages: [`ChatMessageWithToolCall`](./models/chat-message-with-tool-call.ts)[]<a id="messages-chatmessagewithtoolcallmodelschat-message-with-tool-callts"></a>
 
 The chat messages for this datapoint.
 
@@ -1604,9 +1605,78 @@ Whether to include evaluator aggregates in the response.
 ---
 
 
+### `humanloop.evaluations.list`<a id="humanloopevaluationslist"></a>
+
+Get the evaluations associated with a project.
+
+Sorting and filtering are supported through query params for categorical columns
+and the `created_at` timestamp.
+
+Sorting is supported for the `dataset`, `config`, `status` and `evaluator-{evaluator_id}` columns.
+Specify sorting with the `sort` query param, with values `{column}.{ordering}`.
+E.g. ?sort=dataset.asc&sort=status.desc will yield a multi-column sort. First by dataset then by status.
+
+Filtering is supported for the `id`, `dataset`, `config` and `status` columns.
+
+Specify filtering with the `id_filter`, `dataset_filter`, `config_filter` and `status_filter` query params.
+
+E.g. ?dataset_filter=my_dataset&dataset_filter=my_other_dataset&status_filter=running
+will only show rows where the dataset is "my_dataset" or "my_other_dataset", and where the status is "running".
+
+An additional date range filter is supported for the `created_at` column. Use the `start_date` and `end_date`
+query parameters to configure this.
+
+#### 🛠️ Usage<a id="🛠️-usage"></a>
+
+```typescript
+const listResponse = await humanloop.evaluations.list({
+  projectId: "projectId_example",
+  size: 50,
+  page: 0,
+});
+```
+
+#### ⚙️ Parameters<a id="⚙️-parameters"></a>
+
+##### projectId: `string`<a id="projectid-string"></a>
+
+String ID of project. Starts with `pr_`.
+
+##### id: `string`[]<a id="id-string"></a>
+
+A list of evaluation run ids to filter on. Starts with `ev_`.
+
+##### startDate: `string | Date`<a id="startdate-string--date"></a>
+
+Only return evaluations created after this date.
+
+##### endDate: `string | Date`<a id="enddate-string--date"></a>
+
+Only return evaluations created before this date.
+
+##### size: `number`<a id="size-number"></a>
+
+##### page: `number`<a id="page-number"></a>
+
+#### 🔄 Return<a id="🔄-return"></a>
+
+[PaginatedDataEvaluationResponse](./models/paginated-data-evaluation-response.ts)
+
+#### 🌐 Endpoint<a id="🌐-endpoint"></a>
+
+`/evaluations` `GET`
+
+[🔙 **Back to Table of Contents**](#table-of-contents)
+
+---
+
+
 ### `humanloop.evaluations.listAllForProject`<a id="humanloopevaluationslistallforproject"></a>
 
 Get all the evaluations associated with your project.
+
+Deprecated: This is a legacy unpaginated endpoint. Use `/evaluations` instead, with appropriate
+sorting, filtering and pagination options.
 
 #### 🛠️ Usage<a id="🛠️-usage"></a>
 
@@ -2468,7 +2538,27 @@ String ID of log to return. Starts with `data_`.
 Retrieve paginated logs from the server.
 
 Sorting and filtering are supported through query params.
-See docstring of get_sorted_filtered_project_data_from_query_params for more details.
+
+Sorting is supported for the `source`, `model`, `timestamp`, and `feedback-{output_name}` columns.
+Specify sorting with the `sort` query param, with values `{column}.{ordering}`.
+E.g. ?sort=source.asc&sort=model.desc will yield a multi-column sort. First by source then by model.
+
+Filtering is supported for the `source`, `model`, `feedback-{output_name}`,
+`evaluator-{evaluator_external_id}` columns.
+
+Specify filtering with the `source_filter`, `model_filter`, `feedback-{output.name}_filter` and
+`evaluator-{evaluator_external_id}_filter` query params.
+
+E.g. ?source_filter=AI&source_filter=user_1234&feedback-explicit_filter=good
+will only show rows where the source is "AI" or "user_1234", and where the latest feedback for the "explicit" output
+group is "good".
+
+An additional date range filter is supported for the `Timestamp` column (i.e. `Log.created_at`).
+These are supported through the `start_date` and `end_date` query parameters.
+
+Searching is supported for the model inputs and output.
+Specify a search term with the `search` query param.
+E.g. ?search=hello%20there will cause a case-insensitive search across model inputs and output.
 
 #### 🛠️ Usage<a id="🛠️-usage"></a>
 
@@ -2575,7 +2665,7 @@ A unique string to reference the datapoint. Allows you to log nested datapoints 
 
 Unique ID of an experiment trial to associate to the log.
 
-##### messages: [`ChatMessage`](./models/chat-message.ts)[]<a id="messages-chatmessagemodelschat-messagets"></a>
+##### messages: [`ChatMessageWithToolCall`](./models/chat-message-with-tool-call.ts)[]<a id="messages-chatmessagewithtoolcallmodelschat-message-with-tool-callts"></a>
 
 The messages passed to the to provider chat endpoint.
 
@@ -2907,7 +2997,7 @@ If specified, the model config will be added to this experiment. Experiments are
 
 Prompt template that will take your specified inputs to form your final request to the provider model. NB: Input variables within the prompt template should be specified with syntax: {{INPUT_NAME}}.
 
-##### chat_template: [`ChatMessage`](./models/chat-message.ts)[]<a id="chat_template-chatmessagemodelschat-messagets"></a>
+##### chat_template: [`ChatMessageWithToolCall`](./models/chat-message-with-tool-call.ts)[]<a id="chat_template-chatmessagewithtoolcallmodelschat-message-with-tool-callts"></a>
 
 Messages prepended to the list of messages sent to the provider. These messages that will take your specified inputs to form your final request to the provider model. NB: Input variables within the prompt template should be specified with syntax: {{INPUT_NAME}}.
 
@@ -3003,7 +3093,7 @@ If specified, model will make a best effort to sample deterministically, but it 
 
 The provider model endpoint used.
 
-##### chat_template: [`ChatMessage`](./models/chat-message.ts)[]<a id="chat_template-chatmessagemodelschat-messagets"></a>
+##### chat_template: [`ChatMessageWithToolCall`](./models/chat-message-with-tool-call.ts)[]<a id="chat_template-chatmessagewithtoolcallmodelschat-message-with-tool-callts"></a>
 
 Messages prepended to the list of messages sent to the provider. These messages that will take your specified inputs to form your final request to the provider model. Input variables within the template should be specified with syntax: {{INPUT_NAME}}.
 

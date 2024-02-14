@@ -59,6 +59,8 @@ import { LogProperty } from '../models';
 // @ts-ignore
 import { PaginatedDataEvaluationDatapointSnapshotResponse } from '../models';
 // @ts-ignore
+import { PaginatedDataEvaluationResponse } from '../models';
+// @ts-ignore
 import { ProviderAPIKeysProperty1 } from '../models';
 // @ts-ignore
 import { UpdateEvaluationStatusRequest } from '../models';
@@ -100,7 +102,7 @@ export const EvaluationsApiAxiosParamCreator = function (configuration?: Configu
             const localVarQueryParameter = {} as any;
 
             // authentication APIKeyHeader required
-            await setApiKeyToObject({ object: localVarHeaderParameter, keyParamName: "X-API-KEY", configuration })
+            await setApiKeyToObject({ object: localVarHeaderParameter, key: "X-API-KEY", keyParamName: "xAPIKEY", configuration })
 
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
@@ -150,7 +152,7 @@ export const EvaluationsApiAxiosParamCreator = function (configuration?: Configu
             const localVarQueryParameter = {} as any;
 
             // authentication APIKeyHeader required
-            await setApiKeyToObject({ object: localVarHeaderParameter, keyParamName: "X-API-KEY", configuration })
+            await setApiKeyToObject({ object: localVarHeaderParameter, key: "X-API-KEY", keyParamName: "xAPIKEY", configuration })
 
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
@@ -198,7 +200,7 @@ export const EvaluationsApiAxiosParamCreator = function (configuration?: Configu
             const localVarQueryParameter = {} as any;
 
             // authentication APIKeyHeader required
-            await setApiKeyToObject({ object: localVarHeaderParameter, keyParamName: "X-API-KEY", configuration })
+            await setApiKeyToObject({ object: localVarHeaderParameter, key: "X-API-KEY", keyParamName: "xAPIKEY", configuration })
             if (evaluatorAggregates !== undefined) {
                 localVarQueryParameter['evaluator_aggregates'] = evaluatorAggregates;
             }
@@ -221,11 +223,86 @@ export const EvaluationsApiAxiosParamCreator = function (configuration?: Configu
             };
         },
         /**
-         * Get all the evaluations associated with your project.
+         * Get the evaluations associated with a project.  Sorting and filtering are supported through query params for categorical columns and the `created_at` timestamp.  Sorting is supported for the `dataset`, `config`, `status` and `evaluator-{evaluator_id}` columns. Specify sorting with the `sort` query param, with values `{column}.{ordering}`. E.g. ?sort=dataset.asc&sort=status.desc will yield a multi-column sort. First by dataset then by status.  Filtering is supported for the `id`, `dataset`, `config` and `status` columns.  Specify filtering with the `id_filter`, `dataset_filter`, `config_filter` and `status_filter` query params.  E.g. ?dataset_filter=my_dataset&dataset_filter=my_other_dataset&status_filter=running will only show rows where the dataset is \"my_dataset\" or \"my_other_dataset\", and where the status is \"running\".  An additional date range filter is supported for the `created_at` column. Use the `start_date` and `end_date` query parameters to configure this.
+         * @summary Get Evaluations
+         * @param {string} projectId String ID of project. Starts with &#x60;pr_&#x60;.
+         * @param {Array<string>} [id] A list of evaluation run ids to filter on. Starts with &#x60;ev_&#x60;.
+         * @param {string | Date} [startDate] Only return evaluations created after this date.
+         * @param {string | Date} [endDate] Only return evaluations created before this date.
+         * @param {number} [size] 
+         * @param {number} [page] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        list: async (projectId: string, id?: Array<string>, startDate?: string | Date, endDate?: string | Date, size?: number, page?: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'projectId' is not null or undefined
+            assertParamExists('list', 'projectId', projectId)
+            const localVarPath = `/evaluations`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions: AxiosRequestConfig = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = configuration && !isBrowser() ? { "User-Agent": configuration.userAgent } : {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication APIKeyHeader required
+            await setApiKeyToObject({ object: localVarHeaderParameter, key: "X-API-KEY", keyParamName: "xAPIKEY", configuration })
+            if (projectId !== undefined) {
+                localVarQueryParameter['project_id'] = projectId;
+            }
+
+            if (id) {
+                localVarQueryParameter['id'] = id;
+            }
+
+            if (startDate !== undefined) {
+                localVarQueryParameter['start_date'] = (startDate as any instanceof Date) ?
+                    (startDate as any).toISOString().substr(0,10) :
+                    startDate;
+            }
+
+            if (endDate !== undefined) {
+                localVarQueryParameter['end_date'] = (endDate as any instanceof Date) ?
+                    (endDate as any).toISOString().substr(0,10) :
+                    endDate;
+            }
+
+            if (size !== undefined) {
+                localVarQueryParameter['size'] = size;
+            }
+
+            if (page !== undefined) {
+                localVarQueryParameter['page'] = page;
+            }
+
+
+    
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            requestBeforeHook({
+                queryParameters: localVarQueryParameter,
+                requestConfig: localVarRequestOptions,
+                path: localVarPath,
+                configuration
+            });
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Get all the evaluations associated with your project.  Deprecated: This is a legacy unpaginated endpoint. Use `/evaluations` instead, with appropriate sorting, filtering and pagination options.
          * @summary List For Project
          * @param {string} projectId String ID of project. Starts with &#x60;pr_&#x60;.
          * @param {boolean} [evaluatorAggregates] Whether to include evaluator aggregates in the response.
          * @param {*} [options] Override http request option.
+         * @deprecated
          * @throws {RequiredError}
          */
         listAllForProject: async (projectId: string, evaluatorAggregates?: boolean, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
@@ -245,7 +322,7 @@ export const EvaluationsApiAxiosParamCreator = function (configuration?: Configu
             const localVarQueryParameter = {} as any;
 
             // authentication APIKeyHeader required
-            await setApiKeyToObject({ object: localVarHeaderParameter, keyParamName: "X-API-KEY", configuration })
+            await setApiKeyToObject({ object: localVarHeaderParameter, key: "X-API-KEY", keyParamName: "xAPIKEY", configuration })
             if (evaluatorAggregates !== undefined) {
                 localVarQueryParameter['evaluator_aggregates'] = evaluatorAggregates;
             }
@@ -293,7 +370,7 @@ export const EvaluationsApiAxiosParamCreator = function (configuration?: Configu
             const localVarQueryParameter = {} as any;
 
             // authentication APIKeyHeader required
-            await setApiKeyToObject({ object: localVarHeaderParameter, keyParamName: "X-API-KEY", configuration })
+            await setApiKeyToObject({ object: localVarHeaderParameter, key: "X-API-KEY", keyParamName: "xAPIKEY", configuration })
             if (page !== undefined) {
                 localVarQueryParameter['page'] = page;
             }
@@ -346,7 +423,7 @@ export const EvaluationsApiAxiosParamCreator = function (configuration?: Configu
             const localVarQueryParameter = {} as any;
 
             // authentication APIKeyHeader required
-            await setApiKeyToObject({ object: localVarHeaderParameter, keyParamName: "X-API-KEY", configuration })
+            await setApiKeyToObject({ object: localVarHeaderParameter, key: "X-API-KEY", keyParamName: "xAPIKEY", configuration })
 
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
@@ -396,7 +473,7 @@ export const EvaluationsApiAxiosParamCreator = function (configuration?: Configu
             const localVarQueryParameter = {} as any;
 
             // authentication APIKeyHeader required
-            await setApiKeyToObject({ object: localVarHeaderParameter, keyParamName: "X-API-KEY", configuration })
+            await setApiKeyToObject({ object: localVarHeaderParameter, key: "X-API-KEY", keyParamName: "xAPIKEY", configuration })
 
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
@@ -446,7 +523,7 @@ export const EvaluationsApiAxiosParamCreator = function (configuration?: Configu
             const localVarQueryParameter = {} as any;
 
             // authentication APIKeyHeader required
-            await setApiKeyToObject({ object: localVarHeaderParameter, keyParamName: "X-API-KEY", configuration })
+            await setApiKeyToObject({ object: localVarHeaderParameter, key: "X-API-KEY", keyParamName: "xAPIKEY", configuration })
 
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
@@ -513,10 +590,22 @@ export const EvaluationsApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * Get all the evaluations associated with your project.
+         * Get the evaluations associated with a project.  Sorting and filtering are supported through query params for categorical columns and the `created_at` timestamp.  Sorting is supported for the `dataset`, `config`, `status` and `evaluator-{evaluator_id}` columns. Specify sorting with the `sort` query param, with values `{column}.{ordering}`. E.g. ?sort=dataset.asc&sort=status.desc will yield a multi-column sort. First by dataset then by status.  Filtering is supported for the `id`, `dataset`, `config` and `status` columns.  Specify filtering with the `id_filter`, `dataset_filter`, `config_filter` and `status_filter` query params.  E.g. ?dataset_filter=my_dataset&dataset_filter=my_other_dataset&status_filter=running will only show rows where the dataset is \"my_dataset\" or \"my_other_dataset\", and where the status is \"running\".  An additional date range filter is supported for the `created_at` column. Use the `start_date` and `end_date` query parameters to configure this.
+         * @summary Get Evaluations
+         * @param {EvaluationsApiListRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async list(requestParameters: EvaluationsApiListRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginatedDataEvaluationResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.list(requestParameters.projectId, requestParameters.id, requestParameters.startDate, requestParameters.endDate, requestParameters.size, requestParameters.page, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Get all the evaluations associated with your project.  Deprecated: This is a legacy unpaginated endpoint. Use `/evaluations` instead, with appropriate sorting, filtering and pagination options.
          * @summary List For Project
          * @param {EvaluationsApiListAllForProjectRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
+         * @deprecated
          * @throws {RequiredError}
          */
         async listAllForProject(requestParameters: EvaluationsApiListAllForProjectRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<EvaluationResponse>>> {
@@ -608,10 +697,21 @@ export const EvaluationsApiFactory = function (configuration?: Configuration, ba
             return localVarFp.get(requestParameters, options).then((request) => request(axios, basePath));
         },
         /**
-         * Get all the evaluations associated with your project.
+         * Get the evaluations associated with a project.  Sorting and filtering are supported through query params for categorical columns and the `created_at` timestamp.  Sorting is supported for the `dataset`, `config`, `status` and `evaluator-{evaluator_id}` columns. Specify sorting with the `sort` query param, with values `{column}.{ordering}`. E.g. ?sort=dataset.asc&sort=status.desc will yield a multi-column sort. First by dataset then by status.  Filtering is supported for the `id`, `dataset`, `config` and `status` columns.  Specify filtering with the `id_filter`, `dataset_filter`, `config_filter` and `status_filter` query params.  E.g. ?dataset_filter=my_dataset&dataset_filter=my_other_dataset&status_filter=running will only show rows where the dataset is \"my_dataset\" or \"my_other_dataset\", and where the status is \"running\".  An additional date range filter is supported for the `created_at` column. Use the `start_date` and `end_date` query parameters to configure this.
+         * @summary Get Evaluations
+         * @param {EvaluationsApiListRequest} requestParameters Request parameters.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        list(requestParameters: EvaluationsApiListRequest, options?: AxiosRequestConfig): AxiosPromise<PaginatedDataEvaluationResponse> {
+            return localVarFp.list(requestParameters, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Get all the evaluations associated with your project.  Deprecated: This is a legacy unpaginated endpoint. Use `/evaluations` instead, with appropriate sorting, filtering and pagination options.
          * @summary List For Project
          * @param {EvaluationsApiListAllForProjectRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
+         * @deprecated
          * @throws {RequiredError}
          */
         listAllForProject(requestParameters: EvaluationsApiListAllForProjectRequest, options?: AxiosRequestConfig): AxiosPromise<Array<EvaluationResponse>> {
@@ -712,6 +812,57 @@ export type EvaluationsApiGetRequest = {
     * @memberof EvaluationsApiGet
     */
     readonly evaluatorAggregates?: boolean
+    
+}
+
+/**
+ * Request parameters for list operation in EvaluationsApi.
+ * @export
+ * @interface EvaluationsApiListRequest
+ */
+export type EvaluationsApiListRequest = {
+    
+    /**
+    * String ID of project. Starts with `pr_`.
+    * @type {string}
+    * @memberof EvaluationsApiList
+    */
+    readonly projectId: string
+    
+    /**
+    * A list of evaluation run ids to filter on. Starts with `ev_`.
+    * @type {Array<string>}
+    * @memberof EvaluationsApiList
+    */
+    readonly id?: Array<string>
+    
+    /**
+    * Only return evaluations created after this date.
+    * @type {string | Date}
+    * @memberof EvaluationsApiList
+    */
+    readonly startDate?: string | Date
+    
+    /**
+    * Only return evaluations created before this date.
+    * @type {string | Date}
+    * @memberof EvaluationsApiList
+    */
+    readonly endDate?: string | Date
+    
+    /**
+    * 
+    * @type {number}
+    * @memberof EvaluationsApiList
+    */
+    readonly size?: number
+    
+    /**
+    * 
+    * @type {number}
+    * @memberof EvaluationsApiList
+    */
+    readonly page?: number
     
 }
 
@@ -860,10 +1011,28 @@ export class EvaluationsApiGenerated extends BaseAPI {
     }
 
     /**
-     * Get all the evaluations associated with your project.
+     * Get the evaluations associated with a project.  Sorting and filtering are supported through query params for categorical columns and the `created_at` timestamp.  Sorting is supported for the `dataset`, `config`, `status` and `evaluator-{evaluator_id}` columns. Specify sorting with the `sort` query param, with values `{column}.{ordering}`. E.g. ?sort=dataset.asc&sort=status.desc will yield a multi-column sort. First by dataset then by status.  Filtering is supported for the `id`, `dataset`, `config` and `status` columns.  Specify filtering with the `id_filter`, `dataset_filter`, `config_filter` and `status_filter` query params.  E.g. ?dataset_filter=my_dataset&dataset_filter=my_other_dataset&status_filter=running will only show rows where the dataset is \"my_dataset\" or \"my_other_dataset\", and where the status is \"running\".  An additional date range filter is supported for the `created_at` column. Use the `start_date` and `end_date` query parameters to configure this.
+     * @summary Get Evaluations
+     * @param {EvaluationsApiListRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof EvaluationsApiGenerated
+     */
+    public list(requestParameters: EvaluationsApiListRequest, options?: AxiosRequestConfig) {
+        return paginate({
+            initialParameters: requestParameters,
+            request: (parameters: EvaluationsApiListRequest) => {
+                return EvaluationsApiFp(this.configuration).list(parameters, options).then((request) => request(this.axios, this.basePath));
+            },
+        });
+    }
+
+    /**
+     * Get all the evaluations associated with your project.  Deprecated: This is a legacy unpaginated endpoint. Use `/evaluations` instead, with appropriate sorting, filtering and pagination options.
      * @summary List For Project
      * @param {EvaluationsApiListAllForProjectRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
+     * @deprecated
      * @throws {RequiredError}
      * @memberof EvaluationsApiGenerated
      */

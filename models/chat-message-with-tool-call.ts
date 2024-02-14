@@ -36,45 +36,45 @@ import { ToolCallProperty2 } from './tool-call-property2';
 /**
  * 
  * @export
- * @interface ChatMessage
+ * @interface ChatMessageWithToolCall
  */
-export interface ChatMessage {
+export interface ChatMessageWithToolCall {
     /**
      * 
      * @type {ContentProperty}
-     * @memberof ChatMessage
+     * @memberof ChatMessageWithToolCall
      */
     'content'?: ContentProperty | null;
     /**
      * Optional name of the message author.
      * @type {string}
-     * @memberof ChatMessage
+     * @memberof ChatMessageWithToolCall
      */
     'name'?: string | null;
     /**
      * Tool call that this message is responding to.
      * @type {string}
-     * @memberof ChatMessage
+     * @memberof ChatMessageWithToolCall
      */
     'tool_call_id'?: string | null;
     /**
      * Role of the message author.
      * @type {ChatRole}
-     * @memberof ChatMessage
+     * @memberof ChatMessageWithToolCall
      */
     'role': ChatRole;
     /**
+     * A list of tool calls requested by the assistant.
+     * @type {Array<ToolCall>}
+     * @memberof ChatMessageWithToolCall
+     */
+    'tool_calls'?: Array<ToolCall> | null;
+    /**
      * 
      * @type {ToolCallProperty2}
-     * @memberof ChatMessage
+     * @memberof ChatMessageWithToolCall
      * @deprecated
      */
     'tool_call'?: ToolCallProperty2 | null;
-    /**
-     * A list of tool calls requested by the assistant.
-     * @type {Array<ToolCall>}
-     * @memberof ChatMessage
-     */
-    'tool_calls'?: Array<ToolCall> | null;
 }
 
