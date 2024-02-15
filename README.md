@@ -1133,7 +1133,7 @@ The suffix that comes after a completion of inserted text. Useful for completion
 
 ### `humanloop.datapoints.delete`<a id="humanloopdatapointsdelete"></a>
 
-Delete a list of testsets by their IDs.
+Delete a list of datapoints by their IDs.
 
 #### 🛠️ Usage<a id="🛠️-usage"></a>
 

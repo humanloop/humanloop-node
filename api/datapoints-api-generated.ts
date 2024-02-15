@@ -56,7 +56,7 @@ import { requestBeforeHook } from '../requestBeforeHook';
 export const DatapointsApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * Delete a list of testsets by their IDs.
+         * Delete a list of datapoints by their IDs.
          * @summary Delete
          * @param {Array<string>} requestBody 
          * @param {*} [options] Override http request option.
@@ -204,7 +204,7 @@ export const DatapointsApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = DatapointsApiAxiosParamCreator(configuration)
     return {
         /**
-         * Delete a list of testsets by their IDs.
+         * Delete a list of datapoints by their IDs.
          * @summary Delete
          * @param {DatapointsApiDeleteRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
@@ -247,7 +247,7 @@ export const DatapointsApiFactory = function (configuration?: Configuration, bas
     const localVarFp = DatapointsApiFp(configuration)
     return {
         /**
-         * Delete a list of testsets by their IDs.
+         * Delete a list of datapoints by their IDs.
          * @summary Delete
          * @param {DatapointsApiDeleteRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
@@ -326,7 +326,7 @@ export type DatapointsApiUpdateRequest = {
  */
 export class DatapointsApiGenerated extends BaseAPI {
     /**
-     * Delete a list of testsets by their IDs.
+     * Delete a list of datapoints by their IDs.
      * @summary Delete
      * @param {DatapointsApiDeleteRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
