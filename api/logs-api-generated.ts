@@ -39,7 +39,7 @@ import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } fr
 // @ts-ignore
 import { ChatMessageWithToolCall } from '../models';
 // @ts-ignore
-import { ConfigProperty1 } from '../models';
+import { ConfigProperty } from '../models';
 // @ts-ignore
 import { FeedbackLabelsProperty } from '../models';
 // @ts-ignore
@@ -50,8 +50,6 @@ import { LogDatapointRequest } from '../models';
 import { LogResponse } from '../models';
 // @ts-ignore
 import { LogsLogResponse } from '../models';
-// @ts-ignore
-import { OutputMessageProperty } from '../models';
 // @ts-ignore
 import { PaginatedDataLogResponse } from '../models';
 // @ts-ignore
@@ -429,7 +427,8 @@ export const LogsApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async log(requestParameters: LogsApiLogRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<LogsLogResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.log(requestParameters, options);
+            const logDatapointRequest: LogDatapointRequest = requestParameters;
+            const localVarAxiosArgs = await localVarAxiosParamCreator.log(logDatapointRequest, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -440,7 +439,12 @@ export const LogsApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async update(requestParameters: LogsApiUpdateRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<LogResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.update(requestParameters.id, requestParameters, options);
+            const updateLogRequest: UpdateLogRequest = {
+                output: requestParameters.output,
+                error: requestParameters.error,
+                duration: requestParameters.duration
+            };
+            const localVarAxiosArgs = await localVarAxiosParamCreator.update(requestParameters.id, updateLogRequest, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -451,7 +455,12 @@ export const LogsApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async updateByRef(requestParameters: LogsApiUpdateByRefRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<LogResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.updateByRef(requestParameters.referenceId, requestParameters, options);
+            const updateLogRequest: UpdateLogRequest = {
+                output: requestParameters.output,
+                error: requestParameters.error,
+                duration: requestParameters.duration
+            };
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateByRef(requestParameters.referenceId, updateLogRequest, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }

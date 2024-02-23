@@ -19,7 +19,9 @@ export function requestBeforeHook({
   if (requestBody === null) return;
   if (!path.startsWith("/chat") && !path.startsWith("/completion")) return;
   const providerApiKeys: ProviderApiKeys =
-    "provider_api_keys" in requestBody ? requestBody["provider_api_keys"] : {};
+    requestBody["provider_api_keys"] !== undefined
+      ? requestBody["provider_api_keys"]
+      : {};
 
   // anthropic
   if (

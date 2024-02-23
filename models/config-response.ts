@@ -30,17 +30,17 @@ import type * as buffer from "buffer"
 
 import { AgentConfigResponse } from './agent-config-response';
 import { ChatMessageWithToolCall } from './chat-message-with-tool-call';
-import { CreatedByProperty } from './created-by-property';
 import { GenericConfigResponse } from './generic-config-response';
-import { ModelConfigProperty } from './model-config-property';
+import { ModelConfigRequest } from './model-config-request';
 import { ModelConfigResponse } from './model-config-response';
 import { ModelEndpoints } from './model-endpoints';
 import { ModelProviders } from './model-providers';
-import { ResponseFormatProperty } from './response-format-property';
+import { ResponseFormat } from './response-format';
 import { StopSequenceSProperty } from './stop-sequence-sproperty';
 import { ToolConfigRequest } from './tool-config-request';
 import { ToolConfigResponse } from './tool-config-response';
 import { ToolSource } from './tool-source';
+import { UserResponse } from './user-response';
 
 /**
  * @type ConfigResponse

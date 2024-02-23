@@ -31,7 +31,7 @@ import type * as buffer from "buffer"
 import { ChatMessageWithToolCall } from './chat-message-with-tool-call';
 import { ModelEndpoints } from './model-endpoints';
 import { ModelProviders } from './model-providers';
-import { ResponseFormatProperty } from './response-format-property';
+import { ResponseFormat } from './response-format';
 import { StopSequenceSProperty } from './stop-sequence-sproperty';
 import { ToolsEquivalentToOpenAIFunctionsPropertyInner } from './tools-equivalent-to-open-aifunctions-property-inner';
 
@@ -114,11 +114,11 @@ export interface ModelConfigChatRequest {
      */
     'seed'?: number;
     /**
-     * 
-     * @type {ResponseFormatProperty}
+     * The format of the response. Only type json_object is currently supported for chat.
+     * @type {ResponseFormat}
      * @memberof ModelConfigChatRequest
      */
-    'response_format'?: ResponseFormatProperty;
+    'response_format'?: ResponseFormat;
     /**
      * The provider model endpoint used.
      * @type {ModelEndpoints}

@@ -252,7 +252,9 @@ const createResponse = await humanloop.chat({
 
 The messages passed to the to provider chat endpoint.
 
-##### model_config: [`ModelConfigurationProperty`](./models/model-configuration-property.ts)<a id="model_config-modelconfigurationpropertymodelsmodel-configuration-propertyts"></a>
+##### model_config: [`ModelConfigChatRequest`](./models/model-config-chat-request.ts)<a id="model_config-modelconfigchatrequestmodelsmodel-config-chat-requestts"></a>
+
+The model configuration used to create a chat response.
 
 ##### project: `string`<a id="project-string"></a>
 
@@ -298,7 +300,9 @@ Whether the request/response payloads will be stored on Humanloop.
 
 ID of the source datapoint if this is a log derived from a datapoint in a dataset.
 
-##### provider_api_keys: [`ProviderAPIKeysProperty`](./models/provider-apikeys-property.ts)<a id="provider_api_keys-providerapikeyspropertymodelsprovider-apikeys-propertyts"></a>
+##### provider_api_keys: [`ProviderApiKeys`](./models/provider-api-keys.ts)<a id="provider_api_keys-providerapikeysmodelsprovider-api-keysts"></a>
+
+API keys required by each provider to make API calls. The API keys provided here are not stored by Humanloop. If not specified here, Humanloop will fall back to the key saved to your organization.
 
 ##### num_samples: `number`<a id="num_samples-number"></a>
 
@@ -322,9 +326,11 @@ Whether to return the inputs in the response. If false, the response will contai
 
 ##### tool_choice: [`ToolChoiceProperty`](./models/tool-choice-property.ts)<a id="tool_choice-toolchoicepropertymodelstool-choice-propertyts"></a>
 
-##### tool_call: [`ToolCallProperty1`](./models/tool-call-property1.ts)<a id="tool_call-toolcallproperty1modelstool-call-property1ts"></a>
+##### tool_call: [`ToolCallProperty`](./models/tool-call-property.ts)<a id="tool_call-toolcallpropertymodelstool-call-propertyts"></a>
 
-##### response_format: [`ResponseFormatProperty`](./models/response-format-property.ts)<a id="response_format-responseformatpropertymodelsresponse-format-propertyts"></a>
+##### response_format: [`ResponseFormat`](./models/response-format.ts)<a id="response_format-responseformatmodelsresponse-formatts"></a>
+
+The format of the response. Only type json_object is currently supported for chat.
 
 #### 🔄 Return<a id="🔄-return"></a>
 
@@ -411,7 +417,9 @@ Whether the request/response payloads will be stored on Humanloop.
 
 ID of the source datapoint if this is a log derived from a datapoint in a dataset.
 
-##### provider_api_keys: [`ProviderAPIKeysProperty`](./models/provider-apikeys-property.ts)<a id="provider_api_keys-providerapikeyspropertymodelsprovider-apikeys-propertyts"></a>
+##### provider_api_keys: [`ProviderApiKeys`](./models/provider-api-keys.ts)<a id="provider_api_keys-providerapikeysmodelsprovider-api-keysts"></a>
+
+API keys required by each provider to make API calls. The API keys provided here are not stored by Humanloop. If not specified here, Humanloop will fall back to the key saved to your organization.
 
 ##### num_samples: `number`<a id="num_samples-number"></a>
 
@@ -435,9 +443,11 @@ Whether to return the inputs in the response. If false, the response will contai
 
 ##### tool_choice: [`ToolChoiceProperty`](./models/tool-choice-property.ts)<a id="tool_choice-toolchoicepropertymodelstool-choice-propertyts"></a>
 
-##### tool_call: [`ToolCallProperty1`](./models/tool-call-property1.ts)<a id="tool_call-toolcallproperty1modelstool-call-property1ts"></a>
+##### tool_call: [`ToolCallProperty`](./models/tool-call-property.ts)<a id="tool_call-toolcallpropertymodelstool-call-propertyts"></a>
 
-##### response_format: [`ResponseFormatProperty`](./models/response-format-property.ts)<a id="response_format-responseformatpropertymodelsresponse-format-propertyts"></a>
+##### response_format: [`ResponseFormat`](./models/response-format.ts)<a id="response_format-responseformatmodelsresponse-formatts"></a>
+
+The format of the response. Only type json_object is currently supported for chat.
 
 ##### environment: `string`<a id="environment-string"></a>
 
@@ -531,7 +541,9 @@ Whether the request/response payloads will be stored on Humanloop.
 
 ID of the source datapoint if this is a log derived from a datapoint in a dataset.
 
-##### provider_api_keys: [`ProviderAPIKeysProperty`](./models/provider-apikeys-property.ts)<a id="provider_api_keys-providerapikeyspropertymodelsprovider-apikeys-propertyts"></a>
+##### provider_api_keys: [`ProviderApiKeys`](./models/provider-api-keys.ts)<a id="provider_api_keys-providerapikeysmodelsprovider-api-keysts"></a>
+
+API keys required by each provider to make API calls. The API keys provided here are not stored by Humanloop. If not specified here, Humanloop will fall back to the key saved to your organization.
 
 ##### num_samples: `number`<a id="num_samples-number"></a>
 
@@ -555,9 +567,11 @@ Whether to return the inputs in the response. If false, the response will contai
 
 ##### tool_choice: [`ToolChoiceProperty`](./models/tool-choice-property.ts)<a id="tool_choice-toolchoicepropertymodelstool-choice-propertyts"></a>
 
-##### tool_call: [`ToolCallProperty1`](./models/tool-call-property1.ts)<a id="tool_call-toolcallproperty1modelstool-call-property1ts"></a>
+##### tool_call: [`ToolCallProperty`](./models/tool-call-property.ts)<a id="tool_call-toolcallpropertymodelstool-call-propertyts"></a>
 
-##### response_format: [`ResponseFormatProperty`](./models/response-format-property.ts)<a id="response_format-responseformatpropertymodelsresponse-format-propertyts"></a>
+##### response_format: [`ResponseFormat`](./models/response-format.ts)<a id="response_format-responseformatmodelsresponse-formatts"></a>
+
+The format of the response. Only type json_object is currently supported for chat.
 
 #### 🔄 Return<a id="🔄-return"></a>
 
@@ -647,7 +661,9 @@ Whether the request/response payloads will be stored on Humanloop.
 
 ID of the source datapoint if this is a log derived from a datapoint in a dataset.
 
-##### provider_api_keys: [`ProviderAPIKeysProperty`](./models/provider-apikeys-property.ts)<a id="provider_api_keys-providerapikeyspropertymodelsprovider-apikeys-propertyts"></a>
+##### provider_api_keys: [`ProviderApiKeys`](./models/provider-api-keys.ts)<a id="provider_api_keys-providerapikeysmodelsprovider-api-keysts"></a>
+
+API keys required by each provider to make API calls. The API keys provided here are not stored by Humanloop. If not specified here, Humanloop will fall back to the key saved to your organization.
 
 ##### num_samples: `number`<a id="num_samples-number"></a>
 
@@ -671,9 +687,11 @@ Whether to return the inputs in the response. If false, the response will contai
 
 ##### tool_choice: [`ToolChoiceProperty`](./models/tool-choice-property.ts)<a id="tool_choice-toolchoicepropertymodelstool-choice-propertyts"></a>
 
-##### tool_call: [`ToolCallProperty1`](./models/tool-call-property1.ts)<a id="tool_call-toolcallproperty1modelstool-call-property1ts"></a>
+##### tool_call: [`ToolCallProperty`](./models/tool-call-property.ts)<a id="tool_call-toolcallpropertymodelstool-call-propertyts"></a>
 
-##### response_format: [`ResponseFormatProperty`](./models/response-format-property.ts)<a id="response_format-responseformatpropertymodelsresponse-format-propertyts"></a>
+##### response_format: [`ResponseFormat`](./models/response-format.ts)<a id="response_format-responseformatmodelsresponse-formatts"></a>
+
+The format of the response. Only type json_object is currently supported for chat.
 
 #### 🔄 Return<a id="🔄-return"></a>
 
@@ -714,7 +732,9 @@ const createResponse = await humanloop.complete({
 
 #### ⚙️ Parameters<a id="⚙️-parameters"></a>
 
-##### model_config: [`ModelConfigurationProperty1`](./models/model-configuration-property1.ts)<a id="model_config-modelconfigurationproperty1modelsmodel-configuration-property1ts"></a>
+##### model_config: [`ModelConfigCompletionRequest`](./models/model-config-completion-request.ts)<a id="model_config-modelconfigcompletionrequestmodelsmodel-config-completion-requestts"></a>
+
+The model configuration used to generate.
 
 ##### project: `string`<a id="project-string"></a>
 
@@ -760,7 +780,9 @@ Whether the request/response payloads will be stored on Humanloop.
 
 ID of the source datapoint if this is a log derived from a datapoint in a dataset.
 
-##### provider_api_keys: [`ProviderAPIKeysProperty`](./models/provider-apikeys-property.ts)<a id="provider_api_keys-providerapikeyspropertymodelsprovider-apikeys-propertyts"></a>
+##### provider_api_keys: [`ProviderApiKeys`](./models/provider-api-keys.ts)<a id="provider_api_keys-providerapikeysmodelsprovider-api-keysts"></a>
+
+API keys required by each provider to make API calls. The API keys provided here are not stored by Humanloop. If not specified here, Humanloop will fall back to the key saved to your organization.
 
 ##### num_samples: `number`<a id="num_samples-number"></a>
 
@@ -866,7 +888,9 @@ Whether the request/response payloads will be stored on Humanloop.
 
 ID of the source datapoint if this is a log derived from a datapoint in a dataset.
 
-##### provider_api_keys: [`ProviderAPIKeysProperty`](./models/provider-apikeys-property.ts)<a id="provider_api_keys-providerapikeyspropertymodelsprovider-apikeys-propertyts"></a>
+##### provider_api_keys: [`ProviderApiKeys`](./models/provider-api-keys.ts)<a id="provider_api_keys-providerapikeysmodelsprovider-api-keysts"></a>
+
+API keys required by each provider to make API calls. The API keys provided here are not stored by Humanloop. If not specified here, Humanloop will fall back to the key saved to your organization.
 
 ##### num_samples: `number`<a id="num_samples-number"></a>
 
@@ -979,7 +1003,9 @@ Whether the request/response payloads will be stored on Humanloop.
 
 ID of the source datapoint if this is a log derived from a datapoint in a dataset.
 
-##### provider_api_keys: [`ProviderAPIKeysProperty`](./models/provider-apikeys-property.ts)<a id="provider_api_keys-providerapikeyspropertymodelsprovider-apikeys-propertyts"></a>
+##### provider_api_keys: [`ProviderApiKeys`](./models/provider-api-keys.ts)<a id="provider_api_keys-providerapikeysmodelsprovider-api-keysts"></a>
+
+API keys required by each provider to make API calls. The API keys provided here are not stored by Humanloop. If not specified here, Humanloop will fall back to the key saved to your organization.
 
 ##### num_samples: `number`<a id="num_samples-number"></a>
 
@@ -1088,7 +1114,9 @@ Whether the request/response payloads will be stored on Humanloop.
 
 ID of the source datapoint if this is a log derived from a datapoint in a dataset.
 
-##### provider_api_keys: [`ProviderAPIKeysProperty`](./models/provider-apikeys-property.ts)<a id="provider_api_keys-providerapikeyspropertymodelsprovider-apikeys-propertyts"></a>
+##### provider_api_keys: [`ProviderApiKeys`](./models/provider-api-keys.ts)<a id="provider_api_keys-providerapikeysmodelsprovider-api-keysts"></a>
+
+API keys required by each provider to make API calls. The API keys provided here are not stored by Humanloop. If not specified here, Humanloop will fall back to the key saved to your organization.
 
 ##### num_samples: `number`<a id="num_samples-number"></a>
 
@@ -1547,7 +1575,9 @@ ID of the dataset to use in this evaluation. Starts with `evts_`.
 
 String ID of project. Starts with `pr_`.
 
-##### provider_api_keys: [`ProviderAPIKeysProperty1`](./models/provider-apikeys-property1.ts)<a id="provider_api_keys-providerapikeysproperty1modelsprovider-apikeys-property1ts"></a>
+##### provider_api_keys: [`ProviderApiKeys`](./models/provider-api-keys.ts)<a id="provider_api_keys-providerapikeysmodelsprovider-api-keysts"></a>
+
+API keys required by each provider to make API calls. The API keys provided here are not stored by Humanloop. If not specified here, Humanloop will fall back to the key saved to your organization. Ensure you provide an API key for the provider for the model config you are evaluating, or have one saved to your organization.
 
 ##### max_concurrency: `number`<a id="max_concurrency-number"></a>
 
@@ -1776,7 +1806,9 @@ const logResponse = await humanloop.evaluations.log({
 
 The datapoint for which a log was generated. Must be one of the datapoints in the dataset being evaluated.
 
-##### log: [`LogProperty`](./models/log-property.ts)<a id="log-logpropertymodelslog-propertyts"></a>
+##### log: [`LogRequest`](./models/log-request.ts)<a id="log-logrequestmodelslog-requestts"></a>
+
+The log generated for the datapoint.
 
 ##### evaluationId: `string`<a id="evaluationid-string"></a>
 
@@ -1926,7 +1958,9 @@ The type of the evaluator.
 
 The code for the evaluator. This code will be executed in a sandboxed environment.
 
-##### model_config: [`ModelConfigurationProperty1`](./models/model-configuration-property1.ts)<a id="model_config-modelconfigurationproperty1modelsmodel-configuration-property1ts"></a>
+##### model_config: [`ModelConfigCompletionRequest`](./models/model-config-completion-request.ts)<a id="model_config-modelconfigcompletionrequestmodelsmodel-config-completion-requestts"></a>
+
+The model configuration used to generate.
 
 #### 🔄 Return<a id="🔄-return"></a>
 
@@ -2054,7 +2088,9 @@ The type of the return value of the evaluator.
 
 The code for the evaluator. This code will be executed in a sandboxed environment.
 
-##### model_config: [`ModelConfigurationProperty1`](./models/model-configuration-property1.ts)<a id="model_config-modelconfigurationproperty1modelsmodel-configuration-property1ts"></a>
+##### model_config: [`ModelConfigCompletionRequest`](./models/model-config-completion-request.ts)<a id="model_config-modelconfigcompletionrequestmodelsmodel-config-completion-requestts"></a>
+
+The model configuration used to generate.
 
 #### 🔄 Return<a id="🔄-return"></a>
 
@@ -2341,7 +2377,9 @@ User defined friendly name for a finetuning run
 
 ID of dataset used for finetuning
 
-##### config: [`FinetuningConfigProperty`](./models/finetuning-config-property.ts)<a id="config-finetuningconfigpropertymodelsfinetuning-config-propertyts"></a>
+##### config: [`FinetuneConfig`](./models/finetune-config.ts)<a id="config-finetuneconfigmodelsfinetune-configts"></a>
+
+Configuration and hyper-parameters for the fine-tuning process
 
 ##### projectId: `string`<a id="projectid-string"></a>
 
@@ -2349,7 +2387,9 @@ ID of dataset used for finetuning
 
 Any additional metadata that you would like to log for reference.
 
-##### provider_api_keys: [`ProviderAPIKeysProperty`](./models/provider-apikeys-property.ts)<a id="provider_api_keys-providerapikeyspropertymodelsprovider-apikeys-propertyts"></a>
+##### provider_api_keys: [`ProviderApiKeys`](./models/provider-api-keys.ts)<a id="provider_api_keys-providerapikeysmodelsprovider-api-keysts"></a>
+
+API keys required by each provider to make API calls. The API keys provided here are not stored by Humanloop. If not specified here, Humanloop will fall back to the key saved to your organization.
 
 #### 🔄 Return<a id="🔄-return"></a>
 
@@ -2422,7 +2462,9 @@ User defined friendly name for a finetuning run
 
 ID of dataset used for finetuning
 
-##### config: [`FinetuningConfigProperty`](./models/finetuning-config-property.ts)<a id="config-finetuningconfigpropertymodelsfinetuning-config-propertyts"></a>
+##### config: [`FinetuneConfig`](./models/finetune-config.ts)<a id="config-finetuneconfigmodelsfinetune-configts"></a>
+
+Configuration and hyper-parameters for the fine-tuning process
 
 ##### projectId: `string`<a id="projectid-string"></a>
 
@@ -2430,7 +2472,9 @@ ID of dataset used for finetuning
 
 Any additional metadata that you would like to log for reference.
 
-##### provider_api_keys: [`ProviderAPIKeysProperty`](./models/provider-apikeys-property.ts)<a id="provider_api_keys-providerapikeyspropertymodelsprovider-apikeys-propertyts"></a>
+##### provider_api_keys: [`ProviderApiKeys`](./models/provider-api-keys.ts)<a id="provider_api_keys-providerapikeysmodelsprovider-api-keysts"></a>
+
+API keys required by each provider to make API calls. The API keys provided here are not stored by Humanloop. If not specified here, Humanloop will fall back to the key saved to your organization.
 
 #### 🔄 Return<a id="🔄-return"></a>
 
@@ -2677,7 +2721,7 @@ Generated output from your model for the provided inputs. Can be `None` if loggi
 
 Unique ID of a config to associate to the log.
 
-##### config: [`ConfigProperty1`](./models/config-property1.ts)<a id="config-configproperty1modelsconfig-property1ts"></a>
+##### config: [`ConfigProperty`](./models/config-property.ts)<a id="config-configpropertymodelsconfig-propertyts"></a>
 
 ##### environment: `string`<a id="environment-string"></a>
 
@@ -2697,7 +2741,9 @@ Error message if the log is an error.
 
 Duration of the logged event in seconds.
 
-##### output_message: [`OutputMessageProperty`](./models/output-message-property.ts)<a id="output_message-outputmessagepropertymodelsoutput-message-propertyts"></a>
+##### output_message: [`ChatMessageWithToolCall`](./models/chat-message-with-tool-call.ts)<a id="output_message-chatmessagewithtoolcallmodelschat-message-with-tool-callts"></a>
+
+The message returned by the provider.
 
 ##### prompt_tokens: `number`<a id="prompt_tokens-number"></a>
 
@@ -2979,7 +3025,9 @@ Other parameter values to be passed to the provider call.
 
 If specified, model will make a best effort to sample deterministically, but it is not guaranteed.
 
-##### response_format: [`ResponseFormatProperty`](./models/response-format-property.ts)<a id="response_format-responseformatpropertymodelsresponse-format-propertyts"></a>
+##### response_format: [`ResponseFormat`](./models/response-format.ts)<a id="response_format-responseformatmodelsresponse-formatts"></a>
+
+The format of the response. Only type json_object is currently supported for chat.
 
 ##### project: `string`<a id="project-string"></a>
 
@@ -3087,7 +3135,9 @@ Other parameter values to be passed to the provider call.
 
 If specified, model will make a best effort to sample deterministically, but it is not guaranteed.
 
-##### response_format: [`ResponseFormatProperty`](./models/response-format-property.ts)<a id="response_format-responseformatpropertymodelsresponse-format-propertyts"></a>
+##### response_format: [`ResponseFormat`](./models/response-format.ts)<a id="response_format-responseformatmodelsresponse-formatts"></a>
+
+The format of the response. Only type json_object is currently supported for chat.
 
 ##### endpoint: [`ModelEndpoints`](./models/model-endpoints.ts)<a id="endpoint-modelendpointsmodelsmodel-endpointsts"></a>
 

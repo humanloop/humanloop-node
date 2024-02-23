@@ -31,8 +31,8 @@ import type * as buffer from "buffer"
 import { EvaluatorArgumentsType } from './evaluator-arguments-type';
 import { EvaluatorReturnTypeEnum } from './evaluator-return-type-enum';
 import { EvaluatorType } from './evaluator-type';
-import { LoggingProjectProperty } from './logging-project-property';
-import { ModelConfigProperty1 } from './model-config-property1';
+import { ModelConfigResponse } from './model-config-response';
+import { ProjectResponse } from './project-response';
 
 /**
  * 
@@ -71,11 +71,11 @@ export interface EvaluatorResponse {
      */
     'code'?: string;
     /**
-     * 
-     * @type {ModelConfigProperty1}
+     * The model config defining the LLM evaluator.
+     * @type {ModelConfigResponse}
      * @memberof EvaluatorResponse
      */
-    'model_config'?: ModelConfigProperty1;
+    'model_config'?: ModelConfigResponse;
     /**
      * The type of the evaluator.
      * @type {EvaluatorType}
@@ -101,10 +101,10 @@ export interface EvaluatorResponse {
      */
     'updated_at': string;
     /**
-     * 
-     * @type {LoggingProjectProperty}
+     * The project where the evaluator logs are stored.
+     * @type {ProjectResponse}
      * @memberof EvaluatorResponse
      */
-    'logging_project'?: LoggingProjectProperty;
+    'logging_project'?: ProjectResponse;
 }
 

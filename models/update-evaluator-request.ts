@@ -30,7 +30,7 @@ import type * as buffer from "buffer"
 
 import { EvaluatorArgumentsType } from './evaluator-arguments-type';
 import { EvaluatorReturnTypeEnum } from './evaluator-return-type-enum';
-import { ModelConfigurationProperty1 } from './model-configuration-property1';
+import { ModelConfigCompletionRequest } from './model-config-completion-request';
 
 /**
  * 
@@ -69,10 +69,10 @@ export interface UpdateEvaluatorRequest {
      */
     'code'?: string;
     /**
-     * 
-     * @type {ModelConfigurationProperty1}
+     * The model configuration used to generate.
+     * @type {ModelConfigCompletionRequest}
      * @memberof UpdateEvaluatorRequest
      */
-    'model_config'?: ModelConfigurationProperty1;
+    'model_config'?: ModelConfigCompletionRequest;
 }
 
