@@ -199,7 +199,6 @@ export async function completeDeployed(
     stop,
     presence_penalty,
     frequency_penalty,
-    tool_configs,
     other,
   } = deployedConfig;
 
@@ -333,7 +332,6 @@ const logCompletion = async (
 ) => {
   const humanloop = new Humanloop(humanloopConnectionParams);
 
-  const { id, tool_configs, ...modelConfigRequest } = modelConfig;
   const logRequests: LogRequest[] = completion.data.map(
     (data: DataResponse): LogRequest => {
       return {
@@ -347,7 +345,7 @@ const logCompletion = async (
         metadata: { ...request.metadata, noProxy: true },
         reference_id: request.reference_id,
         output: data.output,
-        config: { ...modelConfigRequest, tools: tool_configs }, // TODO: maybe be better to just provide a model config id here, but API does not yet support this.
+        config_id: modelConfig.id,
         created_at: new Date().toISOString(),
         duration: providerLatency,
       };
@@ -370,7 +368,6 @@ const logCompletionError = async (
 ) => {
   const humanloop = new Humanloop(humanloopConnectionParams);
 
-  const { id, tool_configs, ...modelConfigRequest } = modelConfig;
   const logRequests: LogRequest[] = [
     {
       // TODO: would be better to pass the client-side generated datapoint ID here, but API does not yet support this.
@@ -385,7 +382,7 @@ const logCompletionError = async (
       reference_id: request.reference_id,
       output: undefined,
       error,
-      config: { ...modelConfigRequest, tools: tool_configs }, // TODO: would be better to just provide a model config id here, but API does not yet support this.
+      config_id: modelConfig.id,
       created_at: new Date().toISOString(),
       duration: providerLatency,
     },
