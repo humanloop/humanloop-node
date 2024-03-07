@@ -69,6 +69,7 @@ export * from './feedback-type-model';
 export * from './feedback-type-property';
 export * from './feedback-type-request';
 export * from './feedback-value-property';
+export * from './file-type';
 export * from './finetune-config';
 export * from './finetune-data-summary';
 export * from './finetune-request';
