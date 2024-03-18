@@ -2617,6 +2617,7 @@ E.g. ?search=hello%20there will cause a case-insensitive search across model inp
 ```typescript
 const listResponse = await humanloop.logs.list({
   projectId: "projectId_example",
+  versionStatus: "uncommitted",
   size: 50,
   page: 0,
 });
@@ -2629,6 +2630,8 @@ const listResponse = await humanloop.logs.list({
 ##### search: `string`<a id="search-string"></a>
 
 ##### metadataSearch: `string`<a id="metadatasearch-string"></a>
+
+##### versionStatus: [`VersionStatus`](./models/version-status.ts)<a id="versionstatus-versionstatusmodelsversion-statusts"></a>
 
 ##### startDate: `string | Date`<a id="startdate-string--date"></a>
 

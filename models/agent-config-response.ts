@@ -69,6 +69,12 @@ export interface AgentConfigResponse {
      */
     'created_by'?: UserResponse;
     /**
+     * Whether the config is committed or not.
+     * @type {string}
+     * @memberof AgentConfigResponse
+     */
+    'status': string;
+    /**
      * Name of config.
      * @type {string}
      * @memberof AgentConfigResponse

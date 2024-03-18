@@ -147,3 +147,4 @@ export * from './user-response';
 export * from './validation-error';
 export * from './value-property';
 export * from './value-property1';
+export * from './version-status';

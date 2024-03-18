@@ -74,6 +74,12 @@ export interface ToolConfigResponse {
      */
     'created_by'?: UserResponse;
     /**
+     * Whether the config is committed or not.
+     * @type {string}
+     * @memberof ToolConfigResponse
+     */
+    'status': string;
+    /**
      * Name for the tool referenced by the model.
      * @type {string}
      * @memberof ToolConfigResponse

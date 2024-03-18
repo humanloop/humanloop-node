@@ -67,6 +67,12 @@ export interface GenericConfigResponse {
      */
     'created_by'?: UserResponse;
     /**
+     * Whether the config is committed or not.
+     * @type {string}
+     * @memberof GenericConfigResponse
+     */
+    'status': string;
+    /**
      * Name of config.
      * @type {string}
      * @memberof GenericConfigResponse

@@ -1018,6 +1018,9 @@ export const operationParameterMap: Record<string, Entry> = {
                 name: 'metadata_search'
             },
             {
+                name: 'version_status'
+            },
+            {
                 name: 'start_date'
             },
             {

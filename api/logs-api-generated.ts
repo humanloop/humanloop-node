@@ -54,6 +54,8 @@ import { LogsLogResponse } from '../models';
 import { PaginatedDataLogResponse } from '../models';
 // @ts-ignore
 import { UpdateLogRequest } from '../models';
+// @ts-ignore
+import { VersionStatus } from '../models';
 import { paginate } from "../pagination/paginate";
 import type * as buffer from "buffer"
 import { requestBeforeHook } from '../requestBeforeHook';
@@ -158,6 +160,7 @@ export const LogsApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {string} projectId 
          * @param {string} [search] 
          * @param {string} [metadataSearch] 
+         * @param {VersionStatus} [versionStatus] 
          * @param {string | Date} [startDate] 
          * @param {string | Date} [endDate] 
          * @param {number} [size] 
@@ -165,7 +168,7 @@ export const LogsApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        list: async (projectId: string, search?: string, metadataSearch?: string, startDate?: string | Date, endDate?: string | Date, size?: number, page?: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        list: async (projectId: string, search?: string, metadataSearch?: string, versionStatus?: VersionStatus, startDate?: string | Date, endDate?: string | Date, size?: number, page?: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'projectId' is not null or undefined
             assertParamExists('list', 'projectId', projectId)
             const localVarPath = `/logs`;
@@ -192,6 +195,10 @@ export const LogsApiAxiosParamCreator = function (configuration?: Configuration)
 
             if (metadataSearch !== undefined) {
                 localVarQueryParameter['metadata_search'] = metadataSearch;
+            }
+
+            if (versionStatus !== undefined) {
+                localVarQueryParameter['version_status'] = versionStatus;
             }
 
             if (startDate !== undefined) {
@@ -428,7 +435,7 @@ export const LogsApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async list(requestParameters: LogsApiListRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginatedDataLogResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.list(requestParameters.projectId, requestParameters.search, requestParameters.metadataSearch, requestParameters.startDate, requestParameters.endDate, requestParameters.size, requestParameters.page, options);
+            const localVarAxiosArgs = await localVarAxiosParamCreator.list(requestParameters.projectId, requestParameters.search, requestParameters.metadataSearch, requestParameters.versionStatus, requestParameters.startDate, requestParameters.endDate, requestParameters.size, requestParameters.page, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -607,6 +614,13 @@ export type LogsApiListRequest = {
     * @memberof LogsApiList
     */
     readonly metadataSearch?: string
+    
+    /**
+    * 
+    * @type {VersionStatus}
+    * @memberof LogsApiList
+    */
+    readonly versionStatus?: VersionStatus
     
     /**
     * 

@@ -67,6 +67,12 @@ export interface ModelConfigResponse {
      */
     'type': ModelConfigResponseTypeEnum;
     /**
+     * Whether the config is committed or not.
+     * @type {string}
+     * @memberof ModelConfigResponse
+     */
+    'status': string;
+    /**
      * A friendly display name for the model config. If not provided, a name will be generated.
      * @type {string}
      * @memberof ModelConfigResponse
