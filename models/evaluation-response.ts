@@ -85,6 +85,12 @@ export interface EvaluationResponse {
     'dataset': DatasetResponse;
     /**
      * 
+     * @type {string}
+     * @memberof EvaluationResponse
+     */
+    'dataset_version_id': string;
+    /**
+     * 
      * @type {DatasetResponse}
      * @memberof EvaluationResponse
      */

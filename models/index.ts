@@ -135,7 +135,6 @@ export * from './tool-result-response';
 export * from './tool-source';
 export * from './tool-type';
 export * from './tools-equivalent-to-open-aifunctions-property-inner';
-export * from './update-datapoint-request';
 export * from './update-dataset-request';
 export * from './update-evaluation-status-request';
 export * from './update-evaluator-request';

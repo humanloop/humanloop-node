@@ -48,9 +48,10 @@ export interface DatasetResponse {
      */
     'id': string;
     /**
-     * 
+     * Datasets are now files and do not belong to projects. If this dataset was created before that change, the legacy project ID will be provided here, otherwise an empty string will be returned.
      * @type {string}
      * @memberof DatasetResponse
+     * @deprecated
      */
     'project_id': string;
     /**

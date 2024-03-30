@@ -30,9 +30,9 @@ import type * as buffer from "buffer"
 
 
 /**
- * Enum for File types.  Note that enum values added here must also be added to the InternalFileTypeWithOther enum below (as Python does not allow subclassing of enums).
+ * Enum for File types.
  * @export
  * @enum {string}
  */
-export type FileType = 'prompt' | 'tool'
+export type FileType = 'prompt' | 'tool' | 'dataset'
 

@@ -557,15 +557,6 @@ export const operationParameterMap: Record<string, Entry> = {
             {
                 name: 'id'
             },
-            {
-                name: 'inputs'
-            },
-            {
-                name: 'messages'
-            },
-            {
-                name: 'target'
-            },
         ]
     },
     '/projects/{project_id}/datasets-POST': {

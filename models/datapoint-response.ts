@@ -48,7 +48,7 @@ export interface DatapointResponse {
      * @type {string}
      * @memberof DatapointResponse
      */
-    'dataset_id': string;
+    'dataset_id'?: string;
     /**
      * 
      * @type {{ [key: string]: string; }}
@@ -67,23 +67,5 @@ export interface DatapointResponse {
      * @memberof DatapointResponse
      */
     'target'?: { [key: string]: Target; };
-    /**
-     * 
-     * @type {string}
-     * @memberof DatapointResponse
-     */
-    'source_project_data_id'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof DatapointResponse
-     */
-    'created_at': string;
-    /**
-     * 
-     * @type {string}
-     * @memberof DatapointResponse
-     */
-    'updated_at': string;
 }
 

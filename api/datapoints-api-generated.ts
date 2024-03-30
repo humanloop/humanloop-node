@@ -37,15 +37,9 @@ import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObj
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
 // @ts-ignore
-import { ChatMessageWithToolCall } from '../models';
-// @ts-ignore
 import { DatapointResponse } from '../models';
 // @ts-ignore
 import { HTTPValidationError } from '../models';
-// @ts-ignore
-import { Target } from '../models';
-// @ts-ignore
-import { UpdateDatapointRequest } from '../models';
 import { paginate } from "../pagination/paginate";
 import type * as buffer from "buffer"
 import { requestBeforeHook } from '../requestBeforeHook';
@@ -56,15 +50,13 @@ import { requestBeforeHook } from '../requestBeforeHook';
 export const DatapointsApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * Delete a list of datapoints by their IDs.
+         * Delete a list of datapoints by their IDs.  WARNING: This endpoint has been decommisioned and no longer works. Please use the v5 datasets API instead.
          * @summary Delete
-         * @param {Array<string>} requestBody 
          * @param {*} [options] Override http request option.
+         * @deprecated
          * @throws {RequiredError}
          */
-        delete: async (requestBody: Array<string>, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'requestBody' is not null or undefined
-            assertParamExists('delete', 'requestBody', requestBody)
+        delete: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/datapoints`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -81,13 +73,9 @@ export const DatapointsApiAxiosParamCreator = function (configuration?: Configur
             await setApiKeyToObject({ object: localVarHeaderParameter, key: "X-API-KEY", keyParamName: "xAPIKEY", configuration })
 
     
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             requestBeforeHook({
-                requestBody: requestBody,
                 queryParameters: localVarQueryParameter,
                 requestConfig: localVarRequestOptions,
                 path: localVarPath,
@@ -95,7 +83,6 @@ export const DatapointsApiAxiosParamCreator = function (configuration?: Configur
                 pathTemplate: '/datapoints',
                 httpMethod: 'DELETE'
             });
-            localVarRequestOptions.data = serializeDataIfNeeded(requestBody, localVarRequestOptions, configuration)
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             return {
@@ -106,7 +93,7 @@ export const DatapointsApiAxiosParamCreator = function (configuration?: Configur
         /**
          * Get a datapoint by ID.
          * @summary Get
-         * @param {string} id String ID of datapoint. Starts with &#x60;evtc_&#x60;.
+         * @param {string} id String ID of datapoint.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -148,18 +135,16 @@ export const DatapointsApiAxiosParamCreator = function (configuration?: Configur
             };
         },
         /**
-         * Edit the input, messages and criteria fields of a datapoint. The fields passed in the request are the ones edited.  Passing `null` as a value for a field will delete that field. In order to signify not changing a field, it should be omitted from the request body.
+         * Edit the input, messages and criteria fields of a datapoint.  WARNING: This endpoint has been decommisioned and no longer works. Please use the v5 datasets API instead.
          * @summary Update
-         * @param {string} id String ID of datapoint. Starts with &#x60;evtc_&#x60;.
-         * @param {UpdateDatapointRequest} updateDatapointRequest 
+         * @param {string} id String ID of datapoint.
          * @param {*} [options] Override http request option.
+         * @deprecated
          * @throws {RequiredError}
          */
-        update: async (id: string, updateDatapointRequest: UpdateDatapointRequest, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        update: async (id: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('update', 'id', id)
-            // verify required parameter 'updateDatapointRequest' is not null or undefined
-            assertParamExists('update', 'updateDatapointRequest', updateDatapointRequest)
             const localVarPath = `/datapoints/{id}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id !== undefined ? id : `-id-`)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -177,13 +162,9 @@ export const DatapointsApiAxiosParamCreator = function (configuration?: Configur
             await setApiKeyToObject({ object: localVarHeaderParameter, key: "X-API-KEY", keyParamName: "xAPIKEY", configuration })
 
     
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             requestBeforeHook({
-                requestBody: updateDatapointRequest,
                 queryParameters: localVarQueryParameter,
                 requestConfig: localVarRequestOptions,
                 path: localVarPath,
@@ -191,7 +172,6 @@ export const DatapointsApiAxiosParamCreator = function (configuration?: Configur
                 pathTemplate: '/datapoints/{id}',
                 httpMethod: 'PATCH'
             });
-            localVarRequestOptions.data = serializeDataIfNeeded(updateDatapointRequest, localVarRequestOptions, configuration)
 
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             return {
@@ -210,15 +190,14 @@ export const DatapointsApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = DatapointsApiAxiosParamCreator(configuration)
     return {
         /**
-         * Delete a list of datapoints by their IDs.
+         * Delete a list of datapoints by their IDs.  WARNING: This endpoint has been decommisioned and no longer works. Please use the v5 datasets API instead.
          * @summary Delete
-         * @param {DatapointsApiDeleteRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
+         * @deprecated
          * @throws {RequiredError}
          */
-        async delete(requestParameters: DatapointsApiDeleteRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const requestBody: Array<string> = requestParameters;
-            const localVarAxiosArgs = await localVarAxiosParamCreator.delete(requestBody, options);
+        async delete(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.delete(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -233,19 +212,15 @@ export const DatapointsApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * Edit the input, messages and criteria fields of a datapoint. The fields passed in the request are the ones edited.  Passing `null` as a value for a field will delete that field. In order to signify not changing a field, it should be omitted from the request body.
+         * Edit the input, messages and criteria fields of a datapoint.  WARNING: This endpoint has been decommisioned and no longer works. Please use the v5 datasets API instead.
          * @summary Update
          * @param {DatapointsApiUpdateRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
+         * @deprecated
          * @throws {RequiredError}
          */
         async update(requestParameters: DatapointsApiUpdateRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DatapointResponse>> {
-            const updateDatapointRequest: UpdateDatapointRequest = {
-                inputs: requestParameters.inputs,
-                messages: requestParameters.messages,
-                target: requestParameters.target
-            };
-            const localVarAxiosArgs = await localVarAxiosParamCreator.update(requestParameters.id, updateDatapointRequest, options);
+            const localVarAxiosArgs = await localVarAxiosParamCreator.update(requestParameters.id, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -259,14 +234,14 @@ export const DatapointsApiFactory = function (configuration?: Configuration, bas
     const localVarFp = DatapointsApiFp(configuration)
     return {
         /**
-         * Delete a list of datapoints by their IDs.
+         * Delete a list of datapoints by their IDs.  WARNING: This endpoint has been decommisioned and no longer works. Please use the v5 datasets API instead.
          * @summary Delete
-         * @param {DatapointsApiDeleteRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
+         * @deprecated
          * @throws {RequiredError}
          */
-        delete(requestParameters: DatapointsApiDeleteRequest, options?: AxiosRequestConfig): AxiosPromise<void> {
-            return localVarFp.delete(requestParameters, options).then((request) => request(axios, basePath));
+        delete(options?: AxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.delete(options).then((request) => request(axios, basePath));
         },
         /**
          * Get a datapoint by ID.
@@ -279,10 +254,11 @@ export const DatapointsApiFactory = function (configuration?: Configuration, bas
             return localVarFp.get(requestParameters, options).then((request) => request(axios, basePath));
         },
         /**
-         * Edit the input, messages and criteria fields of a datapoint. The fields passed in the request are the ones edited.  Passing `null` as a value for a field will delete that field. In order to signify not changing a field, it should be omitted from the request body.
+         * Edit the input, messages and criteria fields of a datapoint.  WARNING: This endpoint has been decommisioned and no longer works. Please use the v5 datasets API instead.
          * @summary Update
          * @param {DatapointsApiUpdateRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
+         * @deprecated
          * @throws {RequiredError}
          */
         update(requestParameters: DatapointsApiUpdateRequest, options?: AxiosRequestConfig): AxiosPromise<DatapointResponse> {
@@ -292,13 +268,6 @@ export const DatapointsApiFactory = function (configuration?: Configuration, bas
 };
 
 /**
- * Request parameters for delete operation in DatapointsApi.
- * @export
- * @interface DatapointsApiDeleteRequest
- */
-export type DatapointsApiDeleteRequest = Array<string>
-
-/**
  * Request parameters for get operation in DatapointsApi.
  * @export
  * @interface DatapointsApiGetRequest
@@ -306,7 +275,7 @@ export type DatapointsApiDeleteRequest = Array<string>
 export type DatapointsApiGetRequest = {
     
     /**
-    * String ID of datapoint. Starts with `evtc_`.
+    * String ID of datapoint.
     * @type {string}
     * @memberof DatapointsApiGet
     */
@@ -322,13 +291,13 @@ export type DatapointsApiGetRequest = {
 export type DatapointsApiUpdateRequest = {
     
     /**
-    * String ID of datapoint. Starts with `evtc_`.
+    * String ID of datapoint.
     * @type {string}
     * @memberof DatapointsApiUpdate
     */
     readonly id: string
     
-} & UpdateDatapointRequest
+}
 
 /**
  * DatapointsApiGenerated - object-oriented interface
@@ -338,15 +307,15 @@ export type DatapointsApiUpdateRequest = {
  */
 export class DatapointsApiGenerated extends BaseAPI {
     /**
-     * Delete a list of datapoints by their IDs.
+     * Delete a list of datapoints by their IDs.  WARNING: This endpoint has been decommisioned and no longer works. Please use the v5 datasets API instead.
      * @summary Delete
-     * @param {DatapointsApiDeleteRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
+     * @deprecated
      * @throws {RequiredError}
      * @memberof DatapointsApiGenerated
      */
-    public delete(requestParameters: DatapointsApiDeleteRequest, options?: AxiosRequestConfig) {
-        return DatapointsApiFp(this.configuration).delete(requestParameters, options).then((request) => request(this.axios, this.basePath));
+    public delete(options?: AxiosRequestConfig) {
+        return DatapointsApiFp(this.configuration).delete(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -362,10 +331,11 @@ export class DatapointsApiGenerated extends BaseAPI {
     }
 
     /**
-     * Edit the input, messages and criteria fields of a datapoint. The fields passed in the request are the ones edited.  Passing `null` as a value for a field will delete that field. In order to signify not changing a field, it should be omitted from the request body.
+     * Edit the input, messages and criteria fields of a datapoint.  WARNING: This endpoint has been decommisioned and no longer works. Please use the v5 datasets API instead.
      * @summary Update
      * @param {DatapointsApiUpdateRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
+     * @deprecated
      * @throws {RequiredError}
      * @memberof DatapointsApiGenerated
      */
