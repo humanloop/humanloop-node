@@ -256,10 +256,51 @@ export const DatasetsApiAxiosParamCreator = function (configuration?: Configurat
             };
         },
         /**
+         * Get all Datasets for an organization.
+         * @summary List 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        list: async (options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/datasets`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions: AxiosRequestConfig = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = configuration && !isBrowser() ? { "User-Agent": configuration.userAgent } : {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication APIKeyHeader required
+            await setApiKeyToObject({ object: localVarHeaderParameter, key: "X-API-KEY", keyParamName: "xAPIKEY", configuration })
+
+    
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            requestBeforeHook({
+                queryParameters: localVarQueryParameter,
+                requestConfig: localVarRequestOptions,
+                path: localVarPath,
+                configuration,
+                pathTemplate: '/datasets',
+                httpMethod: 'GET'
+            });
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Get all datasets for a project.
          * @summary List For Project
          * @param {string} projectId 
          * @param {*} [options] Override http request option.
+         * @deprecated
          * @throws {RequiredError}
          */
         listAllForProject: async (projectId: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
@@ -465,10 +506,21 @@ export const DatasetsApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
+         * Get all Datasets for an organization.
+         * @summary List 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async list(options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<DatasetResponse>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.list(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
          * Get all datasets for a project.
          * @summary List For Project
          * @param {DatasetsApiListAllForProjectRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
+         * @deprecated
          * @throws {RequiredError}
          */
         async listAllForProject(requestParameters: DatasetsApiListAllForProjectRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<DatasetResponse>>> {
@@ -552,10 +604,20 @@ export const DatasetsApiFactory = function (configuration?: Configuration, baseP
             return localVarFp.get(requestParameters, options).then((request) => request(axios, basePath));
         },
         /**
+         * Get all Datasets for an organization.
+         * @summary List 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        list(options?: AxiosRequestConfig): AxiosPromise<Array<DatasetResponse>> {
+            return localVarFp.list(options).then((request) => request(axios, basePath));
+        },
+        /**
          * Get all datasets for a project.
          * @summary List For Project
          * @param {DatasetsApiListAllForProjectRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
+         * @deprecated
          * @throws {RequiredError}
          */
         listAllForProject(requestParameters: DatasetsApiListAllForProjectRequest, options?: AxiosRequestConfig): AxiosPromise<Array<DatasetResponse>> {
@@ -770,10 +832,22 @@ export class DatasetsApiGenerated extends BaseAPI {
     }
 
     /**
+     * Get all Datasets for an organization.
+     * @summary List 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DatasetsApiGenerated
+     */
+    public list(options?: AxiosRequestConfig) {
+        return DatasetsApiFp(this.configuration).list(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
      * Get all datasets for a project.
      * @summary List For Project
      * @param {DatasetsApiListAllForProjectRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
+     * @deprecated
      * @throws {RequiredError}
      * @memberof DatasetsApiGenerated
      */

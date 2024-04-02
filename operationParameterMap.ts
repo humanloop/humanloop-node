@@ -605,6 +605,10 @@ export const operationParameterMap: Record<string, Entry> = {
             },
         ]
     },
+    '/datasets-GET': {
+        parameters: [
+        ]
+    },
     '/projects/{project_id}/datasets-GET': {
         parameters: [
             {

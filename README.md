@@ -31,6 +31,7 @@
   * [`humanloop.datasets.createDatapoint`](#humanloopdatasetscreatedatapoint)
   * [`humanloop.datasets.delete`](#humanloopdatasetsdelete)
   * [`humanloop.datasets.get`](#humanloopdatasetsget)
+  * [`humanloop.datasets.list`](#humanloopdatasetslist)
   * [`humanloop.datasets.listAllForProject`](#humanloopdatasetslistallforproject)
   * [`humanloop.datasets.listDatapoints`](#humanloopdatasetslistdatapoints)
   * [`humanloop.datasets.update`](#humanloopdatasetsupdate)
@@ -1381,6 +1382,29 @@ String ID of dataset. Starts with `evts_`.
 #### 🌐 Endpoint<a id="🌐-endpoint"></a>
 
 `/datasets/{id}` `GET`
+
+[🔙 **Back to Table of Contents**](#table-of-contents)
+
+---
+
+
+### `humanloop.datasets.list`<a id="humanloopdatasetslist"></a>
+
+Get all Datasets for an organization.
+
+#### 🛠️ Usage<a id="🛠️-usage"></a>
+
+```typescript
+const listResponse = await humanloop.datasets.list();
+```
+
+#### 🔄 Return<a id="🔄-return"></a>
+
+[DatasetResponse](./models/dataset-response.ts)
+
+#### 🌐 Endpoint<a id="🌐-endpoint"></a>
+
+`/datasets` `GET`
 
 [🔙 **Back to Table of Contents**](#table-of-contents)
 
