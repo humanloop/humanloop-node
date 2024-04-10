@@ -38,7 +38,6 @@ export * from './api/evaluations-api';
 export * from './api/evaluators-api';
 export * from './api/experiments-api';
 export * from './api/feedback-api';
-export * from './api/finetunes-api';
 export * from './api/logs-api';
 export * from './api/model-configs-api';
 export * from './api/projects-api';

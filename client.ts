@@ -46,7 +46,6 @@ import {
   ExperimentsApi,
   FeedbackApi,
   FeedbackApiFeedbackRequest,
-  FinetunesApi,
   LogsApi,
   LogsApiLogRequest,
   ModelConfigsApi,
@@ -65,7 +64,6 @@ export class Humanloop extends HumanloopCustom {
   readonly evaluators: EvaluatorsApi;
   readonly experiments: ExperimentsApi;
   readonly feedbackApi: FeedbackApi;
-  readonly finetunes: FinetunesApi;
   readonly logs: LogsApi;
   readonly modelConfigs: ModelConfigsApi;
   readonly projects: ProjectsApi;
@@ -82,7 +80,6 @@ export class Humanloop extends HumanloopCustom {
     this.evaluators = new EvaluatorsApi(configuration);
     this.experiments = new ExperimentsApi(configuration);
     this.feedbackApi = new FeedbackApi(configuration);
-    this.finetunes = new FinetunesApi(configuration);
     this.logs = new LogsApi(configuration);
     this.modelConfigs = new ModelConfigsApi(configuration);
     this.projects = new ProjectsApi(configuration);
