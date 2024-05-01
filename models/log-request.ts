@@ -189,6 +189,18 @@ export interface LogRequest {
      */
     'output_tokens'?: number;
     /**
+     * Cost in dollars associated to the tokens in the prompt.
+     * @type {number}
+     * @memberof LogRequest
+     */
+    'prompt_cost'?: number;
+    /**
+     * Cost in dollars associated to the tokens in the output.
+     * @type {number}
+     * @memberof LogRequest
+     */
+    'output_cost'?: number;
+    /**
      * Raw request sent to provider.
      * @type {object}
      * @memberof LogRequest

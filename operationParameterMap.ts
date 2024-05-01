@@ -1043,6 +1043,12 @@ export const operationParameterMap: Record<string, Entry> = {
                 name: 'output_tokens'
             },
             {
+                name: 'prompt_cost'
+            },
+            {
+                name: 'output_cost'
+            },
+            {
                 name: 'provider_request'
             },
             {

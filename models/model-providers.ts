@@ -34,5 +34,5 @@ import type * as buffer from "buffer"
  * @export
  * @enum {string}
  */
-export type ModelProviders = 'openai' | 'openai_azure' | 'ai21' | 'mock' | 'anthropic' | 'langchain' | 'cohere' | 'replicate' | 'google'
+export type ModelProviders = 'openai' | 'openai_azure' | 'ai21' | 'mock' | 'anthropic' | 'langchain' | 'cohere' | 'replicate' | 'google' | 'groq'
 
