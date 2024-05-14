@@ -34,5 +34,5 @@ import type * as buffer from "buffer"
  * @export
  * @enum {string}
  */
-export type PlatformAccessEnum = 'superadmin' | 'user'
+export type PlatformAccessEnum = 'superadmin' | 'supportadmin' | 'user'
 
