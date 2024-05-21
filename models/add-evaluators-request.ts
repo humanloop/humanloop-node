@@ -40,6 +40,12 @@ export interface AddEvaluatorsRequest {
      * @type {Array<string>}
      * @memberof AddEvaluatorsRequest
      */
-    'evaluator_ids': Array<string>;
+    'evaluator_ids'?: Array<string>;
+    /**
+     * IDs of the evaluator versions to add to the evaluation run. IDs start with `evv_`
+     * @type {Array<string>}
+     * @memberof AddEvaluatorsRequest
+     */
+    'evaluator_version_ids'?: Array<string>;
 }
 

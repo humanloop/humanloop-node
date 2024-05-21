@@ -34,5 +34,5 @@ import type * as buffer from "buffer"
  * @export
  * @enum {string}
  */
-export type ConfigType = 'generic' | 'model' | 'tool' | 'agent'
+export type ConfigType = 'generic' | 'model' | 'tool' | 'agent' | 'evaluator'
 

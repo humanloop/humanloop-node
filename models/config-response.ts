@@ -30,6 +30,9 @@ import type * as buffer from "buffer"
 
 import { AgentConfigResponse } from './agent-config-response';
 import { ChatMessageWithToolCall } from './chat-message-with-tool-call';
+import { EvaluatorArgumentsType } from './evaluator-arguments-type';
+import { EvaluatorConfigResponse } from './evaluator-config-response';
+import { EvaluatorReturnTypeEnum } from './evaluator-return-type-enum';
 import { GenericConfigResponse } from './generic-config-response';
 import { ModelConfigRequest } from './model-config-request';
 import { ModelConfigResponse } from './model-config-response';
@@ -46,6 +49,6 @@ import { UserResponse } from './user-response';
  * @type ConfigResponse
  * @export
  */
-export type ConfigResponse = { type: 'agent' } & AgentConfigResponse | { type: 'generic' } & GenericConfigResponse | { type: 'model' } & ModelConfigResponse | { type: 'tool' } & ToolConfigResponse;
+export type ConfigResponse = { type: 'agent' } & AgentConfigResponse | { type: 'evaluator' } & EvaluatorConfigResponse | { type: 'generic' } & GenericConfigResponse | { type: 'model' } & ModelConfigResponse | { type: 'tool' } & ToolConfigResponse;
 
 

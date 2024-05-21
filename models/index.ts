@@ -45,6 +45,7 @@ export * from './evaluation-response';
 export * from './evaluation-result-response';
 export * from './evaluation-status';
 export * from './evaluator-arguments-type';
+export * from './evaluator-config-response';
 export * from './evaluator-response';
 export * from './evaluator-return-type-enum';
 export * from './evaluator-type';

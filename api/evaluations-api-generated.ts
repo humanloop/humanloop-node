@@ -583,7 +583,8 @@ export const EvaluationsApiFp = function(configuration?: Configuration) {
          */
         async addEvaluators(requestParameters: EvaluationsApiAddEvaluatorsRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<EvaluationResponse>> {
             const addEvaluatorsRequest: AddEvaluatorsRequest = {
-                evaluator_ids: requestParameters.evaluator_ids
+                evaluator_ids: requestParameters.evaluator_ids,
+                evaluator_version_ids: requestParameters.evaluator_version_ids
             };
             const localVarAxiosArgs = await localVarAxiosParamCreator.addEvaluators(requestParameters.id, addEvaluatorsRequest, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);

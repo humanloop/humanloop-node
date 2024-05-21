@@ -1161,6 +1161,7 @@ The suffix that comes after a completion of inserted text. Useful for completion
 
 
 ### `humanloop.datapoints.delete`<a id="humanloopdatapointsdelete"></a>
+![Deprecated](https://img.shields.io/badge/deprecated-yellow)
 
 Delete a list of datapoints by their IDs.
 
@@ -1213,6 +1214,7 @@ String ID of datapoint.
 
 
 ### `humanloop.datapoints.update`<a id="humanloopdatapointsupdate"></a>
+![Deprecated](https://img.shields.io/badge/deprecated-yellow)
 
 Edit the input, messages and criteria fields of a datapoint.
 
@@ -1408,6 +1410,7 @@ const listResponse = await humanloop.datasets.list();
 
 
 ### `humanloop.datasets.listAllForProject`<a id="humanloopdatasetslistallforproject"></a>
+![Deprecated](https://img.shields.io/badge/deprecated-yellow)
 
 Get all datasets for a project.
 
@@ -1521,19 +1524,22 @@ Add evaluators to an existing evaluation run.
 ```typescript
 const addEvaluatorsResponse = await humanloop.evaluations.addEvaluators({
   id: "id_example",
-  evaluator_ids: ["evaluator_ids_example"],
 });
 ```
 
 #### ⚙️ Parameters<a id="⚙️-parameters"></a>
 
+##### id: `string`<a id="id-string"></a>
+
+String ID of evaluation run. Starts with `ev_`.
+
 ##### evaluator_ids: `string`[]<a id="evaluator_ids-string"></a>
 
 IDs of evaluators to add to the evaluation run. IDs start with `evfn_`
 
-##### id: `string`<a id="id-string"></a>
+##### evaluator_version_ids: `string`[]<a id="evaluator_version_ids-string"></a>
 
-String ID of evaluation run. Starts with `ev_`.
+IDs of the evaluator versions to add to the evaluation run. IDs start with `evv_`
 
 #### 🔄 Return<a id="🔄-return"></a>
 
@@ -1710,6 +1716,7 @@ Only return evaluations created before this date.
 
 
 ### `humanloop.evaluations.listAllForProject`<a id="humanloopevaluationslistallforproject"></a>
+![Deprecated](https://img.shields.io/badge/deprecated-yellow)
 
 Get all the evaluations associated with your project.
 

@@ -49,6 +49,12 @@ export interface ModelConfigEvaluatorAggregateResponse {
     'evaluator_id': string;
     /**
      * 
+     * @type {string}
+     * @memberof ModelConfigEvaluatorAggregateResponse
+     */
+    'evaluator_version_id': string;
+    /**
+     * 
      * @type {number}
      * @memberof ModelConfigEvaluatorAggregateResponse
      */
