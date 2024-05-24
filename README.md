@@ -2443,6 +2443,8 @@ group is "good".
 
 An additional date range filter is supported for the `Timestamp` column (i.e. `Log.created_at`).
 These are supported through the `start_date` and `end_date` query parameters.
+The date format could be either date: YYYY-MM-DD, e.g. 2024-01-01
+or datetime: YYYY-MM-DD[T]HH:MM[:SS[.ffffff]][Z or [±]HH[:]MM], e.g. 2024-01-01T00:00:00Z.
 
 Searching is supported for the model inputs and output.
 Specify a search term with the `search` query param.
@@ -2469,9 +2471,9 @@ const listResponse = await humanloop.logs.list({
 
 ##### versionStatus: [`VersionStatus`](./models/version-status.ts)<a id="versionstatus-versionstatusmodelsversion-statusts"></a>
 
-##### startDate: `string | Date`<a id="startdate-string--date"></a>
+##### startDate: [`StartDate`](./models/start-date.ts)<a id="startdate-startdatemodelsstart-datets"></a>
 
-##### endDate: `string | Date`<a id="enddate-string--date"></a>
+##### endDate: [`EndDate`](./models/end-date.ts)<a id="enddate-enddatemodelsend-datets"></a>
 
 ##### size: `number`<a id="size-number"></a>
 

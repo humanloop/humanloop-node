@@ -155,20 +155,20 @@ export const LogsApiAxiosParamCreator = function (configuration?: Configuration)
             };
         },
         /**
-         * Retrieve paginated logs from the server.  Sorting and filtering are supported through query params.  Sorting is supported for the `source`, `model`, `timestamp`, and `feedback-{output_name}` columns. Specify sorting with the `sort` query param, with values `{column}.{ordering}`. E.g. ?sort=source.asc&sort=model.desc will yield a multi-column sort. First by source then by model.  Filtering is supported for the `source`, `model`, `feedback-{output_name}`, `evaluator-{evaluator_external_id}` columns.  Specify filtering with the `source_filter`, `model_filter`, `feedback-{output.name}_filter` and `evaluator-{evaluator_external_id}_filter` query params.  E.g. ?source_filter=AI&source_filter=user_1234&feedback-explicit_filter=good will only show rows where the source is \"AI\" or \"user_1234\", and where the latest feedback for the \"explicit\" output group is \"good\".  An additional date range filter is supported for the `Timestamp` column (i.e. `Log.created_at`). These are supported through the `start_date` and `end_date` query parameters.  Searching is supported for the model inputs and output. Specify a search term with the `search` query param. E.g. ?search=hello%20there will cause a case-insensitive search across model inputs and output.
+         * Retrieve paginated logs from the server.  Sorting and filtering are supported through query params.  Sorting is supported for the `source`, `model`, `timestamp`, and `feedback-{output_name}` columns. Specify sorting with the `sort` query param, with values `{column}.{ordering}`. E.g. ?sort=source.asc&sort=model.desc will yield a multi-column sort. First by source then by model.  Filtering is supported for the `source`, `model`, `feedback-{output_name}`, `evaluator-{evaluator_external_id}` columns.  Specify filtering with the `source_filter`, `model_filter`, `feedback-{output.name}_filter` and `evaluator-{evaluator_external_id}_filter` query params.  E.g. ?source_filter=AI&source_filter=user_1234&feedback-explicit_filter=good will only show rows where the source is \"AI\" or \"user_1234\", and where the latest feedback for the \"explicit\" output group is \"good\".  An additional date range filter is supported for the `Timestamp` column (i.e. `Log.created_at`). These are supported through the `start_date` and `end_date` query parameters. The date format could be either date: YYYY-MM-DD, e.g. 2024-01-01 or datetime: YYYY-MM-DD[T]HH:MM[:SS[.ffffff]][Z or [±]HH[:]MM], e.g. 2024-01-01T00:00:00Z.  Searching is supported for the model inputs and output. Specify a search term with the `search` query param. E.g. ?search=hello%20there will cause a case-insensitive search across model inputs and output.
          * @summary List 
          * @param {string} projectId 
          * @param {string} [search] 
          * @param {string} [metadataSearch] 
          * @param {VersionStatus} [versionStatus] 
-         * @param {string | Date} [startDate] 
-         * @param {string | Date} [endDate] 
+         * @param {StartDate} [startDate] 
+         * @param {EndDate} [endDate] 
          * @param {number} [size] 
          * @param {number} [page] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        list: async (projectId: string, search?: string, metadataSearch?: string, versionStatus?: VersionStatus, startDate?: string | Date, endDate?: string | Date, size?: number, page?: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        list: async (projectId: string, search?: string, metadataSearch?: string, versionStatus?: VersionStatus, startDate?: StartDate, endDate?: EndDate, size?: number, page?: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'projectId' is not null or undefined
             assertParamExists('list', 'projectId', projectId)
             const localVarPath = `/logs`;
@@ -202,15 +202,11 @@ export const LogsApiAxiosParamCreator = function (configuration?: Configuration)
             }
 
             if (startDate !== undefined) {
-                localVarQueryParameter['start_date'] = (startDate as any instanceof Date) ?
-                    (startDate as any).toISOString().substr(0,10) :
-                    startDate;
+                localVarQueryParameter['start_date'] = startDate;
             }
 
             if (endDate !== undefined) {
-                localVarQueryParameter['end_date'] = (endDate as any instanceof Date) ?
-                    (endDate as any).toISOString().substr(0,10) :
-                    endDate;
+                localVarQueryParameter['end_date'] = endDate;
             }
 
             if (size !== undefined) {
@@ -428,7 +424,7 @@ export const LogsApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * Retrieve paginated logs from the server.  Sorting and filtering are supported through query params.  Sorting is supported for the `source`, `model`, `timestamp`, and `feedback-{output_name}` columns. Specify sorting with the `sort` query param, with values `{column}.{ordering}`. E.g. ?sort=source.asc&sort=model.desc will yield a multi-column sort. First by source then by model.  Filtering is supported for the `source`, `model`, `feedback-{output_name}`, `evaluator-{evaluator_external_id}` columns.  Specify filtering with the `source_filter`, `model_filter`, `feedback-{output.name}_filter` and `evaluator-{evaluator_external_id}_filter` query params.  E.g. ?source_filter=AI&source_filter=user_1234&feedback-explicit_filter=good will only show rows where the source is \"AI\" or \"user_1234\", and where the latest feedback for the \"explicit\" output group is \"good\".  An additional date range filter is supported for the `Timestamp` column (i.e. `Log.created_at`). These are supported through the `start_date` and `end_date` query parameters.  Searching is supported for the model inputs and output. Specify a search term with the `search` query param. E.g. ?search=hello%20there will cause a case-insensitive search across model inputs and output.
+         * Retrieve paginated logs from the server.  Sorting and filtering are supported through query params.  Sorting is supported for the `source`, `model`, `timestamp`, and `feedback-{output_name}` columns. Specify sorting with the `sort` query param, with values `{column}.{ordering}`. E.g. ?sort=source.asc&sort=model.desc will yield a multi-column sort. First by source then by model.  Filtering is supported for the `source`, `model`, `feedback-{output_name}`, `evaluator-{evaluator_external_id}` columns.  Specify filtering with the `source_filter`, `model_filter`, `feedback-{output.name}_filter` and `evaluator-{evaluator_external_id}_filter` query params.  E.g. ?source_filter=AI&source_filter=user_1234&feedback-explicit_filter=good will only show rows where the source is \"AI\" or \"user_1234\", and where the latest feedback for the \"explicit\" output group is \"good\".  An additional date range filter is supported for the `Timestamp` column (i.e. `Log.created_at`). These are supported through the `start_date` and `end_date` query parameters. The date format could be either date: YYYY-MM-DD, e.g. 2024-01-01 or datetime: YYYY-MM-DD[T]HH:MM[:SS[.ffffff]][Z or [±]HH[:]MM], e.g. 2024-01-01T00:00:00Z.  Searching is supported for the model inputs and output. Specify a search term with the `search` query param. E.g. ?search=hello%20there will cause a case-insensitive search across model inputs and output.
          * @summary List 
          * @param {LogsApiListRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
@@ -513,7 +509,7 @@ export const LogsApiFactory = function (configuration?: Configuration, basePath?
             return localVarFp.get(requestParameters, options).then((request) => request(axios, basePath));
         },
         /**
-         * Retrieve paginated logs from the server.  Sorting and filtering are supported through query params.  Sorting is supported for the `source`, `model`, `timestamp`, and `feedback-{output_name}` columns. Specify sorting with the `sort` query param, with values `{column}.{ordering}`. E.g. ?sort=source.asc&sort=model.desc will yield a multi-column sort. First by source then by model.  Filtering is supported for the `source`, `model`, `feedback-{output_name}`, `evaluator-{evaluator_external_id}` columns.  Specify filtering with the `source_filter`, `model_filter`, `feedback-{output.name}_filter` and `evaluator-{evaluator_external_id}_filter` query params.  E.g. ?source_filter=AI&source_filter=user_1234&feedback-explicit_filter=good will only show rows where the source is \"AI\" or \"user_1234\", and where the latest feedback for the \"explicit\" output group is \"good\".  An additional date range filter is supported for the `Timestamp` column (i.e. `Log.created_at`). These are supported through the `start_date` and `end_date` query parameters.  Searching is supported for the model inputs and output. Specify a search term with the `search` query param. E.g. ?search=hello%20there will cause a case-insensitive search across model inputs and output.
+         * Retrieve paginated logs from the server.  Sorting and filtering are supported through query params.  Sorting is supported for the `source`, `model`, `timestamp`, and `feedback-{output_name}` columns. Specify sorting with the `sort` query param, with values `{column}.{ordering}`. E.g. ?sort=source.asc&sort=model.desc will yield a multi-column sort. First by source then by model.  Filtering is supported for the `source`, `model`, `feedback-{output_name}`, `evaluator-{evaluator_external_id}` columns.  Specify filtering with the `source_filter`, `model_filter`, `feedback-{output.name}_filter` and `evaluator-{evaluator_external_id}_filter` query params.  E.g. ?source_filter=AI&source_filter=user_1234&feedback-explicit_filter=good will only show rows where the source is \"AI\" or \"user_1234\", and where the latest feedback for the \"explicit\" output group is \"good\".  An additional date range filter is supported for the `Timestamp` column (i.e. `Log.created_at`). These are supported through the `start_date` and `end_date` query parameters. The date format could be either date: YYYY-MM-DD, e.g. 2024-01-01 or datetime: YYYY-MM-DD[T]HH:MM[:SS[.ffffff]][Z or [±]HH[:]MM], e.g. 2024-01-01T00:00:00Z.  Searching is supported for the model inputs and output. Specify a search term with the `search` query param. E.g. ?search=hello%20there will cause a case-insensitive search across model inputs and output.
          * @summary List 
          * @param {LogsApiListRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
@@ -624,17 +620,17 @@ export type LogsApiListRequest = {
     
     /**
     * 
-    * @type {string | Date}
+    * @type {StartDate}
     * @memberof LogsApiList
     */
-    readonly startDate?: string | Date
+    readonly startDate?: StartDate
     
     /**
     * 
-    * @type {string | Date}
+    * @type {EndDate}
     * @memberof LogsApiList
     */
-    readonly endDate?: string | Date
+    readonly endDate?: EndDate
     
     /**
     * 
@@ -725,7 +721,7 @@ export class LogsApiGenerated extends BaseAPI {
     }
 
     /**
-     * Retrieve paginated logs from the server.  Sorting and filtering are supported through query params.  Sorting is supported for the `source`, `model`, `timestamp`, and `feedback-{output_name}` columns. Specify sorting with the `sort` query param, with values `{column}.{ordering}`. E.g. ?sort=source.asc&sort=model.desc will yield a multi-column sort. First by source then by model.  Filtering is supported for the `source`, `model`, `feedback-{output_name}`, `evaluator-{evaluator_external_id}` columns.  Specify filtering with the `source_filter`, `model_filter`, `feedback-{output.name}_filter` and `evaluator-{evaluator_external_id}_filter` query params.  E.g. ?source_filter=AI&source_filter=user_1234&feedback-explicit_filter=good will only show rows where the source is \"AI\" or \"user_1234\", and where the latest feedback for the \"explicit\" output group is \"good\".  An additional date range filter is supported for the `Timestamp` column (i.e. `Log.created_at`). These are supported through the `start_date` and `end_date` query parameters.  Searching is supported for the model inputs and output. Specify a search term with the `search` query param. E.g. ?search=hello%20there will cause a case-insensitive search across model inputs and output.
+     * Retrieve paginated logs from the server.  Sorting and filtering are supported through query params.  Sorting is supported for the `source`, `model`, `timestamp`, and `feedback-{output_name}` columns. Specify sorting with the `sort` query param, with values `{column}.{ordering}`. E.g. ?sort=source.asc&sort=model.desc will yield a multi-column sort. First by source then by model.  Filtering is supported for the `source`, `model`, `feedback-{output_name}`, `evaluator-{evaluator_external_id}` columns.  Specify filtering with the `source_filter`, `model_filter`, `feedback-{output.name}_filter` and `evaluator-{evaluator_external_id}_filter` query params.  E.g. ?source_filter=AI&source_filter=user_1234&feedback-explicit_filter=good will only show rows where the source is \"AI\" or \"user_1234\", and where the latest feedback for the \"explicit\" output group is \"good\".  An additional date range filter is supported for the `Timestamp` column (i.e. `Log.created_at`). These are supported through the `start_date` and `end_date` query parameters. The date format could be either date: YYYY-MM-DD, e.g. 2024-01-01 or datetime: YYYY-MM-DD[T]HH:MM[:SS[.ffffff]][Z or [±]HH[:]MM], e.g. 2024-01-01T00:00:00Z.  Searching is supported for the model inputs and output. Specify a search term with the `search` query param. E.g. ?search=hello%20there will cause a case-insensitive search across model inputs and output.
      * @summary List 
      * @param {LogsApiListRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
