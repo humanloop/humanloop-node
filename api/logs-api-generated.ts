@@ -41,6 +41,8 @@ import { ChatMessageWithToolCall } from '../models';
 // @ts-ignore
 import { ConfigProperty } from '../models';
 // @ts-ignore
+import { EndDate } from '../models';
+// @ts-ignore
 import { FeedbackLabelsProperty } from '../models';
 // @ts-ignore
 import { HTTPValidationError } from '../models';
@@ -52,6 +54,8 @@ import { LogResponse } from '../models';
 import { LogsLogResponse } from '../models';
 // @ts-ignore
 import { PaginatedDataLogResponse } from '../models';
+// @ts-ignore
+import { StartDate } from '../models';
 // @ts-ignore
 import { UpdateLogRequest } from '../models';
 // @ts-ignore
