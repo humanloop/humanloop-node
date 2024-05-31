@@ -49,6 +49,8 @@ import { CreateLogResponse } from '../models';
 // @ts-ignore
 import { EvaluationResponse } from '../models';
 // @ts-ignore
+import { EvaluationResultProperty } from '../models';
+// @ts-ignore
 import { EvaluationResultResponse } from '../models';
 // @ts-ignore
 import { EvaluationStatus } from '../models';
@@ -64,8 +66,6 @@ import { PaginatedDataEvaluationResponse } from '../models';
 import { ProviderApiKeys } from '../models';
 // @ts-ignore
 import { UpdateEvaluationStatusRequest } from '../models';
-// @ts-ignore
-import { ValueProperty } from '../models';
 import { paginate } from "../pagination/paginate";
 import type * as buffer from "buffer"
 import { requestBeforeHook } from '../requestBeforeHook';

@@ -30,9 +30,10 @@ import type * as buffer from "buffer"
 
 
 /**
- * @type ValueProperty1
+ * @type EvaluationResultProperty
+ * The result value of the evaluation.
  * @export
  */
-export type ValueProperty1 = boolean | number;
+export type EvaluationResultProperty = boolean | number;
 
 
