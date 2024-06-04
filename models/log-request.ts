@@ -31,6 +31,7 @@ import type * as buffer from "buffer"
 import { ChatMessageWithToolCall } from './chat-message-with-tool-call';
 import { ConfigProperty } from './config-property';
 import { FeedbackLabelsProperty } from './feedback-labels-property';
+import { JudgmentProperty } from './judgment-property';
 
 /**
  * Request model for logging a datapoint.
@@ -128,6 +129,12 @@ export interface LogRequest {
      * @memberof LogRequest
      */
     'output'?: string;
+    /**
+     * 
+     * @type {JudgmentProperty}
+     * @memberof LogRequest
+     */
+    'judgment'?: JudgmentProperty;
     /**
      * Unique ID of a config to associate to the log.
      * @type {string}

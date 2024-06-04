@@ -47,6 +47,8 @@ import { FeedbackLabelsProperty } from '../models';
 // @ts-ignore
 import { HTTPValidationError } from '../models';
 // @ts-ignore
+import { JudgmentProperty } from '../models';
+// @ts-ignore
 import { LogDatapointRequest } from '../models';
 // @ts-ignore
 import { LogResponse } from '../models';

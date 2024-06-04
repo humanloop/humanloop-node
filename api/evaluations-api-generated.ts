@@ -184,10 +184,11 @@ export const EvaluationsApiAxiosParamCreator = function (configuration?: Configu
          * @summary Get
          * @param {string} id String ID of evaluation run. Starts with &#x60;ev_&#x60;.
          * @param {boolean} [evaluatorAggregates] Whether to include evaluator aggregates in the response.
+         * @param {string} [evaluateeId] String ID of evaluatee version to return. If not defined, the first evaluatee will be returned. Starts with &#x60;evv_&#x60;.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        get: async (id: string, evaluatorAggregates?: boolean, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        get: async (id: string, evaluatorAggregates?: boolean, evaluateeId?: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('get', 'id', id)
             const localVarPath = `/evaluations/{id}`
@@ -207,6 +208,10 @@ export const EvaluationsApiAxiosParamCreator = function (configuration?: Configu
             await setApiKeyToObject({ object: localVarHeaderParameter, key: "X-API-KEY", keyParamName: "xAPIKEY", configuration })
             if (evaluatorAggregates !== undefined) {
                 localVarQueryParameter['evaluator_aggregates'] = evaluatorAggregates;
+            }
+
+            if (evaluateeId !== undefined) {
+                localVarQueryParameter['evaluatee_id'] = evaluateeId;
             }
 
 
@@ -237,10 +242,11 @@ export const EvaluationsApiAxiosParamCreator = function (configuration?: Configu
          * @param {string | Date} [endDate] Only return evaluations created before this date.
          * @param {number} [size] 
          * @param {number} [page] 
+         * @param {string} [evaluateeId] String ID of evaluatee version to return. If not defined, the first evaluatee will be returned. Starts with &#x60;evv_&#x60;.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        list: async (projectId: string, id?: Array<string>, startDate?: string | Date, endDate?: string | Date, size?: number, page?: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        list: async (projectId: string, id?: Array<string>, startDate?: string | Date, endDate?: string | Date, size?: number, page?: number, evaluateeId?: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'projectId' is not null or undefined
             assertParamExists('list', 'projectId', projectId)
             const localVarPath = `/evaluations`;
@@ -285,6 +291,10 @@ export const EvaluationsApiAxiosParamCreator = function (configuration?: Configu
                 localVarQueryParameter['page'] = page;
             }
 
+            if (evaluateeId !== undefined) {
+                localVarQueryParameter['evaluatee_id'] = evaluateeId;
+            }
+
 
     
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -308,12 +318,13 @@ export const EvaluationsApiAxiosParamCreator = function (configuration?: Configu
          * Get all the evaluations associated with your project.  Deprecated: This is a legacy unpaginated endpoint. Use `/evaluations` instead, with appropriate sorting, filtering and pagination options.
          * @summary List For Project
          * @param {string} projectId String ID of project. Starts with &#x60;pr_&#x60;.
+         * @param {string} [evaluateeId] String ID of evaluatee version to return. If not defined, the first evaluatee will be returned. Starts with &#x60;evv_&#x60;.
          * @param {boolean} [evaluatorAggregates] Whether to include evaluator aggregates in the response.
          * @param {*} [options] Override http request option.
          * @deprecated
          * @throws {RequiredError}
          */
-        listAllForProject: async (projectId: string, evaluatorAggregates?: boolean, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        listAllForProject: async (projectId: string, evaluateeId?: string, evaluatorAggregates?: boolean, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'projectId' is not null or undefined
             assertParamExists('listAllForProject', 'projectId', projectId)
             const localVarPath = `/projects/{project_id}/evaluations`
@@ -331,6 +342,10 @@ export const EvaluationsApiAxiosParamCreator = function (configuration?: Configu
 
             // authentication APIKeyHeader required
             await setApiKeyToObject({ object: localVarHeaderParameter, key: "X-API-KEY", keyParamName: "xAPIKEY", configuration })
+            if (evaluateeId !== undefined) {
+                localVarQueryParameter['evaluatee_id'] = evaluateeId;
+            }
+
             if (evaluatorAggregates !== undefined) {
                 localVarQueryParameter['evaluator_aggregates'] = evaluatorAggregates;
             }
@@ -360,10 +375,11 @@ export const EvaluationsApiAxiosParamCreator = function (configuration?: Configu
          * @param {string} id String ID of evaluation. Starts with &#x60;ev_&#x60;.
          * @param {number} [page] Page to fetch. Starts from 1.
          * @param {number} [size] Number of evaluation results to retrieve.
+         * @param {string} [evaluateeId] String ID of evaluatee version to return. If not defined, the first evaluatee will be returned. Starts with &#x60;evv_&#x60;.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listDatapoints: async (id: string, page?: number, size?: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        listDatapoints: async (id: string, page?: number, size?: number, evaluateeId?: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('listDatapoints', 'id', id)
             const localVarPath = `/evaluations/{id}/datapoints`
@@ -387,6 +403,10 @@ export const EvaluationsApiAxiosParamCreator = function (configuration?: Configu
 
             if (size !== undefined) {
                 localVarQueryParameter['size'] = size;
+            }
+
+            if (evaluateeId !== undefined) {
+                localVarQueryParameter['evaluatee_id'] = evaluateeId;
             }
 
 
@@ -413,10 +433,11 @@ export const EvaluationsApiAxiosParamCreator = function (configuration?: Configu
          * @summary Log
          * @param {string} evaluationId ID of the evaluation run. Starts with &#x60;evrun_&#x60;.
          * @param {CreateEvaluationLogRequest} createEvaluationLogRequest 
+         * @param {string} [evaluateeId] String ID of evaluatee version to return. If not defined, the first evaluatee will be returned. Starts with &#x60;evv_&#x60;.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        log: async (evaluationId: string, createEvaluationLogRequest: CreateEvaluationLogRequest, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        log: async (evaluationId: string, createEvaluationLogRequest: CreateEvaluationLogRequest, evaluateeId?: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'evaluationId' is not null or undefined
             assertParamExists('log', 'evaluationId', evaluationId)
             // verify required parameter 'createEvaluationLogRequest' is not null or undefined
@@ -436,6 +457,10 @@ export const EvaluationsApiAxiosParamCreator = function (configuration?: Configu
 
             // authentication APIKeyHeader required
             await setApiKeyToObject({ object: localVarHeaderParameter, key: "X-API-KEY", keyParamName: "xAPIKEY", configuration })
+            if (evaluateeId !== undefined) {
+                localVarQueryParameter['evaluatee_id'] = evaluateeId;
+            }
+
 
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
@@ -465,10 +490,11 @@ export const EvaluationsApiAxiosParamCreator = function (configuration?: Configu
          * @summary Result
          * @param {string} evaluationId ID of the evaluation run. Starts with &#x60;evrun_&#x60;.
          * @param {CreateEvaluationResultLogRequest} createEvaluationResultLogRequest 
+         * @param {string} [evaluateeId] String ID of evaluatee version to return. If not defined, the first evaluatee will be returned. Starts with &#x60;evv_&#x60;.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        result: async (evaluationId: string, createEvaluationResultLogRequest: CreateEvaluationResultLogRequest, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        result: async (evaluationId: string, createEvaluationResultLogRequest: CreateEvaluationResultLogRequest, evaluateeId?: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'evaluationId' is not null or undefined
             assertParamExists('result', 'evaluationId', evaluationId)
             // verify required parameter 'createEvaluationResultLogRequest' is not null or undefined
@@ -488,6 +514,10 @@ export const EvaluationsApiAxiosParamCreator = function (configuration?: Configu
 
             // authentication APIKeyHeader required
             await setApiKeyToObject({ object: localVarHeaderParameter, key: "X-API-KEY", keyParamName: "xAPIKEY", configuration })
+            if (evaluateeId !== undefined) {
+                localVarQueryParameter['evaluatee_id'] = evaluateeId;
+            }
+
 
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
@@ -616,7 +646,7 @@ export const EvaluationsApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async get(requestParameters: EvaluationsApiGetRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<EvaluationResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.get(requestParameters.id, requestParameters.evaluatorAggregates, options);
+            const localVarAxiosArgs = await localVarAxiosParamCreator.get(requestParameters.id, requestParameters.evaluatorAggregates, requestParameters.evaluateeId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -627,7 +657,7 @@ export const EvaluationsApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async list(requestParameters: EvaluationsApiListRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginatedDataEvaluationResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.list(requestParameters.projectId, requestParameters.id, requestParameters.startDate, requestParameters.endDate, requestParameters.size, requestParameters.page, options);
+            const localVarAxiosArgs = await localVarAxiosParamCreator.list(requestParameters.projectId, requestParameters.id, requestParameters.startDate, requestParameters.endDate, requestParameters.size, requestParameters.page, requestParameters.evaluateeId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -639,7 +669,7 @@ export const EvaluationsApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async listAllForProject(requestParameters: EvaluationsApiListAllForProjectRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<EvaluationResponse>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.listAllForProject(requestParameters.projectId, requestParameters.evaluatorAggregates, options);
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listAllForProject(requestParameters.projectId, requestParameters.evaluateeId, requestParameters.evaluatorAggregates, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -650,7 +680,7 @@ export const EvaluationsApiFp = function(configuration?: Configuration) {
          * @throws {RequiredError}
          */
         async listDatapoints(requestParameters: EvaluationsApiListDatapointsRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginatedDataEvaluationDatapointSnapshotResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.listDatapoints(requestParameters.id, requestParameters.page, requestParameters.size, options);
+            const localVarAxiosArgs = await localVarAxiosParamCreator.listDatapoints(requestParameters.id, requestParameters.page, requestParameters.size, requestParameters.evaluateeId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -665,7 +695,7 @@ export const EvaluationsApiFp = function(configuration?: Configuration) {
                 datapoint_id: requestParameters.datapoint_id,
                 log: requestParameters.log
             };
-            const localVarAxiosArgs = await localVarAxiosParamCreator.log(requestParameters.evaluationId, createEvaluationLogRequest, options);
+            const localVarAxiosArgs = await localVarAxiosParamCreator.log(requestParameters.evaluationId, createEvaluationLogRequest, requestParameters.evaluateeId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -682,7 +712,7 @@ export const EvaluationsApiFp = function(configuration?: Configuration) {
                 result: requestParameters.result,
                 error: requestParameters.error
             };
-            const localVarAxiosArgs = await localVarAxiosParamCreator.result(requestParameters.evaluationId, createEvaluationResultLogRequest, options);
+            const localVarAxiosArgs = await localVarAxiosParamCreator.result(requestParameters.evaluationId, createEvaluationResultLogRequest, requestParameters.evaluateeId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -856,6 +886,13 @@ export type EvaluationsApiGetRequest = {
     */
     readonly evaluatorAggregates?: boolean
     
+    /**
+    * String ID of evaluatee version to return. If not defined, the first evaluatee will be returned. Starts with `evv_`.
+    * @type {string}
+    * @memberof EvaluationsApiGet
+    */
+    readonly evaluateeId?: string
+    
 }
 
 /**
@@ -907,6 +944,13 @@ export type EvaluationsApiListRequest = {
     */
     readonly page?: number
     
+    /**
+    * String ID of evaluatee version to return. If not defined, the first evaluatee will be returned. Starts with `evv_`.
+    * @type {string}
+    * @memberof EvaluationsApiList
+    */
+    readonly evaluateeId?: string
+    
 }
 
 /**
@@ -922,6 +966,13 @@ export type EvaluationsApiListAllForProjectRequest = {
     * @memberof EvaluationsApiListAllForProject
     */
     readonly projectId: string
+    
+    /**
+    * String ID of evaluatee version to return. If not defined, the first evaluatee will be returned. Starts with `evv_`.
+    * @type {string}
+    * @memberof EvaluationsApiListAllForProject
+    */
+    readonly evaluateeId?: string
     
     /**
     * Whether to include evaluator aggregates in the response.
@@ -960,6 +1011,13 @@ export type EvaluationsApiListDatapointsRequest = {
     */
     readonly size?: number
     
+    /**
+    * String ID of evaluatee version to return. If not defined, the first evaluatee will be returned. Starts with `evv_`.
+    * @type {string}
+    * @memberof EvaluationsApiListDatapoints
+    */
+    readonly evaluateeId?: string
+    
 }
 
 /**
@@ -976,6 +1034,13 @@ export type EvaluationsApiLogRequest = {
     */
     readonly evaluationId: string
     
+    /**
+    * String ID of evaluatee version to return. If not defined, the first evaluatee will be returned. Starts with `evv_`.
+    * @type {string}
+    * @memberof EvaluationsApiLog
+    */
+    readonly evaluateeId?: string
+    
 } & CreateEvaluationLogRequest
 
 /**
@@ -991,6 +1056,13 @@ export type EvaluationsApiResultRequest = {
     * @memberof EvaluationsApiResult
     */
     readonly evaluationId: string
+    
+    /**
+    * String ID of evaluatee version to return. If not defined, the first evaluatee will be returned. Starts with `evv_`.
+    * @type {string}
+    * @memberof EvaluationsApiResult
+    */
+    readonly evaluateeId?: string
     
 } & CreateEvaluationResultLogRequest
 

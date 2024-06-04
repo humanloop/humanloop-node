@@ -32,6 +32,7 @@ import { ChatMessageWithToolCall } from './chat-message-with-tool-call';
 import { ConfigResponse } from './config-response';
 import { EvaluationResultResponse } from './evaluation-result-response';
 import { FeedbackResponse } from './feedback-response';
+import { JudgmentProperty } from './judgment-property';
 import { MetricValueResponse } from './metric-value-response';
 import { ObservabilityStatus } from './observability-status';
 import { ToolChoiceProperty } from './tool-choice-property';
@@ -139,6 +140,12 @@ export interface LogResponse {
      * @memberof LogResponse
      */
     'output'?: string;
+    /**
+     * 
+     * @type {JudgmentProperty}
+     * @memberof LogResponse
+     */
+    'judgment'?: JudgmentProperty;
     /**
      * Unique ID of a config to associate to the log.
      * @type {string}
@@ -289,5 +296,11 @@ export interface LogResponse {
      * @memberof LogResponse
      */
     'updated_at': string;
+    /**
+     * List of batch IDs the log belongs to.
+     * @type {Array<string>}
+     * @memberof LogResponse
+     */
+    'batch_ids'?: Array<string>;
 }
 

@@ -1636,6 +1636,10 @@ String ID of evaluation run. Starts with `ev_`.
 
 Whether to include evaluator aggregates in the response.
 
+##### evaluateeId: `string`<a id="evaluateeid-string"></a>
+
+String ID of evaluatee version to return. If not defined, the first evaluatee will be returned. Starts with `evv_`.
+
 #### 🔄 Return<a id="🔄-return"></a>
 
 [EvaluationResponse](./models/evaluation-response.ts)
@@ -1702,6 +1706,10 @@ Only return evaluations created before this date.
 
 ##### page: `number`<a id="page-number"></a>
 
+##### evaluateeId: `string`<a id="evaluateeid-string"></a>
+
+String ID of evaluatee version to return. If not defined, the first evaluatee will be returned. Starts with `evv_`.
+
 #### 🔄 Return<a id="🔄-return"></a>
 
 [PaginatedDataEvaluationResponse](./models/paginated-data-evaluation-response.ts)
@@ -1738,6 +1746,10 @@ const listAllForProjectResponse = await humanloop.evaluations.listAllForProject(
 ##### projectId: `string`<a id="projectid-string"></a>
 
 String ID of project. Starts with `pr_`.
+
+##### evaluateeId: `string`<a id="evaluateeid-string"></a>
+
+String ID of evaluatee version to return. If not defined, the first evaluatee will be returned. Starts with `evv_`.
 
 ##### evaluatorAggregates: `boolean`<a id="evaluatoraggregates-boolean"></a>
 
@@ -1784,6 +1796,10 @@ Page to fetch. Starts from 1.
 
 Number of evaluation results to retrieve.
 
+##### evaluateeId: `string`<a id="evaluateeid-string"></a>
+
+String ID of evaluatee version to return. If not defined, the first evaluatee will be returned. Starts with `evv_`.
+
 #### 🔄 Return<a id="🔄-return"></a>
 
 [PaginatedDataEvaluationDatapointSnapshotResponse](./models/paginated-data-evaluation-datapoint-snapshot-response.ts)
@@ -1828,6 +1844,10 @@ The log generated for the datapoint.
 ##### evaluationId: `string`<a id="evaluationid-string"></a>
 
 ID of the evaluation run. Starts with `evrun_`.
+
+##### evaluateeId: `string`<a id="evaluateeid-string"></a>
+
+String ID of evaluatee version to return. If not defined, the first evaluatee will be returned. Starts with `evv_`.
 
 #### 🔄 Return<a id="🔄-return"></a>
 
@@ -1877,6 +1897,10 @@ ID of the evaluation run. Starts with `evrun_`.
 ##### error: `string`<a id="error-string"></a>
 
 An error that occurred during evaluation.
+
+##### evaluateeId: `string`<a id="evaluateeid-string"></a>
+
+String ID of evaluatee version to return. If not defined, the first evaluatee will be returned. Starts with `evv_`.
 
 #### 🔄 Return<a id="🔄-return"></a>
 
@@ -2565,6 +2589,8 @@ The messages passed to the to provider chat endpoint.
 ##### output: `string`<a id="output-string"></a>
 
 Generated output from your model for the provided inputs. Can be `None` if logging an error, or if logging a parent datapoint with the intention to populate it later
+
+##### judgment: [`JudgmentProperty`](./models/judgment-property.ts)<a id="judgment-judgmentpropertymodelsjudgment-propertyts"></a>
 
 ##### config_id: `string`<a id="config_id-string"></a>
 

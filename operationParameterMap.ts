@@ -688,6 +688,9 @@ export const operationParameterMap: Record<string, Entry> = {
             {
                 name: 'evaluator_aggregates'
             },
+            {
+                name: 'evaluatee_id'
+            },
         ]
     },
     '/evaluations-GET': {
@@ -710,12 +713,18 @@ export const operationParameterMap: Record<string, Entry> = {
             {
                 name: 'page'
             },
+            {
+                name: 'evaluatee_id'
+            },
         ]
     },
     '/projects/{project_id}/evaluations-GET': {
         parameters: [
             {
                 name: 'project_id'
+            },
+            {
+                name: 'evaluatee_id'
             },
             {
                 name: 'evaluator_aggregates'
@@ -733,6 +742,9 @@ export const operationParameterMap: Record<string, Entry> = {
             {
                 name: 'size'
             },
+            {
+                name: 'evaluatee_id'
+            },
         ]
     },
     '/evaluations/{evaluation_id}/log-POST': {
@@ -745,6 +757,9 @@ export const operationParameterMap: Record<string, Entry> = {
             },
             {
                 name: 'evaluation_id'
+            },
+            {
+                name: 'evaluatee_id'
             },
         ]
     },
@@ -764,6 +779,9 @@ export const operationParameterMap: Record<string, Entry> = {
             },
             {
                 name: 'error'
+            },
+            {
+                name: 'evaluatee_id'
             },
         ]
     },
@@ -1014,6 +1032,9 @@ export const operationParameterMap: Record<string, Entry> = {
             },
             {
                 name: 'output'
+            },
+            {
+                name: 'judgment'
             },
             {
                 name: 'config_id'

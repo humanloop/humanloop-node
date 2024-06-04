@@ -80,6 +80,7 @@ export * from './get-model-config-response';
 export * from './httpvalidation-error';
 export * from './image-chat-content';
 export * from './image-url';
+export * from './judgment-property';
 export * from './label-sentiment';
 export * from './linked-tool-request';
 export * from './location-property-inner';
