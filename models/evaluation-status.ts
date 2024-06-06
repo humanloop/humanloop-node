@@ -34,5 +34,5 @@ import type * as buffer from "buffer"
  * @export
  * @enum {string}
  */
-export type EvaluationStatus = 'pending' | 'running' | 'completed' | 'failed' | 'cancelled'
+export type EvaluationStatus = 'pending' | 'running' | 'completed' | 'cancelled'
 

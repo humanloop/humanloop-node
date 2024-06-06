@@ -673,9 +673,6 @@ export const operationParameterMap: Record<string, Entry> = {
                 name: 'provider_api_keys'
             },
             {
-                name: 'max_concurrency'
-            },
-            {
                 name: 'hl_generated'
             },
         ]

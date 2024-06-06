@@ -1566,7 +1566,6 @@ const createResponse = await humanloop.evaluations.create({
   config_id: "config_id_example",
   evaluator_ids: ["evaluator_ids_example"],
   dataset_id: "dataset_id_example",
-  max_concurrency: 5,
   hl_generated: true,
 });
 ```
@@ -1592,10 +1591,6 @@ String ID of project. Starts with `pr_`.
 ##### provider_api_keys: [`ProviderApiKeys`](./models/provider-api-keys.ts)<a id="provider_api_keys-providerapikeysmodelsprovider-api-keysts"></a>
 
 API keys required by each provider to make API calls. The API keys provided here are not stored by Humanloop. If not specified here, Humanloop will fall back to the key saved to your organization. Ensure you provide an API key for the provider for the model config you are evaluating, or have one saved to your organization.
-
-##### max_concurrency: `number`<a id="max_concurrency-number"></a>
-
-The maximum number of concurrent generations to run. A higher value will result in faster completion of the evaluation but may place higher load on your provider rate-limits. 
 
 ##### hl_generated: `boolean`<a id="hl_generated-boolean"></a>
 

@@ -632,7 +632,6 @@ export const EvaluationsApiFp = function(configuration?: Configuration) {
                 evaluator_ids: requestParameters.evaluator_ids,
                 dataset_id: requestParameters.dataset_id,
                 provider_api_keys: requestParameters.provider_api_keys,
-                max_concurrency: requestParameters.max_concurrency,
                 hl_generated: requestParameters.hl_generated
             };
             const localVarAxiosArgs = await localVarAxiosParamCreator.create(requestParameters.projectId, createEvaluationRequest, options);
