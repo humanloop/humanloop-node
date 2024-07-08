@@ -30,7 +30,7 @@ import type * as buffer from "buffer"
 
 
 /**
- * Status of a project datum for observability.
+ * Status of a Log for observability.  Observability is implemented by running monitoring Evaluators on Logs.
  * @export
  * @enum {string}
  */

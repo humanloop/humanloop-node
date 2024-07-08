@@ -3234,7 +3234,7 @@ String ID of project. Starts with `pr_`.
 
 ### `humanloop.projects.deleteDeployedConfig`<a id="humanloopprojectsdeletedeployedconfig"></a>
 
-Remove the verion deployed to environment.
+Remove the version deployed to environment.
 
 This has no effect if the project does not have an active version set.
 

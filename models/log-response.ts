@@ -285,7 +285,7 @@ export interface LogResponse {
      */
     'evaluation_results': Array<EvaluationResultResponse>;
     /**
-     * Status of a project datum for observability.
+     * Status of a Log for observability.  Observability is implemented by running monitoring Evaluators on Logs.
      * @type {ObservabilityStatus}
      * @memberof LogResponse
      */

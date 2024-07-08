@@ -324,7 +324,7 @@ export const ProjectsApiAxiosParamCreator = function (configuration?: Configurat
             };
         },
         /**
-         * Remove the verion deployed to environment.  This has no effect if the project does not have an active version set.
+         * Remove the version deployed to environment.  This has no effect if the project does not have an active version set.
          * @summary Delete Deployed Config
          * @param {string} projectId 
          * @param {string} environmentId 
@@ -913,7 +913,7 @@ export const ProjectsApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * Remove the verion deployed to environment.  This has no effect if the project does not have an active version set.
+         * Remove the version deployed to environment.  This has no effect if the project does not have an active version set.
          * @summary Delete Deployed Config
          * @param {ProjectsApiDeleteDeployedConfigRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
@@ -1096,7 +1096,7 @@ export const ProjectsApiFactory = function (configuration?: Configuration, baseP
             return localVarFp.delete(requestParameters, options).then((request) => request(axios, basePath));
         },
         /**
-         * Remove the verion deployed to environment.  This has no effect if the project does not have an active version set.
+         * Remove the version deployed to environment.  This has no effect if the project does not have an active version set.
          * @summary Delete Deployed Config
          * @param {ProjectsApiDeleteDeployedConfigRequest} requestParameters Request parameters.
          * @param {*} [options] Override http request option.
@@ -1587,7 +1587,7 @@ export class ProjectsApiGenerated extends BaseAPI {
     }
 
     /**
-     * Remove the verion deployed to environment.  This has no effect if the project does not have an active version set.
+     * Remove the version deployed to environment.  This has no effect if the project does not have an active version set.
      * @summary Delete Deployed Config
      * @param {ProjectsApiDeleteDeployedConfigRequest} requestParameters Request parameters.
      * @param {*} [options] Override http request option.
