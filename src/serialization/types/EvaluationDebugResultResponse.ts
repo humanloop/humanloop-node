@@ -12,11 +12,11 @@ export const EvaluationDebugResultResponse: core.serialization.ObjectSchema<
     Humanloop.EvaluationDebugResultResponse
 > = core.serialization.object({
     logId: core.serialization.property("log_id", core.serialization.string()),
-    log: core.serialization.lazyObject(async () => (await import("..")).LogResponse),
+    log: core.serialization.lazyObject(() => serializers.LogResponse),
     datapointId: core.serialization.property("datapoint_id", core.serialization.string().optional()),
     llmEvaluationLog: core.serialization.property(
         "llm_evaluation_log",
-        core.serialization.lazyObject(async () => (await import("..")).LogResponse).optional()
+        core.serialization.lazyObject(() => serializers.LogResponse).optional()
     ),
     value: EvaluationDebugResultResponseValue.optional(),
     error: core.serialization.string().optional(),

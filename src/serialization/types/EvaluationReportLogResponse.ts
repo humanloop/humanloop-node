@@ -14,10 +14,10 @@ export const EvaluationReportLogResponse: core.serialization.ObjectSchema<
 > = core.serialization.object({
     evaluatedVersion: core.serialization.property("evaluated_version", EvaluatedVersionResponse),
     datapoint: DatapointResponse,
-    log: core.serialization.lazyObject(async () => (await import("..")).LogResponse).optional(),
+    log: core.serialization.lazyObject(() => serializers.LogResponse).optional(),
     evaluatorLogs: core.serialization.property(
         "evaluator_logs",
-        core.serialization.list(core.serialization.lazyObject(async () => (await import("..")).LogResponse))
+        core.serialization.list(core.serialization.lazyObject(() => serializers.LogResponse))
     ),
 });
 

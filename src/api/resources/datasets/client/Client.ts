@@ -150,17 +150,14 @@ export class Datasets {
                     });
             }
         };
-        let _offset = request.page != null ? request.page : 1;
+        let _offset = request?.page != null ? request?.page : 1;
         return new core.Pageable<Humanloop.PaginatedDatasetResponse, Humanloop.DatasetResponse>({
             response: await list(request),
             hasNextPage: (response) => (response?.records ?? []).length > 0,
             getItems: (response) => response?.records ?? [],
             loadPage: (_response) => {
                 _offset += 1;
-                return list({
-                    ...request,
-                    page: _offset,
-                });
+                return list(core.setObjectProperty(request, "page", _offset));
             },
         });
     }
@@ -626,17 +623,14 @@ export class Datasets {
                     });
             }
         };
-        let _offset = request.page != null ? request.page : 1;
+        let _offset = request?.page != null ? request?.page : 1;
         return new core.Pageable<Humanloop.PaginatedDatapointResponse, Humanloop.DatapointResponse>({
             response: await list(request),
             hasNextPage: (response) => (response?.records ?? []).length > 0,
             getItems: (response) => response?.records ?? [],
             loadPage: (_response) => {
                 _offset += 1;
-                return list({
-                    ...request,
-                    page: _offset,
-                });
+                return list(core.setObjectProperty(request, "page", _offset));
             },
         });
     }

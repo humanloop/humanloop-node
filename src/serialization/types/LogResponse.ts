@@ -66,9 +66,7 @@ export const LogResponse: core.serialization.ObjectSchema<serializers.LogRespons
         toolChoice: core.serialization.property("tool_choice", LogResponseToolChoice.optional()),
         evaluationResults: core.serialization.property(
             "evaluation_results",
-            core.serialization.list(
-                core.serialization.lazyObject(async () => (await import("..")).EvaluationResultResponse)
-            )
+            core.serialization.list(core.serialization.lazyObject(() => serializers.EvaluationResultResponse))
         ),
         observabilityStatus: core.serialization.property("observability_status", ObservabilityStatus),
         updatedAt: core.serialization.property("updated_at", core.serialization.date()),

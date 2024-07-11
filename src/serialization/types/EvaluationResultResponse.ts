@@ -16,7 +16,7 @@ export const EvaluationResultResponse: core.serialization.ObjectSchema<
     evaluatorVersionId: core.serialization.property("evaluator_version_id", core.serialization.string()),
     evaluationId: core.serialization.property("evaluation_id", core.serialization.string().optional()),
     logId: core.serialization.property("log_id", core.serialization.string()),
-    log: core.serialization.lazyObject(async () => (await import("..")).LogResponse).optional(),
+    log: core.serialization.lazyObject(() => serializers.LogResponse).optional(),
     versionId: core.serialization.property("version_id", core.serialization.string().optional()),
     version: core.serialization.unknown().optional(),
     value: EvaluationResultResponseValue.optional(),
@@ -25,7 +25,7 @@ export const EvaluationResultResponse: core.serialization.ObjectSchema<
     createdAt: core.serialization.property("created_at", core.serialization.date()),
     llmEvaluatorLog: core.serialization.property(
         "llm_evaluator_log",
-        core.serialization.lazyObject(async () => (await import("..")).LogResponse).optional()
+        core.serialization.lazyObject(() => serializers.LogResponse).optional()
     ),
 });
 
