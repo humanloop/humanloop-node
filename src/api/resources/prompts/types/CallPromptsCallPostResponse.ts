@@ -4,4 +4,4 @@
 
 import * as Humanloop from "../../../index";
 
-export type PromptsCallResponse = Humanloop.PromptCallResponse | Humanloop.PromptCallStreamResponse;
+export type CallPromptsCallPostResponse = Humanloop.PromptCallResponse | Humanloop.PromptCallStreamResponse;

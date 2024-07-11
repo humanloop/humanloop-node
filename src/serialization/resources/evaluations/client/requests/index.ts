@@ -1,1 +1,1 @@
-export { UpdateEvaluationStatusRequest } from "./UpdateEvaluationStatusRequest";
+export { BodyUpdateStatusEvaluationsIdStatusPatch } from "./BodyUpdateStatusEvaluationsIdStatusPatch";

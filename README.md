@@ -16,7 +16,6 @@ npm i -s humanloop
 Instantiate and use the client with the following:
 
 ```typescript
-import * as environments from "../src/environments";
 import { HumanloopClient } from "humanloop";
 
 const client = new HumanloopClient({ apiKey: "YOUR_API_KEY" });
@@ -33,10 +32,9 @@ following namespace:
 ```typescript
 import { Humanloop } from "humanloop";
 
-const request: Humanloop.PromptsListPromptsRequest = {
+const request: Humanloop.ListPromptsGetRequest = {
     ...
 };
-const response = await client.listPrompts(request);
 ```
 
 ## Exception Handling
@@ -48,7 +46,7 @@ will be thrown.
 import { HumanloopError } from "humanloop";
 
 try {
-    await client.upsert(...);
+    await client.prompts.upsert(...);
 } catch (err) {
     if (err instanceof HumanloopError) {
         console.log(err.statusCode);
@@ -113,29 +111,7 @@ A request is deemed retriable when any of the following HTTP status codes is ret
 Use the `maxRetries` request option to configure this behavior.
 
 ```typescript
-const response = await client.upsert(..., {
-    maxRetries: 0 // override maxRetries at the request level
-});
-```
-
-## Advanced
-
-### Retries
-
-The SDK is instrumented with automatic retries with exponential backoff. A request will be retried as long
-as the request is deemed retriable and the number of retry attempts has not grown larger than the configured
-retry limit (default: 2).
-
-A request is deemed retriable when any of the following HTTP status codes is returned:
-
--   [408](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/408) (Timeout)
--   [429](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429) (Too Many Requests)
--   [5XX](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/500) (Internal Server Errors)
-
-Use the `maxRetries` request option to configure this behavior.
-
-```typescript
-const response = await client.upsert(..., {
+const response = await client.prompts.upsert(..., {
     maxRetries: 0 // override maxRetries at the request level
 });
 ```
@@ -145,8 +121,46 @@ const response = await client.upsert(..., {
 The SDK defaults to a 60 second timeout. Use the `timeoutInSeconds` option to configure this behavior.
 
 ```typescript
-const response = await client.upsert(..., {
+const response = await client.prompts.upsert(..., {
     timeoutInSeconds: 30 // override timeout to 30s
+});
+```
+
+### Aborting Requests
+
+The SDK allows users to abort requests at any point by passing in an abort signal.
+
+```typescript
+const controller = new AbortController();
+const response = await client.prompts.upsert(..., {
+    abortSignal: controller.signal
+});
+controller.abort(); // aborts the request
+```
+
+### Runtime Compatibility
+
+The SDK defaults to `node-fetch` but will use the global fetch client if present. The SDK works in the following
+runtimes:
+
+-   Node.js 18+
+-   Vercel
+-   Cloudflare Workers
+-   Deno v1.25+
+-   Bun 1.0+
+-   React Native
+
+### Customizing Fetch Client
+
+The SDK provides a way for your to customize the underlying HTTP client / Fetch function. If you're running in an
+unsupported environment, this provides a way for you to break glass and ensure the SDK works.
+
+```typescript
+import { HumanloopClient } from "humanloop";
+
+const client = new HumanloopClient({
+    ...
+    fetcher: // provide your implementation here
 });
 ```
 

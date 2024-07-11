@@ -6,15 +6,15 @@ import * as serializers from "../../../../index";
 import * as Humanloop from "../../../../../api/index";
 import * as core from "../../../../../core";
 
-export const BodyDatasetsCreateDatapointsFromLogs: core.serialization.Schema<
-    serializers.BodyDatasetsCreateDatapointsFromLogs.Raw,
-    Omit<Humanloop.BodyDatasetsCreateDatapointsFromLogs, "versionId" | "environment">
+export const BodyFromLogsDatasetsIdDatapointsLogsPost: core.serialization.Schema<
+    serializers.BodyFromLogsDatasetsIdDatapointsLogsPost.Raw,
+    Omit<Humanloop.BodyFromLogsDatasetsIdDatapointsLogsPost, "versionId" | "environment">
 > = core.serialization.object({
     logIds: core.serialization.property("log_ids", core.serialization.list(core.serialization.string())),
     commitMessage: core.serialization.property("commit_message", core.serialization.string()),
 });
 
-export declare namespace BodyDatasetsCreateDatapointsFromLogs {
+export declare namespace BodyFromLogsDatasetsIdDatapointsLogsPost {
     interface Raw {
         log_ids: string[];
         commit_message: string;

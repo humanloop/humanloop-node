@@ -17,8 +17,11 @@ export declare namespace Logs {
     }
 
     interface RequestOptions {
+        /** The maximum time to wait for a response in seconds. */
         timeoutInSeconds?: number;
+        /** The number of times to retry the request. Defaults to 2. */
         maxRetries?: number;
+        /** A hook to abort the request. */
         abortSignal?: AbortSignal;
     }
 }
@@ -42,118 +45,124 @@ export class Logs {
     /**
      * List Logs.
      *
-     * @param {Humanloop.ListLogsForFileLogsGetRequest} request
+     * @param {Humanloop.ListLogsGetRequest} request
      * @param {Logs.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Humanloop.UnprocessableEntityError}
      *
      * @example
-     *     await client.logs.listLogsForFile({
+     *     await client.logs.list({
      *         fileId: "file_id"
      *     })
      */
-    public async listLogsForFile(
-        request: Humanloop.ListLogsForFileLogsGetRequest,
+    public async list(
+        request: Humanloop.ListLogsGetRequest,
         requestOptions?: Logs.RequestOptions
-    ): Promise<Humanloop.PaginatedPromptLogResponse> {
-        const { fileId, page, size, versionId, versionStatus, search, metadataSearch, startDate, endDate } = request;
-        const _queryParams: Record<string, string | string[] | object | object[]> = {};
-        _queryParams["file_id"] = fileId;
-        if (page != null) {
-            _queryParams["page"] = page.toString();
-        }
-
-        if (size != null) {
-            _queryParams["size"] = size.toString();
-        }
-
-        if (versionId != null) {
-            _queryParams["version_id"] = versionId;
-        }
-
-        if (versionStatus != null) {
-            _queryParams["version_status"] = versionStatus;
-        }
-
-        if (search != null) {
-            _queryParams["search"] = search;
-        }
-
-        if (metadataSearch != null) {
-            _queryParams["metadata_search"] = metadataSearch;
-        }
-
-        if (startDate != null) {
-            _queryParams["start_date"] = startDate.toISOString();
-        }
-
-        if (endDate != null) {
-            _queryParams["end_date"] = endDate.toISOString();
-        }
-
-        const _response = await (this._options.fetcher ?? core.fetcher)({
-            url: urlJoin(
-                (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
-                "logs"
-            ),
-            method: "GET",
-            headers: {
-                "X-Fern-Language": "JavaScript",
-                "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.0.1",
-                "X-Fern-Runtime": core.RUNTIME.type,
-                "X-Fern-Runtime-Version": core.RUNTIME.version,
-                ...(await this._getCustomAuthorizationHeaders()),
-            },
-            contentType: "application/json",
-            queryParameters: _queryParams,
-            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-            maxRetries: requestOptions?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-        });
-        if (_response.ok) {
-            return await serializers.PaginatedPromptLogResponse.parseOrThrow(_response.body, {
-                unrecognizedObjectKeys: "passthrough",
-                allowUnrecognizedUnionMembers: true,
-                allowUnrecognizedEnumValues: true,
-                skipValidation: true,
-                breadcrumbsPrefix: ["response"],
+    ): Promise<core.Page<Humanloop.PromptLogResponse>> {
+        const list = async (request: Humanloop.ListLogsGetRequest): Promise<Humanloop.PaginatedPromptLogResponse> => {
+            const { fileId, page, size, versionId, versionStatus, search, metadataSearch, startDate, endDate } =
+                request;
+            const _queryParams: Record<string, string | string[] | object | object[]> = {};
+            _queryParams["file_id"] = fileId;
+            if (page != null) {
+                _queryParams["page"] = page.toString();
+            }
+            if (size != null) {
+                _queryParams["size"] = size.toString();
+            }
+            if (versionId != null) {
+                _queryParams["version_id"] = versionId;
+            }
+            if (versionStatus != null) {
+                _queryParams["version_status"] = versionStatus;
+            }
+            if (search != null) {
+                _queryParams["search"] = search;
+            }
+            if (metadataSearch != null) {
+                _queryParams["metadata_search"] = metadataSearch;
+            }
+            if (startDate != null) {
+                _queryParams["start_date"] = startDate.toISOString();
+            }
+            if (endDate != null) {
+                _queryParams["end_date"] = endDate.toISOString();
+            }
+            const _response = await (this._options.fetcher ?? core.fetcher)({
+                url: urlJoin(
+                    (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
+                    "logs"
+                ),
+                method: "GET",
+                headers: {
+                    "X-Fern-Language": "JavaScript",
+                    "X-Fern-SDK-Name": "humanloop",
+                    "X-Fern-SDK-Version": "0.8.0-beta0",
+                    "X-Fern-Runtime": core.RUNTIME.type,
+                    "X-Fern-Runtime-Version": core.RUNTIME.version,
+                    ...(await this._getCustomAuthorizationHeaders()),
+                },
+                contentType: "application/json",
+                queryParameters: _queryParams,
+                timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+                maxRetries: requestOptions?.maxRetries,
+                abortSignal: requestOptions?.abortSignal,
             });
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 422:
-                    throw new Humanloop.UnprocessableEntityError(
-                        await serializers.HttpValidationError.parseOrThrow(_response.error.body, {
-                            unrecognizedObjectKeys: "passthrough",
-                            allowUnrecognizedUnionMembers: true,
-                            allowUnrecognizedEnumValues: true,
-                            skipValidation: true,
-                            breadcrumbsPrefix: ["response"],
-                        })
-                    );
-                default:
+            if (_response.ok) {
+                return serializers.PaginatedPromptLogResponse.parseOrThrow(_response.body, {
+                    unrecognizedObjectKeys: "passthrough",
+                    allowUnrecognizedUnionMembers: true,
+                    allowUnrecognizedEnumValues: true,
+                    skipValidation: true,
+                    breadcrumbsPrefix: ["response"],
+                });
+            }
+            if (_response.error.reason === "status-code") {
+                switch (_response.error.statusCode) {
+                    case 422:
+                        throw new Humanloop.UnprocessableEntityError(
+                            serializers.HttpValidationError.parseOrThrow(_response.error.body, {
+                                unrecognizedObjectKeys: "passthrough",
+                                allowUnrecognizedUnionMembers: true,
+                                allowUnrecognizedEnumValues: true,
+                                skipValidation: true,
+                                breadcrumbsPrefix: ["response"],
+                            })
+                        );
+                    default:
+                        throw new errors.HumanloopError({
+                            statusCode: _response.error.statusCode,
+                            body: _response.error.body,
+                        });
+                }
+            }
+            switch (_response.error.reason) {
+                case "non-json":
                     throw new errors.HumanloopError({
                         statusCode: _response.error.statusCode,
-                        body: _response.error.body,
+                        body: _response.error.rawBody,
+                    });
+                case "timeout":
+                    throw new errors.HumanloopTimeoutError();
+                case "unknown":
+                    throw new errors.HumanloopError({
+                        message: _response.error.errorMessage,
                     });
             }
-        }
-
-        switch (_response.error.reason) {
-            case "non-json":
-                throw new errors.HumanloopError({
-                    statusCode: _response.error.statusCode,
-                    body: _response.error.rawBody,
+        };
+        let _offset = request.page != null ? request.page : 1;
+        return new core.Pageable<Humanloop.PaginatedPromptLogResponse, Humanloop.PromptLogResponse>({
+            response: await list(request),
+            hasNextPage: (response) => (response?.records ?? []).length > 0,
+            getItems: (response) => response?.records ?? [],
+            loadPage: (_response) => {
+                _offset += 1;
+                return list({
+                    ...request,
+                    page: _offset,
                 });
-            case "timeout":
-                throw new errors.HumanloopTimeoutError();
-            case "unknown":
-                throw new errors.HumanloopError({
-                    message: _response.error.errorMessage,
-                });
-        }
+            },
+        });
     }
 
     /**
@@ -192,7 +201,7 @@ export class Logs {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.0.1",
+                "X-Fern-SDK-Version": "0.8.0-beta0",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -211,7 +220,7 @@ export class Logs {
             switch (_response.error.statusCode) {
                 case 422:
                     throw new Humanloop.UnprocessableEntityError(
-                        await serializers.HttpValidationError.parseOrThrow(_response.error.body, {
+                        serializers.HttpValidationError.parseOrThrow(_response.error.body, {
                             unrecognizedObjectKeys: "passthrough",
                             allowUnrecognizedUnionMembers: true,
                             allowUnrecognizedEnumValues: true,
@@ -263,7 +272,7 @@ export class Logs {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.0.1",
+                "X-Fern-SDK-Version": "0.8.0-beta0",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -274,7 +283,7 @@ export class Logs {
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return await serializers.PromptLogResponse.parseOrThrow(_response.body, {
+            return serializers.PromptLogResponse.parseOrThrow(_response.body, {
                 unrecognizedObjectKeys: "passthrough",
                 allowUnrecognizedUnionMembers: true,
                 allowUnrecognizedEnumValues: true,
@@ -287,7 +296,7 @@ export class Logs {
             switch (_response.error.statusCode) {
                 case 422:
                     throw new Humanloop.UnprocessableEntityError(
-                        await serializers.HttpValidationError.parseOrThrow(_response.error.body, {
+                        serializers.HttpValidationError.parseOrThrow(_response.error.body, {
                             unrecognizedObjectKeys: "passthrough",
                             allowUnrecognizedUnionMembers: true,
                             allowUnrecognizedEnumValues: true,

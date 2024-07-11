@@ -8,25 +8,25 @@ import * as Humanloop from "../../../../index";
  * @example
  *     {}
  */
-export interface EvaluatorsListRequest {
+export interface ListPromptsGetRequest {
     /**
-     * Page offset for pagination.
+     * Page number for pagination.
      */
     page?: number;
     /**
-     * Page size for pagination. Number of Evaluators to fetch.
+     * Page size for pagination. Number of Prompts to fetch.
      */
     size?: number;
     /**
-     * Case-insensitive filter for Evaluator name.
+     * Case-insensitive filter for Prompt name.
      */
     name?: string;
     /**
-     * Case-insensitive filter for users in the Evaluator. This filter matches against both email address and name of users.
+     * Case-insensitive filter for users in the Prompt. This filter matches against both email address and name of users.
      */
     userFilter?: string;
     /**
-     * Field to sort Evaluators by
+     * Field to sort Prompts by
      */
     sortBy?: Humanloop.ProjectSortBy;
     /**

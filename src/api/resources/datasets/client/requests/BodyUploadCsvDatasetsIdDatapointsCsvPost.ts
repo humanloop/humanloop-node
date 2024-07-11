@@ -5,11 +5,10 @@
 /**
  * @example
  *     {
- *         logIds: ["log_ids"],
  *         commitMessage: "commit_message"
  *     }
  */
-export interface BodyDatasetsCreateDatapointsFromLogs {
+export interface BodyUploadCsvDatasetsIdDatapointsCsvPost {
     /**
      * ID of the specific Dataset version to base the created Version on.
      */
@@ -18,8 +17,6 @@ export interface BodyDatasetsCreateDatapointsFromLogs {
      * Name of the Environment identifying a deployed Version to base the created Version on.
      */
     environment?: string;
-    /** List of Log IDs to create Datapoints from. */
-    logIds: string[];
     /** Commit message for the new Dataset version. */
     commitMessage: string;
 }

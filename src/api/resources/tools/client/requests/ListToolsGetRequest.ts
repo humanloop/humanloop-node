@@ -8,7 +8,7 @@ import * as Humanloop from "../../../../index";
  * @example
  *     {}
  */
-export interface ToolsListRequest {
+export interface ListToolsGetRequest {
     /**
      * Page offset for pagination.
      */

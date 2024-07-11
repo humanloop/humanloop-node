@@ -7,14 +7,14 @@ import * as Humanloop from "../../../../../api/index";
 import * as core from "../../../../../core";
 import { EvaluationStatus } from "../../../../types/EvaluationStatus";
 
-export const UpdateEvaluationStatusRequest: core.serialization.Schema<
-    serializers.UpdateEvaluationStatusRequest.Raw,
-    Humanloop.UpdateEvaluationStatusRequest
+export const BodyUpdateStatusEvaluationsIdStatusPatch: core.serialization.Schema<
+    serializers.BodyUpdateStatusEvaluationsIdStatusPatch.Raw,
+    Humanloop.BodyUpdateStatusEvaluationsIdStatusPatch
 > = core.serialization.object({
     status: EvaluationStatus,
 });
 
-export declare namespace UpdateEvaluationStatusRequest {
+export declare namespace BodyUpdateStatusEvaluationsIdStatusPatch {
     interface Raw {
         status: EvaluationStatus.Raw;
     }

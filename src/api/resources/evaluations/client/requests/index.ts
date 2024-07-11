@@ -1,2 +1,3 @@
-export { type EvaluationsListRequest } from "./EvaluationsListRequest";
-export { type UpdateEvaluationStatusRequest } from "./UpdateEvaluationStatusRequest";
+export { type ListEvaluationsGetRequest } from "./ListEvaluationsGetRequest";
+export { type BodyUpdateStatusEvaluationsIdStatusPatch } from "./BodyUpdateStatusEvaluationsIdStatusPatch";
+export { type GetLogsEvaluationsIdLogsGetRequest } from "./GetLogsEvaluationsIdLogsGetRequest";

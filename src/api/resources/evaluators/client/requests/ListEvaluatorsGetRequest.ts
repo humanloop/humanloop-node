@@ -8,25 +8,25 @@ import * as Humanloop from "../../../../index";
  * @example
  *     {}
  */
-export interface DatasetsListRequest {
+export interface ListEvaluatorsGetRequest {
     /**
      * Page offset for pagination.
      */
     page?: number;
     /**
-     * Page size for pagination. Number of Datasets to fetch.
+     * Page size for pagination. Number of Evaluators to fetch.
      */
     size?: number;
     /**
-     * Case-insensitive filter for Dataset name.
+     * Case-insensitive filter for Evaluator name.
      */
     name?: string;
     /**
-     * Case-insensitive filter for users in the Dataset. This filter matches against both email address and name of users.
+     * Case-insensitive filter for users in the Evaluator. This filter matches against both email address and name of users.
      */
     userFilter?: string;
     /**
-     * Field to sort Datasets by
+     * Field to sort Evaluators by
      */
     sortBy?: Humanloop.ProjectSortBy;
     /**

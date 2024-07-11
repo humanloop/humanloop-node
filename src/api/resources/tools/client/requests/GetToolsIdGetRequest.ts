@@ -6,9 +6,9 @@
  * @example
  *     {}
  */
-export interface PromptsGetRequest {
+export interface GetToolsIdGetRequest {
     /**
-     * A specific Version ID of the Prompt to retrieve.
+     * A specific Version ID of the Tool to retrieve.
      */
     versionId?: string;
     /**

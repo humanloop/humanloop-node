@@ -8,12 +8,22 @@ import * as core from "../../core";
 import { LlmEvaluatorRequest } from "./LlmEvaluatorRequest";
 import { CodeEvaluatorRequest } from "./CodeEvaluatorRequest";
 import { HumanEvaluatorRequest } from "./HumanEvaluatorRequest";
+import { ExternalEvaluatorRequest } from "./ExternalEvaluatorRequest";
 
 export const EvaluatorResponseSpec: core.serialization.Schema<
     serializers.EvaluatorResponseSpec.Raw,
     Humanloop.EvaluatorResponseSpec
-> = core.serialization.undiscriminatedUnion([LlmEvaluatorRequest, CodeEvaluatorRequest, HumanEvaluatorRequest]);
+> = core.serialization.undiscriminatedUnion([
+    LlmEvaluatorRequest,
+    CodeEvaluatorRequest,
+    HumanEvaluatorRequest,
+    ExternalEvaluatorRequest,
+]);
 
 export declare namespace EvaluatorResponseSpec {
-    type Raw = LlmEvaluatorRequest.Raw | CodeEvaluatorRequest.Raw | HumanEvaluatorRequest.Raw;
+    type Raw =
+        | LlmEvaluatorRequest.Raw
+        | CodeEvaluatorRequest.Raw
+        | HumanEvaluatorRequest.Raw
+        | ExternalEvaluatorRequest.Raw;
 }

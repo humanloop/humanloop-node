@@ -7,4 +7,5 @@ import * as Humanloop from "../../../index";
 export type RunSyncEvaluationRequestEvaluator =
     | Humanloop.LlmEvaluatorRequest
     | Humanloop.CodeEvaluatorRequest
-    | Humanloop.HumanEvaluatorRequest;
+    | Humanloop.HumanEvaluatorRequest
+    | Humanloop.ExternalEvaluatorRequest;

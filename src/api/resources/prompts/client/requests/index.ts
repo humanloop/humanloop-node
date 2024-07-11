@@ -1,8 +1,8 @@
-export { type PromptsListPromptsRequest } from "./PromptsListPromptsRequest";
+export { type ListPromptsGetRequest } from "./ListPromptsGetRequest";
 export { type PromptRequest } from "./PromptRequest";
-export { type PromptsGetRequest } from "./PromptsGetRequest";
+export { type GetPromptsIdGetRequest } from "./GetPromptsIdGetRequest";
 export { type UpdatePromptRequest } from "./UpdatePromptRequest";
-export { type PromptsListVersionsRequest } from "./PromptsListVersionsRequest";
+export { type ListVersionsPromptsIdVersionsGetRequest } from "./ListVersionsPromptsIdVersionsGetRequest";
 export { type PromptLogRequest } from "./PromptLogRequest";
 export { type PromptCallRequest } from "./PromptCallRequest";
 export { type DeployPromptsIdEnvironmentsEnvironmentIdPostRequest } from "./DeployPromptsIdEnvironmentsEnvironmentIdPostRequest";

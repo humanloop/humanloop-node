@@ -6,7 +6,7 @@
  * @example
  *     {}
  */
-export interface SessionsListRequest {
+export interface ListSessionsGetRequest {
     /**
      * Unique identifier for File to return Sessions for. Sessions that contain any Logs associated to this File will be returned.
      */

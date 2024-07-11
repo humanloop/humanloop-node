@@ -10,6 +10,6 @@ import * as Humanloop from "../../../../index";
  *         status: Humanloop.EvaluationStatus.Pending
  *     }
  */
-export interface UpdateEvaluationStatusRequest {
+export interface BodyUpdateStatusEvaluationsIdStatusPatch {
     status: Humanloop.EvaluationStatus;
 }

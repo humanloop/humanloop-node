@@ -1,6 +1,6 @@
 ## Prompts
 
-<details><summary> <code>client.prompts.<a href="./src/api/resources/prompts/client/Client.ts">listPrompts</a>({ ...params }) -> Humanloop.ListPrompts</code> </summary>
+<details><summary> <code>client.prompts.<a href="./src/api/resources/prompts/client/Client.ts">list</a>({ ...params }) -> core.Page<Humanloop.PromptResponse></code> </summary>
 
 <dl>
 
@@ -37,7 +37,7 @@ Get a list of Prompts.
 <dd>
 
 ```ts
-await client.prompts.listPrompts();
+await client.prompts.list();
 ```
 
 </dd>
@@ -58,7 +58,7 @@ await client.prompts.listPrompts();
 
 <dd>
 
-**request: `Humanloop.PromptsListPromptsRequest`**
+**request: `Humanloop.ListPromptsGetRequest`**
 
 </dd>
 
@@ -245,7 +245,7 @@ await client.prompts.get("id");
 
 <dd>
 
-**request: `Humanloop.PromptsGetRequest`**
+**request: `Humanloop.GetPromptsIdGetRequest`**
 
 </dd>
 
@@ -446,7 +446,7 @@ await client.prompts.move("id");
 </dl>
 </details>
 
-<details><summary> <code>client.prompts.<a href="./src/api/resources/prompts/client/Client.ts">listversions</a>(id, { ...params }) -> Humanloop.ListPrompts</code> </summary>
+<details><summary> <code>client.prompts.<a href="./src/api/resources/prompts/client/Client.ts">listVersions</a>(id, { ...params }) -> Humanloop.ListPrompts</code> </summary>
 
 <dl>
 
@@ -483,7 +483,7 @@ Get a list of all the versions of a Prompt.
 <dd>
 
 ```ts
-await client.prompts.listversions("id");
+await client.prompts.listVersions("id");
 ```
 
 </dd>
@@ -514,7 +514,7 @@ await client.prompts.listversions("id");
 
 <dd>
 
-**request: `Humanloop.PromptsListVersionsRequest`**
+**request: `Humanloop.ListVersionsPromptsIdVersionsGetRequest`**
 
 </dd>
 
@@ -735,7 +735,7 @@ await client.prompts.log();
 </dl>
 </details>
 
-<details><summary> <code>client.prompts.<a href="./src/api/resources/prompts/client/Client.ts">call</a>({ ...params }) -> Humanloop.PromptsCallResponse</code> </summary>
+<details><summary> <code>client.prompts.<a href="./src/api/resources/prompts/client/Client.ts">call</a>({ ...params }) -> Humanloop.CallPromptsCallPostResponse</code> </summary>
 
 <dl>
 
@@ -1214,7 +1214,7 @@ await client.prompts.listEnvironments("id");
 
 ## Tools
 
-<details><summary> <code>client.tools.<a href="./src/api/resources/tools/client/Client.ts">list</a>({ ...params }) -> Humanloop.ListTools</code> </summary>
+<details><summary> <code>client.tools.<a href="./src/api/resources/tools/client/Client.ts">list</a>({ ...params }) -> core.Page<Humanloop.ToolResponse></code> </summary>
 
 <dl>
 
@@ -1272,7 +1272,7 @@ await client.tools.list();
 
 <dd>
 
-**request: `Humanloop.ToolsListRequest`**
+**request: `Humanloop.ListToolsGetRequest`**
 
 </dd>
 
@@ -1457,7 +1457,7 @@ await client.tools.get("id");
 
 <dd>
 
-**request: `Humanloop.ToolsGetRequest`**
+**request: `Humanloop.GetToolsIdGetRequest`**
 
 </dd>
 
@@ -1658,7 +1658,7 @@ await client.tools.move("id");
 </dl>
 </details>
 
-<details><summary> <code>client.tools.<a href="./src/api/resources/tools/client/Client.ts">listversions</a>(id, { ...params }) -> Humanloop.ListTools</code> </summary>
+<details><summary> <code>client.tools.<a href="./src/api/resources/tools/client/Client.ts">listVersions</a>(id, { ...params }) -> Humanloop.ListTools</code> </summary>
 
 <dl>
 
@@ -1695,7 +1695,7 @@ Get a list of all the versions of a Tool.
 <dd>
 
 ```ts
-await client.tools.listversions("id");
+await client.tools.listVersions("id");
 ```
 
 </dd>
@@ -1726,7 +1726,7 @@ await client.tools.listversions("id");
 
 <dd>
 
-**request: `Humanloop.ToolsListVersionsRequest`**
+**request: `Humanloop.ListVersionsToolsIdVersionsGetRequest`**
 
 </dd>
 
@@ -2332,7 +2332,7 @@ await client.tools.listEnvironments("id");
 
 ## Datasets
 
-<details><summary> <code>client.datasets.<a href="./src/api/resources/datasets/client/Client.ts">list</a>({ ...params }) -> Humanloop.PaginatedDatasetResponse</code> </summary>
+<details><summary> <code>client.datasets.<a href="./src/api/resources/datasets/client/Client.ts">list</a>({ ...params }) -> core.Page<Humanloop.DatasetResponse></code> </summary>
 
 <dl>
 
@@ -2390,7 +2390,7 @@ await client.datasets.list();
 
 <dd>
 
-**request: `Humanloop.DatasetsListRequest`**
+**request: `Humanloop.ListDatasetsGetRequest`**
 
 </dd>
 
@@ -2592,7 +2592,7 @@ await client.datasets.get("id");
 
 <dd>
 
-**request: `Humanloop.DatasetsGetRequest`**
+**request: `Humanloop.GetDatasetsIdGetRequest`**
 
 </dd>
 
@@ -2793,7 +2793,7 @@ await client.datasets.move("id");
 </dl>
 </details>
 
-<details><summary> <code>client.datasets.<a href="./src/api/resources/datasets/client/Client.ts">listdatapoints</a>(id, { ...params }) -> Humanloop.PaginatedDatapointResponse</code> </summary>
+<details><summary> <code>client.datasets.<a href="./src/api/resources/datasets/client/Client.ts">listDatapoints</a>(id, { ...params }) -> core.Page<Humanloop.DatapointResponse></code> </summary>
 
 <dl>
 
@@ -2830,7 +2830,7 @@ List all Datapoints for the Dataset with the given ID.
 <dd>
 
 ```ts
-await client.datasets.listdatapoints("id");
+await client.datasets.listDatapoints("id");
 ```
 
 </dd>
@@ -2861,7 +2861,7 @@ await client.datasets.listdatapoints("id");
 
 <dd>
 
-**request: `Humanloop.DatasetsListDatapointsRequest`**
+**request: `Humanloop.ListDatapointsDatasetsIdDatapointsGetRequest`**
 
 </dd>
 
@@ -2886,7 +2886,7 @@ await client.datasets.listdatapoints("id");
 </dl>
 </details>
 
-<details><summary> <code>client.datasets.<a href="./src/api/resources/datasets/client/Client.ts">listversions</a>(id, { ...params }) -> Humanloop.ListDatasets</code> </summary>
+<details><summary> <code>client.datasets.<a href="./src/api/resources/datasets/client/Client.ts">listVersions</a>(id, { ...params }) -> Humanloop.ListDatasets</code> </summary>
 
 <dl>
 
@@ -2923,7 +2923,7 @@ Get a list of the versions for a Dataset.
 <dd>
 
 ```ts
-await client.datasets.listversions("id");
+await client.datasets.listVersions("id");
 ```
 
 </dd>
@@ -2954,7 +2954,7 @@ await client.datasets.listversions("id");
 
 <dd>
 
-**request: `Humanloop.DatasetsListVersionsRequest`**
+**request: `Humanloop.ListVersionsDatasetsIdVersionsGetRequest`**
 
 </dd>
 
@@ -3084,7 +3084,119 @@ await client.datasets.commit("id", "version_id", {
 </dl>
 </details>
 
-<details><summary> <code>client.datasets.<a href="./src/api/resources/datasets/client/Client.ts">createdatapointsfromlogs</a>(id, { ...params }) -> Humanloop.DatasetResponse</code> </summary>
+<details><summary> <code>client.datasets.<a href="./src/api/resources/datasets/client/Client.ts">uploadCsv</a>(file, id, { ...params }) -> Humanloop.DatasetResponse</code> </summary>
+
+<dl>
+
+<dd>
+
+#### 📝 Description
+
+<dl>
+
+<dd>
+
+<dl>
+
+<dd>
+
+Add Datapoints from a CSV file to a Dataset.
+
+This will create a new committed version of the Dataset with the Datapoints from the CSV file.
+
+If either `version_id` or `environment` is provided, the new version will be based on the specified version,
+with the Datapoints from the CSV file added to the existing Datapoints in the version.
+If neither `version_id` nor `environment` is provided, the new version will be based on the version
+of the Dataset that is deployed to the default Environment.
+
+</dd>
+
+</dl>
+
+</dd>
+
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+
+<dd>
+
+<dl>
+
+<dd>
+
+```ts
+await client.datasets.uploadCsv(fs.createReadStream("/path/to/your/file"), "id", {
+    commitMessage: "commit_message",
+});
+```
+
+</dd>
+
+</dl>
+
+</dd>
+
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+
+<dd>
+
+<dl>
+
+<dd>
+
+**file: `File | fs.ReadStream`**
+
+</dd>
+
+</dl>
+
+<dl>
+
+<dd>
+
+**id: `string`**
+
+</dd>
+
+</dl>
+
+<dl>
+
+<dd>
+
+**request: `Humanloop.BodyUploadCsvDatasetsIdDatapointsCsvPost`**
+
+</dd>
+
+</dl>
+
+<dl>
+
+<dd>
+
+**requestOptions: `Datasets.RequestOptions`**
+
+</dd>
+
+</dl>
+
+</dd>
+
+</dl>
+
+</dd>
+
+</dl>
+</details>
+
+<details><summary> <code>client.datasets.<a href="./src/api/resources/datasets/client/Client.ts">fromLogs</a>(id, { ...params }) -> Humanloop.DatasetResponse</code> </summary>
 
 <dl>
 
@@ -3128,7 +3240,7 @@ of the Dataset that is deployed to the default Environment.
 <dd>
 
 ```ts
-await client.datasets.createdatapointsfromlogs("id", {
+await client.datasets.fromLogs("id", {
     logIds: ["log_ids"],
     commitMessage: "commit_message",
 });
@@ -3162,7 +3274,7 @@ await client.datasets.createdatapointsfromlogs("id", {
 
 <dd>
 
-**request: `Humanloop.BodyDatasetsCreateDatapointsFromLogs`**
+**request: `Humanloop.BodyFromLogsDatasetsIdDatapointsLogsPost`**
 
 </dd>
 
@@ -3896,7 +4008,7 @@ await client.directories.update("id");
 
 ## Evaluations
 
-<details><summary> <code>client.evaluations.<a href="./src/api/resources/evaluations/client/Client.ts">list</a>({ ...params }) -> Humanloop.PaginatedEvaluationResponse</code> </summary>
+<details><summary> <code>client.evaluations.<a href="./src/api/resources/evaluations/client/Client.ts">list</a>({ ...params }) -> core.Page<Humanloop.EvaluationResponse></code> </summary>
 
 <dl>
 
@@ -3958,7 +4070,7 @@ await client.evaluations.list({
 
 <dd>
 
-**request: `Humanloop.EvaluationsListRequest`**
+**request: `Humanloop.ListEvaluationsGetRequest`**
 
 </dd>
 
@@ -4366,7 +4478,7 @@ await client.evaluations.update("id", {
 </dl>
 </details>
 
-<details><summary> <code>client.evaluations.<a href="./src/api/resources/evaluations/client/Client.ts">updatestatus</a>(id, { ...params }) -> Humanloop.EvaluationResponse</code> </summary>
+<details><summary> <code>client.evaluations.<a href="./src/api/resources/evaluations/client/Client.ts">updateStatus</a>(id, { ...params }) -> Humanloop.EvaluationResponse</code> </summary>
 
 <dl>
 
@@ -4406,7 +4518,7 @@ as completed.
 <dd>
 
 ```ts
-await client.evaluations.updatestatus("id", {
+await client.evaluations.updateStatus("id", {
     status: Humanloop.EvaluationStatus.Pending,
 });
 ```
@@ -4439,7 +4551,7 @@ await client.evaluations.updatestatus("id", {
 
 <dd>
 
-**request: `Humanloop.UpdateEvaluationStatusRequest`**
+**request: `Humanloop.BodyUpdateStatusEvaluationsIdStatusPatch`**
 
 </dd>
 
@@ -4464,7 +4576,7 @@ await client.evaluations.updatestatus("id", {
 </dl>
 </details>
 
-<details><summary> <code>client.evaluations.<a href="./src/api/resources/evaluations/client/Client.ts">getstats</a>(id) -> Humanloop.EvaluationStats</code> </summary>
+<details><summary> <code>client.evaluations.<a href="./src/api/resources/evaluations/client/Client.ts">getStats</a>(id) -> Humanloop.EvaluationStats</code> </summary>
 
 <dl>
 
@@ -4505,7 +4617,7 @@ This includes the number of generated Logs for every evaluatee and Evaluator met
 <dd>
 
 ```ts
-await client.evaluations.getstats("id");
+await client.evaluations.getStats("id");
 ```
 
 </dd>
@@ -4551,9 +4663,267 @@ await client.evaluations.getstats("id");
 </dl>
 </details>
 
+<details><summary> <code>client.evaluations.<a href="./src/api/resources/evaluations/client/Client.ts">getLogs</a>(id, { ...params }) -> Humanloop.PaginatedDataEvaluationReportLogResponse</code> </summary>
+
+<dl>
+
+<dd>
+
+#### 📝 Description
+
+<dl>
+
+<dd>
+
+<dl>
+
+<dd>
+
+Get Logs by Evaluation ID.
+
+Each Evaluation Log corresponds to a (Datapoint, Evaluated Version) pair.
+It has an optional generated Log and a list of Evaluator Logs.
+
+</dd>
+
+</dl>
+
+</dd>
+
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+
+<dd>
+
+<dl>
+
+<dd>
+
+```ts
+await client.evaluations.getLogs("id");
+```
+
+</dd>
+
+</dl>
+
+</dd>
+
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+
+<dd>
+
+<dl>
+
+<dd>
+
+**id: `string`** — String ID of evaluation. Starts with `ev_` or `evr_`.
+
+</dd>
+
+</dl>
+
+<dl>
+
+<dd>
+
+**request: `Humanloop.GetLogsEvaluationsIdLogsGetRequest`**
+
+</dd>
+
+</dl>
+
+<dl>
+
+<dd>
+
+**requestOptions: `Evaluations.RequestOptions`**
+
+</dd>
+
+</dl>
+
+</dd>
+
+</dl>
+
+</dd>
+
+</dl>
+</details>
+
 ## Evaluators
 
-<details><summary> <code>client.evaluators.<a href="./src/api/resources/evaluators/client/Client.ts">list</a>({ ...params }) -> Humanloop.ListEvaluators</code> </summary>
+<details><summary> <code>client.evaluators.<a href="./src/api/resources/evaluators/client/Client.ts">listDefault</a>() -> Humanloop.EvaluatorResponse[]</code> </summary>
+
+<dl>
+
+<dd>
+
+#### 📝 Description
+
+<dl>
+
+<dd>
+
+<dl>
+
+<dd>
+
+Get a list of default evaluators for the organization.
+
+</dd>
+
+</dl>
+
+</dd>
+
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+
+<dd>
+
+<dl>
+
+<dd>
+
+```ts
+await client.evaluators.listDefault();
+```
+
+</dd>
+
+</dl>
+
+</dd>
+
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+
+<dd>
+
+<dl>
+
+<dd>
+
+**requestOptions: `Evaluators.RequestOptions`**
+
+</dd>
+
+</dl>
+
+</dd>
+
+</dl>
+
+</dd>
+
+</dl>
+</details>
+
+<details><summary> <code>client.evaluators.<a href="./src/api/resources/evaluators/client/Client.ts">debug</a>({ ...params }) -> Humanloop.EvaluationDebugResultResponse[]</code> </summary>
+
+<dl>
+
+<dd>
+
+#### 📝 Description
+
+<dl>
+
+<dd>
+
+<dl>
+
+<dd>
+
+Run a synchronous evaluator execution on a collection of datapoints.
+
+</dd>
+
+</dl>
+
+</dd>
+
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+
+<dd>
+
+<dl>
+
+<dd>
+
+```ts
+await client.evaluators.debug({
+    fileId: "file_id",
+    evaluator: {
+        argumentsType: Humanloop.EvaluatorArgumentsType.TargetFree,
+        returnType: Humanloop.EvaluatorReturnTypeEnum.Boolean,
+    },
+});
+```
+
+</dd>
+
+</dl>
+
+</dd>
+
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+
+<dd>
+
+<dl>
+
+<dd>
+
+**request: `Humanloop.RunSyncEvaluationRequest`**
+
+</dd>
+
+</dl>
+
+<dl>
+
+<dd>
+
+**requestOptions: `Evaluators.RequestOptions`**
+
+</dd>
+
+</dl>
+
+</dd>
+
+</dl>
+
+</dd>
+
+</dl>
+</details>
+
+<details><summary> <code>client.evaluators.<a href="./src/api/resources/evaluators/client/Client.ts">list</a>({ ...params }) -> core.Page<Humanloop.EvaluatorResponse></code> </summary>
 
 <dl>
 
@@ -4611,7 +4981,7 @@ await client.evaluators.list();
 
 <dd>
 
-**request: `Humanloop.EvaluatorsListRequest`**
+**request: `Humanloop.ListEvaluatorsGetRequest`**
 
 </dd>
 
@@ -4801,7 +5171,7 @@ await client.evaluators.get("id");
 
 <dd>
 
-**request: `Humanloop.EvaluatorsGetRequest`**
+**request: `Humanloop.GetEvaluatorsIdGetRequest`**
 
 </dd>
 
@@ -5002,7 +5372,7 @@ await client.evaluators.move("id");
 </dl>
 </details>
 
-<details><summary> <code>client.evaluators.<a href="./src/api/resources/evaluators/client/Client.ts">listversions</a>(id, { ...params }) -> Humanloop.ListEvaluators</code> </summary>
+<details><summary> <code>client.evaluators.<a href="./src/api/resources/evaluators/client/Client.ts">listVersions</a>(id, { ...params }) -> Humanloop.ListEvaluators</code> </summary>
 
 <dl>
 
@@ -5039,7 +5409,7 @@ Get a list of all the versions of an Evaluator.
 <dd>
 
 ```ts
-await client.evaluators.listversions("id");
+await client.evaluators.listVersions("id");
 ```
 
 </dd>
@@ -5070,7 +5440,7 @@ await client.evaluators.listversions("id");
 
 <dd>
 
-**request: `Humanloop.EvaluatorsListVersionsRequest`**
+**request: `Humanloop.ListVersionsEvaluatorsIdVersionsGetRequest`**
 
 </dd>
 
@@ -5176,168 +5546,6 @@ await client.evaluators.commit("id", "version_id", {
 <dd>
 
 **request: `Humanloop.CommitRequest`**
-
-</dd>
-
-</dl>
-
-<dl>
-
-<dd>
-
-**requestOptions: `Evaluators.RequestOptions`**
-
-</dd>
-
-</dl>
-
-</dd>
-
-</dl>
-
-</dd>
-
-</dl>
-</details>
-
-<details><summary> <code>client.evaluators.<a href="./src/api/resources/evaluators/client/Client.ts">listdefault</a>() -> Humanloop.EvaluatorResponse[]</code> </summary>
-
-<dl>
-
-<dd>
-
-#### 📝 Description
-
-<dl>
-
-<dd>
-
-<dl>
-
-<dd>
-
-Get a list of default evaluators for the organization.
-
-</dd>
-
-</dl>
-
-</dd>
-
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-
-<dd>
-
-<dl>
-
-<dd>
-
-```ts
-await client.evaluators.listdefault();
-```
-
-</dd>
-
-</dl>
-
-</dd>
-
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-
-<dd>
-
-<dl>
-
-<dd>
-
-**requestOptions: `Evaluators.RequestOptions`**
-
-</dd>
-
-</dl>
-
-</dd>
-
-</dl>
-
-</dd>
-
-</dl>
-</details>
-
-<details><summary> <code>client.evaluators.<a href="./src/api/resources/evaluators/client/Client.ts">debug</a>({ ...params }) -> Humanloop.EvaluationDebugResultResponse[]</code> </summary>
-
-<dl>
-
-<dd>
-
-#### 📝 Description
-
-<dl>
-
-<dd>
-
-<dl>
-
-<dd>
-
-Run a synchronous evaluator execution on a collection of datapoints.
-
-</dd>
-
-</dl>
-
-</dd>
-
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-
-<dd>
-
-<dl>
-
-<dd>
-
-```ts
-await client.evaluators.debug({
-    fileId: "file_id",
-    evaluator: {
-        argumentsType: Humanloop.EvaluatorArgumentsType.TargetFree,
-        returnType: Humanloop.EvaluatorReturnTypeEnum.Boolean,
-    },
-});
-```
-
-</dd>
-
-</dl>
-
-</dd>
-
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-
-<dd>
-
-<dl>
-
-<dd>
-
-**request: `Humanloop.RunSyncEvaluationRequest`**
 
 </dd>
 
@@ -5651,7 +5859,7 @@ await client.evaluators.listEnvironments("id");
 
 ## Logs
 
-<details><summary> <code>client.logs.<a href="./src/api/resources/logs/client/Client.ts">listLogsForFile</a>({ ...params }) -> Humanloop.PaginatedPromptLogResponse</code> </summary>
+<details><summary> <code>client.logs.<a href="./src/api/resources/logs/client/Client.ts">list</a>({ ...params }) -> core.Page<Humanloop.PromptLogResponse></code> </summary>
 
 <dl>
 
@@ -5688,7 +5896,7 @@ List Logs.
 <dd>
 
 ```ts
-await client.logs.listLogsForFile({
+await client.logs.list({
     fileId: "file_id",
 });
 ```
@@ -5711,7 +5919,7 @@ await client.logs.listLogsForFile({
 
 <dd>
 
-**request: `Humanloop.ListLogsForFileLogsGetRequest`**
+**request: `Humanloop.ListLogsGetRequest`**
 
 </dd>
 
@@ -6072,7 +6280,7 @@ await client.sessions.delete("id");
 </dl>
 </details>
 
-<details><summary> <code>client.sessions.<a href="./src/api/resources/sessions/client/Client.ts">list</a>({ ...params }) -> Humanloop.PaginatedSessionResponse</code> </summary>
+<details><summary> <code>client.sessions.<a href="./src/api/resources/sessions/client/Client.ts">list</a>({ ...params }) -> core.Page<Humanloop.SessionResponse></code> </summary>
 
 <dl>
 
@@ -6130,7 +6338,7 @@ await client.sessions.list();
 
 <dd>
 
-**request: `Humanloop.SessionsListRequest`**
+**request: `Humanloop.ListSessionsGetRequest`**
 
 </dd>
 

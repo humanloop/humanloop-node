@@ -6,7 +6,7 @@
  * @example
  *     {}
  */
-export interface EvaluatorsGetRequest {
+export interface GetEvaluatorsIdGetRequest {
     /**
      * A specific Version ID of the Evaluator to retrieve.
      */

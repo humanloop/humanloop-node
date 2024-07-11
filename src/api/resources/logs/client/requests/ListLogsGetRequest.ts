@@ -10,7 +10,7 @@ import * as Humanloop from "../../../../index";
  *         fileId: "file_id"
  *     }
  */
-export interface ListLogsForFileLogsGetRequest {
+export interface ListLogsGetRequest {
     /**
      * Unique identifier for the File to list Logs for.
      */

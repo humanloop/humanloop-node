@@ -8,7 +8,7 @@
  *         fileId: "file_id"
  *     }
  */
-export interface EvaluationsListRequest {
+export interface ListEvaluationsGetRequest {
     /**
      * Filter by File ID. If provided, only Evaluation for the specified File will be returned.
      */

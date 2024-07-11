@@ -8,25 +8,25 @@ import * as Humanloop from "../../../../index";
  * @example
  *     {}
  */
-export interface PromptsListPromptsRequest {
+export interface ListDatasetsGetRequest {
     /**
-     * Page number for pagination.
+     * Page offset for pagination.
      */
     page?: number;
     /**
-     * Page size for pagination. Number of Prompts to fetch.
+     * Page size for pagination. Number of Datasets to fetch.
      */
     size?: number;
     /**
-     * Case-insensitive filter for Prompt name.
+     * Case-insensitive filter for Dataset name.
      */
     name?: string;
     /**
-     * Case-insensitive filter for users in the Prompt. This filter matches against both email address and name of users.
+     * Case-insensitive filter for users in the Dataset. This filter matches against both email address and name of users.
      */
     userFilter?: string;
     /**
-     * Field to sort Prompts by
+     * Field to sort Datasets by
      */
     sortBy?: Humanloop.ProjectSortBy;
     /**

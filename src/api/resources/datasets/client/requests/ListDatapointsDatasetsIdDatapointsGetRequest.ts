@@ -6,7 +6,7 @@
  * @example
  *     {}
  */
-export interface DatasetsListDatapointsRequest {
+export interface ListDatapointsDatasetsIdDatapointsGetRequest {
     /**
      * A specific Version ID of the Dataset to retrieve.
      */

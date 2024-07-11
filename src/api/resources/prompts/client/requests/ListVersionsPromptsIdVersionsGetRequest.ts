@@ -8,7 +8,7 @@ import * as Humanloop from "../../../../index";
  * @example
  *     {}
  */
-export interface EvaluatorsListVersionsRequest {
+export interface ListVersionsPromptsIdVersionsGetRequest {
     /**
      * Filter versions by status: 'uncommitted', 'committed'. If no status is provided, all versions are returned.
      */

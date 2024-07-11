@@ -8,11 +8,11 @@ import * as core from "../../../../core";
 import { PromptCallResponse } from "../../../types/PromptCallResponse";
 import { PromptCallStreamResponse } from "../../../types/PromptCallStreamResponse";
 
-export const PromptsCallResponse: core.serialization.Schema<
-    serializers.PromptsCallResponse.Raw,
-    Humanloop.PromptsCallResponse
+export const CallPromptsCallPostResponse: core.serialization.Schema<
+    serializers.CallPromptsCallPostResponse.Raw,
+    Humanloop.CallPromptsCallPostResponse
 > = core.serialization.undiscriminatedUnion([PromptCallResponse, PromptCallStreamResponse]);
 
-export declare namespace PromptsCallResponse {
+export declare namespace CallPromptsCallPostResponse {
     type Raw = PromptCallResponse.Raw | PromptCallStreamResponse.Raw;
 }

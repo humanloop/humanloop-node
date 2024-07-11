@@ -8,7 +8,7 @@ import * as core from "../../../../core";
 import { EvaluatorResponse } from "../../../types/EvaluatorResponse";
 
 export const Response: core.serialization.Schema<
-    serializers.evaluators.listdefault.Response.Raw,
+    serializers.evaluators.listDefault.Response.Raw,
     Humanloop.EvaluatorResponse[]
 > = core.serialization.list(EvaluatorResponse);
 

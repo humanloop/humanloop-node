@@ -1,1 +1,1 @@
-export { type SessionsListRequest } from "./SessionsListRequest";
+export { type ListSessionsGetRequest } from "./ListSessionsGetRequest";
