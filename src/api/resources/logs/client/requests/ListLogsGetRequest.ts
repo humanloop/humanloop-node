@@ -7,7 +7,8 @@ import * as Humanloop from "../../../../index";
 /**
  * @example
  *     {
- *         fileId: "file_id"
+ *         fileId: "file_123abc",
+ *         size: 1
  *     }
  */
 export interface ListLogsGetRequest {

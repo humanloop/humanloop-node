@@ -43,7 +43,7 @@ export class Logs {
     constructor(protected readonly _options: Logs.Options) {}
 
     /**
-     * List Logs.
+     * List all Logs for the given filter criteria.
      *
      * @param {Humanloop.ListLogsGetRequest} request
      * @param {Logs.RequestOptions} requestOptions - Request-specific configuration.
@@ -52,7 +52,8 @@ export class Logs {
      *
      * @example
      *     await client.logs.list({
-     *         fileId: "file_id"
+     *         fileId: "file_123abc",
+     *         size: 1
      *     })
      */
     public async list(
@@ -97,7 +98,7 @@ export class Logs {
                 headers: {
                     "X-Fern-Language": "JavaScript",
                     "X-Fern-SDK-Name": "humanloop",
-                    "X-Fern-SDK-Version": "0.8.0-beta1",
+                    "X-Fern-SDK-Version": "0.8.0-beta2",
                     "X-Fern-Runtime": core.RUNTIME.type,
                     "X-Fern-Runtime-Version": core.RUNTIME.version,
                     ...(await this._getCustomAuthorizationHeaders()),
@@ -198,7 +199,7 @@ export class Logs {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta1",
+                "X-Fern-SDK-Version": "0.8.0-beta2",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -257,7 +258,7 @@ export class Logs {
      * @throws {@link Humanloop.UnprocessableEntityError}
      *
      * @example
-     *     await client.logs.get("id")
+     *     await client.logs.get("prv_Wu6zx1lAWJRqOyL8nWuZk")
      */
     public async get(id: string, requestOptions?: Logs.RequestOptions): Promise<Humanloop.PromptLogResponse> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
@@ -269,7 +270,7 @@ export class Logs {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta1",
+                "X-Fern-SDK-Version": "0.8.0-beta2",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),

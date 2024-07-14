@@ -16,11 +16,29 @@ npm i -s humanloop
 Instantiate and use the client with the following:
 
 ```typescript
-import { HumanloopClient } from "humanloop";
+import { HumanloopClient, Humanloop } from "humanloop";
 
 const client = new HumanloopClient({ apiKey: "YOUR_API_KEY" });
-await client.prompts.upsert({
-    model: "model",
+await client.prompts.log({
+    path: "persona",
+    prompt: {
+        model: "gpt-4",
+        template: [
+            {
+                role: Humanloop.ChatRole.System,
+                content: "You are {{person}}. Answer questions as this person. Do not break character.",
+            },
+        ],
+    },
+    messages: [
+        {
+            role: Humanloop.ChatRole.User,
+            content: "What really happened at Roswell?",
+        },
+    ],
+    inputs: {
+        person: "Trump",
+    },
 });
 ```
 
@@ -32,7 +50,7 @@ following namespace:
 ```typescript
 import { Humanloop } from "humanloop";
 
-const request: Humanloop.ListPromptsGetRequest = {
+const request: Humanloop.PromptLogRequest = {
     ...
 };
 ```
@@ -46,7 +64,7 @@ will be thrown.
 import { HumanloopError } from "humanloop";
 
 try {
-    await client.prompts.upsert(...);
+    await client.prompts.log(...);
 } catch (err) {
     if (err instanceof HumanloopError) {
         console.log(err.statusCode);
@@ -111,7 +129,7 @@ A request is deemed retriable when any of the following HTTP status codes is ret
 Use the `maxRetries` request option to configure this behavior.
 
 ```typescript
-const response = await client.prompts.upsert(..., {
+const response = await client.prompts.log(..., {
     maxRetries: 0 // override maxRetries at the request level
 });
 ```
@@ -121,7 +139,7 @@ const response = await client.prompts.upsert(..., {
 The SDK defaults to a 60 second timeout. Use the `timeoutInSeconds` option to configure this behavior.
 
 ```typescript
-const response = await client.prompts.upsert(..., {
+const response = await client.prompts.log(..., {
     timeoutInSeconds: 30 // override timeout to 30s
 });
 ```
@@ -132,7 +150,7 @@ The SDK allows users to abort requests at any point by passing in an abort signa
 
 ```typescript
 const controller = new AbortController();
-const response = await client.prompts.upsert(..., {
+const response = await client.prompts.log(..., {
     abortSignal: controller.signal
 });
 controller.abort(); // aborts the request

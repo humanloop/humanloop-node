@@ -7,10 +7,14 @@ import * as Humanloop from "../../../../index";
 /**
  * @example
  *     {
+ *         path: "Shared Evaluators/Accuracy Evaluator",
  *         spec: {
- *             argumentsType: Humanloop.EvaluatorArgumentsType.TargetFree,
- *             returnType: Humanloop.EvaluatorReturnTypeEnum.Boolean
- *         }
+ *             argumentsType: Humanloop.EvaluatorArgumentsType.TargetRequired,
+ *             returnType: Humanloop.EvaluatorReturnTypeEnum.Number,
+ *             evaluatorType: "python",
+ *             code: "def evaluate(answer, target):\\n    return 0.5"
+ *         },
+ *         commitMessage: "Initial commit"
  *     }
  */
 export interface EvaluatorsRequest {

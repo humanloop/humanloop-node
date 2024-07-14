@@ -8,11 +8,11 @@ import * as core from "../../core";
 import { MonitoringEvaluatorVersionRequest } from "./MonitoringEvaluatorVersionRequest";
 import { MonitoringEvaluatorEnvironmentRequest } from "./MonitoringEvaluatorEnvironmentRequest";
 
-export const EvaluatorActivationDeactivationRequestEvaluatorsToDeactivateItem: core.serialization.Schema<
-    serializers.EvaluatorActivationDeactivationRequestEvaluatorsToDeactivateItem.Raw,
-    Humanloop.EvaluatorActivationDeactivationRequestEvaluatorsToDeactivateItem
+export const EvaluatorActivationDeactivationRequestDeactivateItem: core.serialization.Schema<
+    serializers.EvaluatorActivationDeactivationRequestDeactivateItem.Raw,
+    Humanloop.EvaluatorActivationDeactivationRequestDeactivateItem
 > = core.serialization.undiscriminatedUnion([MonitoringEvaluatorVersionRequest, MonitoringEvaluatorEnvironmentRequest]);
 
-export declare namespace EvaluatorActivationDeactivationRequestEvaluatorsToDeactivateItem {
+export declare namespace EvaluatorActivationDeactivationRequestDeactivateItem {
     type Raw = MonitoringEvaluatorVersionRequest.Raw | MonitoringEvaluatorEnvironmentRequest.Raw;
 }

@@ -52,7 +52,7 @@ export class Sessions {
      * @throws {@link Humanloop.UnprocessableEntityError}
      *
      * @example
-     *     await client.sessions.get("id")
+     *     await client.sessions.get("sesh_123abc")
      */
     public async get(id: string, requestOptions?: Sessions.RequestOptions): Promise<Humanloop.SessionResponse> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
@@ -64,7 +64,7 @@ export class Sessions {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta1",
+                "X-Fern-SDK-Version": "0.8.0-beta2",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -128,7 +128,7 @@ export class Sessions {
      * @throws {@link Humanloop.UnprocessableEntityError}
      *
      * @example
-     *     await client.sessions.delete("id")
+     *     await client.sessions.delete("sesh_123abc")
      */
     public async delete(id: string, requestOptions?: Sessions.RequestOptions): Promise<void> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
@@ -140,7 +140,7 @@ export class Sessions {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta1",
+                "X-Fern-SDK-Version": "0.8.0-beta2",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -198,7 +198,10 @@ export class Sessions {
      * @throws {@link Humanloop.UnprocessableEntityError}
      *
      * @example
-     *     await client.sessions.list()
+     *     await client.sessions.list({
+     *         size: 1,
+     *         fileId: "pr_123abc"
+     *     })
      */
     public async list(
         request: Humanloop.ListSessionsGetRequest = {},
@@ -228,7 +231,7 @@ export class Sessions {
                 headers: {
                     "X-Fern-Language": "JavaScript",
                     "X-Fern-SDK-Name": "humanloop",
-                    "X-Fern-SDK-Version": "0.8.0-beta1",
+                    "X-Fern-SDK-Version": "0.8.0-beta2",
                     "X-Fern-Runtime": core.RUNTIME.type,
                     "X-Fern-Runtime-Version": core.RUNTIME.version,
                     ...(await this._getCustomAuthorizationHeaders()),

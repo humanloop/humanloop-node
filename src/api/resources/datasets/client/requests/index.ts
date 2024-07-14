@@ -5,5 +5,4 @@ export { type UpdateDatasetRequest } from "./UpdateDatasetRequest";
 export { type ListDatapointsDatasetsIdDatapointsGetRequest } from "./ListDatapointsDatasetsIdDatapointsGetRequest";
 export { type ListVersionsDatasetsIdVersionsGetRequest } from "./ListVersionsDatasetsIdVersionsGetRequest";
 export { type BodyUploadCsvDatasetsIdDatapointsCsvPost } from "./BodyUploadCsvDatasetsIdDatapointsCsvPost";
-export { type BodyFromLogsDatasetsIdDatapointsLogsPost } from "./BodyFromLogsDatasetsIdDatapointsLogsPost";
-export { type DeployDatasetsIdEnvironmentsEnvironmentIdPostRequest } from "./DeployDatasetsIdEnvironmentsEnvironmentIdPostRequest";
+export { type SetDeploymentDatasetsIdEnvironmentsEnvironmentIdPostRequest } from "./SetDeploymentDatasetsIdEnvironmentsEnvironmentIdPostRequest";

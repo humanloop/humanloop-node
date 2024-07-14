@@ -7,7 +7,6 @@ import * as core from "./core";
 import { Prompts } from "./api/resources/prompts/client/Client";
 import { Tools } from "./api/resources/tools/client/Client";
 import { Datasets } from "./api/resources/datasets/client/Client";
-import { Directories } from "./api/resources/directories/client/Client";
 import { Evaluations } from "./api/resources/evaluations/client/Client";
 import { Evaluators } from "./api/resources/evaluators/client/Client";
 import { Logs } from "./api/resources/logs/client/Client";
@@ -49,12 +48,6 @@ export class HumanloopClient {
 
     public get datasets(): Datasets {
         return (this._datasets ??= new Datasets(this._options));
-    }
-
-    protected _directories: Directories | undefined;
-
-    public get directories(): Directories {
-        return (this._directories ??= new Directories(this._options));
     }
 
     protected _evaluations: Evaluations | undefined;

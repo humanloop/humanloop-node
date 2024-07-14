@@ -7,7 +7,24 @@ import * as Humanloop from "../../../../index";
 /**
  * @example
  *     {
- *         datapoints: [{}]
+ *         path: "test-questions",
+ *         datapoints: [{
+ *                 inputs: {
+ *                     "question": "What is the capital of France?"
+ *                 },
+ *                 target: {
+ *                     "answer": "Paris"
+ *                 }
+ *             }, {
+ *                 inputs: {
+ *                     "question": "Who wrote Hamlet?"
+ *                 },
+ *                 target: {
+ *                     "answer": "William Shakespeare"
+ *                 }
+ *             }],
+ *         action: Humanloop.UpdateDatesetAction.Add,
+ *         commitMessage: "Add two new questions and answers"
  *     }
  */
 export interface DatasetsRequest {

@@ -32,6 +32,9 @@ export const EvaluatorResponse: core.serialization.ObjectSchema<
     versionLogsCount: core.serialization.property("version_logs_count", core.serialization.number()),
     totalLogsCount: core.serialization.property("total_logs_count", core.serialization.number()),
     inputs: core.serialization.list(InputResponse),
+    evaluators: core.serialization
+        .list(core.serialization.lazyObject(() => serializers.MonitoringEvaluatorResponse))
+        .optional(),
     evaluatorAggregates: core.serialization.property(
         "evaluator_aggregates",
         core.serialization.list(EvaluatorAggregate).optional()
@@ -56,6 +59,7 @@ export declare namespace EvaluatorResponse {
         version_logs_count: number;
         total_logs_count: number;
         inputs: InputResponse.Raw[];
+        evaluators?: serializers.MonitoringEvaluatorResponse.Raw[] | null;
         evaluator_aggregates?: EvaluatorAggregate.Raw[] | null;
     }
 }

@@ -4,7 +4,9 @@
 
 /**
  * @example
- *     {}
+ *     {
+ *         path: "new directory/new name"
+ *     }
  */
 export interface UpdateEvaluatorRequest {
     /** Path of the Evaluator including the Evaluator name, which is used as a unique identifier. */

@@ -8,7 +8,7 @@
  *         versionId: "version_id"
  *     }
  */
-export interface DeployPromptsIdEnvironmentsEnvironmentIdPostRequest {
+export interface SetDeploymentPromptsIdEnvironmentsEnvironmentIdPostRequest {
     /**
      * Unique identifier for the specific version of the Prompt.
      */

@@ -4,7 +4,9 @@
 
 /**
  * @example
- *     {}
+ *     {
+ *         path: "new directory/new name"
+ *     }
  */
 export interface UpdatePromptRequest {
     /** Path of the Prompt including the Prompt name, which is used as a unique identifier. */

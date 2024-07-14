@@ -4,4 +4,4 @@
 
 import * as Humanloop from "../index";
 
-export type EvaluatedVersionResponse = Humanloop.PromptResponse | Humanloop.ToolResponse;
+export type EvaluatedVersionResponse = Humanloop.PromptResponse | Humanloop.ToolResponse | Humanloop.EvaluatorResponse;

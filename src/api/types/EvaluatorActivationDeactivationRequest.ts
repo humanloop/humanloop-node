@@ -5,8 +5,8 @@
 import * as Humanloop from "../index";
 
 export interface EvaluatorActivationDeactivationRequest {
-    /** Monitoring Evaluators to activate. These will be automatically run on new Logs. */
-    evaluatorsToActivate?: Humanloop.EvaluatorActivationDeactivationRequestEvaluatorsToActivateItem[];
+    /** Evaluators to activate on Monitoring. These will be automatically run on new Logs. */
+    activate?: Humanloop.EvaluatorActivationDeactivationRequestActivateItem[];
     /** Evaluators to deactivate. These will not be run on new Logs. */
-    evaluatorsToDeactivate?: Humanloop.EvaluatorActivationDeactivationRequestEvaluatorsToDeactivateItem[];
+    deactivate?: Humanloop.EvaluatorActivationDeactivationRequestDeactivateItem[];
 }

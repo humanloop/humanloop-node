@@ -5,10 +5,10 @@
 import * as Humanloop from "../index";
 
 /**
- * Request model for creating a new Evaluator
+ * Version of the Evaluator used to provide judgments.
  */
 export interface EvaluatorResponse {
-    /** Path of the Dataset including the Dataset name, which is used as a unique identifier. */
+    /** Path of the Evaluator including the Evaluator name, which is used as a unique identifier. */
     path: string;
     /** Unique identifier for the Evaluator. */
     id: string;
@@ -34,6 +34,8 @@ export interface EvaluatorResponse {
     totalLogsCount: number;
     /** Inputs associated to the Prompt. Inputs correspond to any of the variables used within the Prompt template. */
     inputs: Humanloop.InputResponse[];
+    /** Evaluators that have been attached to this Prompt that are used for monitoring logs. */
+    evaluators?: Humanloop.MonitoringEvaluatorResponse[];
     /** Aggregation of Evaluator results for the Evaluator Version. */
     evaluatorAggregates?: Humanloop.EvaluatorAggregate[];
 }

@@ -5,19 +5,18 @@
 import * as serializers from "../index";
 import * as Humanloop from "../../api/index";
 import * as core from "../../core";
-import { EvaluatorResponse } from "./EvaluatorResponse";
 
 export const EvaluationEvaluatorResponse: core.serialization.ObjectSchema<
     serializers.EvaluationEvaluatorResponse.Raw,
     Humanloop.EvaluationEvaluatorResponse
 > = core.serialization.object({
-    version: EvaluatorResponse,
+    version: core.serialization.lazyObject(() => serializers.EvaluatorResponse),
     orchestrated: core.serialization.boolean(),
 });
 
 export declare namespace EvaluationEvaluatorResponse {
     interface Raw {
-        version: EvaluatorResponse.Raw;
+        version: serializers.EvaluatorResponse.Raw;
         orchestrated: boolean;
     }
 }

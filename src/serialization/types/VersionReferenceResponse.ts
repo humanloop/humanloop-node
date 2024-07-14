@@ -5,14 +5,15 @@
 import * as serializers from "../index";
 import * as Humanloop from "../../api/index";
 import * as core from "../../core";
-import { VersionDeploymentResponse } from "./VersionDeploymentResponse";
-import { VersionIdResponse } from "./VersionIdResponse";
 
 export const VersionReferenceResponse: core.serialization.Schema<
     serializers.VersionReferenceResponse.Raw,
     Humanloop.VersionReferenceResponse
-> = core.serialization.undiscriminatedUnion([VersionDeploymentResponse, VersionIdResponse]);
+> = core.serialization.undiscriminatedUnion([
+    core.serialization.lazyObject(() => serializers.VersionDeploymentResponse),
+    core.serialization.lazyObject(() => serializers.VersionIdResponse),
+]);
 
 export declare namespace VersionReferenceResponse {
-    type Raw = VersionDeploymentResponse.Raw | VersionIdResponse.Raw;
+    type Raw = serializers.VersionDeploymentResponse.Raw | serializers.VersionIdResponse.Raw;
 }

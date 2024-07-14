@@ -4,7 +4,9 @@
 
 /**
  * @example
- *     {}
+ *     {
+ *         size: 1
+ *     }
  */
 export interface ListDatapointsDatasetsIdDatapointsGetRequest {
     /**

@@ -14,8 +14,7 @@ export interface ListVersionsEvaluatorsIdVersionsGetRequest {
      */
     status?: Humanloop.VersionStatus;
     /**
-     * Name of the environment to filter versions by. If no environment is provided, all versions are returned.
+     * Whether to include Evaluator aggregate results for the versions in the response
      */
-    environment?: string;
     evaluatorAggregates?: boolean;
 }

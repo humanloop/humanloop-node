@@ -53,7 +53,7 @@ export class Datasets {
     constructor(protected readonly _options: Datasets.Options) {}
 
     /**
-     * Get a list of Datasets.
+     * List a list of all Datasets.
      *
      * @param {Humanloop.ListDatasetsGetRequest} request
      * @param {Datasets.RequestOptions} requestOptions - Request-specific configuration.
@@ -61,7 +61,9 @@ export class Datasets {
      * @throws {@link Humanloop.UnprocessableEntityError}
      *
      * @example
-     *     await client.datasets.list()
+     *     await client.datasets.list({
+     *         size: 1
+     *     })
      */
     public async list(
         request: Humanloop.ListDatasetsGetRequest = {},
@@ -97,7 +99,7 @@ export class Datasets {
                 headers: {
                     "X-Fern-Language": "JavaScript",
                     "X-Fern-SDK-Name": "humanloop",
-                    "X-Fern-SDK-Version": "0.8.0-beta1",
+                    "X-Fern-SDK-Version": "0.8.0-beta2",
                     "X-Fern-Runtime": core.RUNTIME.type,
                     "X-Fern-Runtime-Version": core.RUNTIME.version,
                     ...(await this._getCustomAuthorizationHeaders()),
@@ -188,7 +190,24 @@ export class Datasets {
      *
      * @example
      *     await client.datasets.upsert({
-     *         datapoints: [{}]
+     *         path: "test-questions",
+     *         datapoints: [{
+     *                 inputs: {
+     *                     "question": "What is the capital of France?"
+     *                 },
+     *                 target: {
+     *                     "answer": "Paris"
+     *                 }
+     *             }, {
+     *                 inputs: {
+     *                     "question": "Who wrote Hamlet?"
+     *                 },
+     *                 target: {
+     *                     "answer": "William Shakespeare"
+     *                 }
+     *             }],
+     *         action: Humanloop.UpdateDatesetAction.Add,
+     *         commitMessage: "Add two new questions and answers"
      *     })
      */
     public async upsert(
@@ -214,7 +233,7 @@ export class Datasets {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta1",
+                "X-Fern-SDK-Version": "0.8.0-beta2",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -289,7 +308,10 @@ export class Datasets {
      * @throws {@link Humanloop.UnprocessableEntityError}
      *
      * @example
-     *     await client.datasets.get("id")
+     *     await client.datasets.get("ds_b0baF1ca7652", {
+     *         versionId: "dsv_6L78pqrdFi2xa",
+     *         includeDatapoints: true
+     *     })
      */
     public async get(
         id: string,
@@ -319,7 +341,7 @@ export class Datasets {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta1",
+                "X-Fern-SDK-Version": "0.8.0-beta2",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -396,7 +418,7 @@ export class Datasets {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta1",
+                "X-Fern-SDK-Version": "0.8.0-beta2",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -471,7 +493,7 @@ export class Datasets {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta1",
+                "X-Fern-SDK-Version": "0.8.0-beta2",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -537,7 +559,9 @@ export class Datasets {
      * @throws {@link Humanloop.UnprocessableEntityError}
      *
      * @example
-     *     await client.datasets.listDatapoints("id")
+     *     await client.datasets.listDatapoints("ds_b0baF1ca7652", {
+     *         size: 1
+     *     })
      */
     public async listDatapoints(
         id: string,
@@ -570,7 +594,7 @@ export class Datasets {
                 headers: {
                     "X-Fern-Language": "JavaScript",
                     "X-Fern-SDK-Name": "humanloop",
-                    "X-Fern-SDK-Version": "0.8.0-beta1",
+                    "X-Fern-SDK-Version": "0.8.0-beta2",
                     "X-Fern-Runtime": core.RUNTIME.type,
                     "X-Fern-Runtime-Version": core.RUNTIME.version,
                     ...(await this._getCustomAuthorizationHeaders()),
@@ -645,25 +669,19 @@ export class Datasets {
      * @throws {@link Humanloop.UnprocessableEntityError}
      *
      * @example
-     *     await client.datasets.listVersions("id")
+     *     await client.datasets.listVersions("ds_b0baF1ca7652", {
+     *         status: Humanloop.VersionStatus.Committed
+     *     })
      */
     public async listVersions(
         id: string,
         request: Humanloop.ListVersionsDatasetsIdVersionsGetRequest = {},
         requestOptions?: Datasets.RequestOptions
     ): Promise<Humanloop.ListDatasets> {
-        const { status, environment, evaluationAggregates } = request;
+        const { status } = request;
         const _queryParams: Record<string, string | string[] | object | object[]> = {};
         if (status != null) {
             _queryParams["status"] = status;
-        }
-
-        if (environment != null) {
-            _queryParams["environment"] = environment;
-        }
-
-        if (evaluationAggregates != null) {
-            _queryParams["evaluation_aggregates"] = evaluationAggregates.toString();
         }
 
         const _response = await (this._options.fetcher ?? core.fetcher)({
@@ -675,7 +693,7 @@ export class Datasets {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta1",
+                "X-Fern-SDK-Version": "0.8.0-beta2",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -732,7 +750,9 @@ export class Datasets {
     }
 
     /**
-     * Commit the Dataset Version with the given ID.
+     * Commit a version of the Dataset with a commit message.
+     *
+     * If the version is already committed, an exception will be raised.
      *
      * @param {string} id - Unique identifier for Dataset.
      * @param {string} versionId - Unique identifier for the specific version of the Dataset.
@@ -742,8 +762,8 @@ export class Datasets {
      * @throws {@link Humanloop.UnprocessableEntityError}
      *
      * @example
-     *     await client.datasets.commit("id", "version_id", {
-     *         commitMessage: "commit_message"
+     *     await client.datasets.commit("ds_b0baF1ca7652", "dsv_6L78pqrdFi2xa", {
+     *         commitMessage: "initial commit"
      *     })
      */
     public async commit(
@@ -761,7 +781,7 @@ export class Datasets {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta1",
+                "X-Fern-SDK-Version": "0.8.0-beta2",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -867,7 +887,7 @@ export class Datasets {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta1",
+                "X-Fern-SDK-Version": "0.8.0-beta2",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -925,131 +945,26 @@ export class Datasets {
     }
 
     /**
-     * Add Datapoints from Logs to a Dataset.
-     *
-     * This will create a new committed version of the Dataset with the Datapoints from the Logs.
-     *
-     * If either `version_id` or `environment` is provided, the new version will be based on the specified version,
-     * with the Datapoints from the Logs added to the existing Datapoints in the version.
-     * If neither `version_id` nor `environment` is provided, the new version will be based on the version
-     * of the Dataset that is deployed to the default Environment.
-     *
-     * @param {string} id - Unique identifier for the Dataset
-     * @param {Humanloop.BodyFromLogsDatasetsIdDatapointsLogsPost} request
-     * @param {Datasets.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @throws {@link Humanloop.UnprocessableEntityError}
-     *
-     * @example
-     *     await client.datasets.fromLogs("id", {
-     *         logIds: ["log_ids"],
-     *         commitMessage: "commit_message"
-     *     })
-     */
-    public async fromLogs(
-        id: string,
-        request: Humanloop.BodyFromLogsDatasetsIdDatapointsLogsPost,
-        requestOptions?: Datasets.RequestOptions
-    ): Promise<Humanloop.DatasetResponse> {
-        const { versionId, environment, ..._body } = request;
-        const _queryParams: Record<string, string | string[] | object | object[]> = {};
-        if (versionId != null) {
-            _queryParams["version_id"] = versionId;
-        }
-
-        if (environment != null) {
-            _queryParams["environment"] = environment;
-        }
-
-        const _response = await (this._options.fetcher ?? core.fetcher)({
-            url: urlJoin(
-                (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
-                `datasets/${encodeURIComponent(id)}/datapoints/logs`
-            ),
-            method: "POST",
-            headers: {
-                "X-Fern-Language": "JavaScript",
-                "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta1",
-                "X-Fern-Runtime": core.RUNTIME.type,
-                "X-Fern-Runtime-Version": core.RUNTIME.version,
-                ...(await this._getCustomAuthorizationHeaders()),
-            },
-            contentType: "application/json",
-            queryParameters: _queryParams,
-            body: serializers.BodyFromLogsDatasetsIdDatapointsLogsPost.jsonOrThrow(_body, {
-                unrecognizedObjectKeys: "strip",
-            }),
-            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-            maxRetries: requestOptions?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-        });
-        if (_response.ok) {
-            return serializers.DatasetResponse.parseOrThrow(_response.body, {
-                unrecognizedObjectKeys: "passthrough",
-                allowUnrecognizedUnionMembers: true,
-                allowUnrecognizedEnumValues: true,
-                skipValidation: true,
-                breadcrumbsPrefix: ["response"],
-            });
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 422:
-                    throw new Humanloop.UnprocessableEntityError(
-                        serializers.HttpValidationError.parseOrThrow(_response.error.body, {
-                            unrecognizedObjectKeys: "passthrough",
-                            allowUnrecognizedUnionMembers: true,
-                            allowUnrecognizedEnumValues: true,
-                            skipValidation: true,
-                            breadcrumbsPrefix: ["response"],
-                        })
-                    );
-                default:
-                    throw new errors.HumanloopError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                    });
-            }
-        }
-
-        switch (_response.error.reason) {
-            case "non-json":
-                throw new errors.HumanloopError({
-                    statusCode: _response.error.statusCode,
-                    body: _response.error.rawBody,
-                });
-            case "timeout":
-                throw new errors.HumanloopTimeoutError();
-            case "unknown":
-                throw new errors.HumanloopError({
-                    message: _response.error.errorMessage,
-                });
-        }
-    }
-
-    /**
      * Deploy Dataset to Environment.
      *
-     * Set the deployed Version for the specified Environment.
+     * Set the deployed version for the specified Environment.
      *
      * @param {string} id - Unique identifier for Dataset.
      * @param {string} environmentId - Unique identifier for the Environment to deploy the Version to.
-     * @param {Humanloop.DeployDatasetsIdEnvironmentsEnvironmentIdPostRequest} request
+     * @param {Humanloop.SetDeploymentDatasetsIdEnvironmentsEnvironmentIdPostRequest} request
      * @param {Datasets.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Humanloop.UnprocessableEntityError}
      *
      * @example
-     *     await client.datasets.deploy("id", "environment_id", {
-     *         versionId: "version_id"
+     *     await client.datasets.setDeployment("ds_b0baF1ca7652", "staging", {
+     *         versionId: "dsv_6L78pqrdFi2xa"
      *     })
      */
-    public async deploy(
+    public async setDeployment(
         id: string,
         environmentId: string,
-        request: Humanloop.DeployDatasetsIdEnvironmentsEnvironmentIdPostRequest,
+        request: Humanloop.SetDeploymentDatasetsIdEnvironmentsEnvironmentIdPostRequest,
         requestOptions?: Datasets.RequestOptions
     ): Promise<Humanloop.DatasetResponse> {
         const { versionId } = request;
@@ -1064,7 +979,7 @@ export class Datasets {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta1",
+                "X-Fern-SDK-Version": "0.8.0-beta2",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1121,9 +1036,9 @@ export class Datasets {
     }
 
     /**
-     * Remove deployment of Dataset from Environment.
+     * Remove deployed Dataset from Environment.
      *
-     * Remove the deployed Version for the specified Environment.
+     * Remove the deployed version for the specified Environment.
      *
      * @param {string} id - Unique identifier for Dataset.
      * @param {string} environmentId - Unique identifier for the Environment to remove the deployment from.
@@ -1132,7 +1047,7 @@ export class Datasets {
      * @throws {@link Humanloop.UnprocessableEntityError}
      *
      * @example
-     *     await client.datasets.removeDeployment("id", "environment_id")
+     *     await client.datasets.removeDeployment("ds_b0baF1ca7652", "staging")
      */
     public async removeDeployment(
         id: string,
@@ -1148,7 +1063,7 @@ export class Datasets {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta1",
+                "X-Fern-SDK-Version": "0.8.0-beta2",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1221,7 +1136,7 @@ export class Datasets {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta1",
+                "X-Fern-SDK-Version": "0.8.0-beta2",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),

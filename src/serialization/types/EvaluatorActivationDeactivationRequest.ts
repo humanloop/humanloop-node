@@ -5,26 +5,20 @@
 import * as serializers from "../index";
 import * as Humanloop from "../../api/index";
 import * as core from "../../core";
-import { EvaluatorActivationDeactivationRequestEvaluatorsToActivateItem } from "./EvaluatorActivationDeactivationRequestEvaluatorsToActivateItem";
-import { EvaluatorActivationDeactivationRequestEvaluatorsToDeactivateItem } from "./EvaluatorActivationDeactivationRequestEvaluatorsToDeactivateItem";
+import { EvaluatorActivationDeactivationRequestActivateItem } from "./EvaluatorActivationDeactivationRequestActivateItem";
+import { EvaluatorActivationDeactivationRequestDeactivateItem } from "./EvaluatorActivationDeactivationRequestDeactivateItem";
 
 export const EvaluatorActivationDeactivationRequest: core.serialization.ObjectSchema<
     serializers.EvaluatorActivationDeactivationRequest.Raw,
     Humanloop.EvaluatorActivationDeactivationRequest
 > = core.serialization.object({
-    evaluatorsToActivate: core.serialization.property(
-        "evaluators_to_activate",
-        core.serialization.list(EvaluatorActivationDeactivationRequestEvaluatorsToActivateItem).optional()
-    ),
-    evaluatorsToDeactivate: core.serialization.property(
-        "evaluators_to_deactivate",
-        core.serialization.list(EvaluatorActivationDeactivationRequestEvaluatorsToDeactivateItem).optional()
-    ),
+    activate: core.serialization.list(EvaluatorActivationDeactivationRequestActivateItem).optional(),
+    deactivate: core.serialization.list(EvaluatorActivationDeactivationRequestDeactivateItem).optional(),
 });
 
 export declare namespace EvaluatorActivationDeactivationRequest {
     interface Raw {
-        evaluators_to_activate?: EvaluatorActivationDeactivationRequestEvaluatorsToActivateItem.Raw[] | null;
-        evaluators_to_deactivate?: EvaluatorActivationDeactivationRequestEvaluatorsToDeactivateItem.Raw[] | null;
+        activate?: EvaluatorActivationDeactivationRequestActivateItem.Raw[] | null;
+        deactivate?: EvaluatorActivationDeactivationRequestDeactivateItem.Raw[] | null;
     }
 }

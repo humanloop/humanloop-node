@@ -5,10 +5,10 @@
 /**
  * @example
  *     {
- *         versionId: "version_id"
+ *         versionId: "tv_012jkl"
  *     }
  */
-export interface DeployToolsIdEnvironmentsEnvironmentIdPostRequest {
+export interface SetDeploymentToolsIdEnvironmentsEnvironmentIdPostRequest {
     /**
      * Unique identifier for the specific version of the Tool.
      */

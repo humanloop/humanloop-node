@@ -6,16 +6,13 @@ import * as Humanloop from "../../../../index";
 
 /**
  * @example
- *     {}
+ *     {
+ *         status: Humanloop.VersionStatus.Committed
+ *     }
  */
 export interface ListVersionsDatasetsIdVersionsGetRequest {
     /**
      * Filter versions by status: 'uncommitted', 'committed'. If no status is provided, all versions are returned.
      */
     status?: Humanloop.VersionStatus;
-    /**
-     * Name of the environment to filter versions by. If no environment is provided, all versions are returned.
-     */
-    environment?: string;
-    evaluationAggregates?: boolean;
 }

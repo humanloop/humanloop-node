@@ -64,6 +64,8 @@ export interface PromptResponse {
     totalLogsCount: number;
     /** Inputs associated to the Prompt. Inputs correspond to any of the variables used within the Prompt template. */
     inputs: Humanloop.InputResponse[];
+    /** Evaluators that have been attached to this Prompt that are used for monitoring logs. */
+    evaluators?: Humanloop.MonitoringEvaluatorResponse[];
     /** Aggregation of Evaluator results for the Prompt Version. */
     evaluatorAggregates?: Humanloop.EvaluatorAggregate[];
 }

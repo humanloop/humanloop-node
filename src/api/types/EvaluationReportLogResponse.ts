@@ -5,8 +5,12 @@
 import * as Humanloop from "../index";
 
 export interface EvaluationReportLogResponse {
+    /** The version of the Prompt, Tool or Evaluator that the Log belongs to. */
     evaluatedVersion: Humanloop.EvaluatedVersionResponse;
+    /** The Datapoint used to generate the log */
     datapoint: Humanloop.DatapointResponse;
+    /** The Log that was evaluated by the Evaluator. */
     log?: Humanloop.LogResponse;
+    /** The Evaluator logs containing the judgments for the Log. */
     evaluatorLogs: Humanloop.LogResponse[];
 }

@@ -1,6 +1,6 @@
 ## Prompts
 
-<details><summary> <code>client.prompts.<a href="./src/api/resources/prompts/client/Client.ts">list</a>({ ...params }) -> core.Page<Humanloop.PromptResponse></code> </summary>
+<details><summary> <code>client.prompts.<a href="./src/api/resources/prompts/client/Client.ts">log</a>({ ...params }) -> Humanloop.CreatePromptLogResponse</code> </summary>
 
 <dl>
 
@@ -16,7 +16,15 @@
 
 <dd>
 
-Get a list of Prompts.
+Log to a Prompt.
+
+You can use query parameters `version_id`, or `environment`, to target
+an existing version of the Prompt. Otherwise the default deployed version will be chosen.
+
+Instead of targeting an existing version explicitly, you can instead pass in
+Prompt details in the request body. In this case, we will check if the details correspond
+to an existing version of the Prompt, if not we will create a new version. This is helpful
+in the case where you are storing or deriving your Prompt details in code.
 
 </dd>
 
@@ -37,7 +45,227 @@ Get a list of Prompts.
 <dd>
 
 ```ts
-await client.prompts.list();
+await client.prompts.log({
+    path: "persona",
+    prompt: {
+        model: "gpt-4",
+        template: [
+            {
+                role: Humanloop.ChatRole.System,
+                content: "You are {{person}}. Answer questions as this person. Do not break character.",
+            },
+        ],
+    },
+    messages: [
+        {
+            role: Humanloop.ChatRole.User,
+            content: "What really happened at Roswell?",
+        },
+    ],
+    inputs: {
+        person: "Trump",
+    },
+});
+```
+
+</dd>
+
+</dl>
+
+</dd>
+
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+
+<dd>
+
+<dl>
+
+<dd>
+
+**request: `Humanloop.PromptLogRequest`**
+
+</dd>
+
+</dl>
+
+<dl>
+
+<dd>
+
+**requestOptions: `Prompts.RequestOptions`**
+
+</dd>
+
+</dl>
+
+</dd>
+
+</dl>
+
+</dd>
+
+</dl>
+</details>
+
+<details><summary> <code>client.prompts.<a href="./src/api/resources/prompts/client/Client.ts">call</a>({ ...params }) -> Humanloop.CallPromptsCallPostResponse</code> </summary>
+
+<dl>
+
+<dd>
+
+#### 📝 Description
+
+<dl>
+
+<dd>
+
+<dl>
+
+<dd>
+
+Call a Prompt.
+
+Calling a Prompt subsequently calls the model provider before logging
+the request, responses and metadata to Humanloop.
+
+You can use query parameters `version_id`, or `environment`, to target
+an existing version of the Prompt. Otherwise the default deployed version will be chosen.
+
+Instead of targeting an existing version explicitly, you can instead pass in
+Prompt details in the request body. In this case, we will check if the details correspond
+to an existing version of the Prompt, if not we will create a new version. This is helpful
+in the case where you are storing or deriving your Prompt details in code.
+
+</dd>
+
+</dl>
+
+</dd>
+
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+
+<dd>
+
+<dl>
+
+<dd>
+
+```ts
+await client.prompts.call({
+    path: "persona",
+    prompt: {
+        model: "gpt-4",
+        template: [
+            {
+                role: Humanloop.ChatRole.System,
+                content: "You are {{person}}. Answer any questions as this person. Do not break character.",
+            },
+        ],
+    },
+    messages: [
+        {
+            role: Humanloop.ChatRole.User,
+            content: "What really happened at Roswell?",
+        },
+    ],
+    inputs: {
+        person: "Trump",
+    },
+    stream: false,
+});
+```
+
+</dd>
+
+</dl>
+
+</dd>
+
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+
+<dd>
+
+<dl>
+
+<dd>
+
+**request: `Humanloop.PromptCallRequest`**
+
+</dd>
+
+</dl>
+
+<dl>
+
+<dd>
+
+**requestOptions: `Prompts.RequestOptions`**
+
+</dd>
+
+</dl>
+
+</dd>
+
+</dl>
+
+</dd>
+
+</dl>
+</details>
+
+<details><summary> <code>client.prompts.<a href="./src/api/resources/prompts/client/Client.ts">list</a>({ ...params }) -> core.Page<Humanloop.PromptResponse></code> </summary>
+
+<dl>
+
+<dd>
+
+#### 📝 Description
+
+<dl>
+
+<dd>
+
+<dl>
+
+<dd>
+
+Get a list of all Prompts.
+
+</dd>
+
+</dl>
+
+</dd>
+
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+
+<dd>
+
+<dl>
+
+<dd>
+
+```ts
+await client.prompts.list({
+    size: 1,
+});
 ```
 
 </dd>
@@ -127,7 +355,25 @@ an exception will be raised.
 
 ```ts
 await client.prompts.upsert({
-    model: "model",
+    path: "Personal Projects/Coding Assistant",
+    model: "gpt-4o",
+    endpoint: Humanloop.ModelEndpoints.Chat,
+    template: [
+        {
+            content: "You are a helpful coding assistant specialising in {{language}}",
+            role: Humanloop.ChatRole.System,
+        },
+    ],
+    provider: Humanloop.ModelProviders.Openai,
+    maxTokens: -1,
+    temperature: 0.7,
+    topP: 1,
+    presencePenalty: 0,
+    frequencyPenalty: 0,
+    other: {},
+    tools: [],
+    linkedTools: [],
+    commitMessage: "Initial commit",
 });
 ```
 
@@ -214,7 +460,7 @@ By default, the deployed version of the Prompt is returned. Use the query parame
 <dd>
 
 ```ts
-await client.prompts.get("id");
+await client.prompts.get("pr_30gco7dx6JDq4200GVOHa");
 ```
 
 </dd>
@@ -307,7 +553,7 @@ Delete the Prompt with the given ID.
 <dd>
 
 ```ts
-await client.prompts.delete("id");
+await client.prompts.delete("pr_30gco7dx6JDq4200GVOHa");
 ```
 
 </dd>
@@ -390,7 +636,9 @@ Move the Prompt to a different path or change the name.
 <dd>
 
 ```ts
-await client.prompts.move("id");
+await client.prompts.move("pr_30gco7dx6JDq4200GVOHa", {
+    path: "new directory/new name",
+});
 ```
 
 </dd>
@@ -483,7 +731,9 @@ Get a list of all the versions of a Prompt.
 <dd>
 
 ```ts
-await client.prompts.listVersions("id");
+await client.prompts.listVersions("pr_30gco7dx6JDq4200GVOHa", {
+    status: Humanloop.VersionStatus.Committed,
+});
 ```
 
 </dd>
@@ -555,7 +805,9 @@ await client.prompts.listVersions("id");
 
 <dd>
 
-Commit the Prompt Version with the given ID.
+Commit a version of the Prompt with a commit message.
+
+If the version is already committed, an exception will be raised.
 
 </dd>
 
@@ -576,8 +828,8 @@ Commit the Prompt Version with the given ID.
 <dd>
 
 ```ts
-await client.prompts.commit("id", "version_id", {
-    commitMessage: "commit_message",
+await client.prompts.commit("pr_30gco7dx6JDq4200GVOHa", "prv_F34aba5f3asp0", {
+    commitMessage: "Reiterated point about not discussing sentience",
 });
 ```
 
@@ -644,7 +896,7 @@ await client.prompts.commit("id", "version_id", {
 </dl>
 </details>
 
-<details><summary> <code>client.prompts.<a href="./src/api/resources/prompts/client/Client.ts">log</a>({ ...params }) -> Humanloop.CreatePromptLogResponse</code> </summary>
+<details><summary> <code>client.prompts.<a href="./src/api/resources/prompts/client/Client.ts">updateMonitoring</a>(id, { ...params }) -> Humanloop.PromptResponse</code> </summary>
 
 <dl>
 
@@ -660,192 +912,7 @@ await client.prompts.commit("id", "version_id", {
 
 <dd>
 
-Log to a Prompt.
-
-You can use query parameters version_id, or environment, to target
-an existing version of the Prompt. Otherwise the default deployed version will be chosen.
-
-Instead of targeting an existing version explicitly, you can instead pass in
-Prompt details in the request body. In this case, we will check if the details correspond
-to an existing version of the Prompt, if not we will create a new version. This is helpful
-in the case where you are storing or deriving your Prompt details in code.
-
-</dd>
-
-</dl>
-
-</dd>
-
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-
-<dd>
-
-<dl>
-
-<dd>
-
-```ts
-await client.prompts.log();
-```
-
-</dd>
-
-</dl>
-
-</dd>
-
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-
-<dd>
-
-<dl>
-
-<dd>
-
-**request: `Humanloop.PromptLogRequest`**
-
-</dd>
-
-</dl>
-
-<dl>
-
-<dd>
-
-**requestOptions: `Prompts.RequestOptions`**
-
-</dd>
-
-</dl>
-
-</dd>
-
-</dl>
-
-</dd>
-
-</dl>
-</details>
-
-<details><summary> <code>client.prompts.<a href="./src/api/resources/prompts/client/Client.ts">call</a>({ ...params }) -> Humanloop.CallPromptsCallPostResponse</code> </summary>
-
-<dl>
-
-<dd>
-
-#### 📝 Description
-
-<dl>
-
-<dd>
-
-<dl>
-
-<dd>
-
-Call a Prompt.
-
-Calling a Prompt subsequently calls the model provider before logging
-the data to Humanloop.
-
-You can use query parameters version_id, or environment, to target
-an existing version of the Prompt. Otherwise the default deployed version will be chosen.
-
-Instead of targeting an existing version explicitly, you can instead pass in
-Prompt details in the request body. In this case, we will check if the details correspond
-to an existing version of the Prompt, if not we will create a new version. This is helpful
-in the case where you are storing or deriving your Prompt details in code.
-
-</dd>
-
-</dl>
-
-</dd>
-
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-
-<dd>
-
-<dl>
-
-<dd>
-
-```ts
-await client.prompts.call();
-```
-
-</dd>
-
-</dl>
-
-</dd>
-
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-
-<dd>
-
-<dl>
-
-<dd>
-
-**request: `Humanloop.PromptCallRequest`**
-
-</dd>
-
-</dl>
-
-<dl>
-
-<dd>
-
-**requestOptions: `Prompts.RequestOptions`**
-
-</dd>
-
-</dl>
-
-</dd>
-
-</dl>
-
-</dd>
-
-</dl>
-</details>
-
-<details><summary> <code>client.prompts.<a href="./src/api/resources/prompts/client/Client.ts">updateEvaluators</a>(id, { ...params }) -> Humanloop.PromptResponse</code> </summary>
-
-<dl>
-
-<dd>
-
-#### 📝 Description
-
-<dl>
-
-<dd>
-
-<dl>
-
-<dd>
-
-Activate and deactivate Evaluators for the Prompt.
+Activate and deactivate Evaluators for monitoring the Prompt.
 
 An activated Evaluator will automatically be run on all new Logs
 within the Prompt for monitoring purposes.
@@ -869,7 +936,13 @@ within the Prompt for monitoring purposes.
 <dd>
 
 ```ts
-await client.prompts.updateEvaluators("id", {});
+await client.prompts.updateMonitoring("pr_30gco7dx6JDq4200GVOHa", {
+    activate: [
+        {
+            evaluatorVersionId: "evv_1abc4308abd",
+        },
+    ],
+});
 ```
 
 </dd>
@@ -925,7 +998,7 @@ await client.prompts.updateEvaluators("id", {});
 </dl>
 </details>
 
-<details><summary> <code>client.prompts.<a href="./src/api/resources/prompts/client/Client.ts">deploy</a>(id, environmentId, { ...params }) -> Humanloop.PromptResponse</code> </summary>
+<details><summary> <code>client.prompts.<a href="./src/api/resources/prompts/client/Client.ts">setDeployment</a>(id, environmentId, { ...params }) -> Humanloop.PromptResponse</code> </summary>
 
 <dl>
 
@@ -941,9 +1014,9 @@ await client.prompts.updateEvaluators("id", {});
 
 <dd>
 
-Deploy Prompt to Environment.
+Deploy Prompt to an Environment.
 
-Set the deployed Version for the specified Environment. This Prompt Version
+Set the deployed version for the specified Environment. This Prompt
 will be used for calls made to the Prompt in this Environment.
 
 </dd>
@@ -965,7 +1038,7 @@ will be used for calls made to the Prompt in this Environment.
 <dd>
 
 ```ts
-await client.prompts.deploy("id", "environment_id", {
+await client.prompts.setDeployment("id", "environment_id", {
     versionId: "version_id",
 });
 ```
@@ -1008,7 +1081,7 @@ await client.prompts.deploy("id", "environment_id", {
 
 <dd>
 
-**request: `Humanloop.DeployPromptsIdEnvironmentsEnvironmentIdPostRequest`**
+**request: `Humanloop.SetDeploymentPromptsIdEnvironmentsEnvironmentIdPostRequest`**
 
 </dd>
 
@@ -1049,9 +1122,9 @@ await client.prompts.deploy("id", "environment_id", {
 
 <dd>
 
-Remove deployment of Prompt from Environment.
+Remove deployed Prompt from the Environment.
 
-Remove the deployed Version for the specified Environment. This Prompt Version
+Remove the deployed version for the specified Environment. This Prompt
 will no longer be used for calls made to the Prompt in this Environment.
 
 </dd>
@@ -1166,7 +1239,7 @@ List all Environments and their deployed versions for the Prompt.
 <dd>
 
 ```ts
-await client.prompts.listEnvironments("id");
+await client.prompts.listEnvironments("pr_30gco7dx6JDq4200GVOHa");
 ```
 
 </dd>
@@ -1214,7 +1287,7 @@ await client.prompts.listEnvironments("id");
 
 ## Tools
 
-<details><summary> <code>client.tools.<a href="./src/api/resources/tools/client/Client.ts">list</a>({ ...params }) -> core.Page<Humanloop.ToolResponse></code> </summary>
+<details><summary> <code>client.tools.<a href="./src/api/resources/tools/client/Client.ts">log</a>({ ...params }) -> Humanloop.CreateToolLogResponse</code> </summary>
 
 <dl>
 
@@ -1230,7 +1303,15 @@ await client.prompts.listEnvironments("id");
 
 <dd>
 
-Get a list of Tools.
+Log to a Tool.
+
+You can use query parameters `version_id`, or `environment`, to target
+an existing version of the Tool. Otherwise the default deployed version will be chosen.
+
+Instead of targeting an existing version explicitly, you can instead pass in
+Tool details in the request body. In this case, we will check if the details correspond
+to an existing version of the Tool, if not we will create a new version. This is helpful
+in the case where you are storing or deriving your Tool details in code.
 
 </dd>
 
@@ -1251,7 +1332,117 @@ Get a list of Tools.
 <dd>
 
 ```ts
-await client.tools.list();
+await client.tools.log({
+    path: "math-tool",
+    tool: {
+        function: {
+            name: "multiply",
+            description: "Multiply two numbers",
+            parameters: {
+                type: "object",
+                properties: {
+                    a: {
+                        type: "number",
+                    },
+                    b: {
+                        type: "number",
+                    },
+                },
+                required: ["a", "b"],
+            },
+        },
+    },
+    inputs: {
+        a: 5,
+        b: 7,
+    },
+    output: "35",
+});
+```
+
+</dd>
+
+</dl>
+
+</dd>
+
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+
+<dd>
+
+<dl>
+
+<dd>
+
+**request: `Humanloop.ToolLogRequest`**
+
+</dd>
+
+</dl>
+
+<dl>
+
+<dd>
+
+**requestOptions: `Tools.RequestOptions`**
+
+</dd>
+
+</dl>
+
+</dd>
+
+</dl>
+
+</dd>
+
+</dl>
+</details>
+
+<details><summary> <code>client.tools.<a href="./src/api/resources/tools/client/Client.ts">list</a>({ ...params }) -> core.Page<Humanloop.ToolResponse></code> </summary>
+
+<dl>
+
+<dd>
+
+#### 📝 Description
+
+<dl>
+
+<dd>
+
+<dl>
+
+<dd>
+
+Get a list of all Tools.
+
+</dd>
+
+</dl>
+
+</dd>
+
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+
+<dd>
+
+<dl>
+
+<dd>
+
+```ts
+await client.tools.list({
+    size: 1,
+});
 ```
 
 </dd>
@@ -1340,7 +1531,26 @@ an exception will be raised.
 <dd>
 
 ```ts
-await client.tools.upsert();
+await client.tools.upsert({
+    path: "math-tool",
+    function: {
+        name: "multiply",
+        description: "Multiply two numbers",
+        parameters: {
+            type: "object",
+            properties: {
+                a: {
+                    type: "number",
+                },
+                b: {
+                    type: "number",
+                },
+            },
+            required: ["a", "b"],
+        },
+    },
+    commitMessage: "Initial commit",
+});
 ```
 
 </dd>
@@ -1426,7 +1636,7 @@ By default, the deployed version of the Tool is returned. Use the query paramete
 <dd>
 
 ```ts
-await client.tools.get("id");
+await client.tools.get("tl_789ghi");
 ```
 
 </dd>
@@ -1519,7 +1729,7 @@ Delete the Tool with the given ID.
 <dd>
 
 ```ts
-await client.tools.delete("id");
+await client.tools.delete("tl_789ghi");
 ```
 
 </dd>
@@ -1602,7 +1812,9 @@ Move the Tool to a different path or change the name.
 <dd>
 
 ```ts
-await client.tools.move("id");
+await client.tools.move("tl_789ghi", {
+    path: "new directory/new name",
+});
 ```
 
 </dd>
@@ -1695,7 +1907,9 @@ Get a list of all the versions of a Tool.
 <dd>
 
 ```ts
-await client.tools.listVersions("id");
+await client.tools.listVersions("tl_789ghi", {
+    status: Humanloop.VersionStatus.Committed,
+});
 ```
 
 </dd>
@@ -1767,7 +1981,9 @@ await client.tools.listVersions("id");
 
 <dd>
 
-Commit the Tool Version with the given ID.
+Commit a version of the Tool with a commit message.
+
+If the version is already committed, an exception will be raised.
 
 </dd>
 
@@ -1788,8 +2004,8 @@ Commit the Tool Version with the given ID.
 <dd>
 
 ```ts
-await client.tools.commit("id", "version_id", {
-    commitMessage: "commit_message",
+await client.tools.commit("tl_789ghi", "tv_012jkl", {
+    commitMessage: "Initial commit",
 });
 ```
 
@@ -1856,7 +2072,7 @@ await client.tools.commit("id", "version_id", {
 </dl>
 </details>
 
-<details><summary> <code>client.tools.<a href="./src/api/resources/tools/client/Client.ts">log</a>({ ...params }) -> Humanloop.CreateToolLogResponse</code> </summary>
+<details><summary> <code>client.tools.<a href="./src/api/resources/tools/client/Client.ts">updateMonitoring</a>(id, { ...params }) -> Humanloop.ToolResponse</code> </summary>
 
 <dl>
 
@@ -1872,98 +2088,7 @@ await client.tools.commit("id", "version_id", {
 
 <dd>
 
-Log to a Tool.
-
-You can use query parameters version_id, or environment, to target
-an existing version of the Tool. Otherwise the default deployed version will be chosen.
-
-Instead of targeting an existing version explicitly, you can instead pass in
-Tool details in the request body. In this case, we will check if the details correspond
-to an existing version of the Tool, if not we will create a new version. This is helpful
-in the case where you are storing or deriving your Tool details in code.
-
-</dd>
-
-</dl>
-
-</dd>
-
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-
-<dd>
-
-<dl>
-
-<dd>
-
-```ts
-await client.tools.log();
-```
-
-</dd>
-
-</dl>
-
-</dd>
-
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-
-<dd>
-
-<dl>
-
-<dd>
-
-**request: `Humanloop.ToolLogRequest`**
-
-</dd>
-
-</dl>
-
-<dl>
-
-<dd>
-
-**requestOptions: `Tools.RequestOptions`**
-
-</dd>
-
-</dl>
-
-</dd>
-
-</dl>
-
-</dd>
-
-</dl>
-</details>
-
-<details><summary> <code>client.tools.<a href="./src/api/resources/tools/client/Client.ts">updateEvaluators</a>(id, { ...params }) -> Humanloop.ToolResponse</code> </summary>
-
-<dl>
-
-<dd>
-
-#### 📝 Description
-
-<dl>
-
-<dd>
-
-<dl>
-
-<dd>
-
-Activate and deactivate Evaluators for the Tool.
+Activate and deactivate Evaluators for monitoring the Tool.
 
 An activated Evaluator will automatically be run on all new Logs
 within the Tool for monitoring purposes.
@@ -1987,7 +2112,13 @@ within the Tool for monitoring purposes.
 <dd>
 
 ```ts
-await client.tools.updateEvaluators("id", {});
+await client.tools.updateMonitoring("tl_789ghi", {
+    activate: [
+        {
+            evaluatorVersionId: "evv_1abc4308abd",
+        },
+    ],
+});
 ```
 
 </dd>
@@ -2043,7 +2174,7 @@ await client.tools.updateEvaluators("id", {});
 </dl>
 </details>
 
-<details><summary> <code>client.tools.<a href="./src/api/resources/tools/client/Client.ts">deploy</a>(id, environmentId, { ...params }) -> Humanloop.ToolResponse</code> </summary>
+<details><summary> <code>client.tools.<a href="./src/api/resources/tools/client/Client.ts">setDeployment</a>(id, environmentId, { ...params }) -> Humanloop.ToolResponse</code> </summary>
 
 <dl>
 
@@ -2059,9 +2190,9 @@ await client.tools.updateEvaluators("id", {});
 
 <dd>
 
-Deploy Tool to Environment.
+Deploy Tool to an Environment.
 
-Set the deployed Version for the specified Environment. This Tool Version
+Set the deployed version for the specified Environment. This Prompt
 will be used for calls made to the Tool in this Environment.
 
 </dd>
@@ -2083,8 +2214,8 @@ will be used for calls made to the Tool in this Environment.
 <dd>
 
 ```ts
-await client.tools.deploy("id", "environment_id", {
-    versionId: "version_id",
+await client.tools.setDeployment("tl_789ghi", "staging", {
+    versionId: "tv_012jkl",
 });
 ```
 
@@ -2126,7 +2257,7 @@ await client.tools.deploy("id", "environment_id", {
 
 <dd>
 
-**request: `Humanloop.DeployToolsIdEnvironmentsEnvironmentIdPostRequest`**
+**request: `Humanloop.SetDeploymentToolsIdEnvironmentsEnvironmentIdPostRequest`**
 
 </dd>
 
@@ -2167,9 +2298,9 @@ await client.tools.deploy("id", "environment_id", {
 
 <dd>
 
-Remove deployment of Tool from Environment.
+Remove deployed Tool from the Environment.
 
-Remove the deployed Version for the specified Environment. This Tool Version
+Remove the deployed version for the specified Environment. This Tool
 will no longer be used for calls made to the Tool in this Environment.
 
 </dd>
@@ -2191,7 +2322,7 @@ will no longer be used for calls made to the Tool in this Environment.
 <dd>
 
 ```ts
-await client.tools.removeDeployment("id", "environment_id");
+await client.tools.removeDeployment("tl_789ghi", "staging");
 ```
 
 </dd>
@@ -2284,7 +2415,7 @@ List all Environments and their deployed versions for the Tool.
 <dd>
 
 ```ts
-await client.tools.listEnvironments("id");
+await client.tools.listEnvironments("tl_789ghi");
 ```
 
 </dd>
@@ -2348,7 +2479,7 @@ await client.tools.listEnvironments("id");
 
 <dd>
 
-Get a list of Datasets.
+List a list of all Datasets.
 
 </dd>
 
@@ -2369,7 +2500,9 @@ Get a list of Datasets.
 <dd>
 
 ```ts
-await client.datasets.list();
+await client.datasets.list({
+    size: 1,
+});
 ```
 
 </dd>
@@ -2469,7 +2602,27 @@ you can add a unique identifier to the Datapoint's inputs such as `{_dedupe_id: 
 
 ```ts
 await client.datasets.upsert({
-    datapoints: [{}],
+    path: "test-questions",
+    datapoints: [
+        {
+            inputs: {
+                question: "What is the capital of France?",
+            },
+            target: {
+                answer: "Paris",
+            },
+        },
+        {
+            inputs: {
+                question: "Who wrote Hamlet?",
+            },
+            target: {
+                answer: "William Shakespeare",
+            },
+        },
+    ],
+    action: Humanloop.UpdateDatesetAction.Add,
+    commitMessage: "Add two new questions and answers",
 });
 ```
 
@@ -2561,7 +2714,10 @@ By default, the deployed version of the Dataset is returned. Use the query param
 <dd>
 
 ```ts
-await client.datasets.get("id");
+await client.datasets.get("ds_b0baF1ca7652", {
+    versionId: "dsv_6L78pqrdFi2xa",
+    includeDatapoints: true,
+});
 ```
 
 </dd>
@@ -2830,7 +2986,9 @@ List all Datapoints for the Dataset with the given ID.
 <dd>
 
 ```ts
-await client.datasets.listDatapoints("id");
+await client.datasets.listDatapoints("ds_b0baF1ca7652", {
+    size: 1,
+});
 ```
 
 </dd>
@@ -2923,7 +3081,9 @@ Get a list of the versions for a Dataset.
 <dd>
 
 ```ts
-await client.datasets.listVersions("id");
+await client.datasets.listVersions("ds_b0baF1ca7652", {
+    status: Humanloop.VersionStatus.Committed,
+});
 ```
 
 </dd>
@@ -2995,7 +3155,9 @@ await client.datasets.listVersions("id");
 
 <dd>
 
-Commit the Dataset Version with the given ID.
+Commit a version of the Dataset with a commit message.
+
+If the version is already committed, an exception will be raised.
 
 </dd>
 
@@ -3016,8 +3178,8 @@ Commit the Dataset Version with the given ID.
 <dd>
 
 ```ts
-await client.datasets.commit("id", "version_id", {
-    commitMessage: "commit_message",
+await client.datasets.commit("ds_b0baF1ca7652", "dsv_6L78pqrdFi2xa", {
+    commitMessage: "initial commit",
 });
 ```
 
@@ -3196,110 +3358,7 @@ await client.datasets.uploadCsv(fs.createReadStream("/path/to/your/file"), "id",
 </dl>
 </details>
 
-<details><summary> <code>client.datasets.<a href="./src/api/resources/datasets/client/Client.ts">fromLogs</a>(id, { ...params }) -> Humanloop.DatasetResponse</code> </summary>
-
-<dl>
-
-<dd>
-
-#### 📝 Description
-
-<dl>
-
-<dd>
-
-<dl>
-
-<dd>
-
-Add Datapoints from Logs to a Dataset.
-
-This will create a new committed version of the Dataset with the Datapoints from the Logs.
-
-If either `version_id` or `environment` is provided, the new version will be based on the specified version,
-with the Datapoints from the Logs added to the existing Datapoints in the version.
-If neither `version_id` nor `environment` is provided, the new version will be based on the version
-of the Dataset that is deployed to the default Environment.
-
-</dd>
-
-</dl>
-
-</dd>
-
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-
-<dd>
-
-<dl>
-
-<dd>
-
-```ts
-await client.datasets.fromLogs("id", {
-    logIds: ["log_ids"],
-    commitMessage: "commit_message",
-});
-```
-
-</dd>
-
-</dl>
-
-</dd>
-
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-
-<dd>
-
-<dl>
-
-<dd>
-
-**id: `string`** — Unique identifier for the Dataset
-
-</dd>
-
-</dl>
-
-<dl>
-
-<dd>
-
-**request: `Humanloop.BodyFromLogsDatasetsIdDatapointsLogsPost`**
-
-</dd>
-
-</dl>
-
-<dl>
-
-<dd>
-
-**requestOptions: `Datasets.RequestOptions`**
-
-</dd>
-
-</dl>
-
-</dd>
-
-</dl>
-
-</dd>
-
-</dl>
-</details>
-
-<details><summary> <code>client.datasets.<a href="./src/api/resources/datasets/client/Client.ts">deploy</a>(id, environmentId, { ...params }) -> Humanloop.DatasetResponse</code> </summary>
+<details><summary> <code>client.datasets.<a href="./src/api/resources/datasets/client/Client.ts">setDeployment</a>(id, environmentId, { ...params }) -> Humanloop.DatasetResponse</code> </summary>
 
 <dl>
 
@@ -3317,7 +3376,7 @@ await client.datasets.fromLogs("id", {
 
 Deploy Dataset to Environment.
 
-Set the deployed Version for the specified Environment.
+Set the deployed version for the specified Environment.
 
 </dd>
 
@@ -3338,8 +3397,8 @@ Set the deployed Version for the specified Environment.
 <dd>
 
 ```ts
-await client.datasets.deploy("id", "environment_id", {
-    versionId: "version_id",
+await client.datasets.setDeployment("ds_b0baF1ca7652", "staging", {
+    versionId: "dsv_6L78pqrdFi2xa",
 });
 ```
 
@@ -3381,7 +3440,7 @@ await client.datasets.deploy("id", "environment_id", {
 
 <dd>
 
-**request: `Humanloop.DeployDatasetsIdEnvironmentsEnvironmentIdPostRequest`**
+**request: `Humanloop.SetDeploymentDatasetsIdEnvironmentsEnvironmentIdPostRequest`**
 
 </dd>
 
@@ -3422,9 +3481,9 @@ await client.datasets.deploy("id", "environment_id", {
 
 <dd>
 
-Remove deployment of Dataset from Environment.
+Remove deployed Dataset from Environment.
 
-Remove the deployed Version for the specified Environment.
+Remove the deployed version for the specified Environment.
 
 </dd>
 
@@ -3445,7 +3504,7 @@ Remove the deployed Version for the specified Environment.
 <dd>
 
 ```ts
-await client.datasets.removeDeployment("id", "environment_id");
+await client.datasets.removeDeployment("ds_b0baF1ca7652", "staging");
 ```
 
 </dd>
@@ -3584,428 +3643,6 @@ await client.datasets.listEnvironments("id");
 </dl>
 </details>
 
-## Directories
-
-<details><summary> <code>client.directories.<a href="./src/api/resources/directories/client/Client.ts">list</a>() -> Humanloop.DirectoryResponse[]</code> </summary>
-
-<dl>
-
-<dd>
-
-#### 📝 Description
-
-<dl>
-
-<dd>
-
-<dl>
-
-<dd>
-
-Retrieve a list of all Directories.
-
-</dd>
-
-</dl>
-
-</dd>
-
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-
-<dd>
-
-<dl>
-
-<dd>
-
-```ts
-await client.directories.list();
-```
-
-</dd>
-
-</dl>
-
-</dd>
-
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-
-<dd>
-
-<dl>
-
-<dd>
-
-**requestOptions: `Directories.RequestOptions`**
-
-</dd>
-
-</dl>
-
-</dd>
-
-</dl>
-
-</dd>
-
-</dl>
-</details>
-
-<details><summary> <code>client.directories.<a href="./src/api/resources/directories/client/Client.ts">create</a>({ ...params }) -> Humanloop.DirectoryResponse</code> </summary>
-
-<dl>
-
-<dd>
-
-#### 📝 Description
-
-<dl>
-
-<dd>
-
-<dl>
-
-<dd>
-
-Creates a Directory.
-
-</dd>
-
-</dl>
-
-</dd>
-
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-
-<dd>
-
-<dl>
-
-<dd>
-
-```ts
-await client.directories.create({
-    name: "name",
-    parentId: "parent_id",
-});
-```
-
-</dd>
-
-</dl>
-
-</dd>
-
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-
-<dd>
-
-<dl>
-
-<dd>
-
-**request: `Humanloop.CreateDirectoryRequest`**
-
-</dd>
-
-</dl>
-
-<dl>
-
-<dd>
-
-**requestOptions: `Directories.RequestOptions`**
-
-</dd>
-
-</dl>
-
-</dd>
-
-</dl>
-
-</dd>
-
-</dl>
-</details>
-
-<details><summary> <code>client.directories.<a href="./src/api/resources/directories/client/Client.ts">get</a>(id) -> Humanloop.DirectoryWithParentsAndChildrenResponse</code> </summary>
-
-<dl>
-
-<dd>
-
-#### 📝 Description
-
-<dl>
-
-<dd>
-
-<dl>
-
-<dd>
-
-Fetches a directory by ID.
-
-</dd>
-
-</dl>
-
-</dd>
-
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-
-<dd>
-
-<dl>
-
-<dd>
-
-```ts
-await client.directories.get("id");
-```
-
-</dd>
-
-</dl>
-
-</dd>
-
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-
-<dd>
-
-<dl>
-
-<dd>
-
-**id: `string`** — String ID of directory. Starts with `dir_`.
-
-</dd>
-
-</dl>
-
-<dl>
-
-<dd>
-
-**requestOptions: `Directories.RequestOptions`**
-
-</dd>
-
-</dl>
-
-</dd>
-
-</dl>
-
-</dd>
-
-</dl>
-</details>
-
-<details><summary> <code>client.directories.<a href="./src/api/resources/directories/client/Client.ts">delete</a>(id) -> void</code> </summary>
-
-<dl>
-
-<dd>
-
-#### 📝 Description
-
-<dl>
-
-<dd>
-
-<dl>
-
-<dd>
-
-Delete the Directory with the given ID.
-
-The Directory must be empty (i.e. contain no Directories or Files).
-
-</dd>
-
-</dl>
-
-</dd>
-
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-
-<dd>
-
-<dl>
-
-<dd>
-
-```ts
-await client.directories.delete("id");
-```
-
-</dd>
-
-</dl>
-
-</dd>
-
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-
-<dd>
-
-<dl>
-
-<dd>
-
-**id: `string`** — Unique identifier for Directory. Starts with `dir_`.
-
-</dd>
-
-</dl>
-
-<dl>
-
-<dd>
-
-**requestOptions: `Directories.RequestOptions`**
-
-</dd>
-
-</dl>
-
-</dd>
-
-</dl>
-
-</dd>
-
-</dl>
-</details>
-
-<details><summary> <code>client.directories.<a href="./src/api/resources/directories/client/Client.ts">update</a>(id, { ...params }) -> Humanloop.DirectoryResponse</code> </summary>
-
-<dl>
-
-<dd>
-
-#### 📝 Description
-
-<dl>
-
-<dd>
-
-<dl>
-
-<dd>
-
-Update the Directory with the given ID.
-
-</dd>
-
-</dl>
-
-</dd>
-
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-
-<dd>
-
-<dl>
-
-<dd>
-
-```ts
-await client.directories.update("id");
-```
-
-</dd>
-
-</dl>
-
-</dd>
-
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-
-<dd>
-
-<dl>
-
-<dd>
-
-**id: `string`** — Unique identifier for Directory. Starts with `dir_`.
-
-</dd>
-
-</dl>
-
-<dl>
-
-<dd>
-
-**request: `Humanloop.UpdateDirectoryRequest`**
-
-</dd>
-
-</dl>
-
-<dl>
-
-<dd>
-
-**requestOptions: `Directories.RequestOptions`**
-
-</dd>
-
-</dl>
-
-</dd>
-
-</dl>
-
-</dd>
-
-</dl>
-</details>
-
 ## Evaluations
 
 <details><summary> <code>client.evaluations.<a href="./src/api/resources/evaluations/client/Client.ts">list</a>({ ...params }) -> core.Page<Humanloop.EvaluationResponse></code> </summary>
@@ -4024,7 +3661,7 @@ await client.directories.update("id");
 
 <dd>
 
-List Evaluations for the given File.
+List all Evaluations for the specified `file_id`.
 
 Retrieve a list of Evaluations that evaluate versions of the specified File.
 
@@ -4048,7 +3685,8 @@ Retrieve a list of Evaluations that evaluate versions of the specified File.
 
 ```ts
 await client.evaluations.list({
-    fileId: "file_id",
+    fileId: "pr_30gco7dx6JDq4200GVOHa",
+    size: 1,
 });
 ```
 
@@ -4113,11 +3751,16 @@ await client.evaluations.list({
 
 Create an Evaluation.
 
-Create a new Evaluation by specifying the Dataset, Evaluatees, and Evaluators.
-Humanloop will automatically start generating Logs and running Evaluators.
+Create a new Evaluation by specifying the Dataset, versions to be
+evaluated (Evaluatees), and which Evaluators to provide judgments.
 
-To keep updated on the progress of the Evaluation, you can poll the Evaluation
-and check its status.
+Humanloop will automatically start generating Logs and running Evaluators where
+`orchestrated=true`. If you own the runtime for the Evaluatee or Evaluator, you
+can set `orchestrated=false` and then generate and submit the required logs using
+your runtime.
+
+To keep updated on the progress of the Evaluation, you can poll the Evaluation using
+the GET /evaluations/{id} endpoint and check its status.
 
 </dd>
 
@@ -4140,16 +3783,18 @@ and check its status.
 ```ts
 await client.evaluations.create({
     dataset: {
-        versionId: "version_id",
+        versionId: "dsv_6L78pqrdFi2xa",
     },
     evaluatees: [
         {
-            versionId: "version_id",
+            versionId: "prv_7ZlQREDScH0xkhUwtXruN",
+            orchestrated: false,
         },
     ],
     evaluators: [
         {
-            versionId: "version_id",
+            versionId: "evv_012def",
+            orchestrated: false,
         },
     ],
 });
@@ -4216,8 +3861,6 @@ await client.evaluations.create({
 
 Get an Evaluation.
 
-Retrieve the Evaluation with the given ID.
-
 </dd>
 
 </dl>
@@ -4237,7 +3880,7 @@ Retrieve the Evaluation with the given ID.
 <dd>
 
 ```ts
-await client.evaluations.get("id");
+await client.evaluations.get("ev_567yza");
 ```
 
 </dd>
@@ -4323,7 +3966,7 @@ will not be deleted.
 <dd>
 
 ```ts
-await client.evaluations.delete("id");
+await client.evaluations.delete("ev_567yza");
 ```
 
 </dd>
@@ -4369,7 +4012,7 @@ await client.evaluations.delete("id");
 </dl>
 </details>
 
-<details><summary> <code>client.evaluations.<a href="./src/api/resources/evaluations/client/Client.ts">update</a>(id, { ...params }) -> Humanloop.EvaluationResponse</code> </summary>
+<details><summary> <code>client.evaluations.<a href="./src/api/resources/evaluations/client/Client.ts">updateSetup</a>(id, { ...params }) -> Humanloop.EvaluationResponse</code> </summary>
 
 <dl>
 
@@ -4387,7 +4030,8 @@ await client.evaluations.delete("id");
 
 Update an Evaluation.
 
-Update the setup of an Evaluation by specifying the Dataset, Evaluatees, and Evaluators.
+Update the setup of an Evaluation by specifying the Dataset, versions to be
+evaluated (Evaluatees), and which Evaluators to provide judgments.
 
 </dd>
 
@@ -4408,18 +4052,20 @@ Update the setup of an Evaluation by specifying the Dataset, Evaluatees, and Eva
 <dd>
 
 ```ts
-await client.evaluations.update("id", {
+await client.evaluations.updateSetup("ev_567yza", {
     dataset: {
-        versionId: "version_id",
+        versionId: "dsv_6L78pqrdFi2xa",
     },
     evaluatees: [
         {
-            versionId: "version_id",
+            versionId: "prv_7ZlQREDScH0xkhUwtXruN",
+            orchestrated: false,
         },
     ],
     evaluators: [
         {
-            versionId: "version_id",
+            versionId: "evv_012def",
+            orchestrated: false,
         },
     ],
 });
@@ -4496,8 +4142,8 @@ await client.evaluations.update("id", {
 
 Update the status of an Evaluation.
 
-Can be used to cancel a running Evaluation, or mark an Evaluation that uses external or human evaluators
-as completed.
+Can be used to cancel a running Evaluation, or mark an Evaluation that uses
+external or human evaluators as completed.
 
 </dd>
 
@@ -4595,8 +4241,8 @@ await client.evaluations.updateStatus("id", {
 Get Evaluation Stats.
 
 Retrieve aggregate stats for the specified Evaluation.
-This includes the number of generated Logs for every evaluatee and Evaluator metrics
-(such as the mean and percentiles for numeric Evaluators for every evaluatee).
+This includes the number of generated Logs for each evaluated version and the
+corresponding Evaluator statistics (such as the mean and percentiles).
 
 </dd>
 
@@ -4679,10 +4325,10 @@ await client.evaluations.getStats("id");
 
 <dd>
 
-Get Logs by Evaluation ID.
+Get the Logs associated to a specific Evaluation.
 
-Each Evaluation Log corresponds to a (Datapoint, Evaluated Version) pair.
-It has an optional generated Log and a list of Evaluator Logs.
+Each Datapoint in your Dataset will have a corresponding Log for each File version evaluated.
+e.g. If you have 50 Datapoints and are evaluating 2 Prompts, there will be 100 Logs associated with the Evaluation.
 
 </dd>
 
@@ -4761,168 +4407,6 @@ await client.evaluations.getLogs("id");
 
 ## Evaluators
 
-<details><summary> <code>client.evaluators.<a href="./src/api/resources/evaluators/client/Client.ts">listDefault</a>() -> Humanloop.EvaluatorResponse[]</code> </summary>
-
-<dl>
-
-<dd>
-
-#### 📝 Description
-
-<dl>
-
-<dd>
-
-<dl>
-
-<dd>
-
-Get a list of default evaluators for the organization.
-
-</dd>
-
-</dl>
-
-</dd>
-
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-
-<dd>
-
-<dl>
-
-<dd>
-
-```ts
-await client.evaluators.listDefault();
-```
-
-</dd>
-
-</dl>
-
-</dd>
-
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-
-<dd>
-
-<dl>
-
-<dd>
-
-**requestOptions: `Evaluators.RequestOptions`**
-
-</dd>
-
-</dl>
-
-</dd>
-
-</dl>
-
-</dd>
-
-</dl>
-</details>
-
-<details><summary> <code>client.evaluators.<a href="./src/api/resources/evaluators/client/Client.ts">debug</a>({ ...params }) -> Humanloop.EvaluationDebugResultResponse[]</code> </summary>
-
-<dl>
-
-<dd>
-
-#### 📝 Description
-
-<dl>
-
-<dd>
-
-<dl>
-
-<dd>
-
-Run a synchronous evaluator execution on a collection of datapoints.
-
-</dd>
-
-</dl>
-
-</dd>
-
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-
-<dd>
-
-<dl>
-
-<dd>
-
-```ts
-await client.evaluators.debug({
-    fileId: "file_id",
-    evaluator: {
-        argumentsType: Humanloop.EvaluatorArgumentsType.TargetFree,
-        returnType: Humanloop.EvaluatorReturnTypeEnum.Boolean,
-    },
-});
-```
-
-</dd>
-
-</dl>
-
-</dd>
-
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-
-<dd>
-
-<dl>
-
-<dd>
-
-**request: `Humanloop.RunSyncEvaluationRequest`**
-
-</dd>
-
-</dl>
-
-<dl>
-
-<dd>
-
-**requestOptions: `Evaluators.RequestOptions`**
-
-</dd>
-
-</dl>
-
-</dd>
-
-</dl>
-
-</dd>
-
-</dl>
-</details>
-
 <details><summary> <code>client.evaluators.<a href="./src/api/resources/evaluators/client/Client.ts">list</a>({ ...params }) -> core.Page<Humanloop.EvaluatorResponse></code> </summary>
 
 <dl>
@@ -4939,7 +4423,7 @@ await client.evaluators.debug({
 
 <dd>
 
-Get a list of Evaluators.
+Get a list of all Evaluators.
 
 </dd>
 
@@ -4960,7 +4444,9 @@ Get a list of Evaluators.
 <dd>
 
 ```ts
-await client.evaluators.list();
+await client.evaluators.list({
+    size: 1,
+});
 ```
 
 </dd>
@@ -5050,10 +4536,14 @@ an exception will be raised.
 
 ```ts
 await client.evaluators.upsert({
+    path: "Shared Evaluators/Accuracy Evaluator",
     spec: {
-        argumentsType: Humanloop.EvaluatorArgumentsType.TargetFree,
-        returnType: Humanloop.EvaluatorReturnTypeEnum.Boolean,
+        argumentsType: Humanloop.EvaluatorArgumentsType.TargetRequired,
+        returnType: Humanloop.EvaluatorReturnTypeEnum.Number,
+        evaluatorType: "python",
+        code: "def evaluate(answer, target):\\n    return 0.5",
     },
+    commitMessage: "Initial commit",
 });
 ```
 
@@ -5140,7 +4630,7 @@ By default, the deployed version of the Evaluator is returned. Use the query par
 <dd>
 
 ```ts
-await client.evaluators.get("id");
+await client.evaluators.get("ev_890bcd");
 ```
 
 </dd>
@@ -5233,7 +4723,7 @@ Delete the Evaluator with the given ID.
 <dd>
 
 ```ts
-await client.evaluators.delete("id");
+await client.evaluators.delete("ev_890bcd");
 ```
 
 </dd>
@@ -5316,7 +4806,9 @@ Move the Evaluator to a different path or change the name.
 <dd>
 
 ```ts
-await client.evaluators.move("id");
+await client.evaluators.move("ev_890bcd", {
+    path: "new directory/new name",
+});
 ```
 
 </dd>
@@ -5409,7 +4901,7 @@ Get a list of all the versions of an Evaluator.
 <dd>
 
 ```ts
-await client.evaluators.listVersions("id");
+await client.evaluators.listVersions("ev_890bcd");
 ```
 
 </dd>
@@ -5481,7 +4973,9 @@ await client.evaluators.listVersions("id");
 
 <dd>
 
-Commit the Evaluator Version with the given ID.
+Commit a version of the Evaluator with a commit message.
+
+If the version is already committed, an exception will be raised.
 
 </dd>
 
@@ -5502,8 +4996,8 @@ Commit the Evaluator Version with the given ID.
 <dd>
 
 ```ts
-await client.evaluators.commit("id", "version_id", {
-    commitMessage: "commit_message",
+await client.evaluators.commit("ev_890bcd", "evv_012def", {
+    commitMessage: "Initial commit",
 });
 ```
 
@@ -5570,7 +5064,7 @@ await client.evaluators.commit("id", "version_id", {
 </dl>
 </details>
 
-<details><summary> <code>client.evaluators.<a href="./src/api/resources/evaluators/client/Client.ts">deploy</a>(id, environmentId, { ...params }) -> Humanloop.EvaluatorResponse</code> </summary>
+<details><summary> <code>client.evaluators.<a href="./src/api/resources/evaluators/client/Client.ts">setDeployment</a>(id, environmentId, { ...params }) -> Humanloop.EvaluatorResponse</code> </summary>
 
 <dl>
 
@@ -5586,9 +5080,9 @@ await client.evaluators.commit("id", "version_id", {
 
 <dd>
 
-Deploy Evaluator to Environment.
+Deploy Evaluator to an Environment.
 
-Set the deployed Version for the specified Environment. This Evaluator Version
+Set the deployed version for the specified Environment. This Evaluator
 will be used for calls made to the Evaluator in this Environment.
 
 </dd>
@@ -5610,8 +5104,8 @@ will be used for calls made to the Evaluator in this Environment.
 <dd>
 
 ```ts
-await client.evaluators.deploy("id", "environment_id", {
-    versionId: "version_id",
+await client.evaluators.setDeployment("ev_890bcd", "staging", {
+    versionId: "evv_012def",
 });
 ```
 
@@ -5653,7 +5147,7 @@ await client.evaluators.deploy("id", "environment_id", {
 
 <dd>
 
-**request: `Humanloop.DeployEvaluatorsIdEnvironmentsEnvironmentIdPostRequest`**
+**request: `Humanloop.SetDeploymentEvaluatorsIdEnvironmentsEnvironmentIdPostRequest`**
 
 </dd>
 
@@ -5694,9 +5188,9 @@ await client.evaluators.deploy("id", "environment_id", {
 
 <dd>
 
-Remove deployment of Evaluator from Environment.
+Remove deployed Evaluator from the Environment.
 
-Remove the deployed Version for the specified Environment. This Evaluator Version
+Remove the deployed version for the specified Environment. This Evaluator
 will no longer be used for calls made to the Evaluator in this Environment.
 
 </dd>
@@ -5718,7 +5212,7 @@ will no longer be used for calls made to the Evaluator in this Environment.
 <dd>
 
 ```ts
-await client.evaluators.removeDeployment("id", "environment_id");
+await client.evaluators.removeDeployment("ev_890bcd", "staging");
 ```
 
 </dd>
@@ -5811,7 +5305,7 @@ List all Environments and their deployed versions for the Evaluator.
 <dd>
 
 ```ts
-await client.evaluators.listEnvironments("id");
+await client.evaluators.listEnvironments("ev_890bcd");
 ```
 
 </dd>
@@ -5875,7 +5369,7 @@ await client.evaluators.listEnvironments("id");
 
 <dd>
 
-List Logs.
+List all Logs for the given filter criteria.
 
 </dd>
 
@@ -5897,7 +5391,8 @@ List Logs.
 
 ```ts
 await client.logs.list({
-    fileId: "file_id",
+    fileId: "file_123abc",
+    size: 1,
 });
 ```
 
@@ -6066,7 +5561,7 @@ Retrieve the Log with the given ID.
 <dd>
 
 ```ts
-await client.logs.get("id");
+await client.logs.get("prv_Wu6zx1lAWJRqOyL8nWuZk");
 ```
 
 </dd>
@@ -6151,7 +5646,7 @@ Retrieve the Session with the given ID.
 <dd>
 
 ```ts
-await client.sessions.get("id");
+await client.sessions.get("sesh_123abc");
 ```
 
 </dd>
@@ -6234,7 +5729,7 @@ Delete the Session with the given ID.
 <dd>
 
 ```ts
-await client.sessions.delete("id");
+await client.sessions.delete("sesh_123abc");
 ```
 
 </dd>
@@ -6317,7 +5812,10 @@ Get a list of Sessions.
 <dd>
 
 ```ts
-await client.sessions.list();
+await client.sessions.list({
+    size: 1,
+    fileId: "pr_123abc",
+});
 ```
 
 </dd>

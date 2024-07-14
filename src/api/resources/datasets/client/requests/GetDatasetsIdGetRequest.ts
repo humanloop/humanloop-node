@@ -4,7 +4,10 @@
 
 /**
  * @example
- *     {}
+ *     {
+ *         versionId: "dsv_6L78pqrdFi2xa",
+ *         includeDatapoints: true
+ *     }
  */
 export interface GetDatasetsIdGetRequest {
     /**

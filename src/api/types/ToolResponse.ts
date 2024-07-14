@@ -42,6 +42,8 @@ export interface ToolResponse {
     totalLogsCount: number;
     /** Inputs associated to the Prompt. Inputs correspond to any of the variables used within the Tool template. */
     inputs: Humanloop.InputResponse[];
+    /** Evaluators that have been attached to this Tool that are used for monitoring logs. */
+    evaluators?: Humanloop.MonitoringEvaluatorResponse[];
     /** Signature of the Tool. */
     signature?: string;
     /** Aggregation of Evaluator results for the Tool Version. */

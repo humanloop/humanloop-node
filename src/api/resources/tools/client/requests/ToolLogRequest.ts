@@ -6,7 +6,35 @@ import * as Humanloop from "../../../../index";
 
 /**
  * @example
- *     {}
+ *     {
+ *         path: "math-tool",
+ *         tool: {
+ *             function: {
+ *                 name: "multiply",
+ *                 description: "Multiply two numbers",
+ *                 parameters: {
+ *                     "type": "object",
+ *                     "properties": {
+ *                         "a": {
+ *                             "type": "number"
+ *                         },
+ *                         "b": {
+ *                             "type": "number"
+ *                         }
+ *                     },
+ *                     "required": [
+ *                         "a",
+ *                         "b"
+ *                     ]
+ *                 }
+ *             }
+ *         },
+ *         inputs: {
+ *             "a": 5,
+ *             "b": 7
+ *         },
+ *         output: "35"
+ *     }
  */
 export interface ToolLogRequest {
     /**

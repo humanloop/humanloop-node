@@ -5,12 +5,13 @@
 /**
  * @example
  *     {
- *         fileId: "file_id"
+ *         fileId: "pr_30gco7dx6JDq4200GVOHa",
+ *         size: 1
  *     }
  */
 export interface ListEvaluationsGetRequest {
     /**
-     * Filter by File ID. If provided, only Evaluation for the specified File will be returned.
+     * Filter by File ID. Only Evaluations for the specified File will be returned.
      */
     fileId: string;
     /**

@@ -6,7 +6,23 @@ import * as Humanloop from "../../../../index";
 
 /**
  * @example
- *     {}
+ *     {
+ *         path: "persona",
+ *         prompt: {
+ *             model: "gpt-4",
+ *             template: [{
+ *                     role: Humanloop.ChatRole.System,
+ *                     content: "You are {{person}}. Answer questions as this person. Do not break character."
+ *                 }]
+ *         },
+ *         messages: [{
+ *                 role: Humanloop.ChatRole.User,
+ *                 content: "What really happened at Roswell?"
+ *             }],
+ *         inputs: {
+ *             "person": "Trump"
+ *         }
+ *     }
  */
 export interface PromptLogRequest {
     /**

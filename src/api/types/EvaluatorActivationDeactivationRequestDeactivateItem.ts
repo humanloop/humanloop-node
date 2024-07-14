@@ -4,6 +4,6 @@
 
 import * as Humanloop from "../index";
 
-export type EvaluatorActivationDeactivationRequestEvaluatorsToDeactivateItem =
+export type EvaluatorActivationDeactivationRequestDeactivateItem =
     | Humanloop.MonitoringEvaluatorVersionRequest
     | Humanloop.MonitoringEvaluatorEnvironmentRequest;

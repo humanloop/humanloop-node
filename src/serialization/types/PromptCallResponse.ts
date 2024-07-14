@@ -5,7 +5,6 @@
 import * as serializers from "../index";
 import * as Humanloop from "../../api/index";
 import * as core from "../../core";
-import { PromptResponse } from "./PromptResponse";
 import { ChatMessage } from "./ChatMessage";
 import { PromptCallResponseToolChoice } from "./PromptCallResponseToolChoice";
 import { PromptCallLogResponse } from "./PromptCallLogResponse";
@@ -14,7 +13,7 @@ export const PromptCallResponse: core.serialization.ObjectSchema<
     serializers.PromptCallResponse.Raw,
     Humanloop.PromptCallResponse
 > = core.serialization.object({
-    prompt: PromptResponse,
+    prompt: core.serialization.lazyObject(() => serializers.PromptResponse),
     messages: core.serialization.list(ChatMessage).optional(),
     toolChoice: core.serialization.property("tool_choice", PromptCallResponseToolChoice.optional()),
     sessionId: core.serialization.property("session_id", core.serialization.string().optional()),
@@ -33,7 +32,7 @@ export const PromptCallResponse: core.serialization.ObjectSchema<
 
 export declare namespace PromptCallResponse {
     interface Raw {
-        prompt: PromptResponse.Raw;
+        prompt: serializers.PromptResponse.Raw;
         messages?: ChatMessage.Raw[] | null;
         tool_choice?: PromptCallResponseToolChoice.Raw | null;
         session_id?: string | null;

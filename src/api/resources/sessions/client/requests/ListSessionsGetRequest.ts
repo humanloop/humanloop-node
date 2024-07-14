@@ -4,7 +4,10 @@
 
 /**
  * @example
- *     {}
+ *     {
+ *         size: 1,
+ *         fileId: "pr_123abc"
+ *     }
  */
 export interface ListSessionsGetRequest {
     /**

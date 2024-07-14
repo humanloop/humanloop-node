@@ -7,7 +7,7 @@ import * as Humanloop from "../index";
 export interface EvaluationResponse {
     /** Unique identifier for the Evaluation. Starts with `evr`. */
     id: string;
-    /** The Dataset Version used in the Evaluation. */
+    /** The Dataset used in the Evaluation. */
     dataset: Humanloop.DatasetResponse;
     /** The Prompt/Tool Versions included in the Evaluation. */
     evaluatees: Humanloop.EvaluateeResponse[];

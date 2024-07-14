@@ -8,10 +8,8 @@
 export type ModelProviders =
     | "openai"
     | "openai_azure"
-    | "ai21"
     | "mock"
     | "anthropic"
-    | "langchain"
     | "cohere"
     | "replicate"
     | "google"
@@ -20,10 +18,8 @@ export type ModelProviders =
 export const ModelProviders = {
     Openai: "openai",
     OpenaiAzure: "openai_azure",
-    Ai21: "ai21",
     Mock: "mock",
     Anthropic: "anthropic",
-    Langchain: "langchain",
     Cohere: "cohere",
     Replicate: "replicate",
     Google: "google",

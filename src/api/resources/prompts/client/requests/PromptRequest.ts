@@ -7,7 +7,23 @@ import * as Humanloop from "../../../../index";
 /**
  * @example
  *     {
- *         model: "model"
+ *         path: "Personal Projects/Coding Assistant",
+ *         model: "gpt-4o",
+ *         endpoint: Humanloop.ModelEndpoints.Chat,
+ *         template: [{
+ *                 content: "You are a helpful coding assistant specialising in {{language}}",
+ *                 role: Humanloop.ChatRole.System
+ *             }],
+ *         provider: Humanloop.ModelProviders.Openai,
+ *         maxTokens: -1,
+ *         temperature: 0.7,
+ *         topP: 1,
+ *         presencePenalty: 0,
+ *         frequencyPenalty: 0,
+ *         other: {},
+ *         tools: [],
+ *         linkedTools: [],
+ *         commitMessage: "Initial commit"
  *     }
  */
 export interface PromptRequest {

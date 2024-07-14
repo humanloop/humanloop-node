@@ -6,7 +6,9 @@ import * as Humanloop from "../../../../index";
 
 /**
  * @example
- *     {}
+ *     {
+ *         size: 1
+ *     }
  */
 export interface ListDatasetsGetRequest {
     /**

@@ -5,21 +5,20 @@
 import * as serializers from "../index";
 import * as Humanloop from "../../api/index";
 import * as core from "../../core";
-import { VersionDeploymentResponseFile } from "./VersionDeploymentResponseFile";
 import { EnvironmentResponse } from "./EnvironmentResponse";
 
 export const VersionDeploymentResponse: core.serialization.ObjectSchema<
     serializers.VersionDeploymentResponse.Raw,
     Humanloop.VersionDeploymentResponse
 > = core.serialization.object({
-    file: VersionDeploymentResponseFile,
+    file: core.serialization.lazy(() => serializers.VersionDeploymentResponseFile),
     environment: EnvironmentResponse,
     type: core.serialization.stringLiteral("environment"),
 });
 
 export declare namespace VersionDeploymentResponse {
     interface Raw {
-        file: VersionDeploymentResponseFile.Raw;
+        file: serializers.VersionDeploymentResponseFile.Raw;
         environment: EnvironmentResponse.Raw;
         type: "environment";
     }

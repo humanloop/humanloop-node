@@ -5,10 +5,10 @@
 /**
  * @example
  *     {
- *         versionId: "version_id"
+ *         versionId: "dsv_6L78pqrdFi2xa"
  *     }
  */
-export interface DeployDatasetsIdEnvironmentsEnvironmentIdPostRequest {
+export interface SetDeploymentDatasetsIdEnvironmentsEnvironmentIdPostRequest {
     /**
      * Unique identifier for the specific version of the Dataset.
      */

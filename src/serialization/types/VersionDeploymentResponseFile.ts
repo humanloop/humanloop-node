@@ -5,16 +5,22 @@
 import * as serializers from "../index";
 import * as Humanloop from "../../api/index";
 import * as core from "../../core";
-import { PromptResponse } from "./PromptResponse";
-import { ToolResponse } from "./ToolResponse";
 import { DatasetResponse } from "./DatasetResponse";
-import { EvaluatorResponse } from "./EvaluatorResponse";
 
 export const VersionDeploymentResponseFile: core.serialization.Schema<
     serializers.VersionDeploymentResponseFile.Raw,
     Humanloop.VersionDeploymentResponseFile
-> = core.serialization.undiscriminatedUnion([PromptResponse, ToolResponse, DatasetResponse, EvaluatorResponse]);
+> = core.serialization.undiscriminatedUnion([
+    core.serialization.lazyObject(() => serializers.PromptResponse),
+    core.serialization.lazyObject(() => serializers.ToolResponse),
+    DatasetResponse,
+    core.serialization.lazyObject(() => serializers.EvaluatorResponse),
+]);
 
 export declare namespace VersionDeploymentResponseFile {
-    type Raw = PromptResponse.Raw | ToolResponse.Raw | DatasetResponse.Raw | EvaluatorResponse.Raw;
+    type Raw =
+        | serializers.PromptResponse.Raw
+        | serializers.ToolResponse.Raw
+        | DatasetResponse.Raw
+        | serializers.EvaluatorResponse.Raw;
 }

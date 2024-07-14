@@ -5,8 +5,8 @@
 import * as environments from "../../../../environments";
 import * as core from "../../../../core";
 import * as Humanloop from "../../../index";
-import urlJoin from "url-join";
 import * as serializers from "../../../../serialization/index";
+import urlJoin from "url-join";
 import * as errors from "../../../../errors/index";
 
 export declare namespace Prompts {
@@ -54,7 +54,241 @@ export class Prompts {
     constructor(protected readonly _options: Prompts.Options) {}
 
     /**
-     * Get a list of Prompts.
+     * Log to a Prompt.
+     *
+     * You can use query parameters `version_id`, or `environment`, to target
+     * an existing version of the Prompt. Otherwise the default deployed version will be chosen.
+     *
+     * Instead of targeting an existing version explicitly, you can instead pass in
+     * Prompt details in the request body. In this case, we will check if the details correspond
+     * to an existing version of the Prompt, if not we will create a new version. This is helpful
+     * in the case where you are storing or deriving your Prompt details in code.
+     *
+     * @param {Humanloop.PromptLogRequest} request
+     * @param {Prompts.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Humanloop.UnprocessableEntityError}
+     *
+     * @example
+     *     await client.prompts.log({
+     *         path: "persona",
+     *         prompt: {
+     *             model: "gpt-4",
+     *             template: [{
+     *                     role: Humanloop.ChatRole.System,
+     *                     content: "You are {{person}}. Answer questions as this person. Do not break character."
+     *                 }]
+     *         },
+     *         messages: [{
+     *                 role: Humanloop.ChatRole.User,
+     *                 content: "What really happened at Roswell?"
+     *             }],
+     *         inputs: {
+     *             "person": "Trump"
+     *         }
+     *     })
+     */
+    public async log(
+        request: Humanloop.PromptLogRequest = {},
+        requestOptions?: Prompts.RequestOptions
+    ): Promise<Humanloop.CreatePromptLogResponse> {
+        const { versionId, environment, ..._body } = request;
+        const _queryParams: Record<string, string | string[] | object | object[]> = {};
+        if (versionId != null) {
+            _queryParams["version_id"] = versionId;
+        }
+
+        if (environment != null) {
+            _queryParams["environment"] = environment;
+        }
+
+        const _response = await (this._options.fetcher ?? core.fetcher)({
+            url: urlJoin(
+                (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
+                "prompts/log"
+            ),
+            method: "POST",
+            headers: {
+                "X-Fern-Language": "JavaScript",
+                "X-Fern-SDK-Name": "humanloop",
+                "X-Fern-SDK-Version": "0.8.0-beta2",
+                "X-Fern-Runtime": core.RUNTIME.type,
+                "X-Fern-Runtime-Version": core.RUNTIME.version,
+                ...(await this._getCustomAuthorizationHeaders()),
+            },
+            contentType: "application/json",
+            queryParameters: _queryParams,
+            body: serializers.PromptLogRequest.jsonOrThrow(_body, { unrecognizedObjectKeys: "strip" }),
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return serializers.CreatePromptLogResponse.parseOrThrow(_response.body, {
+                unrecognizedObjectKeys: "passthrough",
+                allowUnrecognizedUnionMembers: true,
+                allowUnrecognizedEnumValues: true,
+                skipValidation: true,
+                breadcrumbsPrefix: ["response"],
+            });
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 422:
+                    throw new Humanloop.UnprocessableEntityError(
+                        serializers.HttpValidationError.parseOrThrow(_response.error.body, {
+                            unrecognizedObjectKeys: "passthrough",
+                            allowUnrecognizedUnionMembers: true,
+                            allowUnrecognizedEnumValues: true,
+                            skipValidation: true,
+                            breadcrumbsPrefix: ["response"],
+                        })
+                    );
+                default:
+                    throw new errors.HumanloopError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                    });
+            }
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.HumanloopError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
+                });
+            case "timeout":
+                throw new errors.HumanloopTimeoutError();
+            case "unknown":
+                throw new errors.HumanloopError({
+                    message: _response.error.errorMessage,
+                });
+        }
+    }
+
+    /**
+     * Call a Prompt.
+     *
+     * Calling a Prompt subsequently calls the model provider before logging
+     * the request, responses and metadata to Humanloop.
+     *
+     * You can use query parameters `version_id`, or `environment`, to target
+     * an existing version of the Prompt. Otherwise the default deployed version will be chosen.
+     *
+     * Instead of targeting an existing version explicitly, you can instead pass in
+     * Prompt details in the request body. In this case, we will check if the details correspond
+     * to an existing version of the Prompt, if not we will create a new version. This is helpful
+     * in the case where you are storing or deriving your Prompt details in code.
+     *
+     * @param {Humanloop.PromptCallRequest} request
+     * @param {Prompts.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Humanloop.UnprocessableEntityError}
+     *
+     * @example
+     *     await client.prompts.call({
+     *         path: "persona",
+     *         prompt: {
+     *             model: "gpt-4",
+     *             template: [{
+     *                     role: Humanloop.ChatRole.System,
+     *                     content: "You are {{person}}. Answer any questions as this person. Do not break character."
+     *                 }]
+     *         },
+     *         messages: [{
+     *                 role: Humanloop.ChatRole.User,
+     *                 content: "What really happened at Roswell?"
+     *             }],
+     *         inputs: {
+     *             "person": "Trump"
+     *         },
+     *         stream: false
+     *     })
+     */
+    public async call(
+        request: Humanloop.PromptCallRequest = {},
+        requestOptions?: Prompts.RequestOptions
+    ): Promise<Humanloop.CallPromptsCallPostResponse> {
+        const { versionId, environment, ..._body } = request;
+        const _queryParams: Record<string, string | string[] | object | object[]> = {};
+        if (versionId != null) {
+            _queryParams["version_id"] = versionId;
+        }
+
+        if (environment != null) {
+            _queryParams["environment"] = environment;
+        }
+
+        const _response = await (this._options.fetcher ?? core.fetcher)({
+            url: urlJoin(
+                (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
+                "prompts/call"
+            ),
+            method: "POST",
+            headers: {
+                "X-Fern-Language": "JavaScript",
+                "X-Fern-SDK-Name": "humanloop",
+                "X-Fern-SDK-Version": "0.8.0-beta2",
+                "X-Fern-Runtime": core.RUNTIME.type,
+                "X-Fern-Runtime-Version": core.RUNTIME.version,
+                ...(await this._getCustomAuthorizationHeaders()),
+            },
+            contentType: "application/json",
+            queryParameters: _queryParams,
+            body: serializers.PromptCallRequest.jsonOrThrow(_body, { unrecognizedObjectKeys: "strip" }),
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return serializers.CallPromptsCallPostResponse.parseOrThrow(_response.body, {
+                unrecognizedObjectKeys: "passthrough",
+                allowUnrecognizedUnionMembers: true,
+                allowUnrecognizedEnumValues: true,
+                skipValidation: true,
+                breadcrumbsPrefix: ["response"],
+            });
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 422:
+                    throw new Humanloop.UnprocessableEntityError(
+                        serializers.HttpValidationError.parseOrThrow(_response.error.body, {
+                            unrecognizedObjectKeys: "passthrough",
+                            allowUnrecognizedUnionMembers: true,
+                            allowUnrecognizedEnumValues: true,
+                            skipValidation: true,
+                            breadcrumbsPrefix: ["response"],
+                        })
+                    );
+                default:
+                    throw new errors.HumanloopError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                    });
+            }
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.HumanloopError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
+                });
+            case "timeout":
+                throw new errors.HumanloopTimeoutError();
+            case "unknown":
+                throw new errors.HumanloopError({
+                    message: _response.error.errorMessage,
+                });
+        }
+    }
+
+    /**
+     * Get a list of all Prompts.
      *
      * @param {Humanloop.ListPromptsGetRequest} request
      * @param {Prompts.RequestOptions} requestOptions - Request-specific configuration.
@@ -62,13 +296,17 @@ export class Prompts {
      * @throws {@link Humanloop.UnprocessableEntityError}
      *
      * @example
-     *     await client.prompts.list()
+     *     await client.prompts.list({
+     *         size: 1
+     *     })
      */
     public async list(
         request: Humanloop.ListPromptsGetRequest = {},
         requestOptions?: Prompts.RequestOptions
     ): Promise<core.Page<Humanloop.PromptResponse>> {
-        const list = async (request: Humanloop.ListPromptsGetRequest): Promise<Humanloop.ListPrompts> => {
+        const list = async (
+            request: Humanloop.ListPromptsGetRequest
+        ): Promise<Humanloop.PaginatedDataPromptResponse> => {
             const { page, size, name, userFilter, sortBy, order } = request;
             const _queryParams: Record<string, string | string[] | object | object[]> = {};
             if (page != null) {
@@ -98,7 +336,7 @@ export class Prompts {
                 headers: {
                     "X-Fern-Language": "JavaScript",
                     "X-Fern-SDK-Name": "humanloop",
-                    "X-Fern-SDK-Version": "0.8.0-beta1",
+                    "X-Fern-SDK-Version": "0.8.0-beta2",
                     "X-Fern-Runtime": core.RUNTIME.type,
                     "X-Fern-Runtime-Version": core.RUNTIME.version,
                     ...(await this._getCustomAuthorizationHeaders()),
@@ -110,7 +348,7 @@ export class Prompts {
                 abortSignal: requestOptions?.abortSignal,
             });
             if (_response.ok) {
-                return serializers.ListPrompts.parseOrThrow(_response.body, {
+                return serializers.PaginatedDataPromptResponse.parseOrThrow(_response.body, {
                     unrecognizedObjectKeys: "passthrough",
                     allowUnrecognizedUnionMembers: true,
                     allowUnrecognizedEnumValues: true,
@@ -152,7 +390,7 @@ export class Prompts {
             }
         };
         let _offset = request?.page != null ? request?.page : 1;
-        return new core.Pageable<Humanloop.ListPrompts, Humanloop.PromptResponse>({
+        return new core.Pageable<Humanloop.PaginatedDataPromptResponse, Humanloop.PromptResponse>({
             response: await list(request),
             hasNextPage: (response) => (response?.records ?? []).length > 0,
             getItems: (response) => response?.records ?? [],
@@ -179,7 +417,23 @@ export class Prompts {
      *
      * @example
      *     await client.prompts.upsert({
-     *         model: "model"
+     *         path: "Personal Projects/Coding Assistant",
+     *         model: "gpt-4o",
+     *         endpoint: Humanloop.ModelEndpoints.Chat,
+     *         template: [{
+     *                 content: "You are a helpful coding assistant specialising in {{language}}",
+     *                 role: Humanloop.ChatRole.System
+     *             }],
+     *         provider: Humanloop.ModelProviders.Openai,
+     *         maxTokens: -1,
+     *         temperature: 0.7,
+     *         topP: 1,
+     *         presencePenalty: 0,
+     *         frequencyPenalty: 0,
+     *         other: {},
+     *         tools: [],
+     *         linkedTools: [],
+     *         commitMessage: "Initial commit"
      *     })
      */
     public async upsert(
@@ -195,7 +449,7 @@ export class Prompts {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta1",
+                "X-Fern-SDK-Version": "0.8.0-beta2",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -264,7 +518,7 @@ export class Prompts {
      * @throws {@link Humanloop.UnprocessableEntityError}
      *
      * @example
-     *     await client.prompts.get("id")
+     *     await client.prompts.get("pr_30gco7dx6JDq4200GVOHa")
      */
     public async get(
         id: string,
@@ -290,7 +544,7 @@ export class Prompts {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta1",
+                "X-Fern-SDK-Version": "0.8.0-beta2",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -355,7 +609,7 @@ export class Prompts {
      * @throws {@link Humanloop.UnprocessableEntityError}
      *
      * @example
-     *     await client.prompts.delete("id")
+     *     await client.prompts.delete("pr_30gco7dx6JDq4200GVOHa")
      */
     public async delete(id: string, requestOptions?: Prompts.RequestOptions): Promise<void> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
@@ -367,7 +621,7 @@ export class Prompts {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta1",
+                "X-Fern-SDK-Version": "0.8.0-beta2",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -426,7 +680,9 @@ export class Prompts {
      * @throws {@link Humanloop.UnprocessableEntityError}
      *
      * @example
-     *     await client.prompts.move("id")
+     *     await client.prompts.move("pr_30gco7dx6JDq4200GVOHa", {
+     *         path: "new directory/new name"
+     *     })
      */
     public async move(
         id: string,
@@ -442,7 +698,7 @@ export class Prompts {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta1",
+                "X-Fern-SDK-Version": "0.8.0-beta2",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -508,21 +764,19 @@ export class Prompts {
      * @throws {@link Humanloop.UnprocessableEntityError}
      *
      * @example
-     *     await client.prompts.listVersions("id")
+     *     await client.prompts.listVersions("pr_30gco7dx6JDq4200GVOHa", {
+     *         status: Humanloop.VersionStatus.Committed
+     *     })
      */
     public async listVersions(
         id: string,
         request: Humanloop.ListVersionsPromptsIdVersionsGetRequest = {},
         requestOptions?: Prompts.RequestOptions
     ): Promise<Humanloop.ListPrompts> {
-        const { status, environment, evaluatorAggregates } = request;
+        const { status, evaluatorAggregates } = request;
         const _queryParams: Record<string, string | string[] | object | object[]> = {};
         if (status != null) {
             _queryParams["status"] = status;
-        }
-
-        if (environment != null) {
-            _queryParams["environment"] = environment;
         }
 
         if (evaluatorAggregates != null) {
@@ -538,7 +792,7 @@ export class Prompts {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta1",
+                "X-Fern-SDK-Version": "0.8.0-beta2",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -595,7 +849,9 @@ export class Prompts {
     }
 
     /**
-     * Commit the Prompt Version with the given ID.
+     * Commit a version of the Prompt with a commit message.
+     *
+     * If the version is already committed, an exception will be raised.
      *
      * @param {string} id - Unique identifier for Prompt.
      * @param {string} versionId - Unique identifier for the specific version of the Prompt.
@@ -605,8 +861,8 @@ export class Prompts {
      * @throws {@link Humanloop.UnprocessableEntityError}
      *
      * @example
-     *     await client.prompts.commit("id", "version_id", {
-     *         commitMessage: "commit_message"
+     *     await client.prompts.commit("pr_30gco7dx6JDq4200GVOHa", "prv_F34aba5f3asp0", {
+     *         commitMessage: "Reiterated point about not discussing sentience"
      *     })
      */
     public async commit(
@@ -624,7 +880,7 @@ export class Prompts {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta1",
+                "X-Fern-SDK-Version": "0.8.0-beta2",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -681,208 +937,7 @@ export class Prompts {
     }
 
     /**
-     * Log to a Prompt.
-     *
-     * You can use query parameters version_id, or environment, to target
-     * an existing version of the Prompt. Otherwise the default deployed version will be chosen.
-     *
-     * Instead of targeting an existing version explicitly, you can instead pass in
-     * Prompt details in the request body. In this case, we will check if the details correspond
-     * to an existing version of the Prompt, if not we will create a new version. This is helpful
-     * in the case where you are storing or deriving your Prompt details in code.
-     *
-     * @param {Humanloop.PromptLogRequest} request
-     * @param {Prompts.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @throws {@link Humanloop.UnprocessableEntityError}
-     *
-     * @example
-     *     await client.prompts.log()
-     */
-    public async log(
-        request: Humanloop.PromptLogRequest = {},
-        requestOptions?: Prompts.RequestOptions
-    ): Promise<Humanloop.CreatePromptLogResponse> {
-        const { versionId, environment, ..._body } = request;
-        const _queryParams: Record<string, string | string[] | object | object[]> = {};
-        if (versionId != null) {
-            _queryParams["version_id"] = versionId;
-        }
-
-        if (environment != null) {
-            _queryParams["environment"] = environment;
-        }
-
-        const _response = await (this._options.fetcher ?? core.fetcher)({
-            url: urlJoin(
-                (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
-                "prompts/log"
-            ),
-            method: "POST",
-            headers: {
-                "X-Fern-Language": "JavaScript",
-                "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta1",
-                "X-Fern-Runtime": core.RUNTIME.type,
-                "X-Fern-Runtime-Version": core.RUNTIME.version,
-                ...(await this._getCustomAuthorizationHeaders()),
-            },
-            contentType: "application/json",
-            queryParameters: _queryParams,
-            body: serializers.PromptLogRequest.jsonOrThrow(_body, { unrecognizedObjectKeys: "strip" }),
-            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-            maxRetries: requestOptions?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-        });
-        if (_response.ok) {
-            return serializers.CreatePromptLogResponse.parseOrThrow(_response.body, {
-                unrecognizedObjectKeys: "passthrough",
-                allowUnrecognizedUnionMembers: true,
-                allowUnrecognizedEnumValues: true,
-                skipValidation: true,
-                breadcrumbsPrefix: ["response"],
-            });
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 422:
-                    throw new Humanloop.UnprocessableEntityError(
-                        serializers.HttpValidationError.parseOrThrow(_response.error.body, {
-                            unrecognizedObjectKeys: "passthrough",
-                            allowUnrecognizedUnionMembers: true,
-                            allowUnrecognizedEnumValues: true,
-                            skipValidation: true,
-                            breadcrumbsPrefix: ["response"],
-                        })
-                    );
-                default:
-                    throw new errors.HumanloopError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                    });
-            }
-        }
-
-        switch (_response.error.reason) {
-            case "non-json":
-                throw new errors.HumanloopError({
-                    statusCode: _response.error.statusCode,
-                    body: _response.error.rawBody,
-                });
-            case "timeout":
-                throw new errors.HumanloopTimeoutError();
-            case "unknown":
-                throw new errors.HumanloopError({
-                    message: _response.error.errorMessage,
-                });
-        }
-    }
-
-    /**
-     * Call a Prompt.
-     *
-     * Calling a Prompt subsequently calls the model provider before logging
-     * the data to Humanloop.
-     *
-     * You can use query parameters version_id, or environment, to target
-     * an existing version of the Prompt. Otherwise the default deployed version will be chosen.
-     *
-     * Instead of targeting an existing version explicitly, you can instead pass in
-     * Prompt details in the request body. In this case, we will check if the details correspond
-     * to an existing version of the Prompt, if not we will create a new version. This is helpful
-     * in the case where you are storing or deriving your Prompt details in code.
-     *
-     * @param {Humanloop.PromptCallRequest} request
-     * @param {Prompts.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @throws {@link Humanloop.UnprocessableEntityError}
-     *
-     * @example
-     *     await client.prompts.call()
-     */
-    public async call(
-        request: Humanloop.PromptCallRequest = {},
-        requestOptions?: Prompts.RequestOptions
-    ): Promise<Humanloop.CallPromptsCallPostResponse> {
-        const { versionId, environment, ..._body } = request;
-        const _queryParams: Record<string, string | string[] | object | object[]> = {};
-        if (versionId != null) {
-            _queryParams["version_id"] = versionId;
-        }
-
-        if (environment != null) {
-            _queryParams["environment"] = environment;
-        }
-
-        const _response = await (this._options.fetcher ?? core.fetcher)({
-            url: urlJoin(
-                (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
-                "prompts/call"
-            ),
-            method: "POST",
-            headers: {
-                "X-Fern-Language": "JavaScript",
-                "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta1",
-                "X-Fern-Runtime": core.RUNTIME.type,
-                "X-Fern-Runtime-Version": core.RUNTIME.version,
-                ...(await this._getCustomAuthorizationHeaders()),
-            },
-            contentType: "application/json",
-            queryParameters: _queryParams,
-            body: serializers.PromptCallRequest.jsonOrThrow(_body, { unrecognizedObjectKeys: "strip" }),
-            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-            maxRetries: requestOptions?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-        });
-        if (_response.ok) {
-            return serializers.CallPromptsCallPostResponse.parseOrThrow(_response.body, {
-                unrecognizedObjectKeys: "passthrough",
-                allowUnrecognizedUnionMembers: true,
-                allowUnrecognizedEnumValues: true,
-                skipValidation: true,
-                breadcrumbsPrefix: ["response"],
-            });
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 422:
-                    throw new Humanloop.UnprocessableEntityError(
-                        serializers.HttpValidationError.parseOrThrow(_response.error.body, {
-                            unrecognizedObjectKeys: "passthrough",
-                            allowUnrecognizedUnionMembers: true,
-                            allowUnrecognizedEnumValues: true,
-                            skipValidation: true,
-                            breadcrumbsPrefix: ["response"],
-                        })
-                    );
-                default:
-                    throw new errors.HumanloopError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                    });
-            }
-        }
-
-        switch (_response.error.reason) {
-            case "non-json":
-                throw new errors.HumanloopError({
-                    statusCode: _response.error.statusCode,
-                    body: _response.error.rawBody,
-                });
-            case "timeout":
-                throw new errors.HumanloopTimeoutError();
-            case "unknown":
-                throw new errors.HumanloopError({
-                    message: _response.error.errorMessage,
-                });
-        }
-    }
-
-    /**
-     * Activate and deactivate Evaluators for the Prompt.
+     * Activate and deactivate Evaluators for monitoring the Prompt.
      *
      * An activated Evaluator will automatically be run on all new Logs
      * within the Prompt for monitoring purposes.
@@ -894,9 +949,13 @@ export class Prompts {
      * @throws {@link Humanloop.UnprocessableEntityError}
      *
      * @example
-     *     await client.prompts.updateEvaluators("id", {})
+     *     await client.prompts.updateMonitoring("pr_30gco7dx6JDq4200GVOHa", {
+     *         activate: [{
+     *                 evaluatorVersionId: "evv_1abc4308abd"
+     *             }]
+     *     })
      */
-    public async updateEvaluators(
+    public async updateMonitoring(
         id: string,
         request: Humanloop.EvaluatorActivationDeactivationRequest,
         requestOptions?: Prompts.RequestOptions
@@ -910,7 +969,7 @@ export class Prompts {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta1",
+                "X-Fern-SDK-Version": "0.8.0-beta2",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -969,27 +1028,27 @@ export class Prompts {
     }
 
     /**
-     * Deploy Prompt to Environment.
+     * Deploy Prompt to an Environment.
      *
-     * Set the deployed Version for the specified Environment. This Prompt Version
+     * Set the deployed version for the specified Environment. This Prompt
      * will be used for calls made to the Prompt in this Environment.
      *
      * @param {string} id - Unique identifier for Prompt.
      * @param {string} environmentId - Unique identifier for the Environment to deploy the Version to.
-     * @param {Humanloop.DeployPromptsIdEnvironmentsEnvironmentIdPostRequest} request
+     * @param {Humanloop.SetDeploymentPromptsIdEnvironmentsEnvironmentIdPostRequest} request
      * @param {Prompts.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Humanloop.UnprocessableEntityError}
      *
      * @example
-     *     await client.prompts.deploy("id", "environment_id", {
+     *     await client.prompts.setDeployment("id", "environment_id", {
      *         versionId: "version_id"
      *     })
      */
-    public async deploy(
+    public async setDeployment(
         id: string,
         environmentId: string,
-        request: Humanloop.DeployPromptsIdEnvironmentsEnvironmentIdPostRequest,
+        request: Humanloop.SetDeploymentPromptsIdEnvironmentsEnvironmentIdPostRequest,
         requestOptions?: Prompts.RequestOptions
     ): Promise<Humanloop.PromptResponse> {
         const { versionId } = request;
@@ -1004,7 +1063,7 @@ export class Prompts {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta1",
+                "X-Fern-SDK-Version": "0.8.0-beta2",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1061,9 +1120,9 @@ export class Prompts {
     }
 
     /**
-     * Remove deployment of Prompt from Environment.
+     * Remove deployed Prompt from the Environment.
      *
-     * Remove the deployed Version for the specified Environment. This Prompt Version
+     * Remove the deployed version for the specified Environment. This Prompt
      * will no longer be used for calls made to the Prompt in this Environment.
      *
      * @param {string} id - Unique identifier for Prompt.
@@ -1089,7 +1148,7 @@ export class Prompts {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta1",
+                "X-Fern-SDK-Version": "0.8.0-beta2",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1147,7 +1206,7 @@ export class Prompts {
      * @throws {@link Humanloop.UnprocessableEntityError}
      *
      * @example
-     *     await client.prompts.listEnvironments("id")
+     *     await client.prompts.listEnvironments("pr_30gco7dx6JDq4200GVOHa")
      */
     public async listEnvironments(
         id: string,
@@ -1162,7 +1221,7 @@ export class Prompts {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta1",
+                "X-Fern-SDK-Version": "0.8.0-beta2",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),

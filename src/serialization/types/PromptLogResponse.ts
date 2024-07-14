@@ -6,7 +6,6 @@ import * as serializers from "../index";
 import * as Humanloop from "../../api/index";
 import * as core from "../../core";
 import { ChatMessage } from "./ChatMessage";
-import { PromptResponse } from "./PromptResponse";
 import { PromptLogResponseToolChoice } from "./PromptLogResponseToolChoice";
 
 export const PromptLogResponse: core.serialization.ObjectSchema<
@@ -20,7 +19,7 @@ export const PromptLogResponse: core.serialization.ObjectSchema<
     promptCost: core.serialization.property("prompt_cost", core.serialization.number().optional()),
     outputCost: core.serialization.property("output_cost", core.serialization.number().optional()),
     finishReason: core.serialization.property("finish_reason", core.serialization.string().optional()),
-    prompt: PromptResponse,
+    prompt: core.serialization.lazyObject(() => serializers.PromptResponse),
     messages: core.serialization.list(ChatMessage).optional(),
     toolChoice: core.serialization.property("tool_choice", PromptLogResponseToolChoice.optional()),
     output: core.serialization.string().optional(),
@@ -57,7 +56,7 @@ export declare namespace PromptLogResponse {
         prompt_cost?: number | null;
         output_cost?: number | null;
         finish_reason?: string | null;
-        prompt: PromptResponse.Raw;
+        prompt: serializers.PromptResponse.Raw;
         messages?: ChatMessage.Raw[] | null;
         tool_choice?: PromptLogResponseToolChoice.Raw | null;
         output?: string | null;

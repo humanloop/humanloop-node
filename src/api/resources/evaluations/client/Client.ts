@@ -44,7 +44,7 @@ export class Evaluations {
     constructor(protected readonly _options: Evaluations.Options) {}
 
     /**
-     * List Evaluations for the given File.
+     * List all Evaluations for the specified `file_id`.
      *
      * Retrieve a list of Evaluations that evaluate versions of the specified File.
      *
@@ -55,7 +55,8 @@ export class Evaluations {
      *
      * @example
      *     await client.evaluations.list({
-     *         fileId: "file_id"
+     *         fileId: "pr_30gco7dx6JDq4200GVOHa",
+     *         size: 1
      *     })
      */
     public async list(
@@ -83,7 +84,7 @@ export class Evaluations {
                 headers: {
                     "X-Fern-Language": "JavaScript",
                     "X-Fern-SDK-Name": "humanloop",
-                    "X-Fern-SDK-Version": "0.8.0-beta1",
+                    "X-Fern-SDK-Version": "0.8.0-beta2",
                     "X-Fern-Runtime": core.RUNTIME.type,
                     "X-Fern-Runtime-Version": core.RUNTIME.version,
                     ...(await this._getCustomAuthorizationHeaders()),
@@ -151,11 +152,16 @@ export class Evaluations {
     /**
      * Create an Evaluation.
      *
-     * Create a new Evaluation by specifying the Dataset, Evaluatees, and Evaluators.
-     * Humanloop will automatically start generating Logs and running Evaluators.
+     * Create a new Evaluation by specifying the Dataset, versions to be
+     * evaluated (Evaluatees), and which Evaluators to provide judgments.
      *
-     * To keep updated on the progress of the Evaluation, you can poll the Evaluation
-     * and check its status.
+     * Humanloop will automatically start generating Logs and running Evaluators where
+     * `orchestrated=true`. If you own the runtime for the Evaluatee or Evaluator, you
+     * can set `orchestrated=false` and then generate and submit the required logs using
+     * your runtime.
+     *
+     * To keep updated on the progress of the Evaluation, you can poll the Evaluation using
+     * the GET /evaluations/{id} endpoint and check its status.
      *
      * @param {Humanloop.CreateEvaluationRequest} request
      * @param {Evaluations.RequestOptions} requestOptions - Request-specific configuration.
@@ -165,13 +171,15 @@ export class Evaluations {
      * @example
      *     await client.evaluations.create({
      *         dataset: {
-     *             versionId: "version_id"
+     *             versionId: "dsv_6L78pqrdFi2xa"
      *         },
      *         evaluatees: [{
-     *                 versionId: "version_id"
+     *                 versionId: "prv_7ZlQREDScH0xkhUwtXruN",
+     *                 orchestrated: false
      *             }],
      *         evaluators: [{
-     *                 versionId: "version_id"
+     *                 versionId: "evv_012def",
+     *                 orchestrated: false
      *             }]
      *     })
      */
@@ -188,7 +196,7 @@ export class Evaluations {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta1",
+                "X-Fern-SDK-Version": "0.8.0-beta2",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -247,15 +255,13 @@ export class Evaluations {
     /**
      * Get an Evaluation.
      *
-     * Retrieve the Evaluation with the given ID.
-     *
      * @param {string} id - Unique identifier for Evaluation.
      * @param {Evaluations.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Humanloop.UnprocessableEntityError}
      *
      * @example
-     *     await client.evaluations.get("id")
+     *     await client.evaluations.get("ev_567yza")
      */
     public async get(id: string, requestOptions?: Evaluations.RequestOptions): Promise<Humanloop.EvaluationResponse> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
@@ -267,7 +273,7 @@ export class Evaluations {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta1",
+                "X-Fern-SDK-Version": "0.8.0-beta2",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -334,7 +340,7 @@ export class Evaluations {
      * @throws {@link Humanloop.UnprocessableEntityError}
      *
      * @example
-     *     await client.evaluations.delete("id")
+     *     await client.evaluations.delete("ev_567yza")
      */
     public async delete(id: string, requestOptions?: Evaluations.RequestOptions): Promise<void> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
@@ -346,7 +352,7 @@ export class Evaluations {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta1",
+                "X-Fern-SDK-Version": "0.8.0-beta2",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -398,7 +404,8 @@ export class Evaluations {
     /**
      * Update an Evaluation.
      *
-     * Update the setup of an Evaluation by specifying the Dataset, Evaluatees, and Evaluators.
+     * Update the setup of an Evaluation by specifying the Dataset, versions to be
+     * evaluated (Evaluatees), and which Evaluators to provide judgments.
      *
      * @param {string} id - Unique identifier for Evaluation.
      * @param {Humanloop.CreateEvaluationRequest} request
@@ -407,19 +414,21 @@ export class Evaluations {
      * @throws {@link Humanloop.UnprocessableEntityError}
      *
      * @example
-     *     await client.evaluations.update("id", {
+     *     await client.evaluations.updateSetup("ev_567yza", {
      *         dataset: {
-     *             versionId: "version_id"
+     *             versionId: "dsv_6L78pqrdFi2xa"
      *         },
      *         evaluatees: [{
-     *                 versionId: "version_id"
+     *                 versionId: "prv_7ZlQREDScH0xkhUwtXruN",
+     *                 orchestrated: false
      *             }],
      *         evaluators: [{
-     *                 versionId: "version_id"
+     *                 versionId: "evv_012def",
+     *                 orchestrated: false
      *             }]
      *     })
      */
-    public async update(
+    public async updateSetup(
         id: string,
         request: Humanloop.CreateEvaluationRequest,
         requestOptions?: Evaluations.RequestOptions
@@ -433,7 +442,7 @@ export class Evaluations {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta1",
+                "X-Fern-SDK-Version": "0.8.0-beta2",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -492,8 +501,8 @@ export class Evaluations {
     /**
      * Update the status of an Evaluation.
      *
-     * Can be used to cancel a running Evaluation, or mark an Evaluation that uses external or human evaluators
-     * as completed.
+     * Can be used to cancel a running Evaluation, or mark an Evaluation that uses
+     * external or human evaluators as completed.
      *
      * @param {string} id - Unique identifier for Evaluation.
      * @param {Humanloop.BodyUpdateStatusEvaluationsIdStatusPatch} request
@@ -520,7 +529,7 @@ export class Evaluations {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta1",
+                "X-Fern-SDK-Version": "0.8.0-beta2",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -582,8 +591,8 @@ export class Evaluations {
      * Get Evaluation Stats.
      *
      * Retrieve aggregate stats for the specified Evaluation.
-     * This includes the number of generated Logs for every evaluatee and Evaluator metrics
-     * (such as the mean and percentiles for numeric Evaluators for every evaluatee).
+     * This includes the number of generated Logs for each evaluated version and the
+     * corresponding Evaluator statistics (such as the mean and percentiles).
      *
      * @param {string} id - Unique identifier for Evaluation.
      * @param {Evaluations.RequestOptions} requestOptions - Request-specific configuration.
@@ -603,7 +612,7 @@ export class Evaluations {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta1",
+                "X-Fern-SDK-Version": "0.8.0-beta2",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -659,10 +668,10 @@ export class Evaluations {
     }
 
     /**
-     * Get Logs by Evaluation ID.
+     * Get the Logs associated to a specific Evaluation.
      *
-     * Each Evaluation Log corresponds to a (Datapoint, Evaluated Version) pair.
-     * It has an optional generated Log and a list of Evaluator Logs.
+     * Each Datapoint in your Dataset will have a corresponding Log for each File version evaluated.
+     * e.g. If you have 50 Datapoints and are evaluating 2 Prompts, there will be 100 Logs associated with the Evaluation.
      *
      * @param {string} id - String ID of evaluation. Starts with `ev_` or `evr_`.
      * @param {Humanloop.GetLogsEvaluationsIdLogsGetRequest} request
@@ -697,7 +706,7 @@ export class Evaluations {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta1",
+                "X-Fern-SDK-Version": "0.8.0-beta2",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),

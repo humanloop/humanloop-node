@@ -5,16 +5,17 @@
 import * as serializers from "../index";
 import * as Humanloop from "../../api/index";
 import * as core from "../../core";
-import { VersionReferenceResponse } from "./VersionReferenceResponse";
-import { EvaluatorResponse } from "./EvaluatorResponse";
 import { MonitoringEvaluatorState } from "./MonitoringEvaluatorState";
 
 export const MonitoringEvaluatorResponse: core.serialization.ObjectSchema<
     serializers.MonitoringEvaluatorResponse.Raw,
     Humanloop.MonitoringEvaluatorResponse
 > = core.serialization.object({
-    versionReference: core.serialization.property("version_reference", VersionReferenceResponse),
-    version: EvaluatorResponse.optional(),
+    versionReference: core.serialization.property(
+        "version_reference",
+        core.serialization.lazy(() => serializers.VersionReferenceResponse)
+    ),
+    version: core.serialization.lazyObject(() => serializers.EvaluatorResponse).optional(),
     state: MonitoringEvaluatorState,
     createdAt: core.serialization.property("created_at", core.serialization.date()),
     updatedAt: core.serialization.property("updated_at", core.serialization.date()),
@@ -22,8 +23,8 @@ export const MonitoringEvaluatorResponse: core.serialization.ObjectSchema<
 
 export declare namespace MonitoringEvaluatorResponse {
     interface Raw {
-        version_reference: VersionReferenceResponse.Raw;
-        version?: EvaluatorResponse.Raw | null;
+        version_reference: serializers.VersionReferenceResponse.Raw;
+        version?: serializers.EvaluatorResponse.Raw | null;
         state: MonitoringEvaluatorState.Raw;
         created_at: string;
         updated_at: string;

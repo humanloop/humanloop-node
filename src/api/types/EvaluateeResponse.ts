@@ -4,6 +4,9 @@
 
 import * as Humanloop from "../index";
 
+/**
+ * Version of the Evaluatee being evaluated.
+ */
 export interface EvaluateeResponse {
     version: Humanloop.EvaluatedVersionResponse;
     /** Unique identifier for the batch of Logs to include in the Evaluation Report. */

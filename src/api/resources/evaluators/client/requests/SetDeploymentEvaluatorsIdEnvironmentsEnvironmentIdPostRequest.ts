@@ -5,10 +5,10 @@
 /**
  * @example
  *     {
- *         versionId: "version_id"
+ *         versionId: "evv_012def"
  *     }
  */
-export interface DeployEvaluatorsIdEnvironmentsEnvironmentIdPostRequest {
+export interface SetDeploymentEvaluatorsIdEnvironmentsEnvironmentIdPostRequest {
     /**
      * Unique identifier for the specific version of the Evaluator.
      */

@@ -6,7 +6,29 @@ import * as Humanloop from "../../../../index";
 
 /**
  * @example
- *     {}
+ *     {
+ *         path: "math-tool",
+ *         function: {
+ *             name: "multiply",
+ *             description: "Multiply two numbers",
+ *             parameters: {
+ *                 "type": "object",
+ *                 "properties": {
+ *                     "a": {
+ *                         "type": "number"
+ *                     },
+ *                     "b": {
+ *                         "type": "number"
+ *                     }
+ *                 },
+ *                 "required": [
+ *                     "a",
+ *                     "b"
+ *                 ]
+ *             }
+ *         },
+ *         commitMessage: "Initial commit"
+ *     }
  */
 export interface ToolRequest {
     /** Path of the Tool, including the name, which is used as a unique identifier. */

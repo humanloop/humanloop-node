@@ -5,15 +5,14 @@
 import * as serializers from "../index";
 import * as Humanloop from "../../api/index";
 import * as core from "../../core";
-import { PromptResponse } from "./PromptResponse";
 
 export const ListPrompts: core.serialization.ObjectSchema<serializers.ListPrompts.Raw, Humanloop.ListPrompts> =
     core.serialization.object({
-        records: core.serialization.list(PromptResponse),
+        records: core.serialization.list(core.serialization.lazyObject(() => serializers.PromptResponse)),
     });
 
 export declare namespace ListPrompts {
     interface Raw {
-        records: PromptResponse.Raw[];
+        records: serializers.PromptResponse.Raw[];
     }
 }

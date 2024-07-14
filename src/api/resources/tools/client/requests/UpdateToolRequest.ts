@@ -4,7 +4,9 @@
 
 /**
  * @example
- *     {}
+ *     {
+ *         path: "new directory/new name"
+ *     }
  */
 export interface UpdateToolRequest {
     /** Path of the Tool including the Tool name, which is used as a unique identifier. */
