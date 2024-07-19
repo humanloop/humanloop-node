@@ -36,7 +36,6 @@ export * from './api/datapoints-api';
 export * from './api/datasets-api';
 export * from './api/evaluations-api';
 export * from './api/evaluators-api';
-export * from './api/experiments-api';
 export * from './api/feedback-api';
 export * from './api/logs-api';
 export * from './api/model-configs-api';
