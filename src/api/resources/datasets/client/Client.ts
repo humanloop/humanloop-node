@@ -53,7 +53,7 @@ export class Datasets {
     constructor(protected readonly _options: Datasets.Options) {}
 
     /**
-     * List a list of all Datasets.
+     * List all Datasets.
      *
      * @param {Humanloop.ListDatasetsGetRequest} request
      * @param {Datasets.RequestOptions} requestOptions - Request-specific configuration.
@@ -99,7 +99,7 @@ export class Datasets {
                 headers: {
                     "X-Fern-Language": "JavaScript",
                     "X-Fern-SDK-Name": "humanloop",
-                    "X-Fern-SDK-Version": "0.8.0-beta3",
+                    "X-Fern-SDK-Version": "0.8.0-beta4",
                     "X-Fern-Runtime": core.RUNTIME.type,
                     "X-Fern-Runtime-Version": core.RUNTIME.version,
                     ...(await this._getCustomAuthorizationHeaders()),
@@ -209,6 +209,32 @@ export class Datasets {
      *         action: Humanloop.UpdateDatesetAction.Add,
      *         commitMessage: "Add two new questions and answers"
      *     })
+     *
+     * @example
+     *     await client.datasets.upsert({
+     *         path: "datasets/support-queries",
+     *         datapoints: [{
+     *                 messages: [{
+     *                         role: Humanloop.ChatRole.User,
+     *                         content: "Hi Humanloop support team, I'm having trouble understanding how to use the evaluations feature in your software. Can you provide a step-by-step guide or any resources to help me get started?"
+     *                     }],
+     *                 target: {
+     *                     "feature": "evaluations",
+     *                     "issue": "needs step-by-step guide"
+     *                 }
+     *             }, {
+     *                 messages: [{
+     *                         role: Humanloop.ChatRole.User,
+     *                         content: "Hi there, I'm interested in fine-tuning a language model using your software. Can you explain the process and provide any best practices or guidelines?"
+     *                     }],
+     *                 target: {
+     *                     "feature": "fine-tuning",
+     *                     "issue": "process explanation and best practices"
+     *                 }
+     *             }],
+     *         action: Humanloop.UpdateDatesetAction.Add,
+     *         commitMessage: "Add two new questions and answers"
+     *     })
      */
     public async upsert(
         request: Humanloop.DatasetsRequest,
@@ -233,7 +259,7 @@ export class Datasets {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta3",
+                "X-Fern-SDK-Version": "0.8.0-beta4",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -341,7 +367,7 @@ export class Datasets {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta3",
+                "X-Fern-SDK-Version": "0.8.0-beta4",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -418,7 +444,7 @@ export class Datasets {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta3",
+                "X-Fern-SDK-Version": "0.8.0-beta4",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -493,7 +519,7 @@ export class Datasets {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta3",
+                "X-Fern-SDK-Version": "0.8.0-beta4",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -594,7 +620,7 @@ export class Datasets {
                 headers: {
                     "X-Fern-Language": "JavaScript",
                     "X-Fern-SDK-Name": "humanloop",
-                    "X-Fern-SDK-Version": "0.8.0-beta3",
+                    "X-Fern-SDK-Version": "0.8.0-beta4",
                     "X-Fern-Runtime": core.RUNTIME.type,
                     "X-Fern-Runtime-Version": core.RUNTIME.version,
                     ...(await this._getCustomAuthorizationHeaders()),
@@ -693,7 +719,7 @@ export class Datasets {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta3",
+                "X-Fern-SDK-Version": "0.8.0-beta4",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -781,7 +807,7 @@ export class Datasets {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta3",
+                "X-Fern-SDK-Version": "0.8.0-beta4",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -887,7 +913,7 @@ export class Datasets {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta3",
+                "X-Fern-SDK-Version": "0.8.0-beta4",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -979,7 +1005,7 @@ export class Datasets {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta3",
+                "X-Fern-SDK-Version": "0.8.0-beta4",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1063,7 +1089,7 @@ export class Datasets {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta3",
+                "X-Fern-SDK-Version": "0.8.0-beta4",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1136,7 +1162,7 @@ export class Datasets {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta3",
+                "X-Fern-SDK-Version": "0.8.0-beta4",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),

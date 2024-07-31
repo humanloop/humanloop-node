@@ -12,7 +12,6 @@ export const PromptCallLogResponse: core.serialization.ObjectSchema<
     Humanloop.PromptCallLogResponse
 > = core.serialization.object({
     output: core.serialization.string().optional(),
-    rawOutput: core.serialization.property("raw_output", core.serialization.string().optional()),
     createdAt: core.serialization.property("created_at", core.serialization.date().optional()),
     error: core.serialization.string().optional(),
     providerLatency: core.serialization.property("provider_latency", core.serialization.number().optional()),
@@ -28,7 +27,6 @@ export const PromptCallLogResponse: core.serialization.ObjectSchema<
 export declare namespace PromptCallLogResponse {
     interface Raw {
         output?: string | null;
-        raw_output?: string | null;
         created_at?: string | null;
         error?: string | null;
         provider_latency?: number | null;

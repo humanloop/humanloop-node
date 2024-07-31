@@ -6,11 +6,11 @@ import * as serializers from "../index";
 import * as Humanloop from "../../api/index";
 import * as core from "../../core";
 
-export const LogResponseJudgment: core.serialization.Schema<
-    serializers.LogResponseJudgment.Raw,
-    Humanloop.LogResponseJudgment
+export const SrcExternalAppModelsV4LogLogResponseJudgment: core.serialization.Schema<
+    serializers.SrcExternalAppModelsV4LogLogResponseJudgment.Raw,
+    Humanloop.SrcExternalAppModelsV4LogLogResponseJudgment
 > = core.serialization.undiscriminatedUnion([core.serialization.boolean(), core.serialization.number()]);
 
-export declare namespace LogResponseJudgment {
+export declare namespace SrcExternalAppModelsV4LogLogResponseJudgment {
     type Raw = boolean | number;
 }

@@ -21,7 +21,18 @@ import * as Humanloop from "../../../../index";
  *             }],
  *         inputs: {
  *             "person": "Trump"
- *         }
+ *         },
+ *         createdAt: new Date("2024-07-19T00:29:35.178Z"),
+ *         providerLatency: 6.5931549072265625,
+ *         outputMessage: {
+ *             content: "Well, you know, there is so much secrecy involved in government, folks, it's unbelievable. They don't want to tell you everything. They don't tell me everything! But about Roswell, it\u2019s a very popular question. I know, I just know, that something very, very peculiar happened there. Was it a weather balloon? Maybe. Was it something extraterrestrial? Could be. I'd love to go down and open up all the classified documents, believe me, I would. But they don't let that happen. The Deep State, folks, the Deep State. They\u2019re unbelievable. They want to keep everything a secret. But whatever the truth is, I can tell you this: it\u2019s something big, very very big. Tremendous, in fact.",
+ *             role: Humanloop.ChatRole.Assistant
+ *         },
+ *         promptTokens: 100,
+ *         outputTokens: 220,
+ *         promptCost: 0.00001,
+ *         outputCost: 0.0002,
+ *         finishReason: "stop"
  *     }
  */
 export interface PromptLogRequest {
@@ -33,9 +44,9 @@ export interface PromptLogRequest {
      * Name of the Environment identifying a deployed version to log to.
      */
     environment?: string;
-    /** Path of the Prompt, including the name, which is used as a unique identifier. */
+    /** Path of the Prompt, including the name. This locates the Prompt in the Humanloop filesystem and is used as as a unique identifier. Example: `folder/name` or just `name`. */
     path?: string;
-    /** ID for an existing Prompt to update. */
+    /** ID for an existing Prompt. */
     id?: string;
     /** The message returned by the provider. */
     outputMessage?: Humanloop.ChatMessage;
@@ -63,8 +74,6 @@ export interface PromptLogRequest {
     toolChoice?: Humanloop.PromptLogRequestToolChoice;
     /** Generated output from your model for the provided inputs. Can be `None` if logging an error, or if creating a parent Log with the intention to populate it later. */
     output?: string;
-    /** Raw output from the provider. */
-    rawOutput?: string;
     /** User defined timestamp for when the log was created. */
     createdAt?: Date;
     /** Error message if the log is an error. */

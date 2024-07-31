@@ -25,7 +25,6 @@ export const PromptLogRequest: core.serialization.Schema<
     messages: core.serialization.list(ChatMessage).optional(),
     toolChoice: core.serialization.property("tool_choice", PromptLogRequestToolChoice.optional()),
     output: core.serialization.string().optional(),
-    rawOutput: core.serialization.property("raw_output", core.serialization.string().optional()),
     createdAt: core.serialization.property("created_at", core.serialization.date().optional()),
     error: core.serialization.string().optional(),
     providerLatency: core.serialization.property("provider_latency", core.serialization.number().optional()),
@@ -63,7 +62,6 @@ export declare namespace PromptLogRequest {
         messages?: ChatMessage.Raw[] | null;
         tool_choice?: PromptLogRequestToolChoice.Raw | null;
         output?: string | null;
-        raw_output?: string | null;
         created_at?: string | null;
         error?: string | null;
         provider_latency?: number | null;

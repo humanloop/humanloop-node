@@ -5,27 +5,18 @@
 import * as Humanloop from "../index";
 
 /**
- * Request model for creating a new Prompt
+ * Base type that all File Responses should inherit from.
+ *
+ * Attributes defined here are common to all File Responses and should be overridden
+ * in the inheriting classes with documentation and appropriate Field definitions.
  */
 export interface PromptResponse {
     /** Path of the Prompt, including the name, which is used as a unique identifier. */
     path: string;
     /** Unique identifier for the Prompt. */
     id: string;
-    /** Name of the Prompt. */
-    name: string;
-    /** Unique identifier for the specific Prompt Version. If no query params provided, the default deployed Prompt Version is returned. */
-    versionId: string;
-    type?: "prompt";
-    /** The list of environments the Prompt Version is deployed to. */
-    environments?: Humanloop.EnvironmentResponse[];
-    createdAt: Date;
-    updatedAt: Date;
-    /** The user who created the Prompt. */
-    createdBy?: Humanloop.UserResponse;
-    /** The status of the Prompt Version. */
-    status: Humanloop.VersionStatus;
-    lastUsedAt: Date;
+    /** ID of the directory that the file is in on Humanloop. */
+    directoryId?: string;
     /** The model instance used, e.g. `gpt-4`. See [supported models](https://humanloop.com/docs/supported-models) */
     model: string;
     /** The provider model endpoint used. */
@@ -58,6 +49,20 @@ export interface PromptResponse {
     linkedTools?: Humanloop.LinkedToolResponse[];
     /** Message describing the changes made. */
     commitMessage?: string;
+    /** Name of the Prompt. */
+    name: string;
+    /** Unique identifier for the specific Prompt Version. If no query params provided, the default deployed Prompt Version is returned. */
+    versionId: string;
+    type?: "prompt";
+    /** The list of environments the Prompt Version is deployed to. */
+    environments?: Humanloop.EnvironmentResponse[];
+    createdAt: Date;
+    updatedAt: Date;
+    /** The user who created the Prompt. */
+    createdBy?: Humanloop.UserResponse;
+    /** The status of the Prompt Version. */
+    status: Humanloop.VersionStatus;
+    lastUsedAt: Date;
     /** The number of logs that have been generated for this Prompt Version */
     versionLogsCount: number;
     /** The number of logs that have been generated across all Prompt Versions */

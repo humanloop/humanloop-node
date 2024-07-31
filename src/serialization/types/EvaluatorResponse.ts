@@ -5,10 +5,10 @@
 import * as serializers from "../index";
 import * as Humanloop from "../../api/index";
 import * as core from "../../core";
+import { EvaluatorResponseSpec } from "./EvaluatorResponseSpec";
 import { EnvironmentResponse } from "./EnvironmentResponse";
 import { UserResponse } from "./UserResponse";
 import { VersionStatus } from "./VersionStatus";
-import { EvaluatorResponseSpec } from "./EvaluatorResponseSpec";
 import { InputResponse } from "./InputResponse";
 import { EvaluatorAggregate } from "./EvaluatorAggregate";
 
@@ -18,6 +18,9 @@ export const EvaluatorResponse: core.serialization.ObjectSchema<
 > = core.serialization.object({
     path: core.serialization.string(),
     id: core.serialization.string(),
+    directoryId: core.serialization.property("directory_id", core.serialization.string().optional()),
+    commitMessage: core.serialization.property("commit_message", core.serialization.string().optional()),
+    spec: EvaluatorResponseSpec,
     name: core.serialization.string(),
     versionId: core.serialization.property("version_id", core.serialization.string()),
     type: core.serialization.stringLiteral("evaluator").optional(),
@@ -27,8 +30,6 @@ export const EvaluatorResponse: core.serialization.ObjectSchema<
     createdBy: core.serialization.property("created_by", UserResponse.optional()),
     status: VersionStatus,
     lastUsedAt: core.serialization.property("last_used_at", core.serialization.date()),
-    commitMessage: core.serialization.property("commit_message", core.serialization.string().optional()),
-    spec: EvaluatorResponseSpec,
     versionLogsCount: core.serialization.property("version_logs_count", core.serialization.number()),
     totalLogsCount: core.serialization.property("total_logs_count", core.serialization.number()),
     inputs: core.serialization.list(InputResponse),
@@ -45,6 +46,9 @@ export declare namespace EvaluatorResponse {
     interface Raw {
         path: string;
         id: string;
+        directory_id?: string | null;
+        commit_message?: string | null;
+        spec: EvaluatorResponseSpec.Raw;
         name: string;
         version_id: string;
         type?: "evaluator" | null;
@@ -54,8 +58,6 @@ export declare namespace EvaluatorResponse {
         created_by?: UserResponse.Raw | null;
         status: VersionStatus.Raw;
         last_used_at: string;
-        commit_message?: string | null;
-        spec: EvaluatorResponseSpec.Raw;
         version_logs_count: number;
         total_logs_count: number;
         inputs: InputResponse.Raw[];

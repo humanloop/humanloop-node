@@ -7,49 +7,23 @@ import * as Humanloop from "../../../../index";
 /**
  * @example
  *     {
- *         path: "math-tool",
- *         tool: {
- *             function: {
- *                 name: "multiply",
- *                 description: "Multiply two numbers",
- *                 parameters: {
- *                     "type": "object",
- *                     "properties": {
- *                         "a": {
- *                             "type": "number"
- *                         },
- *                         "b": {
- *                             "type": "number"
- *                         }
- *                     },
- *                     "required": [
- *                         "a",
- *                         "b"
- *                     ]
- *                 }
- *             }
- *         },
- *         inputs: {
- *             "a": 5,
- *             "b": 7
- *         },
- *         output: "35"
+ *         parentId: "parent_id"
  *     }
  */
-export interface ToolLogRequest {
+export interface CreateEvaluatorLogRequest {
     /**
-     * A specific Version ID of the Tool to log to.
+     * ID of the Evaluator version to log against.
      */
     versionId?: string;
     /**
      * Name of the Environment identifying a deployed version to log to.
      */
     environment?: string;
-    /** Path of the Tool, including the name. This locates the Tool in the Humanloop filesystem and is used as as a unique identifier. Example: `folder/name` or just `name`. */
+    /** Path of the Evaluator, including the name. This locates the Evaluator in the Humanloop filesystem and is used as as a unique identifier. Example: `folder/name` or just `name`. */
     path?: string;
-    /** ID for an existing Tool. */
+    /** ID for an existing Evaluator. */
     id?: string;
-    /** Generated output from your model for the provided inputs. Can be `None` if logging an error, or if creating a parent Log with the intention to populate it later. */
+    /** Generated output from the LLM. Only populated for LLM Evaluator Logs. */
     output?: string;
     /** User defined timestamp for when the log was created. */
     createdAt?: Date;
@@ -57,14 +31,14 @@ export interface ToolLogRequest {
     error?: string;
     /** Duration of the logged event in seconds. */
     providerLatency?: number;
-    /** Raw request sent to provider. */
+    /** Raw request sent to provider. Only populated for LLM Evaluator Logs. */
     providerRequest?: Record<string, unknown>;
-    /** Raw response received the provider. */
+    /** Raw response received the provider. Only populated for LLM Evaluator Logs. */
     providerResponse?: Record<string, unknown>;
     /** Unique identifier for the Session to associate the Log to. Allows you to record multiple Logs to a Session (using an ID kept by your internal systems) by passing the same `session_id` in subsequent log requests. */
     sessionId?: string;
-    /** Unique identifier for the parent Log in a Session. Should only be provided if `session_id` is provided. If provided, the Log will be nested under the parent Log within the Session. */
-    parentId?: string;
+    /** Identifier of the evaluated Log. The newly created Log will have this one set as parent. */
+    parentId: string;
     /** The inputs passed to the prompt template. */
     inputs?: Record<string, unknown>;
     /** Identifies where the model was called from. */
@@ -80,7 +54,7 @@ export interface ToolLogRequest {
     /** End-user ID related to the Log. */
     user?: string;
     /** The name of the Environment the Log is associated to. */
-    toolLogRequestEnvironment?: string;
-    /** Details of your Tool. A new Tool version will be created if the provided details are new. */
-    tool?: Humanloop.ToolKernelRequest;
+    createEvaluatorLogRequestEnvironment?: string;
+    judgment?: unknown;
+    spec?: Humanloop.CreateEvaluatorLogRequestSpec;
 }

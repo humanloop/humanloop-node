@@ -5,11 +5,11 @@
 import * as serializers from "../../../../index";
 import * as Humanloop from "../../../../../api/index";
 import * as core from "../../../../../core";
-import { ToolKernelRequest } from "../../../../types/ToolKernelRequest";
+import { CreateEvaluatorLogRequestSpec } from "../../types/CreateEvaluatorLogRequestSpec";
 
-export const ToolLogRequest: core.serialization.Schema<
-    serializers.ToolLogRequest.Raw,
-    Omit<Humanloop.ToolLogRequest, "versionId" | "environment">
+export const CreateEvaluatorLogRequest: core.serialization.Schema<
+    serializers.CreateEvaluatorLogRequest.Raw,
+    Omit<Humanloop.CreateEvaluatorLogRequest, "versionId" | "environment">
 > = core.serialization.object({
     path: core.serialization.string().optional(),
     id: core.serialization.string().optional(),
@@ -26,7 +26,7 @@ export const ToolLogRequest: core.serialization.Schema<
         core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional()
     ),
     sessionId: core.serialization.property("session_id", core.serialization.string().optional()),
-    parentId: core.serialization.property("parent_id", core.serialization.string().optional()),
+    parentId: core.serialization.property("parent_id", core.serialization.string()),
     inputs: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
     source: core.serialization.string().optional(),
     metadata: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
@@ -34,11 +34,15 @@ export const ToolLogRequest: core.serialization.Schema<
     sourceDatapointId: core.serialization.property("source_datapoint_id", core.serialization.string().optional()),
     batches: core.serialization.list(core.serialization.string()).optional(),
     user: core.serialization.string().optional(),
-    toolLogRequestEnvironment: core.serialization.property("environment", core.serialization.string().optional()),
-    tool: ToolKernelRequest.optional(),
+    createEvaluatorLogRequestEnvironment: core.serialization.property(
+        "environment",
+        core.serialization.string().optional()
+    ),
+    judgment: core.serialization.unknown().optional(),
+    spec: CreateEvaluatorLogRequestSpec.optional(),
 });
 
-export declare namespace ToolLogRequest {
+export declare namespace CreateEvaluatorLogRequest {
     interface Raw {
         path?: string | null;
         id?: string | null;
@@ -49,7 +53,7 @@ export declare namespace ToolLogRequest {
         provider_request?: Record<string, unknown> | null;
         provider_response?: Record<string, unknown> | null;
         session_id?: string | null;
-        parent_id?: string | null;
+        parent_id: string;
         inputs?: Record<string, unknown> | null;
         source?: string | null;
         metadata?: Record<string, unknown> | null;
@@ -58,6 +62,7 @@ export declare namespace ToolLogRequest {
         batches?: string[] | null;
         user?: string | null;
         environment?: string | null;
-        tool?: ToolKernelRequest.Raw | null;
+        judgment?: unknown | null;
+        spec?: CreateEvaluatorLogRequestSpec.Raw | null;
     }
 }

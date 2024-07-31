@@ -5,13 +5,28 @@
 import * as Humanloop from "../index";
 
 /**
- * Request to create a new Tool.
+ * Base type that all File Responses should inherit from.
+ *
+ * Attributes defined here are common to all File Responses and should be overridden
+ * in the inheriting classes with documentation and appropriate Field definitions.
  */
 export interface ToolResponse {
     /** Path of the Tool, including the name, which is used as a unique identifier. */
     path: string;
     /** Unique identifier for the Tool. */
     id: string;
+    /** ID of the directory that the file is in on Humanloop. */
+    directoryId?: string;
+    /** Callable function specification of the Tool shown to the model for tool calling. */
+    function?: Humanloop.ToolFunction;
+    /** Code source of the Tool. */
+    sourceCode?: string;
+    /** Values needed to setup the Tool, defined in JSON Schema format: https://json-schema.org/ */
+    setupValues?: Record<string, unknown>;
+    /** Type of Tool. */
+    toolType?: Humanloop.FilesToolType;
+    /** Message describing the changes made. */
+    commitMessage?: string;
     /** Name of the Tool, which is used as a unique identifier. */
     name: string;
     /** Unique identifier for the specific Tool Version. If no query params provided, the default deployed Tool Version is returned. */
@@ -26,16 +41,6 @@ export interface ToolResponse {
     /** The status of the Tool Version. */
     status: Humanloop.VersionStatus;
     lastUsedAt: Date;
-    /** Callable function specification of the Tool shown to the model for tool calling. */
-    function?: Humanloop.ToolFunction;
-    /** Code source of the Tool. */
-    sourceCode?: string;
-    /** Values needed to setup the Tool, defined in JSON Schema format: https://json-schema.org/ */
-    setupValues?: Record<string, unknown>;
-    /** Type of Tool. */
-    toolType?: Humanloop.FilesToolType;
-    /** Message describing the changes made. */
-    commitMessage?: string;
     /** The number of logs that have been generated for this Tool Version */
     versionLogsCount: number;
     /** The number of logs that have been generated across all Tool Versions */

@@ -57,11 +57,11 @@ export class Prompts {
      * Log to a Prompt.
      *
      * You can use query parameters `version_id`, or `environment`, to target
-     * an existing version of the Prompt. Otherwise the default deployed version will be chosen.
+     * an existing version of the Prompt. Otherwise, the default deployed version will be chosen.
      *
      * Instead of targeting an existing version explicitly, you can instead pass in
      * Prompt details in the request body. In this case, we will check if the details correspond
-     * to an existing version of the Prompt, if not we will create a new version. This is helpful
+     * to an existing version of the Prompt. If they do not, we will create a new version. This is helpful
      * in the case where you are storing or deriving your Prompt details in code.
      *
      * @param {Humanloop.PromptLogRequest} request
@@ -85,7 +85,18 @@ export class Prompts {
      *             }],
      *         inputs: {
      *             "person": "Trump"
-     *         }
+     *         },
+     *         createdAt: new Date("2024-07-19T00:29:35.178Z"),
+     *         providerLatency: 6.5931549072265625,
+     *         outputMessage: {
+     *             content: "Well, you know, there is so much secrecy involved in government, folks, it's unbelievable. They don't want to tell you everything. They don't tell me everything! But about Roswell, it\u2019s a very popular question. I know, I just know, that something very, very peculiar happened there. Was it a weather balloon? Maybe. Was it something extraterrestrial? Could be. I'd love to go down and open up all the classified documents, believe me, I would. But they don't let that happen. The Deep State, folks, the Deep State. They\u2019re unbelievable. They want to keep everything a secret. But whatever the truth is, I can tell you this: it\u2019s something big, very very big. Tremendous, in fact.",
+     *             role: Humanloop.ChatRole.Assistant
+     *         },
+     *         promptTokens: 100,
+     *         outputTokens: 220,
+     *         promptCost: 0.00001,
+     *         outputCost: 0.0002,
+     *         finishReason: "stop"
      *     })
      */
     public async log(
@@ -111,7 +122,7 @@ export class Prompts {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta3",
+                "X-Fern-SDK-Version": "0.8.0-beta4",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -171,7 +182,7 @@ export class Prompts {
     /**
      * Call a Prompt.
      *
-     * Calling a Prompt subsequently calls the model provider before logging
+     * Calling a Prompt calls the model provider before logging
      * the request, responses and metadata to Humanloop.
      *
      * You can use query parameters `version_id`, or `environment`, to target
@@ -179,13 +190,45 @@ export class Prompts {
      *
      * Instead of targeting an existing version explicitly, you can instead pass in
      * Prompt details in the request body. In this case, we will check if the details correspond
-     * to an existing version of the Prompt, if not we will create a new version. This is helpful
+     * to an existing version of the Prompt. If they do not, we will create a new version. This is helpful
      * in the case where you are storing or deriving your Prompt details in code.
      *
      * @param {Humanloop.PromptCallRequest} request
      * @param {Prompts.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Humanloop.UnprocessableEntityError}
+     *
+     * @example
+     *     await client.prompts.call({
+     *         path: "persona",
+     *         prompt: {
+     *             model: "gpt-4",
+     *             template: [{
+     *                     role: Humanloop.ChatRole.System,
+     *                     content: "You are stockbot. Return latest prices."
+     *                 }],
+     *             tools: [{
+     *                     name: "get_stock_price",
+     *                     description: "Get current stock price",
+     *                     parameters: {
+     *                         "type": "object",
+     *                         "properties": {
+     *                             "ticker_symbol": {
+     *                                 "type": "string",
+     *                                 "name": "Ticker Symbol",
+     *                                 "description": "Ticker symbol of the stock"
+     *                             }
+     *                         },
+     *                         "required": []
+     *                     }
+     *                 }]
+     *         },
+     *         messages: [{
+     *                 role: Humanloop.ChatRole.User,
+     *                 content: "latest apple"
+     *             }],
+     *         stream: false
+     *     })
      *
      * @example
      *     await client.prompts.call({
@@ -205,6 +248,19 @@ export class Prompts {
      *             "person": "Trump"
      *         },
      *         stream: false
+     *     })
+     *
+     * @example
+     *     await client.prompts.call({
+     *         versionId: "prv_Wu6zx1lAWJRqOyL8nWuZk",
+     *         path: "persona",
+     *         messages: [{
+     *                 role: Humanloop.ChatRole.User,
+     *                 content: "What really happened at Roswell?"
+     *             }],
+     *         inputs: {
+     *             "person": "Trump"
+     *         }
      *     })
      */
     public async call(
@@ -230,7 +286,7 @@ export class Prompts {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta3",
+                "X-Fern-SDK-Version": "0.8.0-beta4",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -336,7 +392,7 @@ export class Prompts {
                 headers: {
                     "X-Fern-Language": "JavaScript",
                     "X-Fern-SDK-Name": "humanloop",
-                    "X-Fern-SDK-Version": "0.8.0-beta3",
+                    "X-Fern-SDK-Version": "0.8.0-beta4",
                     "X-Fern-Runtime": core.RUNTIME.type,
                     "X-Fern-Runtime-Version": core.RUNTIME.version,
                     ...(await this._getCustomAuthorizationHeaders()),
@@ -449,7 +505,7 @@ export class Prompts {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta3",
+                "X-Fern-SDK-Version": "0.8.0-beta4",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -544,7 +600,7 @@ export class Prompts {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta3",
+                "X-Fern-SDK-Version": "0.8.0-beta4",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -621,7 +677,7 @@ export class Prompts {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta3",
+                "X-Fern-SDK-Version": "0.8.0-beta4",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -698,7 +754,7 @@ export class Prompts {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta3",
+                "X-Fern-SDK-Version": "0.8.0-beta4",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -792,7 +848,7 @@ export class Prompts {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta3",
+                "X-Fern-SDK-Version": "0.8.0-beta4",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -880,7 +936,7 @@ export class Prompts {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta3",
+                "X-Fern-SDK-Version": "0.8.0-beta4",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -969,7 +1025,7 @@ export class Prompts {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta3",
+                "X-Fern-SDK-Version": "0.8.0-beta4",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1063,7 +1119,7 @@ export class Prompts {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta3",
+                "X-Fern-SDK-Version": "0.8.0-beta4",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1148,7 +1204,7 @@ export class Prompts {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta3",
+                "X-Fern-SDK-Version": "0.8.0-beta4",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1221,7 +1277,7 @@ export class Prompts {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta3",
+                "X-Fern-SDK-Version": "0.8.0-beta4",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),

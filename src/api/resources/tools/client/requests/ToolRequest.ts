@@ -31,9 +31,9 @@ import * as Humanloop from "../../../../index";
  *     }
  */
 export interface ToolRequest {
-    /** Path of the Tool, including the name, which is used as a unique identifier. */
+    /** Path of the Tool, including the name. This locates the Tool in the Humanloop filesystem and is used as as a unique identifier. Example: `folder/name` or just `name`. */
     path?: string;
-    /** ID for an existing Tool to update. */
+    /** ID for an existing Tool. */
     id?: string;
     /** Callable function specification of the Tool shown to the model for tool calling. */
     function?: Humanloop.ToolFunction;

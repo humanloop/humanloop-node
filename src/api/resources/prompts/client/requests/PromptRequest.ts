@@ -27,9 +27,9 @@ import * as Humanloop from "../../../../index";
  *     }
  */
 export interface PromptRequest {
-    /** Path of the Prompt, including the name, which is used as a unique identifier. */
+    /** Path of the Prompt, including the name. This locates the Prompt in the Humanloop filesystem and is used as as a unique identifier. Example: `folder/name` or just `name`. */
     path?: string;
-    /** ID for an existing Prompt to update. */
+    /** ID for an existing Prompt. */
     id?: string;
     /** The model instance used, e.g. `gpt-4`. See [supported models](https://humanloop.com/docs/supported-models) */
     model: string;

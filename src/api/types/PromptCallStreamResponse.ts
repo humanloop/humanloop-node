@@ -10,8 +10,6 @@ import * as Humanloop from "../index";
 export interface PromptCallStreamResponse {
     /** Generated output from your model for the provided inputs. Can be `None` if logging an error, or if creating a parent Log with the intention to populate it later. */
     output?: string;
-    /** Raw output from the provider. */
-    rawOutput?: string;
     /** User defined timestamp for when the log was created. */
     createdAt?: Date;
     /** Error message if the log is an error. */

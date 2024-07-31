@@ -7,7 +7,6 @@ import * as Humanloop from "../../api/index";
 import * as core from "../../core";
 import { BaseModelsUserResponse } from "./BaseModelsUserResponse";
 import { ToolConfigRequest } from "./ToolConfigRequest";
-import { ModelConfigRequest } from "./ModelConfigRequest";
 
 export const AgentConfigResponse: core.serialization.ObjectSchema<
     serializers.AgentConfigResponse.Raw,
@@ -22,7 +21,6 @@ export const AgentConfigResponse: core.serialization.ObjectSchema<
     description: core.serialization.string().optional(),
     agentClass: core.serialization.property("agent_class", core.serialization.string()),
     tools: core.serialization.list(ToolConfigRequest).optional(),
-    modelConfig: core.serialization.property("model_config", ModelConfigRequest),
 });
 
 export declare namespace AgentConfigResponse {
@@ -36,6 +34,5 @@ export declare namespace AgentConfigResponse {
         description?: string | null;
         agent_class: string;
         tools?: ToolConfigRequest.Raw[] | null;
-        model_config: ModelConfigRequest.Raw;
     }
 }
