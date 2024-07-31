@@ -16,7 +16,7 @@ export const EvaluationResultResponse: core.serialization.ObjectSchema<
     evaluatorVersionId: core.serialization.property("evaluator_version_id", core.serialization.string()),
     evaluationId: core.serialization.property("evaluation_id", core.serialization.string().optional()),
     logId: core.serialization.property("log_id", core.serialization.string()),
-    log: core.serialization.lazyObject(() => serializers.LogResponse).optional(),
+    log: core.serialization.lazyObject(() => serializers.SrcExternalAppModelsV4LogLogResponse).optional(),
     versionId: core.serialization.property("version_id", core.serialization.string().optional()),
     version: core.serialization.unknown().optional(),
     value: EvaluationResultResponseValue.optional(),
@@ -25,7 +25,7 @@ export const EvaluationResultResponse: core.serialization.ObjectSchema<
     createdAt: core.serialization.property("created_at", core.serialization.date()),
     llmEvaluatorLog: core.serialization.property(
         "llm_evaluator_log",
-        core.serialization.lazyObject(() => serializers.LogResponse).optional()
+        core.serialization.lazyObject(() => serializers.SrcExternalAppModelsV4LogLogResponse).optional()
     ),
 });
 
@@ -36,13 +36,13 @@ export declare namespace EvaluationResultResponse {
         evaluator_version_id: string;
         evaluation_id?: string | null;
         log_id: string;
-        log?: serializers.LogResponse.Raw | null;
+        log?: serializers.SrcExternalAppModelsV4LogLogResponse.Raw | null;
         version_id?: string | null;
         version?: unknown | null;
         value?: EvaluationResultResponseValue.Raw | null;
         error?: string | null;
         updated_at: string;
         created_at: string;
-        llm_evaluator_log?: serializers.LogResponse.Raw | null;
+        llm_evaluator_log?: serializers.SrcExternalAppModelsV4LogLogResponse.Raw | null;
     }
 }

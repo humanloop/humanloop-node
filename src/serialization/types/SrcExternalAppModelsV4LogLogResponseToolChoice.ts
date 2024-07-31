@@ -7,9 +7,9 @@ import * as Humanloop from "../../api/index";
 import * as core from "../../core";
 import { ToolChoice } from "./ToolChoice";
 
-export const LogResponseToolChoice: core.serialization.Schema<
-    serializers.LogResponseToolChoice.Raw,
-    Humanloop.LogResponseToolChoice
+export const SrcExternalAppModelsV4LogLogResponseToolChoice: core.serialization.Schema<
+    serializers.SrcExternalAppModelsV4LogLogResponseToolChoice.Raw,
+    Humanloop.SrcExternalAppModelsV4LogLogResponseToolChoice
 > = core.serialization.undiscriminatedUnion([
     core.serialization.stringLiteral("none"),
     core.serialization.stringLiteral("auto"),
@@ -17,6 +17,6 @@ export const LogResponseToolChoice: core.serialization.Schema<
     ToolChoice,
 ]);
 
-export declare namespace LogResponseToolChoice {
+export declare namespace SrcExternalAppModelsV4LogLogResponseToolChoice {
     type Raw = "none" | "auto" | "required" | ToolChoice.Raw;
 }

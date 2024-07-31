@@ -15,6 +15,8 @@ export interface DatasetResponse {
     path: string;
     /** Unique identifier for the Dataset. Starts with `ds_`. */
     id: string;
+    /** ID of the directory that the file is in on Humanloop. */
+    directoryId?: string;
     /** Name of the Dataset, which is used as a unique identifier. */
     name: string;
     /** Unique identifier for the specific Dataset Version. If no query params provided, the default deployed Dataset Version is returned. Starts with `dsv_`. */

@@ -12,7 +12,6 @@ export const PromptLogResponse: core.serialization.ObjectSchema<
     serializers.PromptLogResponse.Raw,
     Humanloop.PromptLogResponse
 > = core.serialization.object({
-    id: core.serialization.string(),
     outputMessage: core.serialization.property("output_message", ChatMessage.optional()),
     promptTokens: core.serialization.property("prompt_tokens", core.serialization.number().optional()),
     outputTokens: core.serialization.property("output_tokens", core.serialization.number().optional()),
@@ -23,7 +22,6 @@ export const PromptLogResponse: core.serialization.ObjectSchema<
     messages: core.serialization.list(ChatMessage).optional(),
     toolChoice: core.serialization.property("tool_choice", PromptLogResponseToolChoice.optional()),
     output: core.serialization.string().optional(),
-    rawOutput: core.serialization.property("raw_output", core.serialization.string().optional()),
     createdAt: core.serialization.property("created_at", core.serialization.date().optional()),
     error: core.serialization.string().optional(),
     providerLatency: core.serialization.property("provider_latency", core.serialization.number().optional()),
@@ -45,11 +43,11 @@ export const PromptLogResponse: core.serialization.ObjectSchema<
     batches: core.serialization.list(core.serialization.string()).optional(),
     user: core.serialization.string().optional(),
     environment: core.serialization.string().optional(),
+    id: core.serialization.string(),
 });
 
 export declare namespace PromptLogResponse {
     interface Raw {
-        id: string;
         output_message?: ChatMessage.Raw | null;
         prompt_tokens?: number | null;
         output_tokens?: number | null;
@@ -60,7 +58,6 @@ export declare namespace PromptLogResponse {
         messages?: ChatMessage.Raw[] | null;
         tool_choice?: PromptLogResponseToolChoice.Raw | null;
         output?: string | null;
-        raw_output?: string | null;
         created_at?: string | null;
         error?: string | null;
         provider_latency?: number | null;
@@ -76,5 +73,6 @@ export declare namespace PromptLogResponse {
         batches?: string[] | null;
         user?: string | null;
         environment?: string | null;
+        id: string;
     }
 }

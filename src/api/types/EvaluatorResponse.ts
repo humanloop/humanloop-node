@@ -12,6 +12,11 @@ export interface EvaluatorResponse {
     path: string;
     /** Unique identifier for the Evaluator. */
     id: string;
+    /** ID of the directory that the file is in on Humanloop. */
+    directoryId?: string;
+    /** Message describing the changes made. */
+    commitMessage?: string;
+    spec: Humanloop.EvaluatorResponseSpec;
     /** Name of the Evaluator, which is used as a unique identifier. */
     name: string;
     /** Unique identifier for the specific Evaluator Version. If no query params provided, the default deployed Evaluator Version is returned. */
@@ -25,9 +30,6 @@ export interface EvaluatorResponse {
     createdBy?: Humanloop.UserResponse;
     status: Humanloop.VersionStatus;
     lastUsedAt: Date;
-    /** Message describing the changes made. */
-    commitMessage?: string;
-    spec: Humanloop.EvaluatorResponseSpec;
     /** The number of logs that have been generated for this Prompt Version */
     versionLogsCount: number;
     /** The number of logs that have been generated across all Prompt Versions */

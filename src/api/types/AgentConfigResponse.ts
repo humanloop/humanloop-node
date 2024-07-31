@@ -22,6 +22,4 @@ export interface AgentConfigResponse {
     agentClass: string;
     /** Tools associated with the agent. */
     tools?: Humanloop.ToolConfigRequest[];
-    /** Model config associated with the agent. */
-    modelConfig: Humanloop.ModelConfigRequest;
 }

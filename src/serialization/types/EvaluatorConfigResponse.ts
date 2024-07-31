@@ -6,7 +6,6 @@ import * as serializers from "../index";
 import * as Humanloop from "../../api/index";
 import * as core from "../../core";
 import { BaseModelsUserResponse } from "./BaseModelsUserResponse";
-import { ModelConfigResponse } from "./ModelConfigResponse";
 import { EvaluatorArgumentsType } from "./EvaluatorArgumentsType";
 import { EvaluatorReturnTypeEnum } from "./EvaluatorReturnTypeEnum";
 
@@ -22,7 +21,6 @@ export const EvaluatorConfigResponse: core.serialization.ObjectSchema<
     name: core.serialization.string(),
     description: core.serialization.string().optional(),
     evaluatorType: core.serialization.property("evaluator_type", core.serialization.string()),
-    modelConfig: core.serialization.property("model_config", ModelConfigResponse.optional()),
     code: core.serialization.string().optional(),
     argumentsType: core.serialization.property("arguments_type", EvaluatorArgumentsType.optional()),
     returnType: core.serialization.property("return_type", EvaluatorReturnTypeEnum.optional()),
@@ -38,7 +36,6 @@ export declare namespace EvaluatorConfigResponse {
         name: string;
         description?: string | null;
         evaluator_type: string;
-        model_config?: ModelConfigResponse.Raw | null;
         code?: string | null;
         arguments_type?: EvaluatorArgumentsType.Raw | null;
         return_type?: EvaluatorReturnTypeEnum.Raw | null;

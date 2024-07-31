@@ -26,6 +26,32 @@ import * as Humanloop from "../../../../index";
  *         action: Humanloop.UpdateDatesetAction.Add,
  *         commitMessage: "Add two new questions and answers"
  *     }
+ *
+ * @example
+ *     {
+ *         path: "datasets/support-queries",
+ *         datapoints: [{
+ *                 messages: [{
+ *                         role: Humanloop.ChatRole.User,
+ *                         content: "Hi Humanloop support team, I'm having trouble understanding how to use the evaluations feature in your software. Can you provide a step-by-step guide or any resources to help me get started?"
+ *                     }],
+ *                 target: {
+ *                     "feature": "evaluations",
+ *                     "issue": "needs step-by-step guide"
+ *                 }
+ *             }, {
+ *                 messages: [{
+ *                         role: Humanloop.ChatRole.User,
+ *                         content: "Hi there, I'm interested in fine-tuning a language model using your software. Can you explain the process and provide any best practices or guidelines?"
+ *                     }],
+ *                 target: {
+ *                     "feature": "fine-tuning",
+ *                     "issue": "process explanation and best practices"
+ *                 }
+ *             }],
+ *         action: Humanloop.UpdateDatesetAction.Add,
+ *         commitMessage: "Add two new questions and answers"
+ *     }
  */
 export interface DatasetsRequest {
     /**
@@ -36,9 +62,9 @@ export interface DatasetsRequest {
      * Name of the Environment identifying a deployed Version to base the created Version on. Only used when `action` is `"add"` or `"remove"`.
      */
     environment?: string;
-    /** Path of the Dataset, including the name, which is used as a unique identifier. */
+    /** Path of the Dataset, including the name. This locates the Dataset in the Humanloop filesystem and is used as as a unique identifier. Example: `folder/name` or just `name`. */
     path?: string;
-    /** ID for an existing Dataset to update. */
+    /** ID for an existing Dataset. */
     id?: string;
     /** The Datapoints to create this Dataset version with. Modify the `action` field to determine how these Datapoints are used. */
     datapoints: Humanloop.CreateDatapointRequest[];

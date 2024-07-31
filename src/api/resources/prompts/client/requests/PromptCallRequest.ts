@@ -12,6 +12,38 @@ import * as Humanloop from "../../../../index";
  *             model: "gpt-4",
  *             template: [{
  *                     role: Humanloop.ChatRole.System,
+ *                     content: "You are stockbot. Return latest prices."
+ *                 }],
+ *             tools: [{
+ *                     name: "get_stock_price",
+ *                     description: "Get current stock price",
+ *                     parameters: {
+ *                         "type": "object",
+ *                         "properties": {
+ *                             "ticker_symbol": {
+ *                                 "type": "string",
+ *                                 "name": "Ticker Symbol",
+ *                                 "description": "Ticker symbol of the stock"
+ *                             }
+ *                         },
+ *                         "required": []
+ *                     }
+ *                 }]
+ *         },
+ *         messages: [{
+ *                 role: Humanloop.ChatRole.User,
+ *                 content: "latest apple"
+ *             }],
+ *         stream: false
+ *     }
+ *
+ * @example
+ *     {
+ *         path: "persona",
+ *         prompt: {
+ *             model: "gpt-4",
+ *             template: [{
+ *                     role: Humanloop.ChatRole.System,
  *                     content: "You are {{person}}. Answer any questions as this person. Do not break character."
  *                 }]
  *         },
@@ -24,6 +56,19 @@ import * as Humanloop from "../../../../index";
  *         },
  *         stream: false
  *     }
+ *
+ * @example
+ *     {
+ *         versionId: "prv_Wu6zx1lAWJRqOyL8nWuZk",
+ *         path: "persona",
+ *         messages: [{
+ *                 role: Humanloop.ChatRole.User,
+ *                 content: "What really happened at Roswell?"
+ *             }],
+ *         inputs: {
+ *             "person": "Trump"
+ *         }
+ *     }
  */
 export interface PromptCallRequest {
     /**
@@ -34,9 +79,9 @@ export interface PromptCallRequest {
      * Name of the Environment identifying a deployed version to log to.
      */
     environment?: string;
-    /** Path of the Prompt, including the name, which is used as a unique identifier. */
+    /** Path of the Prompt, including the name. This locates the Prompt in the Humanloop filesystem and is used as as a unique identifier. Example: `folder/name` or just `name`. */
     path?: string;
-    /** ID for an existing Prompt to update. */
+    /** ID for an existing Prompt. */
     id?: string;
     /** Details of your Prompt. A new Prompt version will be created if the provided details are new. */
     prompt?: Humanloop.PromptKernelRequest;

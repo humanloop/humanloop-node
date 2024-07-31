@@ -10,12 +10,12 @@ export interface EvaluationResultResponse {
     evaluatorVersionId: string;
     evaluationId?: string;
     logId: string;
-    log?: Humanloop.LogResponse;
+    log?: Humanloop.SrcExternalAppModelsV4LogLogResponse;
     versionId?: string;
     version?: unknown;
     value?: Humanloop.EvaluationResultResponseValue;
     error?: string;
     updatedAt: Date;
     createdAt: Date;
-    llmEvaluatorLog?: Humanloop.LogResponse;
+    llmEvaluatorLog?: Humanloop.SrcExternalAppModelsV4LogLogResponse;
 }

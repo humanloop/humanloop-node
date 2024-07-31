@@ -10,5 +10,5 @@ export interface SessionResponse {
     createdAt: Date;
     updatedAt: Date;
     /** List of Logs associated with this Session. */
-    logs: Humanloop.PromptLogResponse[];
+    logs: Humanloop.SrcExternalAppModelsV5LogsLogResponse[];
 }

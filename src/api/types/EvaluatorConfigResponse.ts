@@ -20,8 +20,6 @@ export interface EvaluatorConfigResponse {
     description?: string;
     /** Type of evaluator. */
     evaluatorType: string;
-    /** The model config defining the LLM evaluator. */
-    modelConfig?: Humanloop.ModelConfigResponse;
     /** The code for the evaluator. This code will be executed in a sandboxed environment. */
     code?: string;
     /** Whether this evaluator is target-free or target-required. */

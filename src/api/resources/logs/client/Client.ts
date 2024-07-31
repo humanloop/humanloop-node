@@ -59,8 +59,8 @@ export class Logs {
     public async list(
         request: Humanloop.ListLogsGetRequest,
         requestOptions?: Logs.RequestOptions
-    ): Promise<core.Page<Humanloop.PromptLogResponse>> {
-        const list = async (request: Humanloop.ListLogsGetRequest): Promise<Humanloop.PaginatedPromptLogResponse> => {
+    ): Promise<core.Page<Humanloop.SrcExternalAppModelsV5LogsLogResponse>> {
+        const list = async (request: Humanloop.ListLogsGetRequest): Promise<Humanloop.PaginatedDataLogResponse> => {
             const { fileId, page, size, versionId, versionStatus, search, metadataSearch, startDate, endDate } =
                 request;
             const _queryParams: Record<string, string | string[] | object | object[]> = {};
@@ -98,7 +98,7 @@ export class Logs {
                 headers: {
                     "X-Fern-Language": "JavaScript",
                     "X-Fern-SDK-Name": "humanloop",
-                    "X-Fern-SDK-Version": "0.8.0-beta3",
+                    "X-Fern-SDK-Version": "0.8.0-beta4",
                     "X-Fern-Runtime": core.RUNTIME.type,
                     "X-Fern-Runtime-Version": core.RUNTIME.version,
                     ...(await this._getCustomAuthorizationHeaders()),
@@ -110,7 +110,7 @@ export class Logs {
                 abortSignal: requestOptions?.abortSignal,
             });
             if (_response.ok) {
-                return serializers.PaginatedPromptLogResponse.parseOrThrow(_response.body, {
+                return serializers.PaginatedDataLogResponse.parseOrThrow(_response.body, {
                     unrecognizedObjectKeys: "passthrough",
                     allowUnrecognizedUnionMembers: true,
                     allowUnrecognizedEnumValues: true,
@@ -152,7 +152,7 @@ export class Logs {
             }
         };
         let _offset = request?.page != null ? request?.page : 1;
-        return new core.Pageable<Humanloop.PaginatedPromptLogResponse, Humanloop.PromptLogResponse>({
+        return new core.Pageable<Humanloop.PaginatedDataLogResponse, Humanloop.SrcExternalAppModelsV5LogsLogResponse>({
             response: await list(request),
             hasNextPage: (response) => (response?.records ?? []).length > 0,
             getItems: (response) => response?.records ?? [],
@@ -199,7 +199,7 @@ export class Logs {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta3",
+                "X-Fern-SDK-Version": "0.8.0-beta4",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -260,7 +260,10 @@ export class Logs {
      * @example
      *     await client.logs.get("prv_Wu6zx1lAWJRqOyL8nWuZk")
      */
-    public async get(id: string, requestOptions?: Logs.RequestOptions): Promise<Humanloop.PromptLogResponse> {
+    public async get(
+        id: string,
+        requestOptions?: Logs.RequestOptions
+    ): Promise<Humanloop.SrcExternalAppModelsV5LogsLogResponse> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
@@ -270,7 +273,7 @@ export class Logs {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta3",
+                "X-Fern-SDK-Version": "0.8.0-beta4",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -281,7 +284,7 @@ export class Logs {
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return serializers.PromptLogResponse.parseOrThrow(_response.body, {
+            return serializers.SrcExternalAppModelsV5LogsLogResponse.parseOrThrow(_response.body, {
                 unrecognizedObjectKeys: "passthrough",
                 allowUnrecognizedUnionMembers: true,
                 allowUnrecognizedEnumValues: true,

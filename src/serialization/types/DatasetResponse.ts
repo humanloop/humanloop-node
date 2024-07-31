@@ -16,6 +16,7 @@ export const DatasetResponse: core.serialization.ObjectSchema<
 > = core.serialization.object({
     path: core.serialization.string(),
     id: core.serialization.string(),
+    directoryId: core.serialization.property("directory_id", core.serialization.string().optional()),
     name: core.serialization.string(),
     versionId: core.serialization.property("version_id", core.serialization.string()),
     type: core.serialization.stringLiteral("dataset").optional(),
@@ -34,6 +35,7 @@ export declare namespace DatasetResponse {
     interface Raw {
         path: string;
         id: string;
+        directory_id?: string | null;
         name: string;
         version_id: string;
         type?: "dataset" | null;

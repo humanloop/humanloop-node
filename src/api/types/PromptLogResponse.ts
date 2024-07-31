@@ -5,11 +5,9 @@
 import * as Humanloop from "../index";
 
 /**
- * Request for creating a Prompt log.
+ * General request for creating a Log
  */
 export interface PromptLogResponse {
-    /** Unique identifier for the Log. */
-    id: string;
     /** The message returned by the provider. */
     outputMessage?: Humanloop.ChatMessage;
     /** Number of tokens in the prompt used to generate the output. */
@@ -22,7 +20,7 @@ export interface PromptLogResponse {
     outputCost?: number;
     /** Reason the generation finished. */
     finishReason?: string;
-    /** Prompt details used to generate the log. */
+    /** Prompt details used to generate the Log. */
     prompt: Humanloop.PromptResponse;
     /** The messages passed to the to provider chat endpoint. */
     messages?: Humanloop.ChatMessage[];
@@ -37,8 +35,6 @@ export interface PromptLogResponse {
     toolChoice?: Humanloop.PromptLogResponseToolChoice;
     /** Generated output from your model for the provided inputs. Can be `None` if logging an error, or if creating a parent Log with the intention to populate it later. */
     output?: string;
-    /** Raw output from the provider. */
-    rawOutput?: string;
     /** User defined timestamp for when the log was created. */
     createdAt?: Date;
     /** Error message if the log is an error. */
@@ -69,4 +65,6 @@ export interface PromptLogResponse {
     user?: string;
     /** The name of the Environment the Log is associated to. */
     environment?: string;
+    /** Unique identifier for the Log. */
+    id: string;
 }

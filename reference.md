@@ -19,11 +19,11 @@
 Log to a Prompt.
 
 You can use query parameters `version_id`, or `environment`, to target
-an existing version of the Prompt. Otherwise the default deployed version will be chosen.
+an existing version of the Prompt. Otherwise, the default deployed version will be chosen.
 
 Instead of targeting an existing version explicitly, you can instead pass in
 Prompt details in the request body. In this case, we will check if the details correspond
-to an existing version of the Prompt, if not we will create a new version. This is helpful
+to an existing version of the Prompt. If they do not, we will create a new version. This is helpful
 in the case where you are storing or deriving your Prompt details in code.
 
 </dd>
@@ -65,6 +65,18 @@ await client.prompts.log({
     inputs: {
         person: "Trump",
     },
+    createdAt: new Date("2024-07-19T00:29:35.178Z"),
+    providerLatency: 6.5931549072265625,
+    outputMessage: {
+        content:
+            "Well, you know, there is so much secrecy involved in government, folks, it's unbelievable. They don't want to tell you everything. They don't tell me everything! But about Roswell, it\u2019s a very popular question. I know, I just know, that something very, very peculiar happened there. Was it a weather balloon? Maybe. Was it something extraterrestrial? Could be. I'd love to go down and open up all the classified documents, believe me, I would. But they don't let that happen. The Deep State, folks, the Deep State. They\u2019re unbelievable. They want to keep everything a secret. But whatever the truth is, I can tell you this: it\u2019s something big, very very big. Tremendous, in fact.",
+        role: Humanloop.ChatRole.Assistant,
+    },
+    promptTokens: 100,
+    outputTokens: 220,
+    promptCost: 0.00001,
+    outputCost: 0.0002,
+    finishReason: "stop",
 });
 ```
 
@@ -129,7 +141,7 @@ await client.prompts.log({
 
 Call a Prompt.
 
-Calling a Prompt subsequently calls the model provider before logging
+Calling a Prompt calls the model provider before logging
 the request, responses and metadata to Humanloop.
 
 You can use query parameters `version_id`, or `environment`, to target
@@ -137,7 +149,136 @@ an existing version of the Prompt. Otherwise the default deployed version will b
 
 Instead of targeting an existing version explicitly, you can instead pass in
 Prompt details in the request body. In this case, we will check if the details correspond
-to an existing version of the Prompt, if not we will create a new version. This is helpful
+to an existing version of the Prompt. If they do not, we will create a new version. This is helpful
+in the case where you are storing or deriving your Prompt details in code.
+
+</dd>
+
+</dl>
+
+</dd>
+
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+
+<dd>
+
+<dl>
+
+<dd>
+
+```ts
+await client.prompts.call({
+    path: "persona",
+    prompt: {
+        model: "gpt-4",
+        template: [
+            {
+                role: Humanloop.ChatRole.System,
+                content: "You are stockbot. Return latest prices.",
+            },
+        ],
+        tools: [
+            {
+                name: "get_stock_price",
+                description: "Get current stock price",
+                parameters: {
+                    type: "object",
+                    properties: {
+                        ticker_symbol: {
+                            type: "string",
+                            name: "Ticker Symbol",
+                            description: "Ticker symbol of the stock",
+                        },
+                    },
+                    required: [],
+                },
+            },
+        ],
+    },
+    messages: [
+        {
+            role: Humanloop.ChatRole.User,
+            content: "latest apple",
+        },
+    ],
+    stream: false,
+});
+```
+
+</dd>
+
+</dl>
+
+</dd>
+
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+
+<dd>
+
+<dl>
+
+<dd>
+
+**request: `Humanloop.PromptCallRequest`**
+
+</dd>
+
+</dl>
+
+<dl>
+
+<dd>
+
+**requestOptions: `Prompts.RequestOptions`**
+
+</dd>
+
+</dl>
+
+</dd>
+
+</dl>
+
+</dd>
+
+</dl>
+</details>
+
+<details><summary> <code>client.prompts.<a href="./src/api/resources/prompts/client/Client.ts">call</a>({ ...params }) -> Humanloop.CallPromptsCallPostResponse</code> </summary>
+
+<dl>
+
+<dd>
+
+#### 📝 Description
+
+<dl>
+
+<dd>
+
+<dl>
+
+<dd>
+
+Call a Prompt.
+
+Calling a Prompt calls the model provider before logging
+the request, responses and metadata to Humanloop.
+
+You can use query parameters `version_id`, or `environment`, to target
+an existing version of the Prompt. Otherwise the default deployed version will be chosen.
+
+Instead of targeting an existing version explicitly, you can instead pass in
+Prompt details in the request body. In this case, we will check if the details correspond
+to an existing version of the Prompt. If they do not, we will create a new version. This is helpful
 in the case where you are storing or deriving your Prompt details in code.
 
 </dd>
@@ -180,6 +321,112 @@ await client.prompts.call({
         person: "Trump",
     },
     stream: false,
+});
+```
+
+</dd>
+
+</dl>
+
+</dd>
+
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+
+<dd>
+
+<dl>
+
+<dd>
+
+**request: `Humanloop.PromptCallRequest`**
+
+</dd>
+
+</dl>
+
+<dl>
+
+<dd>
+
+**requestOptions: `Prompts.RequestOptions`**
+
+</dd>
+
+</dl>
+
+</dd>
+
+</dl>
+
+</dd>
+
+</dl>
+</details>
+
+<details><summary> <code>client.prompts.<a href="./src/api/resources/prompts/client/Client.ts">call</a>({ ...params }) -> Humanloop.CallPromptsCallPostResponse</code> </summary>
+
+<dl>
+
+<dd>
+
+#### 📝 Description
+
+<dl>
+
+<dd>
+
+<dl>
+
+<dd>
+
+Call a Prompt.
+
+Calling a Prompt calls the model provider before logging
+the request, responses and metadata to Humanloop.
+
+You can use query parameters `version_id`, or `environment`, to target
+an existing version of the Prompt. Otherwise the default deployed version will be chosen.
+
+Instead of targeting an existing version explicitly, you can instead pass in
+Prompt details in the request body. In this case, we will check if the details correspond
+to an existing version of the Prompt. If they do not, we will create a new version. This is helpful
+in the case where you are storing or deriving your Prompt details in code.
+
+</dd>
+
+</dl>
+
+</dd>
+
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+
+<dd>
+
+<dl>
+
+<dd>
+
+```ts
+await client.prompts.call({
+    versionId: "prv_Wu6zx1lAWJRqOyL8nWuZk",
+    path: "persona",
+    messages: [
+        {
+            role: Humanloop.ChatRole.User,
+            content: "What really happened at Roswell?",
+        },
+    ],
+    inputs: {
+        person: "Trump",
+    },
 });
 ```
 
@@ -2479,7 +2726,7 @@ await client.tools.listEnvironments("tl_789ghi");
 
 <dd>
 
-List a list of all Datasets.
+List all Datasets.
 
 </dd>
 
@@ -2618,6 +2865,137 @@ await client.datasets.upsert({
             },
             target: {
                 answer: "William Shakespeare",
+            },
+        },
+    ],
+    action: Humanloop.UpdateDatesetAction.Add,
+    commitMessage: "Add two new questions and answers",
+});
+```
+
+</dd>
+
+</dl>
+
+</dd>
+
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+
+<dd>
+
+<dl>
+
+<dd>
+
+**request: `Humanloop.DatasetsRequest`**
+
+</dd>
+
+</dl>
+
+<dl>
+
+<dd>
+
+**requestOptions: `Datasets.RequestOptions`**
+
+</dd>
+
+</dl>
+
+</dd>
+
+</dl>
+
+</dd>
+
+</dl>
+</details>
+
+<details><summary> <code>client.datasets.<a href="./src/api/resources/datasets/client/Client.ts">upsert</a>({ ...params }) -> Humanloop.DatasetResponse</code> </summary>
+
+<dl>
+
+<dd>
+
+#### 📝 Description
+
+<dl>
+
+<dd>
+
+<dl>
+
+<dd>
+
+Create a Dataset or update it with a new version if it already exists.
+
+Datasets are identified by the `ID` or their `path`. The datapoints determine the versions of the Dataset.
+
+By default, the new Dataset version will be set to the list of Datapoints provided in
+the request. You can also create a new version by adding or removing Datapoints from an existing version
+by specifying `action` as `add` or `remove` respectively. In this case, you may specify
+the `version_id` or `environment` query parameters to identify the existing version to base
+the new version on. If neither is provided, the default deployed version will be used.
+
+If you provide a commit message, then the new version will be committed;
+otherwise it will be uncommitted. If you try to commit an already committed version,
+an exception will be raised.
+
+Humanloop also deduplicates Datapoints. If you try to add a Datapoint that already
+exists, it will be ignored. If you intentionally want to add a duplicate Datapoint,
+you can add a unique identifier to the Datapoint's inputs such as `{_dedupe_id: <unique ID>}`.
+
+</dd>
+
+</dl>
+
+</dd>
+
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+
+<dd>
+
+<dl>
+
+<dd>
+
+```ts
+await client.datasets.upsert({
+    path: "datasets/support-queries",
+    datapoints: [
+        {
+            messages: [
+                {
+                    role: Humanloop.ChatRole.User,
+                    content:
+                        "Hi Humanloop support team, I'm having trouble understanding how to use the evaluations feature in your software. Can you provide a step-by-step guide or any resources to help me get started?",
+                },
+            ],
+            target: {
+                feature: "evaluations",
+                issue: "needs step-by-step guide",
+            },
+        },
+        {
+            messages: [
+                {
+                    role: Humanloop.ChatRole.User,
+                    content:
+                        "Hi there, I'm interested in fine-tuning a language model using your software. Can you explain the process and provide any best practices or guidelines?",
+                },
+            ],
+            target: {
+                feature: "fine-tuning",
+                issue: "process explanation and best practices",
             },
         },
     ],
@@ -5351,9 +5729,94 @@ await client.evaluators.listEnvironments("ev_890bcd");
 </dl>
 </details>
 
+<details><summary> <code>client.evaluators.<a href="./src/api/resources/evaluators/client/Client.ts">log</a>({ ...params }) -> Humanloop.CreateEvaluatorLogResponse</code> </summary>
+
+<dl>
+
+<dd>
+
+#### 📝 Description
+
+<dl>
+
+<dd>
+
+<dl>
+
+<dd>
+
+Submit evalutor judgment for an existing Log. Creates a new Log and makes evaluated one its parent.
+
+</dd>
+
+</dl>
+
+</dd>
+
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+
+<dd>
+
+<dl>
+
+<dd>
+
+```ts
+await client.evaluators.log({
+    parentId: "parent_id",
+});
+```
+
+</dd>
+
+</dl>
+
+</dd>
+
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+
+<dd>
+
+<dl>
+
+<dd>
+
+**request: `Humanloop.CreateEvaluatorLogRequest`**
+
+</dd>
+
+</dl>
+
+<dl>
+
+<dd>
+
+**requestOptions: `Evaluators.RequestOptions`**
+
+</dd>
+
+</dl>
+
+</dd>
+
+</dl>
+
+</dd>
+
+</dl>
+</details>
+
 ## Logs
 
-<details><summary> <code>client.logs.<a href="./src/api/resources/logs/client/Client.ts">list</a>({ ...params }) -> core.Page<Humanloop.PromptLogResponse></code> </summary>
+<details><summary> <code>client.logs.<a href="./src/api/resources/logs/client/Client.ts">list</a>({ ...params }) -> core.Page<Humanloop.SrcExternalAppModelsV5LogsLogResponse></code> </summary>
 
 <dl>
 
@@ -5524,7 +5987,7 @@ await client.logs.delete({
 </dl>
 </details>
 
-<details><summary> <code>client.logs.<a href="./src/api/resources/logs/client/Client.ts">get</a>(id) -> Humanloop.PromptLogResponse</code> </summary>
+<details><summary> <code>client.logs.<a href="./src/api/resources/logs/client/Client.ts">get</a>(id) -> Humanloop.SrcExternalAppModelsV5LogsLogResponse</code> </summary>
 
 <dl>
 

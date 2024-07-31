@@ -5,7 +5,7 @@
 import * as serializers from "../index";
 import * as Humanloop from "../../api/index";
 import * as core from "../../core";
-import { PromptLogResponse } from "./PromptLogResponse";
+import { SrcExternalAppModelsV5LogsLogResponse } from "./SrcExternalAppModelsV5LogsLogResponse";
 
 export const SessionResponse: core.serialization.ObjectSchema<
     serializers.SessionResponse.Raw,
@@ -14,7 +14,7 @@ export const SessionResponse: core.serialization.ObjectSchema<
     id: core.serialization.string(),
     createdAt: core.serialization.property("created_at", core.serialization.date()),
     updatedAt: core.serialization.property("updated_at", core.serialization.date()),
-    logs: core.serialization.list(PromptLogResponse),
+    logs: core.serialization.list(SrcExternalAppModelsV5LogsLogResponse),
 });
 
 export declare namespace SessionResponse {
@@ -22,6 +22,6 @@ export declare namespace SessionResponse {
         id: string;
         created_at: string;
         updated_at: string;
-        logs: PromptLogResponse.Raw[];
+        logs: SrcExternalAppModelsV5LogsLogResponse.Raw[];
     }
 }

@@ -7,6 +7,7 @@ import * as Humanloop from "../../api/index";
 import * as core from "../../core";
 import { EvaluatedVersionResponse } from "./EvaluatedVersionResponse";
 import { DatapointResponse } from "./DatapointResponse";
+import { SrcExternalAppModelsV5LogsLogResponse } from "./SrcExternalAppModelsV5LogsLogResponse";
 
 export const EvaluationReportLogResponse: core.serialization.ObjectSchema<
     serializers.EvaluationReportLogResponse.Raw,
@@ -14,10 +15,10 @@ export const EvaluationReportLogResponse: core.serialization.ObjectSchema<
 > = core.serialization.object({
     evaluatedVersion: core.serialization.property("evaluated_version", EvaluatedVersionResponse),
     datapoint: DatapointResponse,
-    log: core.serialization.lazyObject(() => serializers.LogResponse).optional(),
+    log: SrcExternalAppModelsV5LogsLogResponse.optional(),
     evaluatorLogs: core.serialization.property(
         "evaluator_logs",
-        core.serialization.list(core.serialization.lazyObject(() => serializers.LogResponse))
+        core.serialization.list(SrcExternalAppModelsV5LogsLogResponse)
     ),
 });
 
@@ -25,7 +26,7 @@ export declare namespace EvaluationReportLogResponse {
     interface Raw {
         evaluated_version: EvaluatedVersionResponse.Raw;
         datapoint: DatapointResponse.Raw;
-        log?: serializers.LogResponse.Raw | null;
-        evaluator_logs: serializers.LogResponse.Raw[];
+        log?: SrcExternalAppModelsV5LogsLogResponse.Raw | null;
+        evaluator_logs: SrcExternalAppModelsV5LogsLogResponse.Raw[];
     }
 }
