@@ -993,6 +993,9 @@ export const operationParameterMap: Record<string, Entry> = {
                 name: 'error'
             },
             {
+                name: 'stdout'
+            },
+            {
                 name: 'duration'
             },
             {

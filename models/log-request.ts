@@ -172,6 +172,12 @@ export interface LogRequest {
      */
     'error'?: string;
     /**
+     * Captured log and debug statements.
+     * @type {string}
+     * @memberof LogRequest
+     */
+    'stdout'?: string;
+    /**
      * Duration of the logged event in seconds.
      * @type {number}
      * @memberof LogRequest

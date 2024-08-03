@@ -114,6 +114,6 @@ export interface EvaluationResultResponse {
      * @type {LogResponse}
      * @memberof EvaluationResultResponse
      */
-    'llm_evaluator_log'?: LogResponse;
+    'evaluator_log'?: LogResponse;
 }
 

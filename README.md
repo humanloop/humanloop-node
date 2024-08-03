@@ -2406,6 +2406,10 @@ User defined timestamp for when the log was created.
 
 Error message if the log is an error.
 
+##### stdout: `string`<a id="stdout-string"></a>
+
+Captured log and debug statements.
+
 ##### duration: `number`<a id="duration-number"></a>
 
 Duration of the logged event in seconds.

@@ -183,6 +183,12 @@ export interface LogResponse {
      */
     'error'?: string;
     /**
+     * Captured log and debug statements.
+     * @type {string}
+     * @memberof LogResponse
+     */
+    'stdout'?: string;
+    /**
      * Duration of the logged event in seconds.
      * @type {number}
      * @memberof LogResponse
