@@ -55,6 +55,12 @@ export interface ToolConfigRequest {
      */
     'name': string;
     /**
+     * Whether the tool is strict or not. If strict, the model will be forced to respond with JSON matching the parameters schema.
+     * @type {boolean}
+     * @memberof ToolConfigRequest
+     */
+    'strict'?: boolean;
+    /**
      * Source of the tool. If defined at an organization level will be \'organization\' else \'inline\'.
      * @type {ToolSource}
      * @memberof ToolConfigRequest

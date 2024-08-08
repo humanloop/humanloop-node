@@ -65,6 +65,12 @@ export interface LinkedToolRequest {
      * @memberof LinkedToolRequest
      */
     'name'?: string;
+    /**
+     * Whether the tool is strict or not. If strict, the model will be forced to respond with JSON matching the parameters schema.
+     * @type {boolean}
+     * @memberof LinkedToolRequest
+     */
+    'strict'?: boolean;
 }
 
 type LinkedToolRequestSourceEnum = 'organization'
