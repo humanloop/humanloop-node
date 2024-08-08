@@ -3,13 +3,11 @@ import {
   ChatsApi,
   ChatsApiAxiosParamCreator,
   ChatsApiCreateDeployedRequest,
-  ChatsApiCreateExperimentRequest,
   ChatsApiCreateModelConfigRequest,
   ChatsApiCreateRequest,
   CompletionsApi,
   CompletionsApiAxiosParamCreator,
   CompletionsApiCreateDeployedRequest,
-  CompletionsApiCreateExperimentRequest,
   CompletionsApiCreateModelConfigRequest,
   CompletionsApiCreateRequest,
   ProjectsApi,
@@ -116,20 +114,6 @@ export class HumanloopCustom {
     return this._request(args);
   }
 
-  async chatExperimentStream(
-    requestParameters: ChatsApiCreateExperimentRequest,
-    options?: AxiosRequestConfig
-  ): Promise<AxiosResponse<ReadableStream>> {
-    const { requestParameters: rp, options: o } = this._setup(
-      requestParameters,
-      options
-    );
-    const args = await ChatsApiAxiosParamCreator(
-      this._configuration
-    ).createExperiment(rp, o);
-    return this._request(args);
-  }
-
   async chatModelConfigurationStream(
     requestParameters: ChatsApiCreateModelConfigRequest,
     options?: AxiosRequestConfig
@@ -169,20 +153,6 @@ export class HumanloopCustom {
     const args = await CompletionsApiAxiosParamCreator(
       this._configuration
     ).createDeployed(rp, o);
-    return this._request(args);
-  }
-
-  async completeExperimentStream(
-    requestParameters: CompletionsApiCreateExperimentRequest,
-    options?: AxiosRequestConfig
-  ): Promise<AxiosResponse<ReadableStream>> {
-    const { requestParameters: rp, options: o } = this._setup(
-      requestParameters,
-      options
-    );
-    const args = await CompletionsApiAxiosParamCreator(
-      this._configuration
-    ).createExperiment(rp, o);
     return this._request(args);
   }
 
