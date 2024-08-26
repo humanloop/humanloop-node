@@ -6,23 +6,11 @@ import * as serializers from "../index";
 import * as Humanloop from "../../api/index";
 import * as core from "../../core";
 
-export const ConfigToolResponse: core.serialization.ObjectSchema<
+export const ConfigToolResponse: core.serialization.Schema<
     serializers.ConfigToolResponse.Raw,
     Humanloop.ConfigToolResponse
-> = core.serialization.object({
-    id: core.serialization.string(),
-    name: core.serialization.string(),
-    description: core.serialization.string().optional(),
-    parameters: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
-    source: core.serialization.string().optional(),
-});
+> = core.serialization.unknown();
 
 export declare namespace ConfigToolResponse {
-    interface Raw {
-        id: string;
-        name: string;
-        description?: string | null;
-        parameters?: Record<string, unknown> | null;
-        source?: string | null;
-    }
+    type Raw = unknown;
 }

@@ -16,6 +16,8 @@ export interface EvaluatorLogResponse {
     error?: string;
     /** Duration of the logged event in seconds. */
     providerLatency?: number;
+    /** Captured log and debug statements. */
+    stdout?: string;
     /** Raw request sent to provider. */
     providerRequest?: Record<string, unknown>;
     /** Raw response received the provider. */
@@ -23,7 +25,7 @@ export interface EvaluatorLogResponse {
     /** Unique identifier for the Session to associate the Log to. Allows you to record multiple Logs to a Session (using an ID kept by your internal systems) by passing the same `session_id` in subsequent log requests. */
     sessionId?: string;
     /** Identifier of the evaluated Log. The newly created Log will have this one set as parent. */
-    parentId: string;
+    parentId?: string;
     /** The inputs passed to the prompt template. */
     inputs?: Record<string, unknown>;
     /** Identifies where the model was called from. */
@@ -40,9 +42,14 @@ export interface EvaluatorLogResponse {
     user?: string;
     /** The name of the Environment the Log is associated to. */
     environment?: string;
-    judgment?: unknown;
+    /** Evaluator assessment of the Log. */
+    judgment?: Humanloop.EvaluatorLogResponseJudgment;
     /** Unique identifier for the Log. */
     id: string;
+    /** List of Evaluator Logs associated with the Log. These contain Evaluator judgments on the Log. */
+    evaluatorLogs: Humanloop.EvaluatorLogResponse[];
     /** The Evaluator used to generate the judgment. */
     evaluator: Humanloop.EvaluatorResponse;
+    /** The Log that was evaluated. Only provided if the ?include_parent query parameter is set for the */
+    parent?: Humanloop.LogResponse;
 }

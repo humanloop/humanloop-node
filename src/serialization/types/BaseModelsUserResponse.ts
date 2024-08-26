@@ -6,21 +6,11 @@ import * as serializers from "../index";
 import * as Humanloop from "../../api/index";
 import * as core from "../../core";
 
-export const BaseModelsUserResponse: core.serialization.ObjectSchema<
+export const BaseModelsUserResponse: core.serialization.Schema<
     serializers.BaseModelsUserResponse.Raw,
     Humanloop.BaseModelsUserResponse
-> = core.serialization.object({
-    id: core.serialization.string(),
-    emailAddress: core.serialization.property("email_address", core.serialization.string()),
-    fullName: core.serialization.property("full_name", core.serialization.string().optional()),
-    verified: core.serialization.boolean(),
-});
+> = core.serialization.unknown();
 
 export declare namespace BaseModelsUserResponse {
-    interface Raw {
-        id: string;
-        email_address: string;
-        full_name?: string | null;
-        verified: boolean;
-    }
+    type Raw = unknown;
 }

@@ -23,6 +23,7 @@ export const EvaluationResponse: core.serialization.ObjectSchema<
     createdAt: core.serialization.property("created_at", core.serialization.date()),
     createdBy: core.serialization.property("created_by", UserResponse.optional()),
     updatedAt: core.serialization.property("updated_at", core.serialization.date()),
+    url: core.serialization.string().optional(),
 });
 
 export declare namespace EvaluationResponse {
@@ -33,7 +34,8 @@ export declare namespace EvaluationResponse {
         evaluators: EvaluationEvaluatorResponse.Raw[];
         status: EvaluationStatus.Raw;
         created_at: string;
-        created_by?: UserResponse.Raw | null;
+        created_by?: (UserResponse.Raw | undefined) | null;
         updated_at: string;
+        url?: string | null;
     }
 }

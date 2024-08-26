@@ -7,5 +7,5 @@ export type CreateDatapointRequestTargetValue =
     | number
     | number
     | boolean
-    | Record<string, unknown>
-    | unknown[];
+    | unknown[]
+    | Record<string, unknown>;

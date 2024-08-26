@@ -6,4 +6,6 @@ import * as Humanloop from "../index";
 
 export type VersionStatsEvaluatorVersionStatsItem =
     | Humanloop.NumericEvaluatorVersionStats
-    | Humanloop.BooleanEvaluatorVersionStats;
+    | Humanloop.BooleanEvaluatorVersionStats
+    | Humanloop.SelectEvaluatorVersionStats
+    | Humanloop.TextEvaluatorVersionStats;

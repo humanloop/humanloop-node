@@ -7,6 +7,8 @@ export interface LinkedToolResponse {
     name: string;
     /** Description of the tool referenced by the model */
     description: string;
+    /** If true, forces the model to output json data in the structure of the parameters schema. */
+    strict?: boolean;
     /** Parameters needed to run the Tool, defined in JSON Schema format: https://json-schema.org/ */
     parameters?: Record<string, unknown>;
     /** Unique identifier for the Tool linked. */

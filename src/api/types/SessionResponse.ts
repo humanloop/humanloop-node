@@ -9,6 +9,12 @@ export interface SessionResponse {
     id: string;
     createdAt: Date;
     updatedAt: Date;
-    /** List of Logs associated with this Session. */
-    logs: Humanloop.SrcExternalAppModelsV5LogsLogResponse[];
+    /** Inputs for the first datapoint in the session. */
+    firstInputs?: Record<string, unknown>;
+    /** Output for the last datapoint in the session. */
+    lastOutput?: string;
+    /** Number of logs associated to this session. */
+    logsCount: number;
+    /** List of events associated with this Session. */
+    events: Humanloop.SessionEventResponse[];
 }

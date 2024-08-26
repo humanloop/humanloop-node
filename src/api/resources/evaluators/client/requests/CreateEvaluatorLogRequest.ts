@@ -31,6 +31,8 @@ export interface CreateEvaluatorLogRequest {
     error?: string;
     /** Duration of the logged event in seconds. */
     providerLatency?: number;
+    /** Captured log and debug statements. */
+    stdout?: string;
     /** Raw request sent to provider. Only populated for LLM Evaluator Logs. */
     providerRequest?: Record<string, unknown>;
     /** Raw response received the provider. Only populated for LLM Evaluator Logs. */
@@ -55,6 +57,7 @@ export interface CreateEvaluatorLogRequest {
     user?: string;
     /** The name of the Environment the Log is associated to. */
     createEvaluatorLogRequestEnvironment?: string;
-    judgment?: unknown;
+    /** Evaluator assessment of the Log. */
+    judgment?: Humanloop.CreateEvaluatorLogRequestJudgment;
     spec?: Humanloop.CreateEvaluatorLogRequestSpec;
 }

@@ -41,6 +41,8 @@ export interface PromptLogResponse {
     error?: string;
     /** Duration of the logged event in seconds. */
     providerLatency?: number;
+    /** Captured log and debug statements. */
+    stdout?: string;
     /** Raw request sent to provider. */
     providerRequest?: Record<string, unknown>;
     /** Raw response received the provider. */
@@ -67,4 +69,6 @@ export interface PromptLogResponse {
     environment?: string;
     /** Unique identifier for the Log. */
     id: string;
+    /** List of Evaluator Logs associated with the Log. These contain Evaluator judgments on the Log. */
+    evaluatorLogs: Humanloop.EvaluatorLogResponse[];
 }

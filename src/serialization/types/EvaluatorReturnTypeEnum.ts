@@ -9,8 +9,8 @@ import * as core from "../../core";
 export const EvaluatorReturnTypeEnum: core.serialization.Schema<
     serializers.EvaluatorReturnTypeEnum.Raw,
     Humanloop.EvaluatorReturnTypeEnum
-> = core.serialization.enum_(["boolean", "number"]);
+> = core.serialization.enum_(["boolean", "number", "select", "multi_select", "text"]);
 
 export declare namespace EvaluatorReturnTypeEnum {
-    type Raw = "boolean" | "number";
+    type Raw = "boolean" | "number" | "select" | "multi_select" | "text";
 }

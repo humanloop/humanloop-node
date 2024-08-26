@@ -7,12 +7,23 @@ import * as Humanloop from "../../api/index";
 import * as core from "../../core";
 import { NumericEvaluatorVersionStats } from "./NumericEvaluatorVersionStats";
 import { BooleanEvaluatorVersionStats } from "./BooleanEvaluatorVersionStats";
+import { SelectEvaluatorVersionStats } from "./SelectEvaluatorVersionStats";
+import { TextEvaluatorVersionStats } from "./TextEvaluatorVersionStats";
 
 export const VersionStatsEvaluatorVersionStatsItem: core.serialization.Schema<
     serializers.VersionStatsEvaluatorVersionStatsItem.Raw,
     Humanloop.VersionStatsEvaluatorVersionStatsItem
-> = core.serialization.undiscriminatedUnion([NumericEvaluatorVersionStats, BooleanEvaluatorVersionStats]);
+> = core.serialization.undiscriminatedUnion([
+    NumericEvaluatorVersionStats,
+    BooleanEvaluatorVersionStats,
+    SelectEvaluatorVersionStats,
+    TextEvaluatorVersionStats,
+]);
 
 export declare namespace VersionStatsEvaluatorVersionStatsItem {
-    type Raw = NumericEvaluatorVersionStats.Raw | BooleanEvaluatorVersionStats.Raw;
+    type Raw =
+        | NumericEvaluatorVersionStats.Raw
+        | BooleanEvaluatorVersionStats.Raw
+        | SelectEvaluatorVersionStats.Raw
+        | TextEvaluatorVersionStats.Raw;
 }

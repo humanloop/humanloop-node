@@ -9,6 +9,7 @@ import urlJoin from "url-join";
 import * as serializers from "../../../../serialization/index";
 import * as errors from "../../../../errors/index";
 import * as fs from "fs";
+import { Blob } from "buffer";
 
 export declare namespace Datasets {
     interface Options {
@@ -99,13 +100,14 @@ export class Datasets {
                 headers: {
                     "X-Fern-Language": "JavaScript",
                     "X-Fern-SDK-Name": "humanloop",
-                    "X-Fern-SDK-Version": "0.8.0-beta4",
+                    "X-Fern-SDK-Version": "0.8.0-beta5",
                     "X-Fern-Runtime": core.RUNTIME.type,
                     "X-Fern-Runtime-Version": core.RUNTIME.version,
                     ...(await this._getCustomAuthorizationHeaders()),
                 },
                 contentType: "application/json",
                 queryParameters: _queryParams,
+                requestType: "json",
                 timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
                 maxRetries: requestOptions?.maxRetries,
                 abortSignal: requestOptions?.abortSignal,
@@ -206,7 +208,7 @@ export class Datasets {
      *                     "answer": "William Shakespeare"
      *                 }
      *             }],
-     *         action: Humanloop.UpdateDatesetAction.Add,
+     *         action: Humanloop.UpdateDatesetAction.Set,
      *         commitMessage: "Add two new questions and answers"
      *     })
      *
@@ -216,23 +218,20 @@ export class Datasets {
      *         datapoints: [{
      *                 messages: [{
      *                         role: Humanloop.ChatRole.User,
-     *                         content: "Hi Humanloop support team, I'm having trouble understanding how to use the evaluations feature in your software. Can you provide a step-by-step guide or any resources to help me get started?"
+     *                         content: "How do i manage my organizations API keys?\n"
      *                     }],
      *                 target: {
-     *                     "feature": "evaluations",
-     *                     "issue": "needs step-by-step guide"
+     *                     "response": "Hey, thanks for your questions. Here are steps for how to achieve: 1. Log in to the Humanloop Dashboard \n\n2. Click on \"Organization Settings.\"\n If you do not see this option, you might need to contact your organization admin to gain the necessary permissions.\n\n3. Within the settings or organization settings, select the option labeled \"API Keys\" on the left. Here you will be able to view and manage your API keys.\n\n4. You will see a list of existing API keys. You can perform various actions, such as:\n     - **Generate New API Key:** Click on the \"Generate New Key\" button if you need a new API key.\n     - **Revoke an API Key:** If you need to disable an existing key, find the key in the list and click the \"Revoke\" or \"Delete\" button.\n     - **Copy an API Key:** If you need to use an existing key, you can copy it to your clipboard by clicking the \"Copy\" button next to the key.\n\n5. **Save and Secure API Keys:** Make sure to securely store any new or existing API keys you are using. Treat them like passwords and do not share them publicly.\n\nIf you encounter any issues or need further assistance, it might be helpful to engage with an engineer or your IT department to ensure you have the necessary permissions and support.\n\nWould you need help with anything else?"
      *                 }
      *             }, {
      *                 messages: [{
      *                         role: Humanloop.ChatRole.User,
-     *                         content: "Hi there, I'm interested in fine-tuning a language model using your software. Can you explain the process and provide any best practices or guidelines?"
+     *                         content: "Hey, can do I use my code evaluator for monitoring my legal-copilot prompt?"
      *                     }],
      *                 target: {
-     *                     "feature": "fine-tuning",
-     *                     "issue": "process explanation and best practices"
+     *                     "response": "Hey, thanks for your questions. Here are steps for how to achieve: 1. Navigate to your Prompt dashboard. \n 2. Select the `Monitoring` button on the top right of the Prompt dashboard \n 3. Within the model select the Version of the Evaluator you want to turn on for monitoring. \n\nWould you need help with anything else?"
      *                 }
      *             }],
-     *         action: Humanloop.UpdateDatesetAction.Add,
      *         commitMessage: "Add two new questions and answers"
      *     })
      */
@@ -259,13 +258,14 @@ export class Datasets {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta4",
+                "X-Fern-SDK-Version": "0.8.0-beta5",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
             },
             contentType: "application/json",
             queryParameters: _queryParams,
+            requestType: "json",
             body: serializers.DatasetsRequest.jsonOrThrow(_body, { unrecognizedObjectKeys: "strip" }),
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -367,13 +367,14 @@ export class Datasets {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta4",
+                "X-Fern-SDK-Version": "0.8.0-beta5",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
             },
             contentType: "application/json",
             queryParameters: _queryParams,
+            requestType: "json",
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -444,12 +445,13 @@ export class Datasets {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta4",
+                "X-Fern-SDK-Version": "0.8.0-beta5",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
             },
             contentType: "application/json",
+            requestType: "json",
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -519,12 +521,13 @@ export class Datasets {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta4",
+                "X-Fern-SDK-Version": "0.8.0-beta5",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
             },
             contentType: "application/json",
+            requestType: "json",
             body: serializers.UpdateDatasetRequest.jsonOrThrow(request, { unrecognizedObjectKeys: "strip" }),
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -620,13 +623,14 @@ export class Datasets {
                 headers: {
                     "X-Fern-Language": "JavaScript",
                     "X-Fern-SDK-Name": "humanloop",
-                    "X-Fern-SDK-Version": "0.8.0-beta4",
+                    "X-Fern-SDK-Version": "0.8.0-beta5",
                     "X-Fern-Runtime": core.RUNTIME.type,
                     "X-Fern-Runtime-Version": core.RUNTIME.version,
                     ...(await this._getCustomAuthorizationHeaders()),
                 },
                 contentType: "application/json",
                 queryParameters: _queryParams,
+                requestType: "json",
                 timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
                 maxRetries: requestOptions?.maxRetries,
                 abortSignal: requestOptions?.abortSignal,
@@ -719,13 +723,14 @@ export class Datasets {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta4",
+                "X-Fern-SDK-Version": "0.8.0-beta5",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
             },
             contentType: "application/json",
             queryParameters: _queryParams,
+            requestType: "json",
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -807,12 +812,13 @@ export class Datasets {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta4",
+                "X-Fern-SDK-Version": "0.8.0-beta5",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
             },
             contentType: "application/json",
+            requestType: "json",
             body: serializers.CommitRequest.jsonOrThrow(request, { unrecognizedObjectKeys: "strip" }),
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -873,7 +879,7 @@ export class Datasets {
      * If neither `version_id` nor `environment` is provided, the new version will be based on the version
      * of the Dataset that is deployed to the default Environment.
      *
-     * @param {File | fs.ReadStream} file
+     * @param {File | fs.ReadStream | Blob} file
      * @param {string} id
      * @param {Humanloop.BodyUploadCsvDatasetsIdDatapointsCsvPost} request
      * @param {Datasets.RequestOptions} requestOptions - Request-specific configuration.
@@ -886,7 +892,7 @@ export class Datasets {
      *     })
      */
     public async uploadCsv(
-        file: File | fs.ReadStream,
+        file: File | fs.ReadStream | Blob,
         id: string,
         request: Humanloop.BodyUploadCsvDatasetsIdDatapointsCsvPost,
         requestOptions?: Datasets.RequestOptions
@@ -900,10 +906,10 @@ export class Datasets {
             _queryParams["environment"] = request.environment;
         }
 
-        const _request = new core.FormDataWrapper();
-        await _request.append("file", file);
+        const _request = await core.newFormData();
+        await _request.appendFile("file", file);
         await _request.append("commit_message", request.commitMessage);
-        const _maybeEncodedRequest = _request.getRequest();
+        const _maybeEncodedRequest = await _request.getRequest();
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
@@ -913,14 +919,16 @@ export class Datasets {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta4",
+                "X-Fern-SDK-Version": "0.8.0-beta5",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
-                ...(await _maybeEncodedRequest.getHeaders()),
+                ..._maybeEncodedRequest.headers,
             },
             queryParameters: _queryParams,
-            body: await _maybeEncodedRequest.getBody(),
+            requestType: "file",
+            duplex: _maybeEncodedRequest.duplex,
+            body: _maybeEncodedRequest.body,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -1005,13 +1013,14 @@ export class Datasets {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta4",
+                "X-Fern-SDK-Version": "0.8.0-beta5",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
             },
             contentType: "application/json",
             queryParameters: _queryParams,
+            requestType: "json",
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -1089,12 +1098,13 @@ export class Datasets {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta4",
+                "X-Fern-SDK-Version": "0.8.0-beta5",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
             },
             contentType: "application/json",
+            requestType: "json",
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -1162,12 +1172,13 @@ export class Datasets {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta4",
+                "X-Fern-SDK-Version": "0.8.0-beta5",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
             },
             contentType: "application/json",
+            requestType: "json",
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
             abortSignal: requestOptions?.abortSignal,

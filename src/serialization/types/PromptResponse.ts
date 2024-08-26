@@ -90,7 +90,7 @@ export declare namespace PromptResponse {
         environments?: EnvironmentResponse.Raw[] | null;
         created_at: string;
         updated_at: string;
-        created_by?: UserResponse.Raw | null;
+        created_by?: (UserResponse.Raw | undefined) | null;
         status: VersionStatus.Raw;
         last_used_at: string;
         version_logs_count: number;

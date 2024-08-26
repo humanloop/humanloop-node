@@ -48,4 +48,8 @@ export interface ListLogsGetRequest {
      * If provided, only Logs created before the specified date will be returned.
      */
     endDate?: Date;
+    /**
+     * If true, include the full parent Log in the response. Only applicable when retrieving Evaluator Logs.
+     */
+    includeParent?: boolean;
 }

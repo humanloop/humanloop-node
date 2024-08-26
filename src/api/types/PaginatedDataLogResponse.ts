@@ -5,7 +5,7 @@
 import * as Humanloop from "../index";
 
 export interface PaginatedDataLogResponse {
-    records: Humanloop.SrcExternalAppModelsV5LogsLogResponse[];
+    records: Humanloop.LogResponse[];
     page: number;
     size: number;
     total: number;

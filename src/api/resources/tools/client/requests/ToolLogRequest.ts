@@ -57,6 +57,8 @@ export interface ToolLogRequest {
     error?: string;
     /** Duration of the logged event in seconds. */
     providerLatency?: number;
+    /** Captured log and debug statements. */
+    stdout?: string;
     /** Raw request sent to provider. */
     providerRequest?: Record<string, unknown>;
     /** Raw response received the provider. */

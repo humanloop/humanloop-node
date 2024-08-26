@@ -5,14 +5,20 @@
 import * as serializers from "../index";
 import * as Humanloop from "../../api/index";
 import * as core from "../../core";
+import { ResponseFormatType } from "./ResponseFormatType";
 
 export const ResponseFormat: core.serialization.ObjectSchema<serializers.ResponseFormat.Raw, Humanloop.ResponseFormat> =
     core.serialization.object({
-        type: core.serialization.stringLiteral("json_object"),
+        type: ResponseFormatType,
+        jsonSchema: core.serialization.property(
+            "json_schema",
+            core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional()
+        ),
     });
 
 export declare namespace ResponseFormat {
     interface Raw {
-        type: "json_object";
+        type: ResponseFormatType.Raw;
+        json_schema?: Record<string, unknown> | null;
     }
 }

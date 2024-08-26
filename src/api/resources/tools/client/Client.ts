@@ -99,13 +99,14 @@ export class Tools {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta4",
+                "X-Fern-SDK-Version": "0.8.0-beta5",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
             },
             contentType: "application/json",
             queryParameters: _queryParams,
+            requestType: "json",
             body: serializers.ToolLogRequest.jsonOrThrow(_body, { unrecognizedObjectKeys: "strip" }),
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -172,7 +173,7 @@ export class Tools {
     public async list(
         request: Humanloop.ListToolsGetRequest = {},
         requestOptions?: Tools.RequestOptions
-    ): Promise<core.Page<Humanloop.ToolResponse>> {
+    ): Promise<core.Page<Humanloop.ToolResponse | undefined>> {
         const list = async (request: Humanloop.ListToolsGetRequest): Promise<Humanloop.PaginatedDataToolResponse> => {
             const { page, size, name, userFilter, sortBy, order } = request;
             const _queryParams: Record<string, string | string[] | object | object[]> = {};
@@ -203,13 +204,14 @@ export class Tools {
                 headers: {
                     "X-Fern-Language": "JavaScript",
                     "X-Fern-SDK-Name": "humanloop",
-                    "X-Fern-SDK-Version": "0.8.0-beta4",
+                    "X-Fern-SDK-Version": "0.8.0-beta5",
                     "X-Fern-Runtime": core.RUNTIME.type,
                     "X-Fern-Runtime-Version": core.RUNTIME.version,
                     ...(await this._getCustomAuthorizationHeaders()),
                 },
                 contentType: "application/json",
                 queryParameters: _queryParams,
+                requestType: "json",
                 timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
                 maxRetries: requestOptions?.maxRetries,
                 abortSignal: requestOptions?.abortSignal,
@@ -257,7 +259,7 @@ export class Tools {
             }
         };
         let _offset = request?.page != null ? request?.page : 1;
-        return new core.Pageable<Humanloop.PaginatedDataToolResponse, Humanloop.ToolResponse>({
+        return new core.Pageable<Humanloop.PaginatedDataToolResponse, Humanloop.ToolResponse | undefined>({
             response: await list(request),
             hasNextPage: (response) => (response?.records ?? []).length > 0,
             getItems: (response) => response?.records ?? [],
@@ -310,7 +312,7 @@ export class Tools {
     public async upsert(
         request: Humanloop.ToolRequest = {},
         requestOptions?: Tools.RequestOptions
-    ): Promise<Humanloop.ToolResponse> {
+    ): Promise<Humanloop.ToolResponse | undefined> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
@@ -320,12 +322,13 @@ export class Tools {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta4",
+                "X-Fern-SDK-Version": "0.8.0-beta5",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
             },
             contentType: "application/json",
+            requestType: "json",
             body: serializers.ToolRequest.jsonOrThrow(request, { unrecognizedObjectKeys: "strip" }),
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -395,7 +398,7 @@ export class Tools {
         id: string,
         request: Humanloop.GetToolsIdGetRequest = {},
         requestOptions?: Tools.RequestOptions
-    ): Promise<Humanloop.ToolResponse> {
+    ): Promise<Humanloop.ToolResponse | undefined> {
         const { versionId, environment } = request;
         const _queryParams: Record<string, string | string[] | object | object[]> = {};
         if (versionId != null) {
@@ -415,13 +418,14 @@ export class Tools {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta4",
+                "X-Fern-SDK-Version": "0.8.0-beta5",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
             },
             contentType: "application/json",
             queryParameters: _queryParams,
+            requestType: "json",
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -492,12 +496,13 @@ export class Tools {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta4",
+                "X-Fern-SDK-Version": "0.8.0-beta5",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
             },
             contentType: "application/json",
+            requestType: "json",
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -559,7 +564,7 @@ export class Tools {
         id: string,
         request: Humanloop.UpdateToolRequest = {},
         requestOptions?: Tools.RequestOptions
-    ): Promise<Humanloop.ToolResponse> {
+    ): Promise<Humanloop.ToolResponse | undefined> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
@@ -569,12 +574,13 @@ export class Tools {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta4",
+                "X-Fern-SDK-Version": "0.8.0-beta5",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
             },
             contentType: "application/json",
+            requestType: "json",
             body: serializers.UpdateToolRequest.jsonOrThrow(request, { unrecognizedObjectKeys: "strip" }),
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -663,13 +669,14 @@ export class Tools {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta4",
+                "X-Fern-SDK-Version": "0.8.0-beta5",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
             },
             contentType: "application/json",
             queryParameters: _queryParams,
+            requestType: "json",
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -741,7 +748,7 @@ export class Tools {
         versionId: string,
         request: Humanloop.CommitRequest,
         requestOptions?: Tools.RequestOptions
-    ): Promise<Humanloop.ToolResponse> {
+    ): Promise<Humanloop.ToolResponse | undefined> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
@@ -751,12 +758,13 @@ export class Tools {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta4",
+                "X-Fern-SDK-Version": "0.8.0-beta5",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
             },
             contentType: "application/json",
+            requestType: "json",
             body: serializers.CommitRequest.jsonOrThrow(request, { unrecognizedObjectKeys: "strip" }),
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -830,7 +838,7 @@ export class Tools {
         id: string,
         request: Humanloop.EvaluatorActivationDeactivationRequest,
         requestOptions?: Tools.RequestOptions
-    ): Promise<Humanloop.ToolResponse> {
+    ): Promise<Humanloop.ToolResponse | undefined> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
@@ -840,12 +848,13 @@ export class Tools {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta4",
+                "X-Fern-SDK-Version": "0.8.0-beta5",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
             },
             contentType: "application/json",
+            requestType: "json",
             body: serializers.EvaluatorActivationDeactivationRequest.jsonOrThrow(request, {
                 unrecognizedObjectKeys: "strip",
             }),
@@ -921,7 +930,7 @@ export class Tools {
         environmentId: string,
         request: Humanloop.SetDeploymentToolsIdEnvironmentsEnvironmentIdPostRequest,
         requestOptions?: Tools.RequestOptions
-    ): Promise<Humanloop.ToolResponse> {
+    ): Promise<Humanloop.ToolResponse | undefined> {
         const { versionId } = request;
         const _queryParams: Record<string, string | string[] | object | object[]> = {};
         _queryParams["version_id"] = versionId;
@@ -934,13 +943,14 @@ export class Tools {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta4",
+                "X-Fern-SDK-Version": "0.8.0-beta5",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
             },
             contentType: "application/json",
             queryParameters: _queryParams,
+            requestType: "json",
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -1019,12 +1029,13 @@ export class Tools {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta4",
+                "X-Fern-SDK-Version": "0.8.0-beta5",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
             },
             contentType: "application/json",
+            requestType: "json",
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -1092,12 +1103,13 @@ export class Tools {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta4",
+                "X-Fern-SDK-Version": "0.8.0-beta5",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
             },
             contentType: "application/json",
+            requestType: "json",
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
             abortSignal: requestOptions?.abortSignal,

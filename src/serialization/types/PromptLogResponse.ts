@@ -25,6 +25,7 @@ export const PromptLogResponse: core.serialization.ObjectSchema<
     createdAt: core.serialization.property("created_at", core.serialization.date().optional()),
     error: core.serialization.string().optional(),
     providerLatency: core.serialization.property("provider_latency", core.serialization.number().optional()),
+    stdout: core.serialization.string().optional(),
     providerRequest: core.serialization.property(
         "provider_request",
         core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional()
@@ -44,6 +45,10 @@ export const PromptLogResponse: core.serialization.ObjectSchema<
     user: core.serialization.string().optional(),
     environment: core.serialization.string().optional(),
     id: core.serialization.string(),
+    evaluatorLogs: core.serialization.property(
+        "evaluator_logs",
+        core.serialization.list(core.serialization.lazyObject(() => serializers.EvaluatorLogResponse))
+    ),
 });
 
 export declare namespace PromptLogResponse {
@@ -61,6 +66,7 @@ export declare namespace PromptLogResponse {
         created_at?: string | null;
         error?: string | null;
         provider_latency?: number | null;
+        stdout?: string | null;
         provider_request?: Record<string, unknown> | null;
         provider_response?: Record<string, unknown> | null;
         session_id?: string | null;
@@ -74,5 +80,6 @@ export declare namespace PromptLogResponse {
         user?: string | null;
         environment?: string | null;
         id: string;
+        evaluator_logs: serializers.EvaluatorLogResponse.Raw[];
     }
 }

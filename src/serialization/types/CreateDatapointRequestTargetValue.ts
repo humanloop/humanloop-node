@@ -14,10 +14,10 @@ export const CreateDatapointRequestTargetValue: core.serialization.Schema<
     core.serialization.number(),
     core.serialization.number(),
     core.serialization.boolean(),
-    core.serialization.record(core.serialization.string(), core.serialization.unknown()),
     core.serialization.list(core.serialization.unknown()),
+    core.serialization.record(core.serialization.string(), core.serialization.unknown()),
 ]);
 
 export declare namespace CreateDatapointRequestTargetValue {
-    type Raw = string | number | number | boolean | Record<string, unknown> | unknown[];
+    type Raw = string | number | number | boolean | unknown[] | Record<string, unknown>;
 }

@@ -14,8 +14,8 @@ import * as Humanloop from "../index";
 export interface CreateEvaluationRequest {
     /** The Dataset Version to use in this Evaluation. */
     dataset: Humanloop.EvaluationsDatasetRequest;
-    /** Unique identifiers for the Prompt/Tool Versions to include in the Evaluation Report. */
-    evaluatees: Humanloop.EvaluateeRequest[];
+    /** Unique identifiers for the Prompt/Tool Versions to include in the Evaluation Report. Can be left unpopulated if you wish to add evaluatees to this Evaluation Report by specifying `evaluation_id` in Log calls. */
+    evaluatees?: Humanloop.EvaluateeRequest[];
     /** The Evaluators used to evaluate. */
     evaluators: Humanloop.EvaluationsRequest[];
 }

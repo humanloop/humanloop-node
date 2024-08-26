@@ -10,11 +10,17 @@ export const EvaluationsDatasetRequest: core.serialization.ObjectSchema<
     serializers.EvaluationsDatasetRequest.Raw,
     Humanloop.EvaluationsDatasetRequest
 > = core.serialization.object({
-    versionId: core.serialization.property("version_id", core.serialization.string()),
+    versionId: core.serialization.property("version_id", core.serialization.string().optional()),
+    path: core.serialization.string().optional(),
+    fileId: core.serialization.property("file_id", core.serialization.string().optional()),
+    environment: core.serialization.string().optional(),
 });
 
 export declare namespace EvaluationsDatasetRequest {
     interface Raw {
-        version_id: string;
+        version_id?: string | null;
+        path?: string | null;
+        file_id?: string | null;
+        environment?: string | null;
     }
 }

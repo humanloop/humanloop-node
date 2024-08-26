@@ -10,7 +10,7 @@ export interface EvaluationReportLogResponse {
     /** The Datapoint used to generate the Log */
     datapoint: Humanloop.DatapointResponse;
     /** The Log that was evaluated by the Evaluator. */
-    log?: Humanloop.SrcExternalAppModelsV5LogsLogResponse;
+    log?: Humanloop.LogResponse;
     /** The Evaluator Logs containing the judgments for the Log. */
-    evaluatorLogs: Humanloop.SrcExternalAppModelsV5LogsLogResponse[];
+    evaluatorLogs: Humanloop.LogResponse[];
 }

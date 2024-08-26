@@ -27,7 +27,7 @@ export interface EvaluatorResponse {
     createdAt: Date;
     updatedAt: Date;
     /** The user who created the Prompt. */
-    createdBy?: Humanloop.UserResponse;
+    createdBy?: Humanloop.UserResponse | undefined;
     status: Humanloop.VersionStatus;
     lastUsedAt: Date;
     /** The number of logs that have been generated for this Prompt Version */

@@ -13,6 +13,7 @@ export const PromptLogRequest: core.serialization.Schema<
     serializers.PromptLogRequest.Raw,
     Omit<Humanloop.PromptLogRequest, "versionId" | "environment">
 > = core.serialization.object({
+    evaluationId: core.serialization.property("evaluation_id", core.serialization.string().optional()),
     path: core.serialization.string().optional(),
     id: core.serialization.string().optional(),
     outputMessage: core.serialization.property("output_message", ChatMessage.optional()),
@@ -28,6 +29,7 @@ export const PromptLogRequest: core.serialization.Schema<
     createdAt: core.serialization.property("created_at", core.serialization.date().optional()),
     error: core.serialization.string().optional(),
     providerLatency: core.serialization.property("provider_latency", core.serialization.number().optional()),
+    stdout: core.serialization.string().optional(),
     providerRequest: core.serialization.property(
         "provider_request",
         core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional()
@@ -50,6 +52,7 @@ export const PromptLogRequest: core.serialization.Schema<
 
 export declare namespace PromptLogRequest {
     interface Raw {
+        evaluation_id?: string | null;
         path?: string | null;
         id?: string | null;
         output_message?: ChatMessage.Raw | null;
@@ -65,6 +68,7 @@ export declare namespace PromptLogRequest {
         created_at?: string | null;
         error?: string | null;
         provider_latency?: number | null;
+        stdout?: string | null;
         provider_request?: Record<string, unknown> | null;
         provider_response?: Record<string, unknown> | null;
         session_id?: string | null;

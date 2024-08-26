@@ -7,8 +7,8 @@ import * as Humanloop from "../../api/index";
 import * as core from "../../core";
 
 export const FeedbackType: core.serialization.Schema<serializers.FeedbackType.Raw, Humanloop.FeedbackType> =
-    core.serialization.enum_(["rating", "action", "issue", "correction", "comment"]);
+    core.serialization.unknown();
 
 export declare namespace FeedbackType {
-    type Raw = "rating" | "action" | "issue" | "correction" | "comment";
+    type Raw = unknown;
 }

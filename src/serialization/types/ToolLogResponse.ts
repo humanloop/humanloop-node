@@ -5,6 +5,7 @@
 import * as serializers from "../index";
 import * as Humanloop from "../../api/index";
 import * as core from "../../core";
+import { ToolResponse } from "./ToolResponse";
 
 export const ToolLogResponse: core.serialization.ObjectSchema<
     serializers.ToolLogResponse.Raw,
@@ -14,6 +15,7 @@ export const ToolLogResponse: core.serialization.ObjectSchema<
     createdAt: core.serialization.property("created_at", core.serialization.date().optional()),
     error: core.serialization.string().optional(),
     providerLatency: core.serialization.property("provider_latency", core.serialization.number().optional()),
+    stdout: core.serialization.string().optional(),
     providerRequest: core.serialization.property(
         "provider_request",
         core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional()
@@ -33,7 +35,11 @@ export const ToolLogResponse: core.serialization.ObjectSchema<
     user: core.serialization.string().optional(),
     environment: core.serialization.string().optional(),
     id: core.serialization.string(),
-    tool: core.serialization.lazyObject(() => serializers.ToolResponse),
+    evaluatorLogs: core.serialization.property(
+        "evaluator_logs",
+        core.serialization.list(core.serialization.lazyObject(() => serializers.EvaluatorLogResponse))
+    ),
+    tool: ToolResponse,
 });
 
 export declare namespace ToolLogResponse {
@@ -42,6 +48,7 @@ export declare namespace ToolLogResponse {
         created_at?: string | null;
         error?: string | null;
         provider_latency?: number | null;
+        stdout?: string | null;
         provider_request?: Record<string, unknown> | null;
         provider_response?: Record<string, unknown> | null;
         session_id?: string | null;
@@ -55,6 +62,7 @@ export declare namespace ToolLogResponse {
         user?: string | null;
         environment?: string | null;
         id: string;
-        tool: serializers.ToolResponse.Raw;
+        evaluator_logs: serializers.EvaluatorLogResponse.Raw[];
+        tool?: ToolResponse.Raw;
     }
 }

@@ -15,7 +15,7 @@ export const CodeEvaluatorRequest: core.serialization.ObjectSchema<
     argumentsType: core.serialization.property("arguments_type", EvaluatorArgumentsType),
     returnType: core.serialization.property("return_type", EvaluatorReturnTypeEnum),
     evaluatorType: core.serialization.property("evaluator_type", core.serialization.stringLiteral("python")),
-    code: core.serialization.string().optional(),
+    code: core.serialization.string(),
 });
 
 export declare namespace CodeEvaluatorRequest {
@@ -23,6 +23,6 @@ export declare namespace CodeEvaluatorRequest {
         arguments_type: EvaluatorArgumentsType.Raw;
         return_type: EvaluatorReturnTypeEnum.Raw;
         evaluator_type: "python";
-        code?: string | null;
+        code: string;
     }
 }

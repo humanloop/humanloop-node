@@ -10,14 +10,20 @@ export const EvaluateeRequest: core.serialization.ObjectSchema<
     serializers.EvaluateeRequest.Raw,
     Humanloop.EvaluateeRequest
 > = core.serialization.object({
-    versionId: core.serialization.property("version_id", core.serialization.string()),
+    versionId: core.serialization.property("version_id", core.serialization.string().optional()),
+    path: core.serialization.string().optional(),
+    fileId: core.serialization.property("file_id", core.serialization.string().optional()),
+    environment: core.serialization.string().optional(),
     batchId: core.serialization.property("batch_id", core.serialization.string().optional()),
     orchestrated: core.serialization.boolean().optional(),
 });
 
 export declare namespace EvaluateeRequest {
     interface Raw {
-        version_id: string;
+        version_id?: string | null;
+        path?: string | null;
+        file_id?: string | null;
+        environment?: string | null;
         batch_id?: string | null;
         orchestrated?: boolean | null;
     }

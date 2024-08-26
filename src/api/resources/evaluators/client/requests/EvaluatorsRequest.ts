@@ -12,7 +12,7 @@ import * as Humanloop from "../../../../index";
  *             argumentsType: Humanloop.EvaluatorArgumentsType.TargetRequired,
  *             returnType: Humanloop.EvaluatorReturnTypeEnum.Number,
  *             evaluatorType: "python",
- *             code: "def evaluate(answer, target):\\n    return 0.5"
+ *             code: "def evaluate(answer, target):\n    return 0.5"
  *         },
  *         commitMessage: "Initial commit"
  *     }

@@ -7,7 +7,15 @@ import * as Humanloop from "../index";
 export interface HumanEvaluatorRequest {
     /** Whether this evaluator is target-free or target-required. */
     argumentsType: Humanloop.EvaluatorArgumentsType;
-    /** The type of the return value of the evaluator. */
-    returnType: Humanloop.EvaluatorReturnTypeEnum;
+    /** The type of the return value of the Evaluator. */
+    returnType: Humanloop.HumanEvaluatorRequestReturnType;
     evaluatorType: "human";
+    /** Instructions for the Human annotating the . */
+    instructions?: string;
+    /** The options that the Human annotator can choose from. */
+    options?: Humanloop.EvaluatorJudgmentOptionResponse[];
+    /** Limits on the judgment that can be applied. Only for Evaluators with `return_type` of `'number'`. */
+    numberLimits?: Humanloop.EvaluatorJudgmentNumberLimit;
+    /** The valence of the number judgment. Only for Evaluators with `return_type` of `'number'`. If 'positive', a higher number is better. If 'negative', a lower number is better. */
+    numberValence?: Humanloop.Valence;
 }

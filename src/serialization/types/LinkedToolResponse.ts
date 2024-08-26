@@ -12,6 +12,7 @@ export const LinkedToolResponse: core.serialization.ObjectSchema<
 > = core.serialization.object({
     name: core.serialization.string(),
     description: core.serialization.string(),
+    strict: core.serialization.boolean().optional(),
     parameters: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
     id: core.serialization.string(),
     versionId: core.serialization.property("version_id", core.serialization.string()),
@@ -21,6 +22,7 @@ export declare namespace LinkedToolResponse {
     interface Raw {
         name: string;
         description: string;
+        strict?: boolean | null;
         parameters?: Record<string, unknown> | null;
         id: string;
         version_id: string;

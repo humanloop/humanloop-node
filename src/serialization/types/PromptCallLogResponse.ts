@@ -15,6 +15,7 @@ export const PromptCallLogResponse: core.serialization.ObjectSchema<
     createdAt: core.serialization.property("created_at", core.serialization.date().optional()),
     error: core.serialization.string().optional(),
     providerLatency: core.serialization.property("provider_latency", core.serialization.number().optional()),
+    stdout: core.serialization.string().optional(),
     outputMessage: core.serialization.property("output_message", ChatMessage.optional()),
     promptTokens: core.serialization.property("prompt_tokens", core.serialization.number().optional()),
     outputTokens: core.serialization.property("output_tokens", core.serialization.number().optional()),
@@ -30,6 +31,7 @@ export declare namespace PromptCallLogResponse {
         created_at?: string | null;
         error?: string | null;
         provider_latency?: number | null;
+        stdout?: string | null;
         output_message?: ChatMessage.Raw | null;
         prompt_tokens?: number | null;
         output_tokens?: number | null;

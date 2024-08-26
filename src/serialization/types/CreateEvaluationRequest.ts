@@ -14,14 +14,14 @@ export const CreateEvaluationRequest: core.serialization.ObjectSchema<
     Humanloop.CreateEvaluationRequest
 > = core.serialization.object({
     dataset: EvaluationsDatasetRequest,
-    evaluatees: core.serialization.list(EvaluateeRequest),
+    evaluatees: core.serialization.list(EvaluateeRequest).optional(),
     evaluators: core.serialization.list(EvaluationsRequest),
 });
 
 export declare namespace CreateEvaluationRequest {
     interface Raw {
         dataset: EvaluationsDatasetRequest.Raw;
-        evaluatees: EvaluateeRequest.Raw[];
+        evaluatees?: EvaluateeRequest.Raw[] | null;
         evaluators: EvaluationsRequest.Raw[];
     }
 }

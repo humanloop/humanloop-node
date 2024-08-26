@@ -17,6 +17,7 @@ export const ToolLogRequest: core.serialization.Schema<
     createdAt: core.serialization.property("created_at", core.serialization.date().optional()),
     error: core.serialization.string().optional(),
     providerLatency: core.serialization.property("provider_latency", core.serialization.number().optional()),
+    stdout: core.serialization.string().optional(),
     providerRequest: core.serialization.property(
         "provider_request",
         core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional()
@@ -46,6 +47,7 @@ export declare namespace ToolLogRequest {
         created_at?: string | null;
         error?: string | null;
         provider_latency?: number | null;
+        stdout?: string | null;
         provider_request?: Record<string, unknown> | null;
         provider_response?: Record<string, unknown> | null;
         session_id?: string | null;

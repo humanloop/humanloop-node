@@ -16,6 +16,8 @@ export interface PromptCallStreamResponse {
     error?: string;
     /** Duration of the logged event in seconds. */
     providerLatency?: number;
+    /** Captured log and debug statements. */
+    stdout?: string;
     /** The message returned by the provider. */
     outputMessage?: Humanloop.ChatMessage;
     /** Number of tokens in the prompt used to generate the output. */

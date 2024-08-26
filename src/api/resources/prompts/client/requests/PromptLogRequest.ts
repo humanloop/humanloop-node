@@ -44,6 +44,8 @@ export interface PromptLogRequest {
      * Name of the Environment identifying a deployed version to log to.
      */
     environment?: string;
+    /** Unique identifier for the Evaluation Report to associate the Log to. */
+    evaluationId?: string;
     /** Path of the Prompt, including the name. This locates the Prompt in the Humanloop filesystem and is used as as a unique identifier. Example: `folder/name` or just `name`. */
     path?: string;
     /** ID for an existing Prompt. */
@@ -80,6 +82,8 @@ export interface PromptLogRequest {
     error?: string;
     /** Duration of the logged event in seconds. */
     providerLatency?: number;
+    /** Captured log and debug statements. */
+    stdout?: string;
     /** Raw request sent to provider. */
     providerRequest?: Record<string, unknown>;
     /** Raw response received the provider. */

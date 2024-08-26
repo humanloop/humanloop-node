@@ -5,13 +5,12 @@
 import * as serializers from "../index";
 import * as Humanloop from "../../api/index";
 import * as core from "../../core";
-import { SrcExternalAppModelsV5LogsLogResponse } from "./SrcExternalAppModelsV5LogsLogResponse";
 
 export const PaginatedDataLogResponse: core.serialization.ObjectSchema<
     serializers.PaginatedDataLogResponse.Raw,
     Humanloop.PaginatedDataLogResponse
 > = core.serialization.object({
-    records: core.serialization.list(SrcExternalAppModelsV5LogsLogResponse),
+    records: core.serialization.list(core.serialization.lazy(() => serializers.LogResponse)),
     page: core.serialization.number(),
     size: core.serialization.number(),
     total: core.serialization.number(),
@@ -19,7 +18,7 @@ export const PaginatedDataLogResponse: core.serialization.ObjectSchema<
 
 export declare namespace PaginatedDataLogResponse {
     interface Raw {
-        records: SrcExternalAppModelsV5LogsLogResponse.Raw[];
+        records: serializers.LogResponse.Raw[];
         page: number;
         size: number;
         total: number;

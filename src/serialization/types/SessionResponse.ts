@@ -5,7 +5,6 @@
 import * as serializers from "../index";
 import * as Humanloop from "../../api/index";
 import * as core from "../../core";
-import { SrcExternalAppModelsV5LogsLogResponse } from "./SrcExternalAppModelsV5LogsLogResponse";
 
 export const SessionResponse: core.serialization.ObjectSchema<
     serializers.SessionResponse.Raw,
@@ -14,7 +13,13 @@ export const SessionResponse: core.serialization.ObjectSchema<
     id: core.serialization.string(),
     createdAt: core.serialization.property("created_at", core.serialization.date()),
     updatedAt: core.serialization.property("updated_at", core.serialization.date()),
-    logs: core.serialization.list(SrcExternalAppModelsV5LogsLogResponse),
+    firstInputs: core.serialization.property(
+        "first_inputs",
+        core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional()
+    ),
+    lastOutput: core.serialization.property("last_output", core.serialization.string().optional()),
+    logsCount: core.serialization.property("logs_count", core.serialization.number()),
+    events: core.serialization.list(core.serialization.lazyObject(() => serializers.SessionEventResponse)),
 });
 
 export declare namespace SessionResponse {
@@ -22,6 +27,9 @@ export declare namespace SessionResponse {
         id: string;
         created_at: string;
         updated_at: string;
-        logs: SrcExternalAppModelsV5LogsLogResponse.Raw[];
+        first_inputs?: Record<string, unknown> | null;
+        last_output?: string | null;
+        logs_count: number;
+        events: serializers.SessionEventResponse.Raw[];
     }
 }

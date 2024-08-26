@@ -7,8 +7,8 @@ import * as Humanloop from "../../api/index";
 import * as core from "../../core";
 
 export const EvaluationStatus: core.serialization.Schema<serializers.EvaluationStatus.Raw, Humanloop.EvaluationStatus> =
-    core.serialization.enum_(["pending", "running", "completed", "cancelled", "failed"]);
+    core.serialization.enum_(["pending", "running", "completed", "cancelled"]);
 
 export declare namespace EvaluationStatus {
-    type Raw = "pending" | "running" | "completed" | "cancelled" | "failed";
+    type Raw = "pending" | "running" | "completed" | "cancelled";
 }

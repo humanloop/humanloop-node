@@ -5,39 +5,12 @@
 import * as serializers from "../index";
 import * as Humanloop from "../../api/index";
 import * as core from "../../core";
-import { BaseModelsUserResponse } from "./BaseModelsUserResponse";
-import { EvaluatorArgumentsType } from "./EvaluatorArgumentsType";
-import { EvaluatorReturnTypeEnum } from "./EvaluatorReturnTypeEnum";
 
 export const EvaluatorConfigResponse: core.serialization.ObjectSchema<
     serializers.EvaluatorConfigResponse.Raw,
     Humanloop.EvaluatorConfigResponse
-> = core.serialization.object({
-    id: core.serialization.string(),
-    other: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
-    type: core.serialization.stringLiteral("evaluator"),
-    createdBy: core.serialization.property("created_by", BaseModelsUserResponse.optional()),
-    status: core.serialization.string(),
-    name: core.serialization.string(),
-    description: core.serialization.string().optional(),
-    evaluatorType: core.serialization.property("evaluator_type", core.serialization.string()),
-    code: core.serialization.string().optional(),
-    argumentsType: core.serialization.property("arguments_type", EvaluatorArgumentsType.optional()),
-    returnType: core.serialization.property("return_type", EvaluatorReturnTypeEnum.optional()),
-});
+> = core.serialization.object({});
 
 export declare namespace EvaluatorConfigResponse {
-    interface Raw {
-        id: string;
-        other?: Record<string, unknown> | null;
-        type: "evaluator";
-        created_by?: BaseModelsUserResponse.Raw | null;
-        status: string;
-        name: string;
-        description?: string | null;
-        evaluator_type: string;
-        code?: string | null;
-        arguments_type?: EvaluatorArgumentsType.Raw | null;
-        return_type?: EvaluatorReturnTypeEnum.Raw | null;
-    }
+    interface Raw {}
 }

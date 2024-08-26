@@ -11,5 +11,5 @@ export interface CodeEvaluatorRequest {
     returnType: Humanloop.EvaluatorReturnTypeEnum;
     evaluatorType: "python";
     /** The code for the evaluator. This code will be executed in a sandboxed environment. */
-    code?: string;
+    code: string;
 }

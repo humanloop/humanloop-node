@@ -5,6 +5,7 @@
 import * as serializers from "../index";
 import * as Humanloop from "../../api/index";
 import * as core from "../../core";
+import { EvaluatorLogResponseJudgment } from "./EvaluatorLogResponseJudgment";
 
 export const EvaluatorLogResponse: core.serialization.ObjectSchema<
     serializers.EvaluatorLogResponse.Raw,
@@ -14,6 +15,7 @@ export const EvaluatorLogResponse: core.serialization.ObjectSchema<
     createdAt: core.serialization.property("created_at", core.serialization.date().optional()),
     error: core.serialization.string().optional(),
     providerLatency: core.serialization.property("provider_latency", core.serialization.number().optional()),
+    stdout: core.serialization.string().optional(),
     providerRequest: core.serialization.property(
         "provider_request",
         core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional()
@@ -23,7 +25,7 @@ export const EvaluatorLogResponse: core.serialization.ObjectSchema<
         core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional()
     ),
     sessionId: core.serialization.property("session_id", core.serialization.string().optional()),
-    parentId: core.serialization.property("parent_id", core.serialization.string()),
+    parentId: core.serialization.property("parent_id", core.serialization.string().optional()),
     inputs: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
     source: core.serialization.string().optional(),
     metadata: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
@@ -32,9 +34,14 @@ export const EvaluatorLogResponse: core.serialization.ObjectSchema<
     batches: core.serialization.list(core.serialization.string()).optional(),
     user: core.serialization.string().optional(),
     environment: core.serialization.string().optional(),
-    judgment: core.serialization.unknown().optional(),
+    judgment: EvaluatorLogResponseJudgment.optional(),
     id: core.serialization.string(),
+    evaluatorLogs: core.serialization.property(
+        "evaluator_logs",
+        core.serialization.list(core.serialization.lazyObject(() => serializers.EvaluatorLogResponse))
+    ),
     evaluator: core.serialization.lazyObject(() => serializers.EvaluatorResponse),
+    parent: core.serialization.lazy(() => serializers.LogResponse).optional(),
 });
 
 export declare namespace EvaluatorLogResponse {
@@ -43,10 +50,11 @@ export declare namespace EvaluatorLogResponse {
         created_at?: string | null;
         error?: string | null;
         provider_latency?: number | null;
+        stdout?: string | null;
         provider_request?: Record<string, unknown> | null;
         provider_response?: Record<string, unknown> | null;
         session_id?: string | null;
-        parent_id: string;
+        parent_id?: string | null;
         inputs?: Record<string, unknown> | null;
         source?: string | null;
         metadata?: Record<string, unknown> | null;
@@ -55,8 +63,10 @@ export declare namespace EvaluatorLogResponse {
         batches?: string[] | null;
         user?: string | null;
         environment?: string | null;
-        judgment?: unknown | null;
+        judgment?: EvaluatorLogResponseJudgment.Raw | null;
         id: string;
+        evaluator_logs: serializers.EvaluatorLogResponse.Raw[];
         evaluator: serializers.EvaluatorResponse.Raw;
+        parent?: serializers.LogResponse.Raw | null;
     }
 }
