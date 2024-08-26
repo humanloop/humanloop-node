@@ -42,7 +42,7 @@ export declare namespace DatasetResponse {
         environments?: EnvironmentResponse.Raw[] | null;
         created_at: string;
         updated_at: string;
-        created_by?: (UserResponse.Raw | undefined) | null;
+        created_by?: UserResponse.Raw | null;
         status: VersionStatus.Raw;
         last_used_at: string;
         commit_message?: string | null;

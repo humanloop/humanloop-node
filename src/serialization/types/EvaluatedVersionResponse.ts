@@ -5,17 +5,16 @@
 import * as serializers from "../index";
 import * as Humanloop from "../../api/index";
 import * as core from "../../core";
-import { ToolResponse } from "./ToolResponse";
 
 export const EvaluatedVersionResponse: core.serialization.Schema<
     serializers.EvaluatedVersionResponse.Raw,
     Humanloop.EvaluatedVersionResponse
 > = core.serialization.undiscriminatedUnion([
     core.serialization.lazyObject(() => serializers.PromptResponse),
-    ToolResponse,
+    core.serialization.lazyObject(() => serializers.ToolResponse),
     core.serialization.lazyObject(() => serializers.EvaluatorResponse),
 ]);
 
 export declare namespace EvaluatedVersionResponse {
-    type Raw = serializers.PromptResponse.Raw | (ToolResponse.Raw | undefined) | serializers.EvaluatorResponse.Raw;
+    type Raw = serializers.PromptResponse.Raw | serializers.ToolResponse.Raw | serializers.EvaluatorResponse.Raw;
 }

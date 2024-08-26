@@ -10,6 +10,5 @@ import * as Humanloop from "../index";
 export type FileEnvironmentResponseFile =
     | Humanloop.PromptResponse
     | Humanloop.ToolResponse
-    | undefined
     | Humanloop.DatasetResponse
     | Humanloop.EvaluatorResponse;

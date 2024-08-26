@@ -1133,7 +1133,7 @@ await client.tools.log({
 </dl>
 </details>
 
-<details><summary><code>client.tools.<a href="/src/api/resources/tools/client/Client.ts">list</a>({ ...params }) -> core.Page<Humanloop.ToolResponse | undefined></code></summary>
+<details><summary><code>client.tools.<a href="/src/api/resources/tools/client/Client.ts">list</a>({ ...params }) -> core.Page<Humanloop.ToolResponse></code></summary>
 <dl>
 <dd>
 
@@ -1198,7 +1198,7 @@ await client.tools.list({
 </dl>
 </details>
 
-<details><summary><code>client.tools.<a href="/src/api/resources/tools/client/Client.ts">upsert</a>({ ...params }) -> Humanloop.ToolResponse | undefined</code></summary>
+<details><summary><code>client.tools.<a href="/src/api/resources/tools/client/Client.ts">upsert</a>({ ...params }) -> Humanloop.ToolResponse</code></summary>
 <dl>
 <dd>
 
@@ -1286,7 +1286,7 @@ await client.tools.upsert({
 </dl>
 </details>
 
-<details><summary><code>client.tools.<a href="/src/api/resources/tools/client/Client.ts">get</a>(id, { ...params }) -> Humanloop.ToolResponse | undefined</code></summary>
+<details><summary><code>client.tools.<a href="/src/api/resources/tools/client/Client.ts">get</a>(id, { ...params }) -> Humanloop.ToolResponse</code></summary>
 <dl>
 <dd>
 
@@ -1423,7 +1423,7 @@ await client.tools.delete("tl_789ghi");
 </dl>
 </details>
 
-<details><summary><code>client.tools.<a href="/src/api/resources/tools/client/Client.ts">move</a>(id, { ...params }) -> Humanloop.ToolResponse | undefined</code></summary>
+<details><summary><code>client.tools.<a href="/src/api/resources/tools/client/Client.ts">move</a>(id, { ...params }) -> Humanloop.ToolResponse</code></summary>
 <dl>
 <dd>
 
@@ -1569,7 +1569,7 @@ await client.tools.listVersions("tl_789ghi", {
 </dl>
 </details>
 
-<details><summary><code>client.tools.<a href="/src/api/resources/tools/client/Client.ts">commit</a>(id, versionId, { ...params }) -> Humanloop.ToolResponse | undefined</code></summary>
+<details><summary><code>client.tools.<a href="/src/api/resources/tools/client/Client.ts">commit</a>(id, versionId, { ...params }) -> Humanloop.ToolResponse</code></summary>
 <dl>
 <dd>
 
@@ -1652,7 +1652,7 @@ await client.tools.commit("tl_789ghi", "tv_012jkl", {
 </dl>
 </details>
 
-<details><summary><code>client.tools.<a href="/src/api/resources/tools/client/Client.ts">updateMonitoring</a>(id, { ...params }) -> Humanloop.ToolResponse | undefined</code></summary>
+<details><summary><code>client.tools.<a href="/src/api/resources/tools/client/Client.ts">updateMonitoring</a>(id, { ...params }) -> Humanloop.ToolResponse</code></summary>
 <dl>
 <dd>
 
@@ -1732,7 +1732,7 @@ await client.tools.updateMonitoring("tl_789ghi", {
 </dl>
 </details>
 
-<details><summary><code>client.tools.<a href="/src/api/resources/tools/client/Client.ts">setDeployment</a>(id, environmentId, { ...params }) -> Humanloop.ToolResponse | undefined</code></summary>
+<details><summary><code>client.tools.<a href="/src/api/resources/tools/client/Client.ts">setDeployment</a>(id, environmentId, { ...params }) -> Humanloop.ToolResponse</code></summary>
 <dl>
 <dd>
 
