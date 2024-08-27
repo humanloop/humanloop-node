@@ -19,9 +19,9 @@ describe("test env compatibility", () => {
             },
 
         }, (err, stats) => {
-            done();
             expect(err).toBe(null);
             expect(stats?.hasErrors()).toBe(false);
+            done();
         })
     })
 })
