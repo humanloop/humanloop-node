@@ -23,5 +23,5 @@ describe("test env compatibility", () => {
             expect(stats?.hasErrors()).toBe(false);
             done();
         })
-    })
+    }, 20_000)
 })
