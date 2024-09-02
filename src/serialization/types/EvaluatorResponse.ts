@@ -40,6 +40,7 @@ export const EvaluatorResponse: core.serialization.ObjectSchema<
         "evaluator_aggregates",
         core.serialization.list(EvaluatorAggregate).optional()
     ),
+    attributes: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
 });
 
 export declare namespace EvaluatorResponse {
@@ -55,7 +56,7 @@ export declare namespace EvaluatorResponse {
         environments?: EnvironmentResponse.Raw[] | null;
         created_at: string;
         updated_at: string;
-        created_by?: UserResponse.Raw | null;
+        created_by?: (UserResponse.Raw | undefined) | null;
         status: VersionStatus.Raw;
         last_used_at: string;
         version_logs_count: number;
@@ -63,5 +64,6 @@ export declare namespace EvaluatorResponse {
         inputs: InputResponse.Raw[];
         evaluators?: serializers.MonitoringEvaluatorResponse.Raw[] | null;
         evaluator_aggregates?: EvaluatorAggregate.Raw[] | null;
+        attributes?: Record<string, unknown> | null;
     }
 }

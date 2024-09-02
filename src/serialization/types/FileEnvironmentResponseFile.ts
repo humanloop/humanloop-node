@@ -5,6 +5,7 @@
 import * as serializers from "../index";
 import * as Humanloop from "../../api/index";
 import * as core from "../../core";
+import { ToolResponse } from "./ToolResponse";
 import { DatasetResponse } from "./DatasetResponse";
 
 export const FileEnvironmentResponseFile: core.serialization.Schema<
@@ -12,7 +13,7 @@ export const FileEnvironmentResponseFile: core.serialization.Schema<
     Humanloop.FileEnvironmentResponseFile
 > = core.serialization.undiscriminatedUnion([
     core.serialization.lazyObject(() => serializers.PromptResponse),
-    core.serialization.lazyObject(() => serializers.ToolResponse),
+    ToolResponse,
     DatasetResponse,
     core.serialization.lazyObject(() => serializers.EvaluatorResponse),
 ]);
@@ -20,7 +21,7 @@ export const FileEnvironmentResponseFile: core.serialization.Schema<
 export declare namespace FileEnvironmentResponseFile {
     type Raw =
         | serializers.PromptResponse.Raw
-        | serializers.ToolResponse.Raw
+        | (ToolResponse.Raw | undefined)
         | DatasetResponse.Raw
         | serializers.EvaluatorResponse.Raw;
 }

@@ -9,6 +9,8 @@ export interface HumanEvaluatorRequest {
     argumentsType: Humanloop.EvaluatorArgumentsType;
     /** The type of the return value of the Evaluator. */
     returnType: Humanloop.HumanEvaluatorRequestReturnType;
+    /** Additional fields to describe the Evaluator. Helpful to separate Evaluator versions from each other with details on how they were created or used. */
+    attributes?: Record<string, unknown>;
     evaluatorType: "human";
     /** Instructions for the Human annotating the . */
     instructions?: string;

@@ -6,5 +6,5 @@ import * as Humanloop from "../index";
 
 export interface ListTools {
     /** The list of Tools. */
-    records: Humanloop.ToolResponse[];
+    records: (Humanloop.ToolResponse | undefined)[];
 }

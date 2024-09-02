@@ -29,6 +29,7 @@ export const DatasetResponse: core.serialization.ObjectSchema<
     commitMessage: core.serialization.property("commit_message", core.serialization.string().optional()),
     datapointsCount: core.serialization.property("datapoints_count", core.serialization.number()),
     datapoints: core.serialization.list(DatapointResponse).optional(),
+    attributes: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
 });
 
 export declare namespace DatasetResponse {
@@ -42,11 +43,12 @@ export declare namespace DatasetResponse {
         environments?: EnvironmentResponse.Raw[] | null;
         created_at: string;
         updated_at: string;
-        created_by?: UserResponse.Raw | null;
+        created_by?: (UserResponse.Raw | undefined) | null;
         status: VersionStatus.Raw;
         last_used_at: string;
         commit_message?: string | null;
         datapoints_count: number;
         datapoints?: DatapointResponse.Raw[] | null;
+        attributes?: Record<string, unknown> | null;
     }
 }

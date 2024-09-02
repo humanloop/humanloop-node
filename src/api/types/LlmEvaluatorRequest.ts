@@ -9,6 +9,8 @@ export interface LlmEvaluatorRequest {
     argumentsType: Humanloop.EvaluatorArgumentsType;
     /** The type of the return value of the evaluator. */
     returnType: Humanloop.EvaluatorReturnTypeEnum;
+    /** Additional fields to describe the Evaluator. Helpful to separate Evaluator versions from each other with details on how they were created or used. */
+    attributes?: Record<string, unknown>;
     evaluatorType: "llm";
     /** The prompt parameters used to generate. */
     prompt?: Humanloop.PromptKernelRequest;

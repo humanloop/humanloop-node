@@ -34,7 +34,7 @@ export declare namespace EvaluationResponse {
         evaluators: EvaluationEvaluatorResponse.Raw[];
         status: EvaluationStatus.Raw;
         created_at: string;
-        created_by?: UserResponse.Raw | null;
+        created_by?: (UserResponse.Raw | undefined) | null;
         updated_at: string;
         url?: string | null;
     }

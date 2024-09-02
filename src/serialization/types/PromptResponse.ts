@@ -41,6 +41,7 @@ export const PromptResponse: core.serialization.ObjectSchema<serializers.PromptR
             "linked_tools",
             core.serialization.list(LinkedToolResponse).optional()
         ),
+        attributes: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
         commitMessage: core.serialization.property("commit_message", core.serialization.string().optional()),
         name: core.serialization.string(),
         versionId: core.serialization.property("version_id", core.serialization.string()),
@@ -83,6 +84,7 @@ export declare namespace PromptResponse {
         response_format?: ResponseFormat.Raw | null;
         tools?: ToolFunction.Raw[] | null;
         linked_tools?: LinkedToolResponse.Raw[] | null;
+        attributes?: Record<string, unknown> | null;
         commit_message?: string | null;
         name: string;
         version_id: string;
@@ -90,7 +92,7 @@ export declare namespace PromptResponse {
         environments?: EnvironmentResponse.Raw[] | null;
         created_at: string;
         updated_at: string;
-        created_by?: UserResponse.Raw | null;
+        created_by?: (UserResponse.Raw | undefined) | null;
         status: VersionStatus.Raw;
         last_used_at: string;
         version_logs_count: number;

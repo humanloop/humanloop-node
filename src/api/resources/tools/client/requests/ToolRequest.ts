@@ -41,6 +41,8 @@ export interface ToolRequest {
     sourceCode?: string;
     /** Values needed to setup the Tool, defined in JSON Schema format: https://json-schema.org/ */
     setupValues?: Record<string, unknown>;
+    /** Additional fields to describe the Tool. Helpful to separate Tool versions from each other with details on how they were created or used. */
+    attributes?: Record<string, unknown>;
     /** Type of Tool. */
     toolType?: Humanloop.FilesToolType;
     /** Message describing the changes made. */

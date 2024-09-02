@@ -9,7 +9,7 @@ export interface ExternalEvaluatorRequest {
     argumentsType: Humanloop.EvaluatorArgumentsType;
     /** The type of the return value of the evaluator. */
     returnType: Humanloop.EvaluatorReturnTypeEnum;
+    /** Additional fields to describe the Evaluator. Helpful to separate Evaluator versions from each other with details on how they were created or used. */
+    attributes?: Record<string, unknown>;
     evaluatorType: "external";
-    /** Metadata describing the external Evaluator. */
-    metadata?: Record<string, unknown>;
 }

@@ -17,6 +17,7 @@ export const ToolKernelRequest: core.serialization.ObjectSchema<
         "setup_values",
         core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional()
     ),
+    attributes: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
 });
 
 export declare namespace ToolKernelRequest {
@@ -24,5 +25,6 @@ export declare namespace ToolKernelRequest {
         function?: ToolFunction.Raw | null;
         source_code?: string | null;
         setup_values?: Record<string, unknown> | null;
+        attributes?: Record<string, unknown> | null;
     }
 }

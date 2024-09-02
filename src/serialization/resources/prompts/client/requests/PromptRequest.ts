@@ -34,6 +34,7 @@ export const PromptRequest: core.serialization.Schema<serializers.PromptRequest.
             "linked_tools",
             core.serialization.list(core.serialization.string()).optional()
         ),
+        attributes: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
         commitMessage: core.serialization.property("commit_message", core.serialization.string().optional()),
     });
 
@@ -56,6 +57,7 @@ export declare namespace PromptRequest {
         response_format?: ResponseFormat.Raw | null;
         tools?: ToolFunction.Raw[] | null;
         linked_tools?: string[] | null;
+        attributes?: Record<string, unknown> | null;
         commit_message?: string | null;
     }
 }

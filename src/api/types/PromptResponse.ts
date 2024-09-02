@@ -47,6 +47,8 @@ export interface PromptResponse {
     tools?: Humanloop.ToolFunction[];
     /** The tools linked to your prompt that the model can call. */
     linkedTools?: Humanloop.LinkedToolResponse[];
+    /** Additional fields to describe the Prompt. Helpful to separate Prompt versions from each other with details on how they were created or used. */
+    attributes?: Record<string, unknown>;
     /** Message describing the changes made. */
     commitMessage?: string;
     /** Name of the Prompt. */
@@ -59,7 +61,7 @@ export interface PromptResponse {
     createdAt: Date;
     updatedAt: Date;
     /** The user who created the Prompt. */
-    createdBy?: Humanloop.UserResponse;
+    createdBy?: Humanloop.UserResponse | undefined;
     /** The status of the Prompt Version. */
     status: Humanloop.VersionStatus;
     lastUsedAt: Date;

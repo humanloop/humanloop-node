@@ -61,6 +61,8 @@ export interface PromptRequest {
     tools?: Humanloop.ToolFunction[];
     /** The IDs of the Tools in your organization that the model can choose to call if Tool calling is supported. The default deployed version of that tool is called. */
     linkedTools?: string[];
+    /** Additional fields to describe the Prompt. Helpful to separate Prompt versions from each other with details on how they were created or used. */
+    attributes?: Record<string, unknown>;
     /** Message describing the changes made. */
     commitMessage?: string;
 }

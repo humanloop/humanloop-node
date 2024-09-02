@@ -18,6 +18,7 @@ export const ToolRequest: core.serialization.Schema<serializers.ToolRequest.Raw,
             "setup_values",
             core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional()
         ),
+        attributes: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
         toolType: core.serialization.property("tool_type", FilesToolType.optional()),
         commitMessage: core.serialization.property("commit_message", core.serialization.string().optional()),
     });
@@ -29,6 +30,7 @@ export declare namespace ToolRequest {
         function?: ToolFunction.Raw | null;
         source_code?: string | null;
         setup_values?: Record<string, unknown> | null;
+        attributes?: Record<string, unknown> | null;
         tool_type?: FilesToolType.Raw | null;
         commit_message?: string | null;
     }

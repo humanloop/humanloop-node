@@ -17,6 +17,7 @@ export const HumanEvaluatorRequest: core.serialization.ObjectSchema<
 > = core.serialization.object({
     argumentsType: core.serialization.property("arguments_type", EvaluatorArgumentsType),
     returnType: core.serialization.property("return_type", HumanEvaluatorRequestReturnType),
+    attributes: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
     evaluatorType: core.serialization.property("evaluator_type", core.serialization.stringLiteral("human")),
     instructions: core.serialization.string().optional(),
     options: core.serialization.list(EvaluatorJudgmentOptionResponse).optional(),
@@ -28,6 +29,7 @@ export declare namespace HumanEvaluatorRequest {
     interface Raw {
         arguments_type: EvaluatorArgumentsType.Raw;
         return_type: HumanEvaluatorRequestReturnType.Raw;
+        attributes?: Record<string, unknown> | null;
         evaluator_type: "human";
         instructions?: string | null;
         options?: EvaluatorJudgmentOptionResponse.Raw[] | null;

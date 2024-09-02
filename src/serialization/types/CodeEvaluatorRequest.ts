@@ -14,6 +14,7 @@ export const CodeEvaluatorRequest: core.serialization.ObjectSchema<
 > = core.serialization.object({
     argumentsType: core.serialization.property("arguments_type", EvaluatorArgumentsType),
     returnType: core.serialization.property("return_type", EvaluatorReturnTypeEnum),
+    attributes: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
     evaluatorType: core.serialization.property("evaluator_type", core.serialization.stringLiteral("python")),
     code: core.serialization.string(),
 });
@@ -22,6 +23,7 @@ export declare namespace CodeEvaluatorRequest {
     interface Raw {
         arguments_type: EvaluatorArgumentsType.Raw;
         return_type: EvaluatorReturnTypeEnum.Raw;
+        attributes?: Record<string, unknown> | null;
         evaluator_type: "python";
         code: string;
     }

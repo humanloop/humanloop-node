@@ -34,6 +34,7 @@ export const PromptKernelRequest: core.serialization.ObjectSchema<
         "linked_tools",
         core.serialization.list(core.serialization.string()).optional()
     ),
+    attributes: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
 });
 
 export declare namespace PromptKernelRequest {
@@ -53,5 +54,6 @@ export declare namespace PromptKernelRequest {
         response_format?: ResponseFormat.Raw | null;
         tools?: ToolFunction.Raw[] | null;
         linked_tools?: string[] | null;
+        attributes?: Record<string, unknown> | null;
     }
 }

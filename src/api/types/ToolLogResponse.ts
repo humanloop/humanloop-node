@@ -47,5 +47,5 @@ export interface ToolLogResponse {
     /** List of Evaluator Logs associated with the Log. These contain Evaluator judgments on the Log. */
     evaluatorLogs: Humanloop.EvaluatorLogResponse[];
     /** Tool details used to generate the Log. */
-    tool: Humanloop.ToolResponse;
+    tool?: Humanloop.ToolResponse;
 }

@@ -75,6 +75,8 @@ export interface DatasetsRequest {
      * If `"add"` or `"remove"`, one of the `version_id` or `environment` query parameters may be provided.
      */
     action?: Humanloop.UpdateDatesetAction;
+    /** Additional fields to describe the Dataset. Helpful to separate Dataset versions from each other with details on how they were created or used. */
+    attributes?: Record<string, unknown>;
     /** Message describing the changes made. If provided, a committed version of the Dataset is created. Otherwise, an uncommitted version is created. */
     commitMessage?: string;
 }

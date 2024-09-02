@@ -27,7 +27,7 @@ export interface DatasetResponse {
     createdAt: Date;
     updatedAt: Date;
     /** The user who created the Dataset. */
-    createdBy?: Humanloop.UserResponse;
+    createdBy?: Humanloop.UserResponse | undefined;
     /** The status of the Dataset Version. */
     status: Humanloop.VersionStatus;
     lastUsedAt: Date;
@@ -37,4 +37,6 @@ export interface DatasetResponse {
     datapointsCount: number;
     /** The list of Datapoints in this Dataset version. Only provided if explicitly requested. */
     datapoints?: Humanloop.DatapointResponse[];
+    /** Additional fields to describe the Dataset. Helpful to separate Dataset versions from each other with details on how they were created or used. */
+    attributes?: Record<string, unknown>;
 }
