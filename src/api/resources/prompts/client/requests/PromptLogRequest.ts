@@ -22,7 +22,7 @@ import * as Humanloop from "../../../../index";
  *         inputs: {
  *             "person": "Trump"
  *         },
- *         createdAt: new Date("2024-07-19T00:29:35.178Z"),
+ *         createdAt: "2024-07-19T00:29:35.178992",
  *         providerLatency: 6.5931549072265625,
  *         outputMessage: {
  *             content: "Well, you know, there is so much secrecy involved in government, folks, it's unbelievable. They don't want to tell you everything. They don't tell me everything! But about Roswell, it\u2019s a very popular question. I know, I just know, that something very, very peculiar happened there. Was it a weather balloon? Maybe. Was it something extraterrestrial? Could be. I'd love to go down and open up all the classified documents, believe me, I would. But they don't let that happen. The Deep State, folks, the Deep State. They\u2019re unbelievable. They want to keep everything a secret. But whatever the truth is, I can tell you this: it\u2019s something big, very very big. Tremendous, in fact.",
@@ -62,8 +62,6 @@ export interface PromptLogRequest {
     outputCost?: number;
     /** Reason the generation finished. */
     finishReason?: string;
-    /** Details of your Prompt. A new Prompt version will be created if the provided details are new. */
-    prompt?: Humanloop.PromptKernelRequest;
     /** The messages passed to the to provider chat endpoint. */
     messages?: Humanloop.ChatMessage[];
     /**
@@ -74,6 +72,8 @@ export interface PromptLogRequest {
      * - `{'type': 'function', 'function': {name': <TOOL_NAME>}}` forces the model to use the named function.
      */
     toolChoice?: Humanloop.PromptLogRequestToolChoice;
+    /** Details of your Prompt. A new Prompt version will be created if the provided details are new. */
+    prompt?: Humanloop.PromptKernelRequest;
     /** Generated output from your model for the provided inputs. Can be `None` if logging an error, or if creating a parent Log with the intention to populate it later. */
     output?: string;
     /** User defined timestamp for when the log was created. */
@@ -88,18 +88,16 @@ export interface PromptLogRequest {
     providerRequest?: Record<string, unknown>;
     /** Raw response received the provider. */
     providerResponse?: Record<string, unknown>;
-    /** Unique identifier for the Session to associate the Log to. Allows you to record multiple Logs to a Session (using an ID kept by your internal systems) by passing the same `session_id` in subsequent log requests. */
-    sessionId?: string;
-    /** Unique identifier for the parent Log in a Session. Should only be provided if `session_id` is provided. If provided, the Log will be nested under the parent Log within the Session. */
-    parentId?: string;
     /** The inputs passed to the prompt template. */
     inputs?: Record<string, unknown>;
     /** Identifies where the model was called from. */
     source?: string;
     /** Any additional metadata to record. */
     metadata?: Record<string, unknown>;
-    /** Whether the request/response payloads will be stored on Humanloop. */
-    save?: boolean;
+    /** Unique identifier for the Session to associate the Log to. Allows you to record multiple Logs to a Session (using an ID kept by your internal systems) by passing the same `session_id` in subsequent log requests. */
+    sessionId?: string;
+    /** Unique identifier for the parent Log in a Session. Should only be provided if `session_id` is provided. If provided, the Log will be nested under the parent Log within the Session. */
+    parentId?: string;
     /** Unique identifier for the Datapoint that this Log is derived from. This can be used by Humanloop to associate Logs to Evaluations. If provided, Humanloop will automatically associate this Log to Evaluations that require a Log for this Datapoint-Version pair. */
     sourceDatapointId?: string;
     /** Array of Batch Ids that this log is part of. Batches are used to group Logs together for offline Evaluations */
@@ -108,4 +106,6 @@ export interface PromptLogRequest {
     user?: string;
     /** The name of the Environment the Log is associated to. */
     promptLogRequestEnvironment?: string;
+    /** Whether the request/response payloads will be stored on Humanloop. */
+    save?: boolean;
 }

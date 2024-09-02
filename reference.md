@@ -58,7 +58,7 @@ await client.prompts.log({
     inputs: {
         person: "Trump",
     },
-    createdAt: new Date("2024-07-19T00:29:35.178Z"),
+    createdAt: "2024-07-19T00:29:35.178992",
     providerLatency: 6.5931549072265625,
     outputMessage: {
         content:
@@ -105,7 +105,263 @@ await client.prompts.log({
 </dl>
 </details>
 
-<details><summary><code>client.prompts.<a href="/src/api/resources/prompts/client/Client.ts">call</a>({ ...params }) -> Humanloop.CallPromptsCallPostResponse</code></summary>
+<details><summary><code>client.prompts.<a href="/src/api/resources/prompts/client/Client.ts">update</a>(id, logId, { ...params }) -> Humanloop.LogResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Update a Log.
+
+Update the details of a Log with the given ID.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.prompts.update("id", "log_id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Unique identifier for Prompt.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**logId:** `string` — Unique identifier for the Log.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.PromptLogUpdateRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Prompts.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.prompts.<a href="/src/api/resources/prompts/client/Client.ts">callStream</a>({ ...params }) -> core.Stream<Humanloop.PromptCallStreamResponse></code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Call a Prompt.
+
+Calling a Prompt calls the model provider before logging
+the request, responses and metadata to Humanloop.
+
+You can use query parameters `version_id`, or `environment`, to target
+an existing version of the Prompt. Otherwise the default deployed version will be chosen.
+
+Instead of targeting an existing version explicitly, you can instead pass in
+Prompt details in the request body. In this case, we will check if the details correspond
+to an existing version of the Prompt. If they do not, we will create a new version. This is helpful
+in the case where you are storing or deriving your Prompt details in code.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.prompts.callStream({
+    versionId: "string",
+    environment: "string",
+    path: "string",
+    id: "string",
+    messages: [
+        {
+            content: "string",
+            name: "string",
+            toolCallId: "string",
+            role: Humanloop.ChatRole.User,
+            toolCalls: [
+                {
+                    id: "string",
+                    type: "function",
+                    function: {
+                        name: "string",
+                        arguments: {
+                            key: "value",
+                        },
+                    },
+                },
+            ],
+        },
+    ],
+    toolChoice: "none",
+    prompt: {
+        model: "string",
+        endpoint: Humanloop.ModelEndpoints.Complete,
+        template: "string",
+        provider: Humanloop.ModelProviders.Openai,
+        maxTokens: 1,
+        temperature: 1.1,
+        topP: 1.1,
+        stop: "string",
+        presencePenalty: 1.1,
+        frequencyPenalty: 1.1,
+        other: {
+            string: {
+                key: "value",
+            },
+        },
+        seed: 1,
+        responseFormat: {
+            type: Humanloop.ResponseFormatType.JsonObject,
+            jsonSchema: {
+                string: {
+                    key: "value",
+                },
+            },
+        },
+        tools: [
+            {
+                name: "string",
+                description: "string",
+                strict: {
+                    key: "value",
+                },
+                parameters: {
+                    key: "value",
+                },
+            },
+        ],
+        linkedTools: ["string"],
+        attributes: {
+            string: {
+                key: "value",
+            },
+        },
+    },
+    inputs: {
+        string: {
+            key: "value",
+        },
+    },
+    source: "string",
+    metadata: {
+        string: {
+            key: "value",
+        },
+    },
+    sessionId: "string",
+    parentId: "string",
+    sourceDatapointId: "string",
+    batches: ["string"],
+    user: "string",
+    promptsCallStreamRequestEnvironment: "string",
+    save: true,
+    providerApiKeys: {
+        openai: "string",
+        ai21: "string",
+        mock: "string",
+        anthropic: "string",
+        cohere: "string",
+        openaiAzure: "string",
+        openaiAzureEndpoint: "string",
+    },
+    numSamples: 1,
+    returnInputs: true,
+    logprobs: 1,
+    suffix: "string",
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.PromptsCallStreamRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Prompts.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.prompts.<a href="/src/api/resources/prompts/client/Client.ts">call</a>({ ...params }) -> Humanloop.PromptCallResponse</code></summary>
 <dl>
 <dd>
 
@@ -178,7 +434,6 @@ await client.prompts.call({
             content: "latest apple",
         },
     ],
-    stream: false,
 });
 ```
 
@@ -195,7 +450,7 @@ await client.prompts.call({
 <dl>
 <dd>
 
-**request:** `Humanloop.PromptCallRequest`
+**request:** `Humanloop.PromptsCallRequest`
 
 </dd>
 </dl>
@@ -1115,6 +1370,87 @@ await client.tools.log({
 <dd>
 
 **request:** `Humanloop.ToolLogRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Tools.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.tools.<a href="/src/api/resources/tools/client/Client.ts">update</a>(id, logId, { ...params }) -> Humanloop.LogResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Update a Log.
+
+Update the details of a Log with the given ID.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.tools.update("id", "log_id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Unique identifier for Prompt.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**logId:** `string` — Unique identifier for the Log.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.ToolLogUpdateRequest`
 
 </dd>
 </dl>

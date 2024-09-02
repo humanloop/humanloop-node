@@ -39,7 +39,7 @@ await client.prompts.log({
     inputs: {
         person: "Trump",
     },
-    createdAt: new Date("2024-07-19T00:29:35.178Z"),
+    createdAt: "2024-07-19T00:29:35.178992",
     providerLatency: 6.5931549072265625,
     outputMessage: {
         content:

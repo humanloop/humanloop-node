@@ -1,5 +1,7 @@
 export { type PromptLogRequest } from "./PromptLogRequest";
-export { type PromptCallRequest } from "./PromptCallRequest";
+export { type PromptLogUpdateRequest } from "./PromptLogUpdateRequest";
+export { type PromptsCallStreamRequest } from "./PromptsCallStreamRequest";
+export { type PromptsCallRequest } from "./PromptsCallRequest";
 export { type ListPromptsGetRequest } from "./ListPromptsGetRequest";
 export { type PromptRequest } from "./PromptRequest";
 export { type GetPromptsIdGetRequest } from "./GetPromptsIdGetRequest";

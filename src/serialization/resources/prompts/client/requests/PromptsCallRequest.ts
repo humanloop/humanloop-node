@@ -5,58 +5,56 @@
 import * as serializers from "../../../../index";
 import * as Humanloop from "../../../../../api/index";
 import * as core from "../../../../../core";
-import { PromptKernelRequest } from "../../../../types/PromptKernelRequest";
 import { ChatMessage } from "../../../../types/ChatMessage";
-import { PromptCallRequestToolChoice } from "../../types/PromptCallRequestToolChoice";
+import { PromptsCallRequestToolChoice } from "../../types/PromptsCallRequestToolChoice";
+import { PromptKernelRequest } from "../../../../types/PromptKernelRequest";
 import { ProviderApiKeys } from "../../../../types/ProviderApiKeys";
 
-export const PromptCallRequest: core.serialization.Schema<
-    serializers.PromptCallRequest.Raw,
-    Omit<Humanloop.PromptCallRequest, "versionId" | "environment">
+export const PromptsCallRequest: core.serialization.Schema<
+    serializers.PromptsCallRequest.Raw,
+    Omit<Humanloop.PromptsCallRequest, "versionId" | "environment">
 > = core.serialization.object({
     path: core.serialization.string().optional(),
     id: core.serialization.string().optional(),
-    prompt: PromptKernelRequest.optional(),
     messages: core.serialization.list(ChatMessage).optional(),
-    toolChoice: core.serialization.property("tool_choice", PromptCallRequestToolChoice.optional()),
-    sessionId: core.serialization.property("session_id", core.serialization.string().optional()),
-    parentId: core.serialization.property("parent_id", core.serialization.string().optional()),
+    toolChoice: core.serialization.property("tool_choice", PromptsCallRequestToolChoice.optional()),
+    prompt: PromptKernelRequest.optional(),
     inputs: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
     source: core.serialization.string().optional(),
     metadata: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
-    save: core.serialization.boolean().optional(),
+    sessionId: core.serialization.property("session_id", core.serialization.string().optional()),
+    parentId: core.serialization.property("parent_id", core.serialization.string().optional()),
     sourceDatapointId: core.serialization.property("source_datapoint_id", core.serialization.string().optional()),
     batches: core.serialization.list(core.serialization.string()).optional(),
     user: core.serialization.string().optional(),
-    promptCallRequestEnvironment: core.serialization.property("environment", core.serialization.string().optional()),
+    promptsCallRequestEnvironment: core.serialization.property("environment", core.serialization.string().optional()),
+    save: core.serialization.boolean().optional(),
     providerApiKeys: core.serialization.property("provider_api_keys", ProviderApiKeys.optional()),
     numSamples: core.serialization.property("num_samples", core.serialization.number().optional()),
-    stream: core.serialization.boolean().optional(),
     returnInputs: core.serialization.property("return_inputs", core.serialization.boolean().optional()),
     logprobs: core.serialization.number().optional(),
     suffix: core.serialization.string().optional(),
 });
 
-export declare namespace PromptCallRequest {
+export declare namespace PromptsCallRequest {
     interface Raw {
         path?: string | null;
         id?: string | null;
-        prompt?: PromptKernelRequest.Raw | null;
         messages?: ChatMessage.Raw[] | null;
-        tool_choice?: PromptCallRequestToolChoice.Raw | null;
-        session_id?: string | null;
-        parent_id?: string | null;
+        tool_choice?: PromptsCallRequestToolChoice.Raw | null;
+        prompt?: PromptKernelRequest.Raw | null;
         inputs?: Record<string, unknown> | null;
         source?: string | null;
         metadata?: Record<string, unknown> | null;
-        save?: boolean | null;
+        session_id?: string | null;
+        parent_id?: string | null;
         source_datapoint_id?: string | null;
         batches?: string[] | null;
         user?: string | null;
         environment?: string | null;
+        save?: boolean | null;
         provider_api_keys?: ProviderApiKeys.Raw | null;
         num_samples?: number | null;
-        stream?: boolean | null;
         return_inputs?: boolean | null;
         logprobs?: number | null;
         suffix?: string | null;

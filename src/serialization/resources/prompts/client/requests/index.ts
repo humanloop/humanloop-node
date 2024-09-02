@@ -1,4 +1,6 @@
 export { PromptLogRequest } from "./PromptLogRequest";
-export { PromptCallRequest } from "./PromptCallRequest";
+export { PromptLogUpdateRequest } from "./PromptLogUpdateRequest";
+export { PromptsCallStreamRequest } from "./PromptsCallStreamRequest";
+export { PromptsCallRequest } from "./PromptsCallRequest";
 export { PromptRequest } from "./PromptRequest";
 export { UpdatePromptRequest } from "./UpdatePromptRequest";

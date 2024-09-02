@@ -13,38 +13,38 @@ export const PromptCallResponse: core.serialization.ObjectSchema<
     serializers.PromptCallResponse.Raw,
     Humanloop.PromptCallResponse
 > = core.serialization.object({
-    prompt: core.serialization.lazyObject(() => serializers.PromptResponse),
     messages: core.serialization.list(ChatMessage).optional(),
     toolChoice: core.serialization.property("tool_choice", PromptCallResponseToolChoice.optional()),
-    sessionId: core.serialization.property("session_id", core.serialization.string().optional()),
-    parentId: core.serialization.property("parent_id", core.serialization.string().optional()),
+    prompt: core.serialization.lazyObject(() => serializers.PromptResponse),
     inputs: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
     source: core.serialization.string().optional(),
     metadata: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
-    save: core.serialization.boolean().optional(),
+    sessionId: core.serialization.property("session_id", core.serialization.string().optional()),
+    parentId: core.serialization.property("parent_id", core.serialization.string().optional()),
     sourceDatapointId: core.serialization.property("source_datapoint_id", core.serialization.string().optional()),
     batches: core.serialization.list(core.serialization.string()).optional(),
     user: core.serialization.string().optional(),
     environment: core.serialization.string().optional(),
+    save: core.serialization.boolean().optional(),
     id: core.serialization.string(),
     logs: core.serialization.list(PromptCallLogResponse),
 });
 
 export declare namespace PromptCallResponse {
     interface Raw {
-        prompt: serializers.PromptResponse.Raw;
         messages?: ChatMessage.Raw[] | null;
         tool_choice?: PromptCallResponseToolChoice.Raw | null;
-        session_id?: string | null;
-        parent_id?: string | null;
+        prompt: serializers.PromptResponse.Raw;
         inputs?: Record<string, unknown> | null;
         source?: string | null;
         metadata?: Record<string, unknown> | null;
-        save?: boolean | null;
+        session_id?: string | null;
+        parent_id?: string | null;
         source_datapoint_id?: string | null;
         batches?: string[] | null;
         user?: string | null;
         environment?: string | null;
+        save?: boolean | null;
         id: string;
         logs: PromptCallLogResponse.Raw[];
     }

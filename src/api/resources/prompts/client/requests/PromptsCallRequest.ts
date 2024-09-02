@@ -33,8 +33,7 @@ import * as Humanloop from "../../../../index";
  *         messages: [{
  *                 role: Humanloop.ChatRole.User,
  *                 content: "latest apple"
- *             }],
- *         stream: false
+ *             }]
  *     }
  *
  * @example
@@ -53,8 +52,7 @@ import * as Humanloop from "../../../../index";
  *             }],
  *         inputs: {
  *             "person": "Trump"
- *         },
- *         stream: false
+ *         }
  *     }
  *
  * @example
@@ -70,7 +68,7 @@ import * as Humanloop from "../../../../index";
  *         }
  *     }
  */
-export interface PromptCallRequest {
+export interface PromptsCallRequest {
     /**
      * A specific Version ID of the Prompt to log to.
      */
@@ -83,8 +81,6 @@ export interface PromptCallRequest {
     path?: string;
     /** ID for an existing Prompt. */
     id?: string;
-    /** Details of your Prompt. A new Prompt version will be created if the provided details are new. */
-    prompt?: Humanloop.PromptKernelRequest;
     /** The messages passed to the to provider chat endpoint. */
     messages?: Humanloop.ChatMessage[];
     /**
@@ -94,19 +90,19 @@ export interface PromptCallRequest {
      * - `'required'` means the model can decide to call one or more of the provided tools.
      * - `{'type': 'function', 'function': {name': <TOOL_NAME>}}` forces the model to use the named function.
      */
-    toolChoice?: Humanloop.PromptCallRequestToolChoice;
-    /** Unique identifier for the Session to associate the Log to. Allows you to record multiple Logs to a Session (using an ID kept by your internal systems) by passing the same `session_id` in subsequent log requests. */
-    sessionId?: string;
-    /** Unique identifier for the parent Log in a Session. Should only be provided if `session_id` is provided. If provided, the Log will be nested under the parent Log within the Session. */
-    parentId?: string;
+    toolChoice?: Humanloop.PromptsCallRequestToolChoice;
+    /** Details of your Prompt. A new Prompt version will be created if the provided details are new. */
+    prompt?: Humanloop.PromptKernelRequest;
     /** The inputs passed to the prompt template. */
     inputs?: Record<string, unknown>;
     /** Identifies where the model was called from. */
     source?: string;
     /** Any additional metadata to record. */
     metadata?: Record<string, unknown>;
-    /** Whether the request/response payloads will be stored on Humanloop. */
-    save?: boolean;
+    /** Unique identifier for the Session to associate the Log to. Allows you to record multiple Logs to a Session (using an ID kept by your internal systems) by passing the same `session_id` in subsequent log requests. */
+    sessionId?: string;
+    /** Unique identifier for the parent Log in a Session. Should only be provided if `session_id` is provided. If provided, the Log will be nested under the parent Log within the Session. */
+    parentId?: string;
     /** Unique identifier for the Datapoint that this Log is derived from. This can be used by Humanloop to associate Logs to Evaluations. If provided, Humanloop will automatically associate this Log to Evaluations that require a Log for this Datapoint-Version pair. */
     sourceDatapointId?: string;
     /** Array of Batch Ids that this log is part of. Batches are used to group Logs together for offline Evaluations */
@@ -114,13 +110,13 @@ export interface PromptCallRequest {
     /** End-user ID related to the Log. */
     user?: string;
     /** The name of the Environment the Log is associated to. */
-    promptCallRequestEnvironment?: string;
+    promptsCallRequestEnvironment?: string;
+    /** Whether the request/response payloads will be stored on Humanloop. */
+    save?: boolean;
     /** API keys required by each provider to make API calls. The API keys provided here are not stored by Humanloop. If not specified here, Humanloop will fall back to the key saved to your organization. */
     providerApiKeys?: Humanloop.ProviderApiKeys;
     /** The number of generations. */
     numSamples?: number;
-    /** If true, tokens will be sent as data-only server-sent events. If num_samples > 1, samples are streamed back independently. */
-    stream?: boolean;
     /** Whether to return the inputs in the response. If false, the response will contain an empty dictionary under inputs. This is useful for reducing the size of the response. Defaults to true. */
     returnInputs?: boolean;
     /** Include the log probabilities of the top n tokens in the provider_response */

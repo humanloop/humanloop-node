@@ -7,9 +7,9 @@ import * as Humanloop from "../../../../api/index";
 import * as core from "../../../../core";
 import { ToolChoice } from "../../../types/ToolChoice";
 
-export const PromptCallRequestToolChoice: core.serialization.Schema<
-    serializers.PromptCallRequestToolChoice.Raw,
-    Humanloop.PromptCallRequestToolChoice
+export const PromptsCallStreamRequestToolChoice: core.serialization.Schema<
+    serializers.PromptsCallStreamRequestToolChoice.Raw,
+    Humanloop.PromptsCallStreamRequestToolChoice
 > = core.serialization.undiscriminatedUnion([
     core.serialization.stringLiteral("none"),
     core.serialization.stringLiteral("auto"),
@@ -17,6 +17,6 @@ export const PromptCallRequestToolChoice: core.serialization.Schema<
     ToolChoice,
 ]);
 
-export declare namespace PromptCallRequestToolChoice {
+export declare namespace PromptsCallStreamRequestToolChoice {
     type Raw = "none" | "auto" | "required" | ToolChoice.Raw;
 }

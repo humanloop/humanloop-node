@@ -12,4 +12,4 @@ import * as Humanloop from "../../../index";
  * - `'required'` means the model can decide to call one or more of the provided tools.
  * - `{'type': 'function', 'function': {name': <TOOL_NAME>}}` forces the model to use the named function.
  */
-export type PromptCallRequestToolChoice = "none" | "auto" | "required" | Humanloop.ToolChoice;
+export type PromptLogUpdateRequestToolChoice = "none" | "auto" | "required" | Humanloop.ToolChoice;
