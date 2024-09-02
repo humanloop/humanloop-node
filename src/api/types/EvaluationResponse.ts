@@ -23,7 +23,7 @@ export interface EvaluationResponse {
      */
     status: Humanloop.EvaluationStatus;
     createdAt: Date;
-    createdBy?: Humanloop.UserResponse | undefined;
+    createdBy?: Humanloop.UserResponse;
     updatedAt: Date;
     /** URL to view the Evaluation on the Humanloop. */
     url?: string;

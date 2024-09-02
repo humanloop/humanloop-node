@@ -5,7 +5,6 @@
 import * as serializers from "../index";
 import * as Humanloop from "../../api/index";
 import * as core from "../../core";
-import { ToolResponse } from "./ToolResponse";
 import { DatasetResponse } from "./DatasetResponse";
 
 export const PaginatedDataUnionPromptResponseToolResponseDatasetResponseEvaluatorResponseRecordsItem: core.serialization.Schema<
@@ -13,7 +12,7 @@ export const PaginatedDataUnionPromptResponseToolResponseDatasetResponseEvaluato
     Humanloop.PaginatedDataUnionPromptResponseToolResponseDatasetResponseEvaluatorResponseRecordsItem
 > = core.serialization.undiscriminatedUnion([
     core.serialization.lazyObject(() => serializers.PromptResponse),
-    ToolResponse,
+    core.serialization.lazyObject(() => serializers.ToolResponse),
     DatasetResponse,
     core.serialization.lazyObject(() => serializers.EvaluatorResponse),
 ]);
@@ -21,7 +20,7 @@ export const PaginatedDataUnionPromptResponseToolResponseDatasetResponseEvaluato
 export declare namespace PaginatedDataUnionPromptResponseToolResponseDatasetResponseEvaluatorResponseRecordsItem {
     type Raw =
         | serializers.PromptResponse.Raw
-        | (ToolResponse.Raw | undefined)
+        | serializers.ToolResponse.Raw
         | DatasetResponse.Raw
         | serializers.EvaluatorResponse.Raw;
 }

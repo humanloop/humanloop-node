@@ -5,13 +5,12 @@
 import * as serializers from "../index";
 import * as Humanloop from "../../api/index";
 import * as core from "../../core";
-import { ToolResponse } from "./ToolResponse";
 
 export const PaginatedDataToolResponse: core.serialization.ObjectSchema<
     serializers.PaginatedDataToolResponse.Raw,
     Humanloop.PaginatedDataToolResponse
 > = core.serialization.object({
-    records: core.serialization.list(ToolResponse),
+    records: core.serialization.list(core.serialization.lazyObject(() => serializers.ToolResponse)),
     page: core.serialization.number(),
     size: core.serialization.number(),
     total: core.serialization.number(),
@@ -19,7 +18,7 @@ export const PaginatedDataToolResponse: core.serialization.ObjectSchema<
 
 export declare namespace PaginatedDataToolResponse {
     interface Raw {
-        records: (ToolResponse.Raw | undefined)[];
+        records: serializers.ToolResponse.Raw[];
         page: number;
         size: number;
         total: number;
