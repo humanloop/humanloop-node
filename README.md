@@ -86,44 +86,6 @@ try {
 }
 ```
 
-## Aborting Requests
-
-The SDK allows users to abort requests at any point by passing in an abort signal.
-
-```typescript
-const controller = new AbortController();
-const response = await client.upsert(..., {
-    abortSignal: controller.signal
-});
-controller.abort(); // aborts the request
-```
-
-## Runtime Compatibility
-
-The SDK defaults to `node-fetch` but will use the global fetch client if present. The SDK works in the following
-runtimes:
-
--   Node.js 18+
--   Vercel
--   Cloudflare Workers
--   Deno v1.25+
--   Bun 1.0+
--   React Native
-
-### Customizing Fetch Client
-
-The SDK provides a way for your to customize the underlying HTTP client / Fetch function. If you're running in an
-unsupported environment, this provides a way for you to break glass and ensure the SDK works.
-
-```typescript
-import { HumanloopClient } from "humanloop";
-
-const client = new HumanloopClient({
-    ...
-    fetcher: // provide your implementation here
-});
-```
-
 ## Advanced
 
 ### Retries
