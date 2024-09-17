@@ -5,7 +5,7 @@
 import * as Humanloop from "../index";
 
 export interface HumanEvaluatorRequest {
-    /** Whether this evaluator is target-free or target-required. */
+    /** Whether this Evaluator is target-free or target-required. */
     argumentsType: Humanloop.EvaluatorArgumentsType;
     /** The type of the return value of the Evaluator. */
     returnType: Humanloop.HumanEvaluatorRequestReturnType;

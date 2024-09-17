@@ -5,13 +5,13 @@
 import * as Humanloop from "../index";
 
 export interface CodeEvaluatorRequest {
-    /** Whether this evaluator is target-free or target-required. */
+    /** Whether this Evaluator is target-free or target-required. */
     argumentsType: Humanloop.EvaluatorArgumentsType;
-    /** The type of the return value of the evaluator. */
+    /** The type of the return value of the Evaluator. */
     returnType: Humanloop.EvaluatorReturnTypeEnum;
     /** Additional fields to describe the Evaluator. Helpful to separate Evaluator versions from each other with details on how they were created or used. */
     attributes?: Record<string, unknown>;
     evaluatorType: "python";
-    /** The code for the evaluator. This code will be executed in a sandboxed environment. */
+    /** The code for the Evaluator. This code will be executed in a sandboxed environment. */
     code: string;
 }

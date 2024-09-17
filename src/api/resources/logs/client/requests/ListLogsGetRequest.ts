@@ -52,4 +52,8 @@ export interface ListLogsGetRequest {
      * If true, include the full parent Log in the response. Only applicable when retrieving Evaluator Logs.
      */
     includeParent?: boolean;
+    /**
+     * If true, return Logs that are associated to a Trace. False, return Logs that are not associated to a Trace.
+     */
+    inTraceFilter?: boolean | boolean[];
 }

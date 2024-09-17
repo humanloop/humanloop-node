@@ -7,9 +7,10 @@ import * as core from "./core";
 import { Prompts } from "./api/resources/prompts/client/Client";
 import { Tools } from "./api/resources/tools/client/Client";
 import { Datasets } from "./api/resources/datasets/client/Client";
+import { Evaluators } from "./api/resources/evaluators/client/Client";
+import { Flows } from "./api/resources/flows/client/Client";
 import { Files } from "./api/resources/files/client/Client";
 import { Evaluations } from "./api/resources/evaluations/client/Client";
-import { Evaluators } from "./api/resources/evaluators/client/Client";
 import { Logs } from "./api/resources/logs/client/Client";
 import { Sessions } from "./api/resources/sessions/client/Client";
 
@@ -51,6 +52,18 @@ export class HumanloopClient {
         return (this._datasets ??= new Datasets(this._options));
     }
 
+    protected _evaluators: Evaluators | undefined;
+
+    public get evaluators(): Evaluators {
+        return (this._evaluators ??= new Evaluators(this._options));
+    }
+
+    protected _flows: Flows | undefined;
+
+    public get flows(): Flows {
+        return (this._flows ??= new Flows(this._options));
+    }
+
     protected _files: Files | undefined;
 
     public get files(): Files {
@@ -61,12 +74,6 @@ export class HumanloopClient {
 
     public get evaluations(): Evaluations {
         return (this._evaluations ??= new Evaluations(this._options));
-    }
-
-    protected _evaluators: Evaluators | undefined;
-
-    public get evaluators(): Evaluators {
-        return (this._evaluators ??= new Evaluators(this._options));
     }
 
     protected _logs: Logs | undefined;

@@ -22,21 +22,21 @@ export interface EvaluatorResponse {
     /** Unique identifier for the specific Evaluator Version. If no query params provided, the default deployed Evaluator Version is returned. */
     versionId: string;
     type?: "evaluator";
-    /** The list of environments the Prompt Version is deployed to. */
+    /** The list of environments the Evaluator Version is deployed to. */
     environments?: Humanloop.EnvironmentResponse[];
     createdAt: Date;
     updatedAt: Date;
-    /** The user who created the Prompt. */
-    createdBy?: Humanloop.UserResponse;
+    /** The user who created the Evaluator. */
+    createdBy?: Humanloop.UserResponse | undefined;
     status: Humanloop.VersionStatus;
     lastUsedAt: Date;
-    /** The number of logs that have been generated for this Prompt Version */
+    /** The number of logs that have been generated for this Evaluator Version */
     versionLogsCount: number;
-    /** The number of logs that have been generated across all Prompt Versions */
+    /** The number of logs that have been generated across all Evaluator Versions */
     totalLogsCount: number;
-    /** Inputs associated to the Prompt. Inputs correspond to any of the variables used within the Prompt template. */
+    /** Inputs associated to the Evaluator. Inputs correspond to any of the variables used within the Evaluator template. */
     inputs: Humanloop.InputResponse[];
-    /** Evaluators that have been attached to this Prompt that are used for monitoring logs. */
+    /** Evaluators that have been attached to this Evaluator that are used for monitoring logs. */
     evaluators?: Humanloop.MonitoringEvaluatorResponse[];
     /** Aggregation of Evaluator results for the Evaluator Version. */
     evaluatorAggregates?: Humanloop.EvaluatorAggregate[];

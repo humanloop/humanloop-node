@@ -81,9 +81,11 @@ import * as Humanloop from "../../../../index";
  *                 "key": "value"
  *             }
  *         },
- *         sessionId: "string",
- *         parentId: "string",
+ *         startTime: "2024-01-15T09:30:00Z",
+ *         endTime: "2024-01-15T09:30:00Z",
  *         sourceDatapointId: "string",
+ *         traceId: "string",
+ *         traceParentLogId: "string",
  *         batches: ["string"],
  *         user: "string",
  *         promptsCallStreamRequestEnvironment: "string",
@@ -93,6 +95,7 @@ import * as Humanloop from "../../../../index";
  *             ai21: "string",
  *             mock: "string",
  *             anthropic: "string",
+ *             bedrock: "string",
  *             cohere: "string",
  *             openaiAzure: "string",
  *             openaiAzureEndpoint: "string"
@@ -134,12 +137,16 @@ export interface PromptsCallStreamRequest {
     source?: string;
     /** Any additional metadata to record. */
     metadata?: Record<string, unknown>;
-    /** Unique identifier for the Session to associate the Log to. Allows you to record multiple Logs to a Session (using an ID kept by your internal systems) by passing the same `session_id` in subsequent log requests. */
-    sessionId?: string;
-    /** Unique identifier for the parent Log in a Session. Should only be provided if `session_id` is provided. If provided, the Log will be nested under the parent Log within the Session. */
-    parentId?: string;
+    /** When the logged event started. */
+    startTime?: Date;
+    /** When the logged event ended. */
+    endTime?: Date;
     /** Unique identifier for the Datapoint that this Log is derived from. This can be used by Humanloop to associate Logs to Evaluations. If provided, Humanloop will automatically associate this Log to Evaluations that require a Log for this Datapoint-Version pair. */
     sourceDatapointId?: string;
+    /** Identifier of the Flow Log to which the Log will be associated. Multiple Logs can be associated by passing the same trace_id in subsequent log requests. Use the Flow File log endpoint to create the Trace first. */
+    traceId?: string;
+    /** Log under which this Log should be nested. Leave field blank if the Log should be nested directly under root Trace Log. Parent Log should already be added to the Trace. */
+    traceParentLogId?: string;
     /** Array of Batch Ids that this log is part of. Batches are used to group Logs together for offline Evaluations */
     batches?: string[];
     /** End-user ID related to the Log. */

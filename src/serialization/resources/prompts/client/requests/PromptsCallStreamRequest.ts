@@ -22,9 +22,11 @@ export const PromptsCallStreamRequest: core.serialization.Schema<
     inputs: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
     source: core.serialization.string().optional(),
     metadata: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
-    sessionId: core.serialization.property("session_id", core.serialization.string().optional()),
-    parentId: core.serialization.property("parent_id", core.serialization.string().optional()),
+    startTime: core.serialization.property("start_time", core.serialization.date().optional()),
+    endTime: core.serialization.property("end_time", core.serialization.date().optional()),
     sourceDatapointId: core.serialization.property("source_datapoint_id", core.serialization.string().optional()),
+    traceId: core.serialization.property("trace_id", core.serialization.string().optional()),
+    traceParentLogId: core.serialization.property("trace_parent_log_id", core.serialization.string().optional()),
     batches: core.serialization.list(core.serialization.string()).optional(),
     user: core.serialization.string().optional(),
     promptsCallStreamRequestEnvironment: core.serialization.property(
@@ -49,9 +51,11 @@ export declare namespace PromptsCallStreamRequest {
         inputs?: Record<string, unknown> | null;
         source?: string | null;
         metadata?: Record<string, unknown> | null;
-        session_id?: string | null;
-        parent_id?: string | null;
+        start_time?: string | null;
+        end_time?: string | null;
         source_datapoint_id?: string | null;
+        trace_id?: string | null;
+        trace_parent_log_id?: string | null;
         batches?: string[] | null;
         user?: string | null;
         environment?: string | null;

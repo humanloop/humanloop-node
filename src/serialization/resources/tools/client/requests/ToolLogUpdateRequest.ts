@@ -26,6 +26,8 @@ export const ToolLogUpdateRequest: core.serialization.Schema<
     inputs: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
     source: core.serialization.string().optional(),
     metadata: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
+    startTime: core.serialization.property("start_time", core.serialization.date().optional()),
+    endTime: core.serialization.property("end_time", core.serialization.date().optional()),
 });
 
 export declare namespace ToolLogUpdateRequest {
@@ -40,5 +42,7 @@ export declare namespace ToolLogUpdateRequest {
         inputs?: Record<string, unknown> | null;
         source?: string | null;
         metadata?: Record<string, unknown> | null;
+        start_time?: string | null;
+        end_time?: string | null;
     }
 }

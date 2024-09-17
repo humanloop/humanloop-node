@@ -10,6 +10,7 @@ export type ModelProviders =
     | "openai_azure"
     | "mock"
     | "anthropic"
+    | "bedrock"
     | "cohere"
     | "replicate"
     | "google"
@@ -20,6 +21,7 @@ export const ModelProviders = {
     OpenaiAzure: "openai_azure",
     Mock: "mock",
     Anthropic: "anthropic",
+    Bedrock: "bedrock",
     Cohere: "cohere",
     Replicate: "replicate",
     Google: "google",

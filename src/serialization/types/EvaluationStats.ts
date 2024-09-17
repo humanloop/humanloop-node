@@ -6,19 +6,26 @@ import * as serializers from "../index";
 import * as Humanloop from "../../api/index";
 import * as core from "../../core";
 import { OverallStats } from "./OverallStats";
-import { VersionStats } from "./VersionStats";
+import { VersionStatsResponse } from "./VersionStatsResponse";
+import { EvaluationStatus } from "./EvaluationStatus";
 
 export const EvaluationStats: core.serialization.ObjectSchema<
     serializers.EvaluationStats.Raw,
     Humanloop.EvaluationStats
 > = core.serialization.object({
     overallStats: core.serialization.property("overall_stats", OverallStats),
-    versionStats: core.serialization.property("version_stats", core.serialization.list(VersionStats)),
+    versionStats: core.serialization.property("version_stats", core.serialization.list(VersionStatsResponse)),
+    progress: core.serialization.string().optional(),
+    report: core.serialization.string().optional(),
+    status: EvaluationStatus,
 });
 
 export declare namespace EvaluationStats {
     interface Raw {
         overall_stats: OverallStats.Raw;
-        version_stats: VersionStats.Raw[];
+        version_stats: VersionStatsResponse.Raw[];
+        progress?: string | null;
+        report?: string | null;
+        status: EvaluationStatus.Raw;
     }
 }

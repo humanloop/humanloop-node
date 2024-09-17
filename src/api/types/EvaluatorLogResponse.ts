@@ -8,6 +8,10 @@ import * as Humanloop from "../index";
  * General request for creating a Log
  */
 export interface EvaluatorLogResponse {
+    /** When the logged event started. */
+    startTime?: Date;
+    /** When the logged event ended. */
+    endTime?: Date;
     /** Generated output from your model for the provided inputs. Can be `None` if logging an error, or if creating a parent Log with the intention to populate it later. */
     output?: string;
     /** User defined timestamp for when the log was created. */
@@ -28,12 +32,14 @@ export interface EvaluatorLogResponse {
     source?: string;
     /** Any additional metadata to record. */
     metadata?: Record<string, unknown>;
-    /** Unique identifier for the Session to associate the Log to. Allows you to record multiple Logs to a Session (using an ID kept by your internal systems) by passing the same `session_id` in subsequent log requests. */
-    sessionId?: string;
     /** Identifier of the evaluated Log. The newly created Log will have this one set as parent. */
     parentId?: string;
     /** Unique identifier for the Datapoint that this Log is derived from. This can be used by Humanloop to associate Logs to Evaluations. If provided, Humanloop will automatically associate this Log to Evaluations that require a Log for this Datapoint-Version pair. */
     sourceDatapointId?: string;
+    /** Identifier of the Flow Log to which the Log will be associated. Multiple Logs can be associated by passing the same trace_id in subsequent log requests. Use the Flow File log endpoint to create the Trace first. */
+    traceId?: string;
+    /** Log under which this Log should be nested. Leave field blank if the Log should be nested directly under root Trace Log. Parent Log should already be added to the Trace. */
+    traceParentLogId?: string;
     /** Array of Batch Ids that this log is part of. Batches are used to group Logs together for offline Evaluations */
     batches?: string[];
     /** End-user ID related to the Log. */
@@ -48,7 +54,13 @@ export interface EvaluatorLogResponse {
     id: string;
     /** List of Evaluator Logs associated with the Log. These contain Evaluator judgments on the Log. */
     evaluatorLogs: Humanloop.EvaluatorLogResponse[];
-    /** The Evaluator used to generate the judgment. */
+    /** Identifier for the Flow that the Trace belongs to. */
+    traceFlowId?: string;
+    /** Status of the Trace. When a Trace is marked as `complete`, no more Logs can be added to it. Monitoring Evaluators will only run on `complete` Traces. */
+    traceStatus?: Humanloop.TraceStatus;
+    /** Logs nested under this Log in the Trace. */
+    traceChildren?: Humanloop.LogResponse[];
+    /** Evaluator used to generate the judgment. */
     evaluator: Humanloop.EvaluatorResponse;
     /** The Log that was evaluated. Only provided if the ?include_parent query parameter is set for the */
     parent?: Humanloop.LogResponse;

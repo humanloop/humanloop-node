@@ -10,5 +10,7 @@ import * as Humanloop from "../index";
 export type VersionDeploymentResponseFile =
     | Humanloop.PromptResponse
     | Humanloop.ToolResponse
+    | undefined
     | Humanloop.DatasetResponse
-    | Humanloop.EvaluatorResponse;
+    | Humanloop.EvaluatorResponse
+    | Humanloop.FlowResponse;

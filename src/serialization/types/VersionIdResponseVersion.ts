@@ -5,6 +5,7 @@
 import * as serializers from "../index";
 import * as Humanloop from "../../api/index";
 import * as core from "../../core";
+import { ToolResponse } from "./ToolResponse";
 import { DatasetResponse } from "./DatasetResponse";
 
 export const VersionIdResponseVersion: core.serialization.Schema<
@@ -12,15 +13,17 @@ export const VersionIdResponseVersion: core.serialization.Schema<
     Humanloop.VersionIdResponseVersion
 > = core.serialization.undiscriminatedUnion([
     core.serialization.lazyObject(() => serializers.PromptResponse),
-    core.serialization.lazyObject(() => serializers.ToolResponse),
+    ToolResponse,
     DatasetResponse,
     core.serialization.lazyObject(() => serializers.EvaluatorResponse),
+    core.serialization.lazyObject(() => serializers.FlowResponse),
 ]);
 
 export declare namespace VersionIdResponseVersion {
     type Raw =
         | serializers.PromptResponse.Raw
-        | serializers.ToolResponse.Raw
+        | (ToolResponse.Raw | undefined)
         | DatasetResponse.Raw
-        | serializers.EvaluatorResponse.Raw;
+        | serializers.EvaluatorResponse.Raw
+        | serializers.FlowResponse.Raw;
 }

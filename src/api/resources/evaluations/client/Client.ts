@@ -84,8 +84,8 @@ export class Evaluations {
                 headers: {
                     "X-Fern-Language": "JavaScript",
                     "X-Fern-SDK-Name": "humanloop",
-                    "X-Fern-SDK-Version": "0.8.0-beta12",
-                    "User-Agent": "humanloop/0.8.0-beta12",
+                    "X-Fern-SDK-Version": "0.8.0-beta15",
+                    "User-Agent": "humanloop/0.8.0-beta15",
                     "X-Fern-Runtime": core.RUNTIME.type,
                     "X-Fern-Runtime-Version": core.RUNTIME.version,
                     ...(await this._getCustomAuthorizationHeaders()),
@@ -198,8 +198,8 @@ export class Evaluations {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta12",
-                "User-Agent": "humanloop/0.8.0-beta12",
+                "X-Fern-SDK-Version": "0.8.0-beta15",
+                "User-Agent": "humanloop/0.8.0-beta15",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -277,8 +277,8 @@ export class Evaluations {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta12",
-                "User-Agent": "humanloop/0.8.0-beta12",
+                "X-Fern-SDK-Version": "0.8.0-beta15",
+                "User-Agent": "humanloop/0.8.0-beta15",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -358,8 +358,8 @@ export class Evaluations {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta12",
-                "User-Agent": "humanloop/0.8.0-beta12",
+                "X-Fern-SDK-Version": "0.8.0-beta15",
+                "User-Agent": "humanloop/0.8.0-beta15",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -416,7 +416,7 @@ export class Evaluations {
      * evaluated (Evaluatees), and which Evaluators to provide judgments.
      *
      * @param {string} id - Unique identifier for Evaluation.
-     * @param {Humanloop.CreateEvaluationRequest} request
+     * @param {Humanloop.UpdateEvaluationRequest} request
      * @param {Evaluations.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Humanloop.UnprocessableEntityError}
@@ -438,7 +438,7 @@ export class Evaluations {
      */
     public async updateSetup(
         id: string,
-        request: Humanloop.CreateEvaluationRequest,
+        request: Humanloop.UpdateEvaluationRequest = {},
         requestOptions?: Evaluations.RequestOptions
     ): Promise<Humanloop.EvaluationResponse> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
@@ -450,15 +450,15 @@ export class Evaluations {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta12",
-                "User-Agent": "humanloop/0.8.0-beta12",
+                "X-Fern-SDK-Version": "0.8.0-beta15",
+                "User-Agent": "humanloop/0.8.0-beta15",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
             },
             contentType: "application/json",
             requestType: "json",
-            body: serializers.CreateEvaluationRequest.jsonOrThrow(request, { unrecognizedObjectKeys: "strip" }),
+            body: serializers.UpdateEvaluationRequest.jsonOrThrow(request, { unrecognizedObjectKeys: "strip" }),
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -539,8 +539,8 @@ export class Evaluations {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta12",
-                "User-Agent": "humanloop/0.8.0-beta12",
+                "X-Fern-SDK-Version": "0.8.0-beta15",
+                "User-Agent": "humanloop/0.8.0-beta15",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -624,8 +624,8 @@ export class Evaluations {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta12",
-                "User-Agent": "humanloop/0.8.0-beta12",
+                "X-Fern-SDK-Version": "0.8.0-beta15",
+                "User-Agent": "humanloop/0.8.0-beta15",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -720,8 +720,8 @@ export class Evaluations {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta12",
-                "User-Agent": "humanloop/0.8.0-beta12",
+                "X-Fern-SDK-Version": "0.8.0-beta15",
+                "User-Agent": "humanloop/0.8.0-beta15",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),

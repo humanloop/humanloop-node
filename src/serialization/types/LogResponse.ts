@@ -11,11 +11,13 @@ export const LogResponse: core.serialization.Schema<serializers.LogResponse.Raw,
         core.serialization.lazyObject(() => serializers.PromptLogResponse),
         core.serialization.lazyObject(() => serializers.ToolLogResponse),
         core.serialization.lazyObject(() => serializers.EvaluatorLogResponse),
+        core.serialization.lazyObject(() => serializers.FlowLogResponse),
     ]);
 
 export declare namespace LogResponse {
     type Raw =
         | serializers.PromptLogResponse.Raw
         | serializers.ToolLogResponse.Raw
-        | serializers.EvaluatorLogResponse.Raw;
+        | serializers.EvaluatorLogResponse.Raw
+        | serializers.FlowLogResponse.Raw;
 }

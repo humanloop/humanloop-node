@@ -43,7 +43,7 @@ export class Files {
     public async list(
         request: Humanloop.FilesListRequest = {},
         requestOptions?: Files.RequestOptions
-    ): Promise<Humanloop.PaginatedDataUnionPromptResponseToolResponseDatasetResponseEvaluatorResponse> {
+    ): Promise<Humanloop.PaginatedDataUnionPromptResponseToolResponseDatasetResponseEvaluatorResponseFlowResponse> {
         const { page, size, name, type: type_, environment, sortBy, order } = request;
         const _queryParams: Record<string, string | string[] | object | object[]> = {};
         if (page != null) {
@@ -87,8 +87,8 @@ export class Files {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta12",
-                "User-Agent": "humanloop/0.8.0-beta12",
+                "X-Fern-SDK-Version": "0.8.0-beta15",
+                "User-Agent": "humanloop/0.8.0-beta15",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -101,7 +101,7 @@ export class Files {
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return serializers.PaginatedDataUnionPromptResponseToolResponseDatasetResponseEvaluatorResponse.parseOrThrow(
+            return serializers.PaginatedDataUnionPromptResponseToolResponseDatasetResponseEvaluatorResponseFlowResponse.parseOrThrow(
                 _response.body,
                 {
                     unrecognizedObjectKeys: "passthrough",

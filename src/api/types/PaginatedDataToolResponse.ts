@@ -5,7 +5,7 @@
 import * as Humanloop from "../index";
 
 export interface PaginatedDataToolResponse {
-    records: Humanloop.ToolResponse[];
+    records: (Humanloop.ToolResponse | undefined)[];
     page: number;
     size: number;
     total: number;

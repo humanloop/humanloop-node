@@ -4,4 +4,8 @@
 
 import * as Humanloop from "../index";
 
-export type LogResponse = Humanloop.PromptLogResponse | Humanloop.ToolLogResponse | Humanloop.EvaluatorLogResponse;
+export type LogResponse =
+    | Humanloop.PromptLogResponse
+    | Humanloop.ToolLogResponse
+    | Humanloop.EvaluatorLogResponse
+    | Humanloop.FlowLogResponse;

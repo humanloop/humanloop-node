@@ -306,9 +306,11 @@ await client.prompts.callStream({
             key: "value",
         },
     },
-    sessionId: "string",
-    parentId: "string",
+    startTime: "2024-01-15T09:30:00Z",
+    endTime: "2024-01-15T09:30:00Z",
     sourceDatapointId: "string",
+    traceId: "string",
+    traceParentLogId: "string",
     batches: ["string"],
     user: "string",
     promptsCallStreamRequestEnvironment: "string",
@@ -318,6 +320,7 @@ await client.prompts.callStream({
         ai21: "string",
         mock: "string",
         anthropic: "string",
+        bedrock: "string",
         cohere: "string",
         openaiAzure: "string",
         openaiAzureEndpoint: "string",
@@ -1469,7 +1472,7 @@ await client.tools.update("id", "log_id");
 </dl>
 </details>
 
-<details><summary><code>client.tools.<a href="/src/api/resources/tools/client/Client.ts">list</a>({ ...params }) -> core.Page<Humanloop.ToolResponse></code></summary>
+<details><summary><code>client.tools.<a href="/src/api/resources/tools/client/Client.ts">list</a>({ ...params }) -> core.Page<Humanloop.ToolResponse | undefined></code></summary>
 <dl>
 <dd>
 
@@ -1534,7 +1537,7 @@ await client.tools.list({
 </dl>
 </details>
 
-<details><summary><code>client.tools.<a href="/src/api/resources/tools/client/Client.ts">upsert</a>({ ...params }) -> Humanloop.ToolResponse</code></summary>
+<details><summary><code>client.tools.<a href="/src/api/resources/tools/client/Client.ts">upsert</a>({ ...params }) -> Humanloop.ToolResponse | undefined</code></summary>
 <dl>
 <dd>
 
@@ -1622,7 +1625,7 @@ await client.tools.upsert({
 </dl>
 </details>
 
-<details><summary><code>client.tools.<a href="/src/api/resources/tools/client/Client.ts">get</a>(id, { ...params }) -> Humanloop.ToolResponse</code></summary>
+<details><summary><code>client.tools.<a href="/src/api/resources/tools/client/Client.ts">get</a>(id, { ...params }) -> Humanloop.ToolResponse | undefined</code></summary>
 <dl>
 <dd>
 
@@ -1759,7 +1762,7 @@ await client.tools.delete("tl_789ghi");
 </dl>
 </details>
 
-<details><summary><code>client.tools.<a href="/src/api/resources/tools/client/Client.ts">move</a>(id, { ...params }) -> Humanloop.ToolResponse</code></summary>
+<details><summary><code>client.tools.<a href="/src/api/resources/tools/client/Client.ts">move</a>(id, { ...params }) -> Humanloop.ToolResponse | undefined</code></summary>
 <dl>
 <dd>
 
@@ -1905,7 +1908,7 @@ await client.tools.listVersions("tl_789ghi", {
 </dl>
 </details>
 
-<details><summary><code>client.tools.<a href="/src/api/resources/tools/client/Client.ts">commit</a>(id, versionId, { ...params }) -> Humanloop.ToolResponse</code></summary>
+<details><summary><code>client.tools.<a href="/src/api/resources/tools/client/Client.ts">commit</a>(id, versionId, { ...params }) -> Humanloop.ToolResponse | undefined</code></summary>
 <dl>
 <dd>
 
@@ -1988,7 +1991,7 @@ await client.tools.commit("tl_789ghi", "tv_012jkl", {
 </dl>
 </details>
 
-<details><summary><code>client.tools.<a href="/src/api/resources/tools/client/Client.ts">updateMonitoring</a>(id, { ...params }) -> Humanloop.ToolResponse</code></summary>
+<details><summary><code>client.tools.<a href="/src/api/resources/tools/client/Client.ts">updateMonitoring</a>(id, { ...params }) -> Humanloop.ToolResponse | undefined</code></summary>
 <dl>
 <dd>
 
@@ -2068,7 +2071,7 @@ await client.tools.updateMonitoring("tl_789ghi", {
 </dl>
 </details>
 
-<details><summary><code>client.tools.<a href="/src/api/resources/tools/client/Client.ts">setDeployment</a>(id, environmentId, { ...params }) -> Humanloop.ToolResponse</code></summary>
+<details><summary><code>client.tools.<a href="/src/api/resources/tools/client/Client.ts">setDeployment</a>(id, environmentId, { ...params }) -> Humanloop.ToolResponse | undefined</code></summary>
 <dl>
 <dd>
 
@@ -3209,667 +3212,6 @@ await client.datasets.listEnvironments("id");
 </dl>
 </details>
 
-## Files
-
-<details><summary><code>client.files.<a href="/src/api/resources/files/client/Client.ts">list</a>({ ...params }) -> Humanloop.PaginatedDataUnionPromptResponseToolResponseDatasetResponseEvaluatorResponse</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Get a paginated list of files.
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.files.list();
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `Humanloop.FilesListRequest`
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `Files.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
-## Evaluations
-
-<details><summary><code>client.evaluations.<a href="/src/api/resources/evaluations/client/Client.ts">list</a>({ ...params }) -> core.Page<Humanloop.EvaluationResponse></code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-List all Evaluations for the specified `file_id`.
-
-Retrieve a list of Evaluations that evaluate versions of the specified File.
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.evaluations.list({
-    fileId: "pr_30gco7dx6JDq4200GVOHa",
-    size: 1,
-});
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `Humanloop.ListEvaluationsGetRequest`
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `Evaluations.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.evaluations.<a href="/src/api/resources/evaluations/client/Client.ts">create</a>({ ...params }) -> Humanloop.EvaluationResponse</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Create an Evaluation.
-
-Create a new Evaluation by specifying the Dataset, versions to be
-evaluated (Evaluatees), and which Evaluators to provide judgments.
-
-Humanloop will automatically start generating Logs and running Evaluators where
-`orchestrated=true`. If you own the runtime for the Evaluatee or Evaluator, you
-can set `orchestrated=false` and then generate and submit the required logs using
-your runtime.
-
-To keep updated on the progress of the Evaluation, you can poll the Evaluation using
-the GET /evaluations/{id} endpoint and check its status.
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.evaluations.create({
-    dataset: {
-        versionId: "dsv_6L78pqrdFi2xa",
-    },
-    evaluatees: [
-        {
-            versionId: "prv_7ZlQREDScH0xkhUwtXruN",
-            orchestrated: false,
-        },
-    ],
-    evaluators: [
-        {
-            versionId: "evv_012def",
-            orchestrated: false,
-        },
-    ],
-});
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `Humanloop.CreateEvaluationRequest`
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `Evaluations.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.evaluations.<a href="/src/api/resources/evaluations/client/Client.ts">get</a>(id) -> Humanloop.EvaluationResponse</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Get an Evaluation.
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.evaluations.get("ev_567yza");
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**id:** `string` — Unique identifier for Evaluation.
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `Evaluations.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.evaluations.<a href="/src/api/resources/evaluations/client/Client.ts">delete</a>(id) -> void</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Delete an Evaluation.
-
-Remove an Evaluation from Humanloop. The Logs and Versions used in the Evaluation
-will not be deleted.
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.evaluations.delete("ev_567yza");
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**id:** `string` — Unique identifier for Evaluation.
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `Evaluations.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.evaluations.<a href="/src/api/resources/evaluations/client/Client.ts">updateSetup</a>(id, { ...params }) -> Humanloop.EvaluationResponse</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Update an Evaluation.
-
-Update the setup of an Evaluation by specifying the Dataset, versions to be
-evaluated (Evaluatees), and which Evaluators to provide judgments.
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.evaluations.updateSetup("ev_567yza", {
-    dataset: {
-        versionId: "dsv_6L78pqrdFi2xa",
-    },
-    evaluatees: [
-        {
-            versionId: "prv_7ZlQREDScH0xkhUwtXruN",
-            orchestrated: false,
-        },
-    ],
-    evaluators: [
-        {
-            versionId: "evv_012def",
-            orchestrated: false,
-        },
-    ],
-});
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**id:** `string` — Unique identifier for Evaluation.
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request:** `Humanloop.CreateEvaluationRequest`
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `Evaluations.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.evaluations.<a href="/src/api/resources/evaluations/client/Client.ts">updateStatus</a>(id, { ...params }) -> Humanloop.EvaluationResponse</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Update the status of an Evaluation.
-
-Can be used to cancel a running Evaluation, or mark an Evaluation that uses
-external or human evaluators as completed.
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.evaluations.updateStatus("id", {
-    status: Humanloop.EvaluationStatus.Pending,
-});
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**id:** `string` — Unique identifier for Evaluation.
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request:** `Humanloop.BodyUpdateStatusEvaluationsIdStatusPatch`
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `Evaluations.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.evaluations.<a href="/src/api/resources/evaluations/client/Client.ts">getStats</a>(id) -> Humanloop.EvaluationStats</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Get Evaluation Stats.
-
-Retrieve aggregate stats for the specified Evaluation.
-This includes the number of generated Logs for each evaluated version and the
-corresponding Evaluator statistics (such as the mean and percentiles).
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.evaluations.getStats("id");
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**id:** `string` — Unique identifier for Evaluation.
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `Evaluations.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.evaluations.<a href="/src/api/resources/evaluations/client/Client.ts">getLogs</a>(id, { ...params }) -> Humanloop.PaginatedDataEvaluationReportLogResponse</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Get the Logs associated to a specific Evaluation.
-
-Each Datapoint in your Dataset will have a corresponding Log for each File version evaluated.
-e.g. If you have 50 Datapoints and are evaluating 2 Prompts, there will be 100 Logs associated with the Evaluation.
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.evaluations.getLogs("id");
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**id:** `string` — String ID of evaluation. Starts with `ev_` or `evr_`.
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request:** `Humanloop.GetLogsEvaluationsIdLogsGetRequest`
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `Evaluations.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
 ## Evaluators
 
 <details><summary><code>client.evaluators.<a href="/src/api/resources/evaluators/client/Client.ts">list</a>({ ...params }) -> core.Page<Humanloop.EvaluatorResponse></code></summary>
@@ -4657,6 +3999,1562 @@ await client.evaluators.log({
 <dd>
 
 **requestOptions:** `Evaluators.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+## Flows
+
+<details><summary><code>client.flows.<a href="/src/api/resources/flows/client/Client.ts">get</a>(id, { ...params }) -> Humanloop.FlowResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve the Flow with the given ID.
+
+By default, the deployed version of the Flow is returned. Use the query parameters
+`version_id` or `environment` to target a specific version of the Flow.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.flows.get("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Unique identifier for Flow.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.GetFlowsIdGetRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Flows.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.flows.<a href="/src/api/resources/flows/client/Client.ts">delete</a>(id) -> void</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Delete the Flow with the given ID.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.flows.delete("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Unique identifier for Flow.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Flows.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.flows.<a href="/src/api/resources/flows/client/Client.ts">move</a>(id, { ...params }) -> Humanloop.FlowResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Move the Flow to a different path or change the name.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.flows.move("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Unique identifier for Flow.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.UpdateFlowRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Flows.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.flows.<a href="/src/api/resources/flows/client/Client.ts">list</a>({ ...params }) -> Humanloop.PaginatedDataFlowResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Get a list of all Flows.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.flows.list();
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.ListFlowsGetRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Flows.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.flows.<a href="/src/api/resources/flows/client/Client.ts">upsert</a>({ ...params }) -> Humanloop.FlowResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.flows.upsert({
+    attributes: {
+        key: "value",
+    },
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.FlowRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Flows.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.flows.<a href="/src/api/resources/flows/client/Client.ts">log</a>({ ...params }) -> Humanloop.CreateFlowLogResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Log a Flow Trace.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.flows.log();
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.FlowLogRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Flows.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.flows.<a href="/src/api/resources/flows/client/Client.ts">updateTrace</a>(traceId, { ...params }) -> Humanloop.FlowLogResponse</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.flows.updateTrace("trace_id", {
+    status: Humanloop.TraceStatus.Complete,
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**traceId:** `string` — Unique identifier for Trace.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.UpdateTraceRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Flows.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.flows.<a href="/src/api/resources/flows/client/Client.ts">listVersions</a>(id, { ...params }) -> Humanloop.ListFlows</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Get a list of all the versions of a Flow.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.flows.listVersions("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Unique identifier for Flow.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.ListVersionsFlowsIdVersionsGetRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Flows.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.flows.<a href="/src/api/resources/flows/client/Client.ts">commit</a>(id, versionId, { ...params }) -> Humanloop.FlowResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Commit a version of the Flow with a commit message.
+
+If the version is already committed, an exception will be raised.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.flows.commit("id", "version_id", {
+    commitMessage: "commit_message",
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Unique identifier for Flow.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**versionId:** `string` — Unique identifier for the specific version of the Flow.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.CommitRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Flows.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.flows.<a href="/src/api/resources/flows/client/Client.ts">setDeployment</a>(id, environmentId, { ...params }) -> Humanloop.FlowResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Deploy Flow to an Environment.
+
+Set the deployed version for the specified Environment. This Flow
+will be used for calls made to the Flow in this Environment.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.flows.setDeployment("id", "environment_id", {
+    versionId: "version_id",
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Unique identifier for Flow.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**environmentId:** `string` — Unique identifier for the Environment to deploy the Version to.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.SetDeploymentFlowsIdEnvironmentsEnvironmentIdPostRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Flows.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.flows.<a href="/src/api/resources/flows/client/Client.ts">removeDeployment</a>(id, environmentId) -> void</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Remove deployed Flow from the Environment.
+
+Remove the deployed version for the specified Environment. This Flow
+will no longer be used for calls made to the Flow in this Environment.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.flows.removeDeployment("id", "environment_id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Unique identifier for Flow.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**environmentId:** `string` — Unique identifier for the Environment to remove the deployment from.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Flows.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.flows.<a href="/src/api/resources/flows/client/Client.ts">listEnvironments</a>(id) -> Humanloop.FileEnvironmentResponse[]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+List all Environments and their deployed versions for the Flow.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.flows.listEnvironments("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Unique identifier for Flow.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Flows.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.flows.<a href="/src/api/resources/flows/client/Client.ts">updateMonitoring</a>(id, { ...params }) -> Humanloop.FlowResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Activate and deactivate Evaluators for monitoring the Flow.
+
+An activated Evaluator will automatically be run on all new "completed" Logs
+within the Flow for monitoring purposes.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.flows.updateMonitoring("id", {});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.EvaluatorActivationDeactivationRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Flows.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+## Files
+
+<details><summary><code>client.files.<a href="/src/api/resources/files/client/Client.ts">list</a>({ ...params }) -> Humanloop.PaginatedDataUnionPromptResponseToolResponseDatasetResponseEvaluatorResponseFlowResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Get a paginated list of files.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.files.list();
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.FilesListRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Files.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+## Evaluations
+
+<details><summary><code>client.evaluations.<a href="/src/api/resources/evaluations/client/Client.ts">list</a>({ ...params }) -> core.Page<Humanloop.EvaluationResponse></code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+List all Evaluations for the specified `file_id`.
+
+Retrieve a list of Evaluations that evaluate versions of the specified File.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.evaluations.list({
+    fileId: "pr_30gco7dx6JDq4200GVOHa",
+    size: 1,
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.ListEvaluationsGetRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Evaluations.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.evaluations.<a href="/src/api/resources/evaluations/client/Client.ts">create</a>({ ...params }) -> Humanloop.EvaluationResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Create an Evaluation.
+
+Create a new Evaluation by specifying the Dataset, versions to be
+evaluated (Evaluatees), and which Evaluators to provide judgments.
+
+Humanloop will automatically start generating Logs and running Evaluators where
+`orchestrated=true`. If you own the runtime for the Evaluatee or Evaluator, you
+can set `orchestrated=false` and then generate and submit the required logs using
+your runtime.
+
+To keep updated on the progress of the Evaluation, you can poll the Evaluation using
+the GET /evaluations/{id} endpoint and check its status.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.evaluations.create({
+    dataset: {
+        versionId: "dsv_6L78pqrdFi2xa",
+    },
+    evaluatees: [
+        {
+            versionId: "prv_7ZlQREDScH0xkhUwtXruN",
+            orchestrated: false,
+        },
+    ],
+    evaluators: [
+        {
+            versionId: "evv_012def",
+            orchestrated: false,
+        },
+    ],
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.CreateEvaluationRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Evaluations.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.evaluations.<a href="/src/api/resources/evaluations/client/Client.ts">get</a>(id) -> Humanloop.EvaluationResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Get an Evaluation.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.evaluations.get("ev_567yza");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Unique identifier for Evaluation.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Evaluations.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.evaluations.<a href="/src/api/resources/evaluations/client/Client.ts">delete</a>(id) -> void</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Delete an Evaluation.
+
+Remove an Evaluation from Humanloop. The Logs and Versions used in the Evaluation
+will not be deleted.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.evaluations.delete("ev_567yza");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Unique identifier for Evaluation.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Evaluations.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.evaluations.<a href="/src/api/resources/evaluations/client/Client.ts">updateSetup</a>(id, { ...params }) -> Humanloop.EvaluationResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Update an Evaluation.
+
+Update the setup of an Evaluation by specifying the Dataset, versions to be
+evaluated (Evaluatees), and which Evaluators to provide judgments.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.evaluations.updateSetup("ev_567yza", {
+    dataset: {
+        versionId: "dsv_6L78pqrdFi2xa",
+    },
+    evaluatees: [
+        {
+            versionId: "prv_7ZlQREDScH0xkhUwtXruN",
+            orchestrated: false,
+        },
+    ],
+    evaluators: [
+        {
+            versionId: "evv_012def",
+            orchestrated: false,
+        },
+    ],
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Unique identifier for Evaluation.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.UpdateEvaluationRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Evaluations.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.evaluations.<a href="/src/api/resources/evaluations/client/Client.ts">updateStatus</a>(id, { ...params }) -> Humanloop.EvaluationResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Update the status of an Evaluation.
+
+Can be used to cancel a running Evaluation, or mark an Evaluation that uses
+external or human evaluators as completed.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.evaluations.updateStatus("id", {
+    status: Humanloop.EvaluationStatus.Pending,
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Unique identifier for Evaluation.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.BodyUpdateStatusEvaluationsIdStatusPatch`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Evaluations.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.evaluations.<a href="/src/api/resources/evaluations/client/Client.ts">getStats</a>(id) -> Humanloop.EvaluationStats</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Get Evaluation Stats.
+
+Retrieve aggregate stats for the specified Evaluation.
+This includes the number of generated Logs for each evaluated version and the
+corresponding Evaluator statistics (such as the mean and percentiles).
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.evaluations.getStats("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Unique identifier for Evaluation.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Evaluations.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.evaluations.<a href="/src/api/resources/evaluations/client/Client.ts">getLogs</a>(id, { ...params }) -> Humanloop.PaginatedDataEvaluationReportLogResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Get the Logs associated to a specific Evaluation.
+
+Each Datapoint in your Dataset will have a corresponding Log for each File version evaluated.
+e.g. If you have 50 Datapoints and are evaluating 2 Prompts, there will be 100 Logs associated with the Evaluation.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.evaluations.getLogs("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — String ID of evaluation. Starts with `ev_` or `evr_`.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.GetLogsEvaluationsIdLogsGetRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Evaluations.RequestOptions`
 
 </dd>
 </dl>

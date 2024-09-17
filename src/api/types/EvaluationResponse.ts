@@ -22,8 +22,12 @@ export interface EvaluationResponse {
      * - `"cancelled"`: The Evaluation has been cancelled by the user. Humanloop will stop generating Logs and Evaluator Logs.
      */
     status: Humanloop.EvaluationStatus;
+    /** Name of the Evaluation to help identify it. Must be unique among Evaluations associated with File. */
+    name?: string;
+    /** Unique identifier for the File associated with the Evaluation. */
+    fileId?: string;
     createdAt: Date;
-    createdBy?: Humanloop.UserResponse;
+    createdBy?: Humanloop.UserResponse | undefined;
     updatedAt: Date;
     /** URL to view the Evaluation on the Humanloop. */
     url?: string;

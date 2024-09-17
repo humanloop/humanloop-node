@@ -27,4 +27,8 @@ export interface ToolLogUpdateRequest {
     source?: string;
     /** Any additional metadata to record. */
     metadata?: Record<string, unknown>;
+    /** When the logged event started. */
+    startTime?: Date;
+    /** When the logged event ended. */
+    endTime?: Date;
 }
