@@ -5,7 +5,6 @@
 import * as serializers from "../index";
 import * as Humanloop from "../../api/index";
 import * as core from "../../core";
-import { ToolResponse } from "./ToolResponse";
 
 export const ToolLogResponse: core.serialization.ObjectSchema<
     serializers.ToolLogResponse.Raw,
@@ -46,7 +45,7 @@ export const ToolLogResponse: core.serialization.ObjectSchema<
         "trace_children",
         core.serialization.list(core.serialization.lazy(() => serializers.LogResponse)).optional()
     ),
-    tool: ToolResponse,
+    tool: core.serialization.lazyObject(() => serializers.ToolResponse),
 });
 
 export declare namespace ToolLogResponse {
@@ -74,6 +73,6 @@ export declare namespace ToolLogResponse {
         trace_flow_id?: string | null;
         trace_id?: string | null;
         trace_children?: serializers.LogResponse.Raw[] | null;
-        tool?: ToolResponse.Raw;
+        tool: serializers.ToolResponse.Raw;
     }
 }

@@ -55,5 +55,5 @@ export interface ToolLogResponse {
     /** Logs nested under this Log in the Trace. */
     traceChildren?: Humanloop.LogResponse[];
     /** Tool used to generate the Log. */
-    tool?: Humanloop.ToolResponse;
+    tool: Humanloop.ToolResponse;
 }
