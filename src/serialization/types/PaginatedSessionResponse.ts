@@ -5,23 +5,12 @@
 import * as serializers from "../index";
 import * as Humanloop from "../../api/index";
 import * as core from "../../core";
-import { SessionResponse } from "./SessionResponse";
 
-export const PaginatedSessionResponse: core.serialization.ObjectSchema<
+export const PaginatedSessionResponse: core.serialization.Schema<
     serializers.PaginatedSessionResponse.Raw,
     Humanloop.PaginatedSessionResponse
-> = core.serialization.object({
-    records: core.serialization.list(SessionResponse),
-    page: core.serialization.number(),
-    size: core.serialization.number(),
-    total: core.serialization.number(),
-});
+> = core.serialization.unknown();
 
 export declare namespace PaginatedSessionResponse {
-    interface Raw {
-        records: SessionResponse.Raw[];
-        page: number;
-        size: number;
-        total: number;
-    }
+    type Raw = unknown;
 }

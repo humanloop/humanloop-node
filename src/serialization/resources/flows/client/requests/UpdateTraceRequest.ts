@@ -13,13 +13,15 @@ export const UpdateTraceRequest: core.serialization.Schema<
 > = core.serialization.object({
     inputs: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
     output: core.serialization.string().optional(),
-    status: TraceStatus,
+    error: core.serialization.string().optional(),
+    traceStatus: core.serialization.property("trace_status", TraceStatus),
 });
 
 export declare namespace UpdateTraceRequest {
     interface Raw {
         inputs?: Record<string, unknown> | null;
         output?: string | null;
-        status: TraceStatus.Raw;
+        error?: string | null;
+        trace_status: TraceStatus.Raw;
     }
 }

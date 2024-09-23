@@ -7,7 +7,6 @@ import * as Humanloop from "../../api/index";
 import * as core from "../../core";
 import { ChatMessage } from "./ChatMessage";
 import { PromptLogResponseToolChoice } from "./PromptLogResponseToolChoice";
-import { TraceStatus } from "./TraceStatus";
 
 export const PromptLogResponse: core.serialization.ObjectSchema<
     serializers.PromptLogResponse.Raw,
@@ -41,8 +40,7 @@ export const PromptLogResponse: core.serialization.ObjectSchema<
     source: core.serialization.string().optional(),
     metadata: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
     sourceDatapointId: core.serialization.property("source_datapoint_id", core.serialization.string().optional()),
-    traceId: core.serialization.property("trace_id", core.serialization.string().optional()),
-    traceParentLogId: core.serialization.property("trace_parent_log_id", core.serialization.string().optional()),
+    traceParentId: core.serialization.property("trace_parent_id", core.serialization.string().optional()),
     batches: core.serialization.list(core.serialization.string()).optional(),
     user: core.serialization.string().optional(),
     environment: core.serialization.string().optional(),
@@ -53,7 +51,7 @@ export const PromptLogResponse: core.serialization.ObjectSchema<
         core.serialization.list(core.serialization.lazyObject(() => serializers.EvaluatorLogResponse))
     ),
     traceFlowId: core.serialization.property("trace_flow_id", core.serialization.string().optional()),
-    traceStatus: core.serialization.property("trace_status", TraceStatus.optional()),
+    traceId: core.serialization.property("trace_id", core.serialization.string().optional()),
     traceChildren: core.serialization.property(
         "trace_children",
         core.serialization.list(core.serialization.lazy(() => serializers.LogResponse)).optional()
@@ -84,8 +82,7 @@ export declare namespace PromptLogResponse {
         source?: string | null;
         metadata?: Record<string, unknown> | null;
         source_datapoint_id?: string | null;
-        trace_id?: string | null;
-        trace_parent_log_id?: string | null;
+        trace_parent_id?: string | null;
         batches?: string[] | null;
         user?: string | null;
         environment?: string | null;
@@ -93,7 +90,7 @@ export declare namespace PromptLogResponse {
         id: string;
         evaluator_logs: serializers.EvaluatorLogResponse.Raw[];
         trace_flow_id?: string | null;
-        trace_status?: TraceStatus.Raw | null;
+        trace_id?: string | null;
         trace_children?: serializers.LogResponse.Raw[] | null;
     }
 }

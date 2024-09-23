@@ -49,10 +49,8 @@ export interface FlowLogRequest {
     metadata?: Record<string, unknown>;
     /** Unique identifier for the Datapoint that this Log is derived from. This can be used by Humanloop to associate Logs to Evaluations. If provided, Humanloop will automatically associate this Log to Evaluations that require a Log for this Datapoint-Version pair. */
     sourceDatapointId?: string;
-    /** ID of the Trace. If not provided, one will be assigned. */
-    traceId?: string;
-    /** Log under which this Log should be nested. Leave field blank if the Log should be nested directly under root Trace Log. Parent Log should already be added to the Trace. */
-    traceParentLogId?: string;
+    /** The ID of the parent Log to nest this Log under in a Trace. */
+    traceParentId?: string;
     /** Array of Batch Ids that this log is part of. Batches are used to group Logs together for offline Evaluations */
     batches?: string[];
     /** End-user ID related to the Log. */
@@ -61,6 +59,8 @@ export interface FlowLogRequest {
     flowLogRequestEnvironment?: string;
     /** Whether the request/response payloads will be stored on Humanloop. */
     save?: boolean;
+    /** ID of the Trace. If not provided, one will be assigned. */
+    traceId?: string;
     /** Flow used to generate the Trace. */
     flow?: Humanloop.FlowKernelRequest;
     /** Status of the Trace. When a Trace is marked as `complete`, no more Logs can be added to it. Monitoring Evaluators will only run on `complete` Traces. If you do not intend to add more Logs to the Trace after creation, set this to `complete`. */

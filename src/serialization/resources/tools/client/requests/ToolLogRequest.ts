@@ -32,8 +32,7 @@ export const ToolLogRequest: core.serialization.Schema<
     source: core.serialization.string().optional(),
     metadata: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
     sourceDatapointId: core.serialization.property("source_datapoint_id", core.serialization.string().optional()),
-    traceId: core.serialization.property("trace_id", core.serialization.string().optional()),
-    traceParentLogId: core.serialization.property("trace_parent_log_id", core.serialization.string().optional()),
+    traceParentId: core.serialization.property("trace_parent_id", core.serialization.string().optional()),
     batches: core.serialization.list(core.serialization.string()).optional(),
     user: core.serialization.string().optional(),
     toolLogRequestEnvironment: core.serialization.property("environment", core.serialization.string().optional()),
@@ -58,8 +57,7 @@ export declare namespace ToolLogRequest {
         source?: string | null;
         metadata?: Record<string, unknown> | null;
         source_datapoint_id?: string | null;
-        trace_id?: string | null;
-        trace_parent_log_id?: string | null;
+        trace_parent_id?: string | null;
         batches?: string[] | null;
         user?: string | null;
         environment?: string | null;

@@ -12,7 +12,6 @@ import { Flows } from "./api/resources/flows/client/Client";
 import { Files } from "./api/resources/files/client/Client";
 import { Evaluations } from "./api/resources/evaluations/client/Client";
 import { Logs } from "./api/resources/logs/client/Client";
-import { Sessions } from "./api/resources/sessions/client/Client";
 
 export declare namespace HumanloopClient {
     interface Options {
@@ -80,11 +79,5 @@ export class HumanloopClient {
 
     public get logs(): Logs {
         return (this._logs ??= new Logs(this._options));
-    }
-
-    protected _sessions: Sessions | undefined;
-
-    public get sessions(): Sessions {
-        return (this._sessions ??= new Sessions(this._options));
     }
 }

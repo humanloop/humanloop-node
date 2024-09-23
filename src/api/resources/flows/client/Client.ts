@@ -68,8 +68,8 @@ export class Flows {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta16",
-                "User-Agent": "humanloop/0.8.0-beta16",
+                "X-Fern-SDK-Version": "0.8.0",
+                "User-Agent": "humanloop/0.8.0",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -147,8 +147,8 @@ export class Flows {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta16",
-                "User-Agent": "humanloop/0.8.0-beta16",
+                "X-Fern-SDK-Version": "0.8.0",
+                "User-Agent": "humanloop/0.8.0",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -224,8 +224,8 @@ export class Flows {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta16",
-                "User-Agent": "humanloop/0.8.0-beta16",
+                "X-Fern-SDK-Version": "0.8.0",
+                "User-Agent": "humanloop/0.8.0",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -283,7 +283,7 @@ export class Flows {
     }
 
     /**
-     * Get a list of all Flows.
+     * Get a list of Flows.
      *
      * @param {Humanloop.ListFlowsGetRequest} request
      * @param {Flows.RequestOptions} requestOptions - Request-specific configuration.
@@ -332,8 +332,8 @@ export class Flows {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta16",
-                "User-Agent": "humanloop/0.8.0-beta16",
+                "X-Fern-SDK-Version": "0.8.0",
+                "User-Agent": "humanloop/0.8.0",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -391,6 +391,14 @@ export class Flows {
     }
 
     /**
+     * Create or update a Flow.
+     *
+     * Flows can also be identified by the `ID` or their `path`.
+     *
+     * If you provide a commit message, then the new version will be committed;
+     * otherwise it will be uncommitted. If you try to commit an already committed version,
+     * an exception will be raised.
+     *
      * @param {Humanloop.FlowRequest} request
      * @param {Flows.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -416,8 +424,8 @@ export class Flows {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta16",
-                "User-Agent": "humanloop/0.8.0-beta16",
+                "X-Fern-SDK-Version": "0.8.0",
+                "User-Agent": "humanloop/0.8.0",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -475,7 +483,10 @@ export class Flows {
     }
 
     /**
-     * Log a Flow Trace.
+     * Log to a Flow.
+     *
+     * You can use query parameters `version_id`, or `environment`, to target
+     * an existing version of the Flow. Otherwise, the default deployed version will be chosen.
      *
      * @param {Humanloop.FlowLogRequest} request
      * @param {Flows.RequestOptions} requestOptions - Request-specific configuration.
@@ -508,8 +519,8 @@ export class Flows {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta16",
-                "User-Agent": "humanloop/0.8.0-beta16",
+                "X-Fern-SDK-Version": "0.8.0",
+                "User-Agent": "humanloop/0.8.0",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -568,33 +579,38 @@ export class Flows {
     }
 
     /**
-     * @param {string} traceId - Unique identifier for Trace.
+     * Update the status, inputs, output of a Flow Log.
+     *
+     * Marking a Flow Log as complete will trigger any monitoring Evaluators to run.
+     * Inputs and output (or error) must be provided in order to mark it as complete.
+     *
+     * @param {string} logId - Unique identifier of the Flow Log.
      * @param {Humanloop.UpdateTraceRequest} request
      * @param {Flows.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Humanloop.UnprocessableEntityError}
      *
      * @example
-     *     await client.flows.updateTrace("trace_id", {
-     *         status: Humanloop.TraceStatus.Complete
+     *     await client.flows.updateLog("log_id", {
+     *         traceStatus: Humanloop.TraceStatus.Complete
      *     })
      */
-    public async updateTrace(
-        traceId: string,
+    public async updateLog(
+        logId: string,
         request: Humanloop.UpdateTraceRequest,
         requestOptions?: Flows.RequestOptions
     ): Promise<Humanloop.FlowLogResponse> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
-                `flows/log/${encodeURIComponent(traceId)}`
+                `flows/logs/${encodeURIComponent(logId)}`
             ),
             method: "PATCH",
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta16",
-                "User-Agent": "humanloop/0.8.0-beta16",
+                "X-Fern-SDK-Version": "0.8.0",
+                "User-Agent": "humanloop/0.8.0",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -687,8 +703,8 @@ export class Flows {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta16",
-                "User-Agent": "humanloop/0.8.0-beta16",
+                "X-Fern-SDK-Version": "0.8.0",
+                "User-Agent": "humanloop/0.8.0",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -777,8 +793,8 @@ export class Flows {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta16",
-                "User-Agent": "humanloop/0.8.0-beta16",
+                "X-Fern-SDK-Version": "0.8.0",
+                "User-Agent": "humanloop/0.8.0",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -871,8 +887,8 @@ export class Flows {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta16",
-                "User-Agent": "humanloop/0.8.0-beta16",
+                "X-Fern-SDK-Version": "0.8.0",
+                "User-Agent": "humanloop/0.8.0",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -958,8 +974,8 @@ export class Flows {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta16",
-                "User-Agent": "humanloop/0.8.0-beta16",
+                "X-Fern-SDK-Version": "0.8.0",
+                "User-Agent": "humanloop/0.8.0",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1033,8 +1049,8 @@ export class Flows {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta16",
-                "User-Agent": "humanloop/0.8.0-beta16",
+                "X-Fern-SDK-Version": "0.8.0",
+                "User-Agent": "humanloop/0.8.0",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1119,8 +1135,8 @@ export class Flows {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.0-beta16",
-                "User-Agent": "humanloop/0.8.0-beta16",
+                "X-Fern-SDK-Version": "0.8.0",
+                "User-Agent": "humanloop/0.8.0",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),

@@ -309,8 +309,7 @@ await client.prompts.callStream({
     startTime: "2024-01-15T09:30:00Z",
     endTime: "2024-01-15T09:30:00Z",
     sourceDatapointId: "string",
-    traceId: "string",
-    traceParentLogId: "string",
+    traceParentId: "string",
     batches: ["string"],
     user: "string",
     promptsCallStreamRequestEnvironment: "string",
@@ -2617,7 +2616,7 @@ await client.datasets.delete("id");
 <dl>
 <dd>
 
-Update the Dataset with the given ID.
+Move the Dataset to a different path or change the name.
 
 </dd>
 </dl>
@@ -4231,7 +4230,7 @@ await client.flows.move("id");
 <dl>
 <dd>
 
-Get a list of all Flows.
+Get a list of Flows.
 
 </dd>
 </dl>
@@ -4285,6 +4284,27 @@ await client.flows.list();
 <details><summary><code>client.flows.<a href="/src/api/resources/flows/client/Client.ts">upsert</a>({ ...params }) -> Humanloop.FlowResponse</code></summary>
 <dl>
 <dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Create or update a Flow.
+
+Flows can also be identified by the `ID` or their `path`.
+
+If you provide a commit message, then the new version will be committed;
+otherwise it will be uncommitted. If you try to commit an already committed version,
+an exception will be raised.
+
+</dd>
+</dl>
+</dd>
+</dl>
 
 #### 🔌 Usage
 
@@ -4346,7 +4366,10 @@ await client.flows.upsert({
 <dl>
 <dd>
 
-Log a Flow Trace.
+Log to a Flow.
+
+You can use query parameters `version_id`, or `environment`, to target
+an existing version of the Flow. Otherwise, the default deployed version will be chosen.
 
 </dd>
 </dl>
@@ -4397,9 +4420,27 @@ await client.flows.log();
 </dl>
 </details>
 
-<details><summary><code>client.flows.<a href="/src/api/resources/flows/client/Client.ts">updateTrace</a>(traceId, { ...params }) -> Humanloop.FlowLogResponse</code></summary>
+<details><summary><code>client.flows.<a href="/src/api/resources/flows/client/Client.ts">updateLog</a>(logId, { ...params }) -> Humanloop.FlowLogResponse</code></summary>
 <dl>
 <dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Update the status, inputs, output of a Flow Log.
+
+Marking a Flow Log as complete will trigger any monitoring Evaluators to run.
+Inputs and output (or error) must be provided in order to mark it as complete.
+
+</dd>
+</dl>
+</dd>
+</dl>
 
 #### 🔌 Usage
 
@@ -4410,8 +4451,8 @@ await client.flows.log();
 <dd>
 
 ```typescript
-await client.flows.updateTrace("trace_id", {
-    status: Humanloop.TraceStatus.Complete,
+await client.flows.updateLog("log_id", {
+    traceStatus: Humanloop.TraceStatus.Complete,
 });
 ```
 
@@ -4428,7 +4469,7 @@ await client.flows.updateTrace("trace_id", {
 <dl>
 <dd>
 
-**traceId:** `string` — Unique identifier for Trace.
+**logId:** `string` — Unique identifier of the Flow Log.
 
 </dd>
 </dl>
@@ -5751,200 +5792,6 @@ await client.logs.get("prv_Wu6zx1lAWJRqOyL8nWuZk");
 <dd>
 
 **requestOptions:** `Logs.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
-## Sessions
-
-<details><summary><code>client.sessions.<a href="/src/api/resources/sessions/client/Client.ts">get</a>(id) -> Humanloop.SessionResponse</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Retrieve the Session with the given ID.
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.sessions.get("sesh_123abc");
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**id:** `string` — Unique identifier for Session.
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `Sessions.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.sessions.<a href="/src/api/resources/sessions/client/Client.ts">delete</a>(id) -> void</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Delete the Session with the given ID.
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.sessions.delete("sesh_123abc");
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**id:** `string` — Unique identifier for Session.
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `Sessions.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.sessions.<a href="/src/api/resources/sessions/client/Client.ts">list</a>({ ...params }) -> core.Page<Humanloop.SessionResponse></code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Get a list of Sessions.
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.sessions.list({
-    size: 1,
-    fileId: "pr_123abc",
-});
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `Humanloop.ListSessionsGetRequest`
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `Sessions.RequestOptions`
 
 </dd>
 </dl>

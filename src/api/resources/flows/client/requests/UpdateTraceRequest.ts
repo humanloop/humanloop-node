@@ -7,14 +7,16 @@ import * as Humanloop from "../../../../index";
 /**
  * @example
  *     {
- *         status: Humanloop.TraceStatus.Complete
+ *         traceStatus: Humanloop.TraceStatus.Complete
  *     }
  */
 export interface UpdateTraceRequest {
     /** The inputs passed to the Flow Log. */
     inputs?: Record<string, unknown>;
-    /** The output of the Flow Log. */
+    /** The output of the Flow Log. Provide None to unset existing `output` value. Provide either this or `error`. */
     output?: string;
-    /** Status of the Trace. When a Trace is marked as `complete`, no more Logs can be added to it. Monitoring Evaluators will only run on `complete` Traces. */
-    status: Humanloop.TraceStatus;
+    /** The error message of the Flow Log. Provide None to unset existing `error` value. Provide either this or `output`. */
+    error?: string;
+    /** Status of the Trace. When a Trace is marked as `complete`, no more Logs can be added to it. Monitoring Evaluators will only run on completed Traces. */
+    traceStatus: Humanloop.TraceStatus;
 }

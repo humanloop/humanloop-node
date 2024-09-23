@@ -84,8 +84,7 @@ import * as Humanloop from "../../../../index";
  *         startTime: "2024-01-15T09:30:00Z",
  *         endTime: "2024-01-15T09:30:00Z",
  *         sourceDatapointId: "string",
- *         traceId: "string",
- *         traceParentLogId: "string",
+ *         traceParentId: "string",
  *         batches: ["string"],
  *         user: "string",
  *         promptsCallStreamRequestEnvironment: "string",
@@ -143,10 +142,8 @@ export interface PromptsCallStreamRequest {
     endTime?: Date;
     /** Unique identifier for the Datapoint that this Log is derived from. This can be used by Humanloop to associate Logs to Evaluations. If provided, Humanloop will automatically associate this Log to Evaluations that require a Log for this Datapoint-Version pair. */
     sourceDatapointId?: string;
-    /** Identifier of the Flow Log to which the Log will be associated. Multiple Logs can be associated by passing the same trace_id in subsequent log requests. Use the Flow File log endpoint to create the Trace first. */
-    traceId?: string;
-    /** Log under which this Log should be nested. Leave field blank if the Log should be nested directly under root Trace Log. Parent Log should already be added to the Trace. */
-    traceParentLogId?: string;
+    /** The ID of the parent Log to nest this Log under in a Trace. */
+    traceParentId?: string;
     /** Array of Batch Ids that this log is part of. Batches are used to group Logs together for offline Evaluations */
     batches?: string[];
     /** End-user ID related to the Log. */

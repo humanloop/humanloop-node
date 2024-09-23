@@ -34,10 +34,8 @@ export interface ToolLogResponse {
     metadata?: Record<string, unknown>;
     /** Unique identifier for the Datapoint that this Log is derived from. This can be used by Humanloop to associate Logs to Evaluations. If provided, Humanloop will automatically associate this Log to Evaluations that require a Log for this Datapoint-Version pair. */
     sourceDatapointId?: string;
-    /** Identifier of the Flow Log to which the Log will be associated. Multiple Logs can be associated by passing the same trace_id in subsequent log requests. Use the Flow File log endpoint to create the Trace first. */
-    traceId?: string;
-    /** Log under which this Log should be nested. Leave field blank if the Log should be nested directly under root Trace Log. Parent Log should already be added to the Trace. */
-    traceParentLogId?: string;
+    /** The ID of the parent Log to nest this Log under in a Trace. */
+    traceParentId?: string;
     /** Array of Batch Ids that this log is part of. Batches are used to group Logs together for offline Evaluations */
     batches?: string[];
     /** End-user ID related to the Log. */
@@ -52,8 +50,8 @@ export interface ToolLogResponse {
     evaluatorLogs: Humanloop.EvaluatorLogResponse[];
     /** Identifier for the Flow that the Trace belongs to. */
     traceFlowId?: string;
-    /** Status of the Trace. When a Trace is marked as `complete`, no more Logs can be added to it. Monitoring Evaluators will only run on `complete` Traces. */
-    traceStatus?: Humanloop.TraceStatus;
+    /** Identifier for the Trace that the Log belongs to. */
+    traceId?: string;
     /** Logs nested under this Log in the Trace. */
     traceChildren?: Humanloop.LogResponse[];
     /** Tool used to generate the Log. */
