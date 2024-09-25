@@ -1,8 +1,8 @@
 {
     "name": "humanloop",
-    "version": "0.8.1",
+    "version": "0.8.2",
     "private": false,
-    "repository": "https://github.com/humanloop/humanloop-node-beta",
+    "repository": "https://github.com/humanloop/humanloop-node",
     "main": "./index.js",
     "types": "./index.d.ts",
     "scripts": {

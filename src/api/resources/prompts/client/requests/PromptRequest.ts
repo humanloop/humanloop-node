@@ -9,12 +9,12 @@ import * as Humanloop from "../../../../index";
  *     {
  *         path: "Personal Projects/Coding Assistant",
  *         model: "gpt-4o",
- *         endpoint: Humanloop.ModelEndpoints.Chat,
+ *         endpoint: "chat",
  *         template: [{
  *                 content: "You are a helpful coding assistant specialising in {{language}}",
- *                 role: Humanloop.ChatRole.System
+ *                 role: "system"
  *             }],
- *         provider: Humanloop.ModelProviders.Openai,
+ *         provider: "openai",
  *         maxTokens: -1,
  *         temperature: 0.7,
  *         topP: 1,

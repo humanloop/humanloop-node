@@ -15,24 +15,22 @@ import * as Humanloop from "../../../../index";
  *                 content: "string",
  *                 name: "string",
  *                 toolCallId: "string",
- *                 role: Humanloop.ChatRole.User,
+ *                 role: "user",
  *                 toolCalls: [{
  *                         id: "string",
  *                         type: "function",
  *                         function: {
  *                             name: "string",
- *                             arguments: {
- *                                 "key": "value"
- *                             }
+ *                             arguments: undefined
  *                         }
  *                     }]
  *             }],
  *         toolChoice: "none",
  *         prompt: {
  *             model: "string",
- *             endpoint: Humanloop.ModelEndpoints.Complete,
+ *             endpoint: "complete",
  *             template: "string",
- *             provider: Humanloop.ModelProviders.Openai,
+ *             provider: "openai",
  *             maxTokens: 1,
  *             temperature: 1.1,
  *             topP: 1.1,
@@ -46,22 +44,14 @@ import * as Humanloop from "../../../../index";
  *             },
  *             seed: 1,
  *             responseFormat: {
- *                 type: Humanloop.ResponseFormatType.JsonObject,
- *                 jsonSchema: {
- *                     "string": {
- *                         "key": "value"
- *                     }
- *                 }
+ *                 type: "json_object",
+ *                 jsonSchema: {}
  *             },
  *             tools: [{
  *                     name: "string",
  *                     description: "string",
- *                     strict: {
- *                         "key": "value"
- *                     },
- *                     parameters: {
- *                         "key": "value"
- *                     }
+ *                     strict: undefined,
+ *                     parameters: undefined
  *                 }],
  *             linkedTools: ["string"],
  *             attributes: {

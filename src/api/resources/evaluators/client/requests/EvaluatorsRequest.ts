@@ -9,8 +9,8 @@ import * as Humanloop from "../../../../index";
  *     {
  *         path: "Shared Evaluators/Accuracy Evaluator",
  *         spec: {
- *             argumentsType: Humanloop.EvaluatorArgumentsType.TargetRequired,
- *             returnType: Humanloop.EvaluatorReturnTypeEnum.Number,
+ *             argumentsType: "target_required",
+ *             returnType: "number",
  *             evaluatorType: "python",
  *             code: "def evaluate(answer, target):\n    return 0.5"
  *         },

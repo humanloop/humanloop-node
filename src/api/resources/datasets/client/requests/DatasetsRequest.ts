@@ -23,7 +23,7 @@ import * as Humanloop from "../../../../index";
  *                     "answer": "William Shakespeare"
  *                 }
  *             }],
- *         action: Humanloop.UpdateDatesetAction.Set,
+ *         action: "set",
  *         commitMessage: "Add two new questions and answers"
  *     }
  *
@@ -32,7 +32,7 @@ import * as Humanloop from "../../../../index";
  *         path: "datasets/support-queries",
  *         datapoints: [{
  *                 messages: [{
- *                         role: Humanloop.ChatRole.User,
+ *                         role: "user",
  *                         content: "How do i manage my organizations API keys?\n"
  *                     }],
  *                 target: {
@@ -40,7 +40,7 @@ import * as Humanloop from "../../../../index";
  *                 }
  *             }, {
  *                 messages: [{
- *                         role: Humanloop.ChatRole.User,
+ *                         role: "user",
  *                         content: "Hey, can do I use my code evaluator for monitoring my legal-copilot prompt?"
  *                     }],
  *                 target: {

@@ -76,12 +76,12 @@ export class Prompts {
      *         prompt: {
      *             model: "gpt-4",
      *             template: [{
-     *                     role: Humanloop.ChatRole.System,
+     *                     role: "system",
      *                     content: "You are {{person}}. Answer questions as this person. Do not break character."
      *                 }]
      *         },
      *         messages: [{
-     *                 role: Humanloop.ChatRole.User,
+     *                 role: "user",
      *                 content: "What really happened at Roswell?"
      *             }],
      *         inputs: {
@@ -91,7 +91,7 @@ export class Prompts {
      *         providerLatency: 6.5931549072265625,
      *         outputMessage: {
      *             content: "Well, you know, there is so much secrecy involved in government, folks, it's unbelievable. They don't want to tell you everything. They don't tell me everything! But about Roswell, it\u2019s a very popular question. I know, I just know, that something very, very peculiar happened there. Was it a weather balloon? Maybe. Was it something extraterrestrial? Could be. I'd love to go down and open up all the classified documents, believe me, I would. But they don't let that happen. The Deep State, folks, the Deep State. They\u2019re unbelievable. They want to keep everything a secret. But whatever the truth is, I can tell you this: it\u2019s something big, very very big. Tremendous, in fact.",
-     *             role: Humanloop.ChatRole.Assistant
+     *             role: "assistant"
      *         },
      *         promptTokens: 100,
      *         outputTokens: 220,
@@ -123,8 +123,8 @@ export class Prompts {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.1",
-                "User-Agent": "humanloop/0.8.1",
+                "X-Fern-SDK-Version": "0.8.2",
+                "User-Agent": "humanloop/0.8.2",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -212,8 +212,8 @@ export class Prompts {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.1",
-                "User-Agent": "humanloop/0.8.1",
+                "X-Fern-SDK-Version": "0.8.2",
+                "User-Agent": "humanloop/0.8.2",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -307,8 +307,8 @@ export class Prompts {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.1",
-                "User-Agent": "humanloop/0.8.1",
+                "X-Fern-SDK-Version": "0.8.2",
+                "User-Agent": "humanloop/0.8.2",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -405,7 +405,7 @@ export class Prompts {
      *         prompt: {
      *             model: "gpt-4",
      *             template: [{
-     *                     role: Humanloop.ChatRole.System,
+     *                     role: "system",
      *                     content: "You are stockbot. Return latest prices."
      *                 }],
      *             tools: [{
@@ -425,7 +425,7 @@ export class Prompts {
      *                 }]
      *         },
      *         messages: [{
-     *                 role: Humanloop.ChatRole.User,
+     *                 role: "user",
      *                 content: "latest apple"
      *             }]
      *     })
@@ -436,12 +436,12 @@ export class Prompts {
      *         prompt: {
      *             model: "gpt-4",
      *             template: [{
-     *                     role: Humanloop.ChatRole.System,
+     *                     role: "system",
      *                     content: "You are {{person}}. Answer any questions as this person. Do not break character."
      *                 }]
      *         },
      *         messages: [{
-     *                 role: Humanloop.ChatRole.User,
+     *                 role: "user",
      *                 content: "What really happened at Roswell?"
      *             }],
      *         inputs: {
@@ -454,7 +454,7 @@ export class Prompts {
      *         versionId: "prv_Wu6zx1lAWJRqOyL8nWuZk",
      *         path: "persona",
      *         messages: [{
-     *                 role: Humanloop.ChatRole.User,
+     *                 role: "user",
      *                 content: "What really happened at Roswell?"
      *             }],
      *         inputs: {
@@ -485,8 +485,8 @@ export class Prompts {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.1",
-                "User-Agent": "humanloop/0.8.1",
+                "X-Fern-SDK-Version": "0.8.2",
+                "User-Agent": "humanloop/0.8.2",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -596,8 +596,8 @@ export class Prompts {
                 headers: {
                     "X-Fern-Language": "JavaScript",
                     "X-Fern-SDK-Name": "humanloop",
-                    "X-Fern-SDK-Version": "0.8.1",
-                    "User-Agent": "humanloop/0.8.1",
+                    "X-Fern-SDK-Version": "0.8.2",
+                    "User-Agent": "humanloop/0.8.2",
                     "X-Fern-Runtime": core.RUNTIME.type,
                     "X-Fern-Runtime-Version": core.RUNTIME.version,
                     ...(await this._getCustomAuthorizationHeaders()),
@@ -681,12 +681,12 @@ export class Prompts {
      *     await client.prompts.upsert({
      *         path: "Personal Projects/Coding Assistant",
      *         model: "gpt-4o",
-     *         endpoint: Humanloop.ModelEndpoints.Chat,
+     *         endpoint: "chat",
      *         template: [{
      *                 content: "You are a helpful coding assistant specialising in {{language}}",
-     *                 role: Humanloop.ChatRole.System
+     *                 role: "system"
      *             }],
-     *         provider: Humanloop.ModelProviders.Openai,
+     *         provider: "openai",
      *         maxTokens: -1,
      *         temperature: 0.7,
      *         topP: 1,
@@ -711,8 +711,8 @@ export class Prompts {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.1",
-                "User-Agent": "humanloop/0.8.1",
+                "X-Fern-SDK-Version": "0.8.2",
+                "User-Agent": "humanloop/0.8.2",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -808,8 +808,8 @@ export class Prompts {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.1",
-                "User-Agent": "humanloop/0.8.1",
+                "X-Fern-SDK-Version": "0.8.2",
+                "User-Agent": "humanloop/0.8.2",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -887,8 +887,8 @@ export class Prompts {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.1",
-                "User-Agent": "humanloop/0.8.1",
+                "X-Fern-SDK-Version": "0.8.2",
+                "User-Agent": "humanloop/0.8.2",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -966,8 +966,8 @@ export class Prompts {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.1",
-                "User-Agent": "humanloop/0.8.1",
+                "X-Fern-SDK-Version": "0.8.2",
+                "User-Agent": "humanloop/0.8.2",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1035,7 +1035,7 @@ export class Prompts {
      *
      * @example
      *     await client.prompts.listVersions("pr_30gco7dx6JDq4200GVOHa", {
-     *         status: Humanloop.VersionStatus.Committed
+     *         status: "committed"
      *     })
      */
     public async listVersions(
@@ -1062,8 +1062,8 @@ export class Prompts {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.1",
-                "User-Agent": "humanloop/0.8.1",
+                "X-Fern-SDK-Version": "0.8.2",
+                "User-Agent": "humanloop/0.8.2",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1152,8 +1152,8 @@ export class Prompts {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.1",
-                "User-Agent": "humanloop/0.8.1",
+                "X-Fern-SDK-Version": "0.8.2",
+                "User-Agent": "humanloop/0.8.2",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1243,8 +1243,8 @@ export class Prompts {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.1",
-                "User-Agent": "humanloop/0.8.1",
+                "X-Fern-SDK-Version": "0.8.2",
+                "User-Agent": "humanloop/0.8.2",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1339,8 +1339,8 @@ export class Prompts {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.1",
-                "User-Agent": "humanloop/0.8.1",
+                "X-Fern-SDK-Version": "0.8.2",
+                "User-Agent": "humanloop/0.8.2",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1426,8 +1426,8 @@ export class Prompts {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.1",
-                "User-Agent": "humanloop/0.8.1",
+                "X-Fern-SDK-Version": "0.8.2",
+                "User-Agent": "humanloop/0.8.2",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1501,8 +1501,8 @@ export class Prompts {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.1",
-                "User-Agent": "humanloop/0.8.1",
+                "X-Fern-SDK-Version": "0.8.2",
+                "User-Agent": "humanloop/0.8.2",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),

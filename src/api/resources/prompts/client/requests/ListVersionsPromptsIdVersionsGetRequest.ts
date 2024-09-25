@@ -7,7 +7,7 @@ import * as Humanloop from "../../../../index";
 /**
  * @example
  *     {
- *         status: Humanloop.VersionStatus.Committed
+ *         status: "committed"
  *     }
  */
 export interface ListVersionsPromptsIdVersionsGetRequest {

@@ -11,7 +11,7 @@ import * as Humanloop from "../../../../index";
  *         prompt: {
  *             model: "gpt-4",
  *             template: [{
- *                     role: Humanloop.ChatRole.System,
+ *                     role: "system",
  *                     content: "You are stockbot. Return latest prices."
  *                 }],
  *             tools: [{
@@ -31,7 +31,7 @@ import * as Humanloop from "../../../../index";
  *                 }]
  *         },
  *         messages: [{
- *                 role: Humanloop.ChatRole.User,
+ *                 role: "user",
  *                 content: "latest apple"
  *             }]
  *     }
@@ -42,12 +42,12 @@ import * as Humanloop from "../../../../index";
  *         prompt: {
  *             model: "gpt-4",
  *             template: [{
- *                     role: Humanloop.ChatRole.System,
+ *                     role: "system",
  *                     content: "You are {{person}}. Answer any questions as this person. Do not break character."
  *                 }]
  *         },
  *         messages: [{
- *                 role: Humanloop.ChatRole.User,
+ *                 role: "user",
  *                 content: "What really happened at Roswell?"
  *             }],
  *         inputs: {
@@ -60,7 +60,7 @@ import * as Humanloop from "../../../../index";
  *         versionId: "prv_Wu6zx1lAWJRqOyL8nWuZk",
  *         path: "persona",
  *         messages: [{
- *                 role: Humanloop.ChatRole.User,
+ *                 role: "user",
  *                 content: "What really happened at Roswell?"
  *             }],
  *         inputs: {

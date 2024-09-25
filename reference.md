@@ -44,14 +44,14 @@ await client.prompts.log({
         model: "gpt-4",
         template: [
             {
-                role: Humanloop.ChatRole.System,
+                role: "system",
                 content: "You are {{person}}. Answer questions as this person. Do not break character.",
             },
         ],
     },
     messages: [
         {
-            role: Humanloop.ChatRole.User,
+            role: "user",
             content: "What really happened at Roswell?",
         },
     ],
@@ -63,7 +63,7 @@ await client.prompts.log({
     outputMessage: {
         content:
             "Well, you know, there is so much secrecy involved in government, folks, it's unbelievable. They don't want to tell you everything. They don't tell me everything! But about Roswell, it\u2019s a very popular question. I know, I just know, that something very, very peculiar happened there. Was it a weather balloon? Maybe. Was it something extraterrestrial? Could be. I'd love to go down and open up all the classified documents, believe me, I would. But they don't let that happen. The Deep State, folks, the Deep State. They\u2019re unbelievable. They want to keep everything a secret. But whatever the truth is, I can tell you this: it\u2019s something big, very very big. Tremendous, in fact.",
-        role: Humanloop.ChatRole.Assistant,
+        role: "assistant",
     },
     promptTokens: 100,
     outputTokens: 220,
@@ -235,16 +235,14 @@ await client.prompts.callStream({
             content: "string",
             name: "string",
             toolCallId: "string",
-            role: Humanloop.ChatRole.User,
+            role: "user",
             toolCalls: [
                 {
                     id: "string",
                     type: "function",
                     function: {
                         name: "string",
-                        arguments: {
-                            key: "value",
-                        },
+                        arguments: undefined,
                     },
                 },
             ],
@@ -253,9 +251,9 @@ await client.prompts.callStream({
     toolChoice: "none",
     prompt: {
         model: "string",
-        endpoint: Humanloop.ModelEndpoints.Complete,
+        endpoint: "complete",
         template: "string",
-        provider: Humanloop.ModelProviders.Openai,
+        provider: "openai",
         maxTokens: 1,
         temperature: 1.1,
         topP: 1.1,
@@ -269,23 +267,15 @@ await client.prompts.callStream({
         },
         seed: 1,
         responseFormat: {
-            type: Humanloop.ResponseFormatType.JsonObject,
-            jsonSchema: {
-                string: {
-                    key: "value",
-                },
-            },
+            type: "json_object",
+            jsonSchema: {},
         },
         tools: [
             {
                 name: "string",
                 description: "string",
-                strict: {
-                    key: "value",
-                },
-                parameters: {
-                    key: "value",
-                },
+                strict: undefined,
+                parameters: undefined,
             },
         ],
         linkedTools: ["string"],
@@ -408,7 +398,7 @@ await client.prompts.call({
         model: "gpt-4",
         template: [
             {
-                role: Humanloop.ChatRole.System,
+                role: "system",
                 content: "You are stockbot. Return latest prices.",
             },
         ],
@@ -432,7 +422,7 @@ await client.prompts.call({
     },
     messages: [
         {
-            role: Humanloop.ChatRole.User,
+            role: "user",
             content: "latest apple",
         },
     ],
@@ -573,14 +563,14 @@ an exception will be raised.
 await client.prompts.upsert({
     path: "Personal Projects/Coding Assistant",
     model: "gpt-4o",
-    endpoint: Humanloop.ModelEndpoints.Chat,
+    endpoint: "chat",
     template: [
         {
             content: "You are a helpful coding assistant specialising in {{language}}",
-            role: Humanloop.ChatRole.System,
+            role: "system",
         },
     ],
-    provider: Humanloop.ModelProviders.Openai,
+    provider: "openai",
     maxTokens: -1,
     temperature: 0.7,
     topP: 1,
@@ -864,7 +854,7 @@ Get a list of all the versions of a Prompt.
 
 ```typescript
 await client.prompts.listVersions("pr_30gco7dx6JDq4200GVOHa", {
-    status: Humanloop.VersionStatus.Committed,
+    status: "committed",
 });
 ```
 
@@ -1863,7 +1853,7 @@ Get a list of all the versions of a Tool.
 
 ```typescript
 await client.tools.listVersions("tl_789ghi", {
-    status: Humanloop.VersionStatus.Committed,
+    status: "committed",
 });
 ```
 
@@ -2422,7 +2412,7 @@ await client.datasets.upsert({
             },
         },
     ],
-    action: Humanloop.UpdateDatesetAction.Set,
+    action: "set",
     commitMessage: "Add two new questions and answers",
 });
 ```
@@ -2777,7 +2767,7 @@ Get a list of the versions for a Dataset.
 
 ```typescript
 await client.datasets.listVersions("ds_b0baF1ca7652", {
-    status: Humanloop.VersionStatus.Committed,
+    status: "committed",
 });
 ```
 
@@ -3315,8 +3305,8 @@ an exception will be raised.
 await client.evaluators.upsert({
     path: "Shared Evaluators/Accuracy Evaluator",
     spec: {
-        argumentsType: Humanloop.EvaluatorArgumentsType.TargetRequired,
-        returnType: Humanloop.EvaluatorReturnTypeEnum.Number,
+        argumentsType: "target_required",
+        returnType: "number",
         evaluatorType: "python",
         code: "def evaluate(answer, target):\n    return 0.5",
     },
@@ -4452,7 +4442,7 @@ Inputs and output (or error) must be provided in order to mark it as complete.
 
 ```typescript
 await client.flows.updateLog("log_id", {
-    traceStatus: Humanloop.TraceStatus.Complete,
+    traceStatus: "complete",
 });
 ```
 
@@ -5421,7 +5411,7 @@ external or human evaluators as completed.
 
 ```typescript
 await client.evaluations.updateStatus("id", {
-    status: Humanloop.EvaluationStatus.Pending,
+    status: "pending",
 });
 ```
 

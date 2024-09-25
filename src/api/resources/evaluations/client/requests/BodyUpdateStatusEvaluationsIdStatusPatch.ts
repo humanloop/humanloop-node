@@ -7,7 +7,7 @@ import * as Humanloop from "../../../../index";
 /**
  * @example
  *     {
- *         status: Humanloop.EvaluationStatus.Pending
+ *         status: "pending"
  *     }
  */
 export interface BodyUpdateStatusEvaluationsIdStatusPatch {

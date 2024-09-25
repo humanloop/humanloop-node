@@ -7,7 +7,7 @@ import * as Humanloop from "../../../../index";
 /**
  * @example
  *     {
- *         traceStatus: Humanloop.TraceStatus.Complete
+ *         traceStatus: "complete"
  *     }
  */
 export interface UpdateTraceRequest {
