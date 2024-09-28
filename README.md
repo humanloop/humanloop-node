@@ -1,6 +1,6 @@
 # Humanloop TypeScript Library
 
-[![fern shield](https://img.shields.io/badge/%F0%9F%8C%BF-SDK%20generated%20by%20Fern-brightgreen)](https://github.com/fern-api/fern)
+[![fern shield](https://img.shields.io/badge/%F0%9F%8C%BF-Built%20with%20Fern-brightgreen)](https://buildwithfern.com?utm_source=github&utm_medium=github&utm_campaign=readme&utm_source=https%3A%2F%2Fgithub.com%2Fhumanloop%2Fhumanloop-node)
 [![npm shield](https://img.shields.io/npm/v/humanloop)](https://www.npmjs.com/package/humanloop)
 
 The Humanloop TypeScript library provides convenient access to the Humanloop API from TypeScript.
@@ -10,6 +10,10 @@ The Humanloop TypeScript library provides convenient access to the Humanloop API
 ```sh
 npm i -s humanloop
 ```
+
+## Reference
+
+A full reference for this library is available [here](./reference.md).
 
 ## Usage
 

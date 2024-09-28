@@ -27,7 +27,7 @@ import * as Humanloop from "../../../../index";
  *     }
  */
 export interface PromptRequest {
-    /** Path of the Prompt, including the name. This locates the Prompt in the Humanloop filesystem and is used as as a unique identifier. Example: `folder/name` or just `name`. */
+    /** Path of the Prompt, including the name. This locates the Prompt in the Humanloop filesystem and is used as as a unique identifier. For example: `folder/name` or just `name`. */
     path?: string;
     /** ID for an existing Prompt. */
     id?: string;
@@ -35,7 +35,14 @@ export interface PromptRequest {
     model: string;
     /** The provider model endpoint used. */
     endpoint?: Humanloop.ModelEndpoints;
-    /** For chat endpoint, provide a Chat template. For completion endpoint, provide a Prompt template. Input variables within the template should be specified with double curly bracket syntax: {{INPUT_NAME}}. */
+    /**
+     * The template contains the main structure and instructions for the model, including input variables for dynamic values.
+     *
+     * For chat models, provide the template as a ChatTemplate (a list of messages), e.g. a system message, followed by a user message with an input variable.
+     * For completion models, provide a prompt template as a string.
+     *
+     * Input variables should be specified with double curly bracket syntax: `{{input_name}}`.
+     */
     template?: Humanloop.PromptRequestTemplate;
     /** The company providing the underlying model service. */
     provider?: Humanloop.ModelProviders;

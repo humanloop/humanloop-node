@@ -18,7 +18,7 @@ import * as Humanloop from "../../../../index";
  *     }
  */
 export interface EvaluatorsRequest {
-    /** Path of the Evaluator, including the name. This locates the Evaluator in the Humanloop filesystem and is used as as a unique identifier. Example: `folder/name` or just `name`. */
+    /** Path of the Evaluator, including the name. This locates the Evaluator in the Humanloop filesystem and is used as as a unique identifier. For example: `folder/name` or just `name`. */
     path?: string;
     /** ID for an existing Evaluator. */
     id?: string;

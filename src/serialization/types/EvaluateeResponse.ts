@@ -14,6 +14,8 @@ export const EvaluateeResponse: core.serialization.ObjectSchema<
     version: EvaluatedVersionResponse,
     batchId: core.serialization.property("batch_id", core.serialization.string().optional()),
     orchestrated: core.serialization.boolean(),
+    pinned: core.serialization.boolean(),
+    addedAt: core.serialization.property("added_at", core.serialization.date().optional()),
 });
 
 export declare namespace EvaluateeResponse {
@@ -21,5 +23,7 @@ export declare namespace EvaluateeResponse {
         version: EvaluatedVersionResponse.Raw;
         batch_id?: string | null;
         orchestrated: boolean;
+        pinned: boolean;
+        added_at?: string | null;
     }
 }

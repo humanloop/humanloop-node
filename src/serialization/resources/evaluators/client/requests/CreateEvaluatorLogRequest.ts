@@ -35,7 +35,7 @@ export const CreateEvaluatorLogRequest: core.serialization.Schema<
     parentId: core.serialization.property("parent_id", core.serialization.string()),
     sourceDatapointId: core.serialization.property("source_datapoint_id", core.serialization.string().optional()),
     traceParentId: core.serialization.property("trace_parent_id", core.serialization.string().optional()),
-    batches: core.serialization.list(core.serialization.string()).optional(),
+    batchId: core.serialization.property("batch_id", core.serialization.string().optional()),
     user: core.serialization.string().optional(),
     createEvaluatorLogRequestEnvironment: core.serialization.property(
         "environment",
@@ -65,7 +65,7 @@ export declare namespace CreateEvaluatorLogRequest {
         parent_id: string;
         source_datapoint_id?: string | null;
         trace_parent_id?: string | null;
-        batches?: string[] | null;
+        batch_id?: string | null;
         user?: string | null;
         environment?: string | null;
         save?: boolean | null;

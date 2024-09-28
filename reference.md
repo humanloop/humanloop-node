@@ -300,7 +300,7 @@ await client.prompts.callStream({
     endTime: "2024-01-15T09:30:00Z",
     sourceDatapointId: "string",
     traceParentId: "string",
-    batches: ["string"],
+    batchId: "string",
     user: "string",
     promptsCallStreamRequestEnvironment: "string",
     save: true,
@@ -3710,6 +3710,80 @@ await client.evaluators.commit("ev_890bcd", "evv_012def", {
 </dl>
 </details>
 
+<details><summary><code>client.evaluators.<a href="/src/api/resources/evaluators/client/Client.ts">updateMonitoring</a>(id, { ...params }) -> Humanloop.EvaluatorResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Activate and deactivate Evaluators for monitoring the Evaluator.
+
+An activated Evaluator will automatically be run on all new Logs
+within the Evaluator for monitoring purposes.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.evaluators.updateMonitoring("id", {});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.EvaluatorActivationDeactivationRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Evaluators.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.evaluators.<a href="/src/api/resources/evaluators/client/Client.ts">setDeployment</a>(id, environmentId, { ...params }) -> Humanloop.EvaluatorResponse</code></summary>
 <dl>
 <dd>
@@ -5093,7 +5167,7 @@ can set `orchestrated=false` and then generate and submit the required logs usin
 your runtime.
 
 To keep updated on the progress of the Evaluation, you can poll the Evaluation using
-the GET /evaluations/{id} endpoint and check its status.
+the `GET /evaluations/:id` endpoint and check its status.
 
 </dd>
 </dl>
@@ -5578,6 +5652,80 @@ await client.evaluations.getLogs("id");
 <dd>
 
 **request:** `Humanloop.GetLogsEvaluationsIdLogsGetRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Evaluations.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.evaluations.<a href="/src/api/resources/evaluations/client/Client.ts">pinEvaluatee</a>(id, { ...params }) -> Humanloop.EvaluationResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Pin the specified Evaluatee.
+
+Pinned Evaluatees are always displayed in the Evaluation Overview,
+and serve as the baseline for comparison with other Evaluatees.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.evaluations.pinEvaluatee("id", {});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Unique identifier for Evaluation.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.EvaluateeRequest`
 
 </dd>
 </dl>

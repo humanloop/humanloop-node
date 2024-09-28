@@ -8,4 +8,6 @@ export interface EvaluationEvaluatorResponse {
     version: Humanloop.EvaluatorResponse;
     /** Whether the Evaluator is orchestrated by Humanloop. Default is `True`. If `False`, a log for the Evaluator should be submitted by the user via the API. */
     orchestrated: boolean;
+    /** When the Evaluator was added to the Evaluation. */
+    addedAt: Date;
 }

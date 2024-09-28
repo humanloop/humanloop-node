@@ -12,11 +12,13 @@ export const EvaluationEvaluatorResponse: core.serialization.ObjectSchema<
 > = core.serialization.object({
     version: core.serialization.lazyObject(() => serializers.EvaluatorResponse),
     orchestrated: core.serialization.boolean(),
+    addedAt: core.serialization.property("added_at", core.serialization.date()),
 });
 
 export declare namespace EvaluationEvaluatorResponse {
     interface Raw {
         version: serializers.EvaluatorResponse.Raw;
         orchestrated: boolean;
+        added_at: string;
     }
 }

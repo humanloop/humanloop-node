@@ -31,7 +31,7 @@ import * as Humanloop from "../../../../index";
  *     }
  */
 export interface ToolRequest {
-    /** Path of the Tool, including the name. This locates the Tool in the Humanloop filesystem and is used as as a unique identifier. Example: `folder/name` or just `name`. */
+    /** Path of the Tool, including the name. This locates the Tool in the Humanloop filesystem and is used as as a unique identifier. For example: `folder/name` or just `name`. */
     path?: string;
     /** ID for an existing Tool. */
     id?: string;

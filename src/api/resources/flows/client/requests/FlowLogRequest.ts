@@ -19,7 +19,7 @@ export interface FlowLogRequest {
     environment?: string;
     /** Unique identifier for the Evaluation Report to associate the Log to. */
     evaluationId?: string;
-    /** Path of the Flow, including the name. This locates the Flow in the Humanloop filesystem and is used as as a unique identifier. Example: `folder/name` or just `name`. */
+    /** Path of the Flow, including the name. This locates the Flow in the Humanloop filesystem and is used as as a unique identifier. For example: `folder/name` or just `name`. */
     path?: string;
     /** ID for an existing Flow. */
     id?: string;
@@ -51,16 +51,16 @@ export interface FlowLogRequest {
     sourceDatapointId?: string;
     /** The ID of the parent Log to nest this Log under in a Trace. */
     traceParentId?: string;
-    /** Array of Batch Ids that this log is part of. Batches are used to group Logs together for offline Evaluations */
-    batches?: string[];
+    /** Unique identifier for the Batch to add this Batch to. Batches are used to group Logs together for Evaluations. A Batch will be created if one with the given ID does not exist. */
+    batchId?: string;
     /** End-user ID related to the Log. */
     user?: string;
     /** The name of the Environment the Log is associated to. */
     flowLogRequestEnvironment?: string;
     /** Whether the request/response payloads will be stored on Humanloop. */
     save?: boolean;
-    /** ID of the Trace. If not provided, one will be assigned. */
-    traceId?: string;
+    /** The identifier for the Log. If not specified, a default ID will be generated. This allows additional Logs to be appended to the trace without waiting for Humanloop to return an ID. */
+    logId?: string;
     /** Flow used to generate the Trace. */
     flow?: Humanloop.FlowKernelRequest;
     /** Status of the Trace. When a Trace is marked as `complete`, no more Logs can be added to it. Monitoring Evaluators will only run on `complete` Traces. If you do not intend to add more Logs to the Trace after creation, set this to `complete`. */

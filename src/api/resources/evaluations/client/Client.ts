@@ -84,8 +84,8 @@ export class Evaluations {
                 headers: {
                     "X-Fern-Language": "JavaScript",
                     "X-Fern-SDK-Name": "humanloop",
-                    "X-Fern-SDK-Version": "0.8.2",
-                    "User-Agent": "humanloop/0.8.2",
+                    "X-Fern-SDK-Version": "0.8.3",
+                    "User-Agent": "humanloop/0.8.3",
                     "X-Fern-Runtime": core.RUNTIME.type,
                     "X-Fern-Runtime-Version": core.RUNTIME.version,
                     ...(await this._getCustomAuthorizationHeaders()),
@@ -163,7 +163,7 @@ export class Evaluations {
      * your runtime.
      *
      * To keep updated on the progress of the Evaluation, you can poll the Evaluation using
-     * the GET /evaluations/{id} endpoint and check its status.
+     * the `GET /evaluations/:id` endpoint and check its status.
      *
      * @param {Humanloop.CreateEvaluationRequest} request
      * @param {Evaluations.RequestOptions} requestOptions - Request-specific configuration.
@@ -198,8 +198,8 @@ export class Evaluations {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.2",
-                "User-Agent": "humanloop/0.8.2",
+                "X-Fern-SDK-Version": "0.8.3",
+                "User-Agent": "humanloop/0.8.3",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -277,8 +277,8 @@ export class Evaluations {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.2",
-                "User-Agent": "humanloop/0.8.2",
+                "X-Fern-SDK-Version": "0.8.3",
+                "User-Agent": "humanloop/0.8.3",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -358,8 +358,8 @@ export class Evaluations {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.2",
-                "User-Agent": "humanloop/0.8.2",
+                "X-Fern-SDK-Version": "0.8.3",
+                "User-Agent": "humanloop/0.8.3",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -450,8 +450,8 @@ export class Evaluations {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.2",
-                "User-Agent": "humanloop/0.8.2",
+                "X-Fern-SDK-Version": "0.8.3",
+                "User-Agent": "humanloop/0.8.3",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -539,8 +539,8 @@ export class Evaluations {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.2",
-                "User-Agent": "humanloop/0.8.2",
+                "X-Fern-SDK-Version": "0.8.3",
+                "User-Agent": "humanloop/0.8.3",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -624,8 +624,8 @@ export class Evaluations {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.2",
-                "User-Agent": "humanloop/0.8.2",
+                "X-Fern-SDK-Version": "0.8.3",
+                "User-Agent": "humanloop/0.8.3",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -720,8 +720,8 @@ export class Evaluations {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.2",
-                "User-Agent": "humanloop/0.8.2",
+                "X-Fern-SDK-Version": "0.8.3",
+                "User-Agent": "humanloop/0.8.3",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -735,6 +735,93 @@ export class Evaluations {
         });
         if (_response.ok) {
             return serializers.PaginatedDataEvaluationReportLogResponse.parseOrThrow(_response.body, {
+                unrecognizedObjectKeys: "passthrough",
+                allowUnrecognizedUnionMembers: true,
+                allowUnrecognizedEnumValues: true,
+                skipValidation: true,
+                breadcrumbsPrefix: ["response"],
+            });
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 422:
+                    throw new Humanloop.UnprocessableEntityError(
+                        serializers.HttpValidationError.parseOrThrow(_response.error.body, {
+                            unrecognizedObjectKeys: "passthrough",
+                            allowUnrecognizedUnionMembers: true,
+                            allowUnrecognizedEnumValues: true,
+                            skipValidation: true,
+                            breadcrumbsPrefix: ["response"],
+                        })
+                    );
+                default:
+                    throw new errors.HumanloopError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                    });
+            }
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.HumanloopError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
+                });
+            case "timeout":
+                throw new errors.HumanloopTimeoutError();
+            case "unknown":
+                throw new errors.HumanloopError({
+                    message: _response.error.errorMessage,
+                });
+        }
+    }
+
+    /**
+     * Pin the specified Evaluatee.
+     *
+     * Pinned Evaluatees are always displayed in the Evaluation Overview,
+     * and serve as the baseline for comparison with other Evaluatees.
+     *
+     * @param {string} id - Unique identifier for Evaluation.
+     * @param {Humanloop.EvaluateeRequest} request
+     * @param {Evaluations.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Humanloop.UnprocessableEntityError}
+     *
+     * @example
+     *     await client.evaluations.pinEvaluatee("id", {})
+     */
+    public async pinEvaluatee(
+        id: string,
+        request: Humanloop.EvaluateeRequest,
+        requestOptions?: Evaluations.RequestOptions
+    ): Promise<Humanloop.EvaluationResponse> {
+        const _response = await (this._options.fetcher ?? core.fetcher)({
+            url: urlJoin(
+                (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
+                `evaluations/${encodeURIComponent(id)}/pin-evaluatee`
+            ),
+            method: "POST",
+            headers: {
+                "X-Fern-Language": "JavaScript",
+                "X-Fern-SDK-Name": "humanloop",
+                "X-Fern-SDK-Version": "0.8.3",
+                "User-Agent": "humanloop/0.8.3",
+                "X-Fern-Runtime": core.RUNTIME.type,
+                "X-Fern-Runtime-Version": core.RUNTIME.version,
+                ...(await this._getCustomAuthorizationHeaders()),
+            },
+            contentType: "application/json",
+            requestType: "json",
+            body: serializers.EvaluateeRequest.jsonOrThrow(request, { unrecognizedObjectKeys: "strip" }),
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return serializers.EvaluationResponse.parseOrThrow(_response.body, {
                 unrecognizedObjectKeys: "passthrough",
                 allowUnrecognizedUnionMembers: true,
                 allowUnrecognizedEnumValues: true,

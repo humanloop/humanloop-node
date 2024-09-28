@@ -45,7 +45,7 @@ export const PromptLogRequest: core.serialization.Schema<
     metadata: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
     sourceDatapointId: core.serialization.property("source_datapoint_id", core.serialization.string().optional()),
     traceParentId: core.serialization.property("trace_parent_id", core.serialization.string().optional()),
-    batches: core.serialization.list(core.serialization.string()).optional(),
+    batchId: core.serialization.property("batch_id", core.serialization.string().optional()),
     user: core.serialization.string().optional(),
     promptLogRequestEnvironment: core.serialization.property("environment", core.serialization.string().optional()),
     save: core.serialization.boolean().optional(),
@@ -79,7 +79,7 @@ export declare namespace PromptLogRequest {
         metadata?: Record<string, unknown> | null;
         source_datapoint_id?: string | null;
         trace_parent_id?: string | null;
-        batches?: string[] | null;
+        batch_id?: string | null;
         user?: string | null;
         environment?: string | null;
         save?: boolean | null;

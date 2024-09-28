@@ -61,7 +61,7 @@ export interface PromptLogResponse {
     sourceDatapointId?: string;
     /** The ID of the parent Log to nest this Log under in a Trace. */
     traceParentId?: string;
-    /** Array of Batch Ids that this log is part of. Batches are used to group Logs together for offline Evaluations */
+    /** Array of Batch IDs that this Log is part of. Batches are used to group Logs together for offline Evaluations */
     batches?: string[];
     /** End-user ID related to the Log. */
     user?: string;

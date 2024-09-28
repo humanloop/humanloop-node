@@ -12,6 +12,7 @@ export const VersionStatsResponse: core.serialization.ObjectSchema<
     Humanloop.VersionStatsResponse
 > = core.serialization.object({
     versionId: core.serialization.property("version_id", core.serialization.string()),
+    batchId: core.serialization.property("batch_id", core.serialization.string().optional()),
     numLogs: core.serialization.property("num_logs", core.serialization.number()),
     evaluatorVersionStats: core.serialization.property(
         "evaluator_version_stats",
@@ -22,6 +23,7 @@ export const VersionStatsResponse: core.serialization.ObjectSchema<
 export declare namespace VersionStatsResponse {
     interface Raw {
         version_id: string;
+        batch_id?: string | null;
         num_logs: number;
         evaluator_version_stats: VersionStatsResponseEvaluatorVersionStatsItem.Raw[];
     }

@@ -13,4 +13,8 @@ export interface EvaluateeResponse {
     batchId?: string;
     /** Whether the Prompt/Tool is orchestrated by Humanloop. Default is `True`. If `False`, a log for the Prompt/Tool should be submitted by the user via the API. */
     orchestrated: boolean;
+    /** Pinned Evaluatees are shown in Humanloop's Overview, allowing you to use them as baselines for comparison. */
+    pinned: boolean;
+    /** When the Evaluatee was added to the Evaluation. */
+    addedAt?: Date;
 }

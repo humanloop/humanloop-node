@@ -35,11 +35,11 @@ export const FlowLogRequest: core.serialization.Schema<
     metadata: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
     sourceDatapointId: core.serialization.property("source_datapoint_id", core.serialization.string().optional()),
     traceParentId: core.serialization.property("trace_parent_id", core.serialization.string().optional()),
-    batches: core.serialization.list(core.serialization.string()).optional(),
+    batchId: core.serialization.property("batch_id", core.serialization.string().optional()),
     user: core.serialization.string().optional(),
     flowLogRequestEnvironment: core.serialization.property("environment", core.serialization.string().optional()),
     save: core.serialization.boolean().optional(),
-    traceId: core.serialization.property("trace_id", core.serialization.string().optional()),
+    logId: core.serialization.property("log_id", core.serialization.string().optional()),
     flow: FlowKernelRequest.optional(),
     traceStatus: core.serialization.property("trace_status", TraceStatus.optional()),
 });
@@ -63,11 +63,11 @@ export declare namespace FlowLogRequest {
         metadata?: Record<string, unknown> | null;
         source_datapoint_id?: string | null;
         trace_parent_id?: string | null;
-        batches?: string[] | null;
+        batch_id?: string | null;
         user?: string | null;
         environment?: string | null;
         save?: boolean | null;
-        trace_id?: string | null;
+        log_id?: string | null;
         flow?: FlowKernelRequest.Raw | null;
         trace_status?: TraceStatus.Raw | null;
     }

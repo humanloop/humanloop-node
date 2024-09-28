@@ -46,7 +46,7 @@ export interface PromptLogRequest {
     environment?: string;
     /** Unique identifier for the Evaluation Report to associate the Log to. */
     evaluationId?: string;
-    /** Path of the Prompt, including the name. This locates the Prompt in the Humanloop filesystem and is used as as a unique identifier. Example: `folder/name` or just `name`. */
+    /** Path of the Prompt, including the name. This locates the Prompt in the Humanloop filesystem and is used as as a unique identifier. For example: `folder/name` or just `name`. */
     path?: string;
     /** ID for an existing Prompt. */
     id?: string;
@@ -102,8 +102,8 @@ export interface PromptLogRequest {
     sourceDatapointId?: string;
     /** The ID of the parent Log to nest this Log under in a Trace. */
     traceParentId?: string;
-    /** Array of Batch Ids that this log is part of. Batches are used to group Logs together for offline Evaluations */
-    batches?: string[];
+    /** Unique identifier for the Batch to add this Batch to. Batches are used to group Logs together for Evaluations. A Batch will be created if one with the given ID does not exist. */
+    batchId?: string;
     /** End-user ID related to the Log. */
     user?: string;
     /** The name of the Environment the Log is associated to. */
