@@ -5,13 +5,24 @@
 /**
  * @example
  *     {
+ *         path: "Personal Projects/MedQA Flow",
  *         attributes: {
- *             "key": "value"
+ *             "prompt": {
+ *                 "template": "You are a helpful medical assistant helping with medical anamnesis. Answer {{question}}",
+ *                 "model": "gpt-4o",
+ *                 "temperature": 0.8
+ *             },
+ *             "tool": {
+ *                 "name": "retrieval_tool_v3",
+ *                 "description": "Retrieval tool for MedQA.",
+ *                 "source_code": "def retrieval_tool(question: str) -> str:\n    pass\n"
+ *             },
+ *             "commit_message": "Initial commit"
  *         }
  *     }
  */
 export interface FlowRequest {
-    /** Path of the Flow, including the name. This locates the Flow in the Humanloop filesystem and is used as as a unique identifier. For example: `folder/name` or just `name`. */
+    /** Path of the Flow, including the name. This locates the Flow in the Humanloop filesystem and is used as as a unique identifier. Example: `folder/name` or just `name`. */
     path?: string;
     /** ID for an existing Flow. */
     id?: string;

@@ -105,7 +105,7 @@ await client.prompts.log({
 </dl>
 </details>
 
-<details><summary><code>client.prompts.<a href="/src/api/resources/prompts/client/Client.ts">update</a>(id, logId, { ...params }) -> Humanloop.LogResponse</code></summary>
+<details><summary><code>client.prompts.<a href="/src/api/resources/prompts/client/Client.ts">updateLog</a>(id, logId, { ...params }) -> Humanloop.LogResponse</code></summary>
 <dl>
 <dd>
 
@@ -135,7 +135,7 @@ Update the details of a Log with the given ID.
 <dd>
 
 ```typescript
-await client.prompts.update("id", "log_id");
+await client.prompts.updateLog("id", "log_id");
 ```
 
 </dd>
@@ -981,86 +981,6 @@ await client.prompts.commit("pr_30gco7dx6JDq4200GVOHa", "prv_F34aba5f3asp0", {
 </dl>
 </details>
 
-<details><summary><code>client.prompts.<a href="/src/api/resources/prompts/client/Client.ts">updateMonitoring</a>(id, { ...params }) -> Humanloop.PromptResponse</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Activate and deactivate Evaluators for monitoring the Prompt.
-
-An activated Evaluator will automatically be run on all new Logs
-within the Prompt for monitoring purposes.
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.prompts.updateMonitoring("pr_30gco7dx6JDq4200GVOHa", {
-    activate: [
-        {
-            evaluatorVersionId: "evv_1abc4308abd",
-        },
-    ],
-});
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**id:** `string`
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request:** `Humanloop.EvaluatorActivationDeactivationRequest`
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `Prompts.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
 <details><summary><code>client.prompts.<a href="/src/api/resources/prompts/client/Client.ts">setDeployment</a>(id, environmentId, { ...params }) -> Humanloop.PromptResponse</code></summary>
 <dl>
 <dd>
@@ -1264,6 +1184,86 @@ await client.prompts.listEnvironments("pr_30gco7dx6JDq4200GVOHa");
 <dd>
 
 **id:** `string` — Unique identifier for Prompt.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Prompts.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.prompts.<a href="/src/api/resources/prompts/client/Client.ts">updateMonitoring</a>(id, { ...params }) -> Humanloop.PromptResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Activate and deactivate Evaluators for monitoring the Prompt.
+
+An activated Evaluator will automatically be run on all new Logs
+within the Prompt for monitoring purposes.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.prompts.updateMonitoring("pr_30gco7dx6JDq4200GVOHa", {
+    activate: [
+        {
+            evaluatorVersionId: "evv_1abc4308abd",
+        },
+    ],
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.EvaluatorActivationDeactivationRequest`
 
 </dd>
 </dl>
@@ -1980,86 +1980,6 @@ await client.tools.commit("tl_789ghi", "tv_012jkl", {
 </dl>
 </details>
 
-<details><summary><code>client.tools.<a href="/src/api/resources/tools/client/Client.ts">updateMonitoring</a>(id, { ...params }) -> Humanloop.ToolResponse</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Activate and deactivate Evaluators for monitoring the Tool.
-
-An activated Evaluator will automatically be run on all new Logs
-within the Tool for monitoring purposes.
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.tools.updateMonitoring("tl_789ghi", {
-    activate: [
-        {
-            evaluatorVersionId: "evv_1abc4308abd",
-        },
-    ],
-});
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**id:** `string`
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request:** `Humanloop.EvaluatorActivationDeactivationRequest`
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `Tools.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
 <details><summary><code>client.tools.<a href="/src/api/resources/tools/client/Client.ts">setDeployment</a>(id, environmentId, { ...params }) -> Humanloop.ToolResponse</code></summary>
 <dl>
 <dd>
@@ -2263,6 +2183,86 @@ await client.tools.listEnvironments("tl_789ghi");
 <dd>
 
 **id:** `string` — Unique identifier for Tool.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Tools.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.tools.<a href="/src/api/resources/tools/client/Client.ts">updateMonitoring</a>(id, { ...params }) -> Humanloop.ToolResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Activate and deactivate Evaluators for monitoring the Tool.
+
+An activated Evaluator will automatically be run on all new Logs
+within the Tool for monitoring purposes.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.tools.updateMonitoring("tl_789ghi", {
+    activate: [
+        {
+            evaluatorVersionId: "evv_1abc4308abd",
+        },
+    ],
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.EvaluatorActivationDeactivationRequest`
 
 </dd>
 </dl>
@@ -3203,6 +3203,73 @@ await client.datasets.listEnvironments("id");
 
 ## Evaluators
 
+<details><summary><code>client.evaluators.<a href="/src/api/resources/evaluators/client/Client.ts">log</a>({ ...params }) -> Humanloop.CreateEvaluatorLogResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Submit Evaluator judgment for an existing Log.
+
+Creates a new Log. The evaluated Log will be set as the parent of the created Log.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.evaluators.log({
+    parentId: "parent_id",
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.CreateEvaluatorLogRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Evaluators.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.evaluators.<a href="/src/api/resources/evaluators/client/Client.ts">list</a>({ ...params }) -> core.Page<Humanloop.EvaluatorResponse></code></summary>
 <dl>
 <dd>
@@ -3710,80 +3777,6 @@ await client.evaluators.commit("ev_890bcd", "evv_012def", {
 </dl>
 </details>
 
-<details><summary><code>client.evaluators.<a href="/src/api/resources/evaluators/client/Client.ts">updateMonitoring</a>(id, { ...params }) -> Humanloop.EvaluatorResponse</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Activate and deactivate Evaluators for monitoring the Evaluator.
-
-An activated Evaluator will automatically be run on all new Logs
-within the Evaluator for monitoring purposes.
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.evaluators.updateMonitoring("id", {});
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**id:** `string`
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request:** `Humanloop.EvaluatorActivationDeactivationRequest`
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `Evaluators.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
 <details><summary><code>client.evaluators.<a href="/src/api/resources/evaluators/client/Client.ts">setDeployment</a>(id, environmentId, { ...params }) -> Humanloop.EvaluatorResponse</code></summary>
 <dl>
 <dd>
@@ -4005,7 +3998,7 @@ await client.evaluators.listEnvironments("ev_890bcd");
 </dl>
 </details>
 
-<details><summary><code>client.evaluators.<a href="/src/api/resources/evaluators/client/Client.ts">log</a>({ ...params }) -> Humanloop.CreateEvaluatorLogResponse</code></summary>
+<details><summary><code>client.evaluators.<a href="/src/api/resources/evaluators/client/Client.ts">updateMonitoring</a>(id, { ...params }) -> Humanloop.EvaluatorResponse</code></summary>
 <dl>
 <dd>
 
@@ -4017,9 +4010,10 @@ await client.evaluators.listEnvironments("ev_890bcd");
 <dl>
 <dd>
 
-Submit Evaluator judgment for an existing Log.
+Activate and deactivate Evaluators for monitoring the Evaluator.
 
-Creates a new Log. The evaluated Log will be set as the parent of the created Log.
+An activated Evaluator will automatically be run on all new Logs
+within the Evaluator for monitoring purposes.
 
 </dd>
 </dl>
@@ -4035,9 +4029,7 @@ Creates a new Log. The evaluated Log will be set as the parent of the created Lo
 <dd>
 
 ```typescript
-await client.evaluators.log({
-    parentId: "parent_id",
-});
+await client.evaluators.updateMonitoring("id", {});
 ```
 
 </dd>
@@ -4053,7 +4045,15 @@ await client.evaluators.log({
 <dl>
 <dd>
 
-**request:** `Humanloop.CreateEvaluatorLogRequest`
+**id:** `string`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.EvaluatorActivationDeactivationRequest`
 
 </dd>
 </dl>
@@ -4073,6 +4073,97 @@ await client.evaluators.log({
 </details>
 
 ## Flows
+
+<details><summary><code>client.flows.<a href="/src/api/resources/flows/client/Client.ts">log</a>({ ...params }) -> Humanloop.CreateFlowLogResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Log to a Flow.
+
+You can use query parameters version_id, or environment, to target
+an existing version of the Flow. Otherwise, the default deployed version will be chosen.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.flows.log({
+    logId: "medqa_experiment_0001",
+    id: "fl_6o701g4jmcanPVHxdqD0O",
+    flow: {
+        attributes: {
+            prompt: {
+                template: "You are a helpful assistant helping with medical anamnesis",
+                model: "gpt-4o",
+                temperature: 0.8,
+            },
+            tool: {
+                name: "retrieval_tool_v3",
+                description: "Retrieval tool for MedQA.",
+                source_code: "def retrieval_tool(question: str) -> str:\n    pass\n",
+            },
+        },
+    },
+    inputs: {
+        question:
+            "Patient with a history of diabetes and hypertension presents with chest pain and shortness of breath.",
+    },
+    output: "The patient is likely experiencing a myocardial infarction. Immediate medical attention is required.",
+    traceStatus: "incomplete",
+    startTime: "2024-07-08T22:40:35",
+    endTime: "2024-07-08T22:40:39",
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.FlowLogRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Flows.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
 
 <details><summary><code>client.flows.<a href="/src/api/resources/flows/client/Client.ts">get</a>(id, { ...params }) -> Humanloop.FlowResponse</code></summary>
 <dl>
@@ -4105,7 +4196,7 @@ By default, the deployed version of the Flow is returned. Use the query paramete
 <dd>
 
 ```typescript
-await client.flows.get("id");
+await client.flows.get("fl_6o701g4jmcanPVHxdqD0O");
 ```
 
 </dd>
@@ -4176,7 +4267,7 @@ Delete the Flow with the given ID.
 <dd>
 
 ```typescript
-await client.flows.delete("id");
+await client.flows.delete("fl_6o701g4jmcanPVHxdqD0O");
 ```
 
 </dd>
@@ -4239,7 +4330,9 @@ Move the Flow to a different path or change the name.
 <dd>
 
 ```typescript
-await client.flows.move("id");
+await client.flows.move("fl_6o701g4jmcanPVHxdqD0O", {
+    path: "new directory/new name",
+});
 ```
 
 </dd>
@@ -4282,7 +4375,7 @@ await client.flows.move("id");
 </dl>
 </details>
 
-<details><summary><code>client.flows.<a href="/src/api/resources/flows/client/Client.ts">list</a>({ ...params }) -> Humanloop.PaginatedDataFlowResponse</code></summary>
+<details><summary><code>client.flows.<a href="/src/api/resources/flows/client/Client.ts">list</a>({ ...params }) -> core.Page<Humanloop.FlowResponse></code></summary>
 <dl>
 <dd>
 
@@ -4310,7 +4403,9 @@ Get a list of Flows.
 <dd>
 
 ```typescript
-await client.flows.list();
+await client.flows.list({
+    size: 1,
+});
 ```
 
 </dd>
@@ -4380,8 +4475,19 @@ an exception will be raised.
 
 ```typescript
 await client.flows.upsert({
+    path: "Personal Projects/MedQA Flow",
     attributes: {
-        key: "value",
+        prompt: {
+            template: "You are a helpful medical assistant helping with medical anamnesis. Answer {{question}}",
+            model: "gpt-4o",
+            temperature: 0.8,
+        },
+        tool: {
+            name: "retrieval_tool_v3",
+            description: "Retrieval tool for MedQA.",
+            source_code: "def retrieval_tool(question: str) -> str:\n    pass\n",
+        },
+        commit_message: "Initial commit",
     },
 });
 ```
@@ -4400,72 +4506,6 @@ await client.flows.upsert({
 <dd>
 
 **request:** `Humanloop.FlowRequest`
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `Flows.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.flows.<a href="/src/api/resources/flows/client/Client.ts">log</a>({ ...params }) -> Humanloop.CreateFlowLogResponse</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Log to a Flow.
-
-You can use query parameters `version_id`, or `environment`, to target
-an existing version of the Flow. Otherwise, the default deployed version will be chosen.
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.flows.log();
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `Humanloop.FlowLogRequest`
 
 </dd>
 </dl>
@@ -4515,7 +4555,12 @@ Inputs and output (or error) must be provided in order to mark it as complete.
 <dd>
 
 ```typescript
-await client.flows.updateLog("log_id", {
+await client.flows.updateLog("medqa_experiment_0001", {
+    inputs: {
+        question:
+            "Patient with a history of diabetes and normal tension presents with chest pain and shortness of breath.",
+    },
+    output: "The patient is likely experiencing a myocardial infarction. Immediate medical attention is required.",
     traceStatus: "complete",
 });
 ```
@@ -4588,7 +4633,9 @@ Get a list of all the versions of a Flow.
 <dd>
 
 ```typescript
-await client.flows.listVersions("id");
+await client.flows.listVersions("fl_6o701g4jmcanPVHxdqD0O", {
+    status: "committed",
+});
 ```
 
 </dd>
@@ -4661,8 +4708,8 @@ If the version is already committed, an exception will be raised.
 <dd>
 
 ```typescript
-await client.flows.commit("id", "version_id", {
-    commitMessage: "commit_message",
+await client.flows.commit("fl_6o701g4jmcanPVHxdqD0O", "flv_6o701g4jmcanPVHxdqD0O", {
+    commitMessage: "RAG lookup tool bug fixing",
 });
 ```
 
@@ -4745,8 +4792,8 @@ will be used for calls made to the Flow in this Environment.
 <dd>
 
 ```typescript
-await client.flows.setDeployment("id", "environment_id", {
-    versionId: "version_id",
+await client.flows.setDeployment("fl_6o701g4jmcanPVHxdqD0O", "staging", {
+    versionId: "flv_6o701g4jmcanPVHxdqD0O",
 });
 ```
 
@@ -4829,7 +4876,7 @@ will no longer be used for calls made to the Flow in this Environment.
 <dd>
 
 ```typescript
-await client.flows.removeDeployment("id", "environment_id");
+await client.flows.removeDeployment("fl_6o701g4jmcanPVHxdqD0O", "staging");
 ```
 
 </dd>
@@ -4900,7 +4947,7 @@ List all Environments and their deployed versions for the Flow.
 <dd>
 
 ```typescript
-await client.flows.listEnvironments("id");
+await client.flows.listEnvironments("fl_6o701g4jmcanPVHxdqD0O");
 ```
 
 </dd>
@@ -4966,7 +5013,13 @@ within the Flow for monitoring purposes.
 <dd>
 
 ```typescript
-await client.flows.updateMonitoring("id", {});
+await client.flows.updateMonitoring("fl_6o701g4jmcanPVHxdqD0O", {
+    activate: [
+        {
+            evaluatorVersionId: "evv_1abc4308abd",
+        },
+    ],
+});
 ```
 
 </dd>

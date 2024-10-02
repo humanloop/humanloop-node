@@ -7,6 +7,10 @@ import * as Humanloop from "../../../../index";
 /**
  * @example
  *     {
+ *         inputs: {
+ *             "question": "Patient with a history of diabetes and normal tension presents with chest pain and shortness of breath."
+ *         },
+ *         output: "The patient is likely experiencing a myocardial infarction. Immediate medical attention is required.",
  *         traceStatus: "complete"
  *     }
  */

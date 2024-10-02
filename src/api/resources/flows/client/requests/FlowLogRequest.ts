@@ -6,7 +6,31 @@ import * as Humanloop from "../../../../index";
 
 /**
  * @example
- *     {}
+ *     {
+ *         logId: "medqa_experiment_0001",
+ *         id: "fl_6o701g4jmcanPVHxdqD0O",
+ *         flow: {
+ *             attributes: {
+ *                 "prompt": {
+ *                     "template": "You are a helpful assistant helping with medical anamnesis",
+ *                     "model": "gpt-4o",
+ *                     "temperature": 0.8
+ *                 },
+ *                 "tool": {
+ *                     "name": "retrieval_tool_v3",
+ *                     "description": "Retrieval tool for MedQA.",
+ *                     "source_code": "def retrieval_tool(question: str) -> str:\n    pass\n"
+ *                 }
+ *             }
+ *         },
+ *         inputs: {
+ *             "question": "Patient with a history of diabetes and hypertension presents with chest pain and shortness of breath."
+ *         },
+ *         output: "The patient is likely experiencing a myocardial infarction. Immediate medical attention is required.",
+ *         traceStatus: "incomplete",
+ *         startTime: "2024-07-08T22:40:35",
+ *         endTime: "2024-07-08T22:40:39"
+ *     }
  */
 export interface FlowLogRequest {
     /**
@@ -19,7 +43,7 @@ export interface FlowLogRequest {
     environment?: string;
     /** Unique identifier for the Evaluation Report to associate the Log to. */
     evaluationId?: string;
-    /** Path of the Flow, including the name. This locates the Flow in the Humanloop filesystem and is used as as a unique identifier. For example: `folder/name` or just `name`. */
+    /** Path of the Flow, including the name. This locates the Flow in the Humanloop filesystem and is used as as a unique identifier. Example: `folder/name` or just `name`. */
     path?: string;
     /** ID for an existing Flow. */
     id?: string;

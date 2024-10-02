@@ -17,7 +17,7 @@ export interface PromptResponse {
     id: string;
     /** ID of the directory that the file is in on Humanloop. */
     directoryId?: string;
-    /** The model instance used, e.g. `gpt-4`. See [supported models](https://humanloop.com/docs/supported-models) */
+    /** The model instance used, e.g. `gpt-4`. See [supported models](https://humanloop.com/docs/reference/supported-models) */
     model: string;
     /** The provider model endpoint used. */
     endpoint?: Humanloop.ModelEndpoints;

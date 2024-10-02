@@ -6,7 +6,9 @@ import * as Humanloop from "../../../../index";
 
 /**
  * @example
- *     {}
+ *     {
+ *         status: "committed"
+ *     }
  */
 export interface ListVersionsFlowsIdVersionsGetRequest {
     /**

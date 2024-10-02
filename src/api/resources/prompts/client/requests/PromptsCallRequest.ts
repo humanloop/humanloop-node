@@ -77,7 +77,7 @@ export interface PromptsCallRequest {
      * Name of the Environment identifying a deployed version to log to.
      */
     environment?: string;
-    /** Path of the Prompt, including the name. This locates the Prompt in the Humanloop filesystem and is used as as a unique identifier. For example: `folder/name` or just `name`. */
+    /** Path of the Prompt, including the name. This locates the Prompt in the Humanloop filesystem and is used as as a unique identifier. Example: `folder/name` or just `name`. */
     path?: string;
     /** ID for an existing Prompt. */
     id?: string;

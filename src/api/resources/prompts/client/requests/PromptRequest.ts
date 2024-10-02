@@ -31,7 +31,7 @@ export interface PromptRequest {
     path?: string;
     /** ID for an existing Prompt. */
     id?: string;
-    /** The model instance used, e.g. `gpt-4`. See [supported models](https://humanloop.com/docs/supported-models) */
+    /** The model instance used, e.g. `gpt-4`. See [supported models](https://humanloop.com/docs/reference/supported-models) */
     model: string;
     /** The provider model endpoint used. */
     endpoint?: Humanloop.ModelEndpoints;

@@ -5,8 +5,8 @@
 import * as environments from "../../../../environments";
 import * as core from "../../../../core";
 import * as Humanloop from "../../../index";
-import urlJoin from "url-join";
 import * as serializers from "../../../../serialization/index";
+import urlJoin from "url-join";
 import * as errors from "../../../../errors/index";
 
 export declare namespace Flows {
@@ -30,6 +30,126 @@ export class Flows {
     constructor(protected readonly _options: Flows.Options) {}
 
     /**
+     * Log to a Flow.
+     *
+     * You can use query parameters version_id, or environment, to target
+     * an existing version of the Flow. Otherwise, the default deployed version will be chosen.
+     *
+     * @param {Humanloop.FlowLogRequest} request
+     * @param {Flows.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Humanloop.UnprocessableEntityError}
+     *
+     * @example
+     *     await client.flows.log({
+     *         logId: "medqa_experiment_0001",
+     *         id: "fl_6o701g4jmcanPVHxdqD0O",
+     *         flow: {
+     *             attributes: {
+     *                 "prompt": {
+     *                     "template": "You are a helpful assistant helping with medical anamnesis",
+     *                     "model": "gpt-4o",
+     *                     "temperature": 0.8
+     *                 },
+     *                 "tool": {
+     *                     "name": "retrieval_tool_v3",
+     *                     "description": "Retrieval tool for MedQA.",
+     *                     "source_code": "def retrieval_tool(question: str) -> str:\n    pass\n"
+     *                 }
+     *             }
+     *         },
+     *         inputs: {
+     *             "question": "Patient with a history of diabetes and hypertension presents with chest pain and shortness of breath."
+     *         },
+     *         output: "The patient is likely experiencing a myocardial infarction. Immediate medical attention is required.",
+     *         traceStatus: "incomplete",
+     *         startTime: "2024-07-08T22:40:35",
+     *         endTime: "2024-07-08T22:40:39"
+     *     })
+     */
+    public async log(
+        request: Humanloop.FlowLogRequest = {},
+        requestOptions?: Flows.RequestOptions
+    ): Promise<Humanloop.CreateFlowLogResponse> {
+        const { versionId, environment, ..._body } = request;
+        const _queryParams: Record<string, string | string[] | object | object[]> = {};
+        if (versionId != null) {
+            _queryParams["version_id"] = versionId;
+        }
+
+        if (environment != null) {
+            _queryParams["environment"] = environment;
+        }
+
+        const _response = await (this._options.fetcher ?? core.fetcher)({
+            url: urlJoin(
+                (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
+                "flows/log"
+            ),
+            method: "POST",
+            headers: {
+                "X-Fern-Language": "JavaScript",
+                "X-Fern-SDK-Name": "humanloop",
+                "X-Fern-SDK-Version": "0.8.4",
+                "User-Agent": "humanloop/0.8.4",
+                "X-Fern-Runtime": core.RUNTIME.type,
+                "X-Fern-Runtime-Version": core.RUNTIME.version,
+                ...(await this._getCustomAuthorizationHeaders()),
+            },
+            contentType: "application/json",
+            queryParameters: _queryParams,
+            requestType: "json",
+            body: serializers.FlowLogRequest.jsonOrThrow(_body, { unrecognizedObjectKeys: "strip" }),
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return serializers.CreateFlowLogResponse.parseOrThrow(_response.body, {
+                unrecognizedObjectKeys: "passthrough",
+                allowUnrecognizedUnionMembers: true,
+                allowUnrecognizedEnumValues: true,
+                skipValidation: true,
+                breadcrumbsPrefix: ["response"],
+            });
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 422:
+                    throw new Humanloop.UnprocessableEntityError(
+                        serializers.HttpValidationError.parseOrThrow(_response.error.body, {
+                            unrecognizedObjectKeys: "passthrough",
+                            allowUnrecognizedUnionMembers: true,
+                            allowUnrecognizedEnumValues: true,
+                            skipValidation: true,
+                            breadcrumbsPrefix: ["response"],
+                        })
+                    );
+                default:
+                    throw new errors.HumanloopError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                    });
+            }
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.HumanloopError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
+                });
+            case "timeout":
+                throw new errors.HumanloopTimeoutError();
+            case "unknown":
+                throw new errors.HumanloopError({
+                    message: _response.error.errorMessage,
+                });
+        }
+    }
+
+    /**
      * Retrieve the Flow with the given ID.
      *
      * By default, the deployed version of the Flow is returned. Use the query parameters
@@ -42,7 +162,7 @@ export class Flows {
      * @throws {@link Humanloop.UnprocessableEntityError}
      *
      * @example
-     *     await client.flows.get("id")
+     *     await client.flows.get("fl_6o701g4jmcanPVHxdqD0O")
      */
     public async get(
         id: string,
@@ -68,8 +188,8 @@ export class Flows {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.3",
-                "User-Agent": "humanloop/0.8.3",
+                "X-Fern-SDK-Version": "0.8.4",
+                "User-Agent": "humanloop/0.8.4",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -135,7 +255,7 @@ export class Flows {
      * @throws {@link Humanloop.UnprocessableEntityError}
      *
      * @example
-     *     await client.flows.delete("id")
+     *     await client.flows.delete("fl_6o701g4jmcanPVHxdqD0O")
      */
     public async delete(id: string, requestOptions?: Flows.RequestOptions): Promise<void> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
@@ -147,8 +267,8 @@ export class Flows {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.3",
-                "User-Agent": "humanloop/0.8.3",
+                "X-Fern-SDK-Version": "0.8.4",
+                "User-Agent": "humanloop/0.8.4",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -208,7 +328,9 @@ export class Flows {
      * @throws {@link Humanloop.UnprocessableEntityError}
      *
      * @example
-     *     await client.flows.move("id")
+     *     await client.flows.move("fl_6o701g4jmcanPVHxdqD0O", {
+     *         path: "new directory/new name"
+     *     })
      */
     public async move(
         id: string,
@@ -224,8 +346,8 @@ export class Flows {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.3",
-                "User-Agent": "humanloop/0.8.3",
+                "X-Fern-SDK-Version": "0.8.4",
+                "User-Agent": "humanloop/0.8.4",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -291,103 +413,109 @@ export class Flows {
      * @throws {@link Humanloop.UnprocessableEntityError}
      *
      * @example
-     *     await client.flows.list()
+     *     await client.flows.list({
+     *         size: 1
+     *     })
      */
     public async list(
         request: Humanloop.ListFlowsGetRequest = {},
         requestOptions?: Flows.RequestOptions
-    ): Promise<Humanloop.PaginatedDataFlowResponse> {
-        const { page, size, name, userFilter, sortBy, order } = request;
-        const _queryParams: Record<string, string | string[] | object | object[]> = {};
-        if (page != null) {
-            _queryParams["page"] = page.toString();
-        }
-
-        if (size != null) {
-            _queryParams["size"] = size.toString();
-        }
-
-        if (name != null) {
-            _queryParams["name"] = name;
-        }
-
-        if (userFilter != null) {
-            _queryParams["user_filter"] = userFilter;
-        }
-
-        if (sortBy != null) {
-            _queryParams["sort_by"] = sortBy;
-        }
-
-        if (order != null) {
-            _queryParams["order"] = order;
-        }
-
-        const _response = await (this._options.fetcher ?? core.fetcher)({
-            url: urlJoin(
-                (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
-                "flows"
-            ),
-            method: "GET",
-            headers: {
-                "X-Fern-Language": "JavaScript",
-                "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.3",
-                "User-Agent": "humanloop/0.8.3",
-                "X-Fern-Runtime": core.RUNTIME.type,
-                "X-Fern-Runtime-Version": core.RUNTIME.version,
-                ...(await this._getCustomAuthorizationHeaders()),
-            },
-            contentType: "application/json",
-            queryParameters: _queryParams,
-            requestType: "json",
-            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-            maxRetries: requestOptions?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-        });
-        if (_response.ok) {
-            return serializers.PaginatedDataFlowResponse.parseOrThrow(_response.body, {
-                unrecognizedObjectKeys: "passthrough",
-                allowUnrecognizedUnionMembers: true,
-                allowUnrecognizedEnumValues: true,
-                skipValidation: true,
-                breadcrumbsPrefix: ["response"],
+    ): Promise<core.Page<Humanloop.FlowResponse>> {
+        const list = async (request: Humanloop.ListFlowsGetRequest): Promise<Humanloop.PaginatedDataFlowResponse> => {
+            const { page, size, name, userFilter, sortBy, order } = request;
+            const _queryParams: Record<string, string | string[] | object | object[]> = {};
+            if (page != null) {
+                _queryParams["page"] = page.toString();
+            }
+            if (size != null) {
+                _queryParams["size"] = size.toString();
+            }
+            if (name != null) {
+                _queryParams["name"] = name;
+            }
+            if (userFilter != null) {
+                _queryParams["user_filter"] = userFilter;
+            }
+            if (sortBy != null) {
+                _queryParams["sort_by"] = sortBy;
+            }
+            if (order != null) {
+                _queryParams["order"] = order;
+            }
+            const _response = await (this._options.fetcher ?? core.fetcher)({
+                url: urlJoin(
+                    (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
+                    "flows"
+                ),
+                method: "GET",
+                headers: {
+                    "X-Fern-Language": "JavaScript",
+                    "X-Fern-SDK-Name": "humanloop",
+                    "X-Fern-SDK-Version": "0.8.4",
+                    "User-Agent": "humanloop/0.8.4",
+                    "X-Fern-Runtime": core.RUNTIME.type,
+                    "X-Fern-Runtime-Version": core.RUNTIME.version,
+                    ...(await this._getCustomAuthorizationHeaders()),
+                },
+                contentType: "application/json",
+                queryParameters: _queryParams,
+                requestType: "json",
+                timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+                maxRetries: requestOptions?.maxRetries,
+                abortSignal: requestOptions?.abortSignal,
             });
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 422:
-                    throw new Humanloop.UnprocessableEntityError(
-                        serializers.HttpValidationError.parseOrThrow(_response.error.body, {
-                            unrecognizedObjectKeys: "passthrough",
-                            allowUnrecognizedUnionMembers: true,
-                            allowUnrecognizedEnumValues: true,
-                            skipValidation: true,
-                            breadcrumbsPrefix: ["response"],
-                        })
-                    );
-                default:
+            if (_response.ok) {
+                return serializers.PaginatedDataFlowResponse.parseOrThrow(_response.body, {
+                    unrecognizedObjectKeys: "passthrough",
+                    allowUnrecognizedUnionMembers: true,
+                    allowUnrecognizedEnumValues: true,
+                    skipValidation: true,
+                    breadcrumbsPrefix: ["response"],
+                });
+            }
+            if (_response.error.reason === "status-code") {
+                switch (_response.error.statusCode) {
+                    case 422:
+                        throw new Humanloop.UnprocessableEntityError(
+                            serializers.HttpValidationError.parseOrThrow(_response.error.body, {
+                                unrecognizedObjectKeys: "passthrough",
+                                allowUnrecognizedUnionMembers: true,
+                                allowUnrecognizedEnumValues: true,
+                                skipValidation: true,
+                                breadcrumbsPrefix: ["response"],
+                            })
+                        );
+                    default:
+                        throw new errors.HumanloopError({
+                            statusCode: _response.error.statusCode,
+                            body: _response.error.body,
+                        });
+                }
+            }
+            switch (_response.error.reason) {
+                case "non-json":
                     throw new errors.HumanloopError({
                         statusCode: _response.error.statusCode,
-                        body: _response.error.body,
+                        body: _response.error.rawBody,
+                    });
+                case "timeout":
+                    throw new errors.HumanloopTimeoutError();
+                case "unknown":
+                    throw new errors.HumanloopError({
+                        message: _response.error.errorMessage,
                     });
             }
-        }
-
-        switch (_response.error.reason) {
-            case "non-json":
-                throw new errors.HumanloopError({
-                    statusCode: _response.error.statusCode,
-                    body: _response.error.rawBody,
-                });
-            case "timeout":
-                throw new errors.HumanloopTimeoutError();
-            case "unknown":
-                throw new errors.HumanloopError({
-                    message: _response.error.errorMessage,
-                });
-        }
+        };
+        let _offset = request?.page != null ? request?.page : 1;
+        return new core.Pageable<Humanloop.PaginatedDataFlowResponse, Humanloop.FlowResponse>({
+            response: await list(request),
+            hasNextPage: (response) => (response?.records ?? []).length > 0,
+            getItems: (response) => response?.records ?? [],
+            loadPage: (_response) => {
+                _offset += 1;
+                return list(core.setObjectProperty(request, "page", _offset));
+            },
+        });
     }
 
     /**
@@ -406,8 +534,19 @@ export class Flows {
      *
      * @example
      *     await client.flows.upsert({
+     *         path: "Personal Projects/MedQA Flow",
      *         attributes: {
-     *             "key": "value"
+     *             "prompt": {
+     *                 "template": "You are a helpful medical assistant helping with medical anamnesis. Answer {{question}}",
+     *                 "model": "gpt-4o",
+     *                 "temperature": 0.8
+     *             },
+     *             "tool": {
+     *                 "name": "retrieval_tool_v3",
+     *                 "description": "Retrieval tool for MedQA.",
+     *                 "source_code": "def retrieval_tool(question: str) -> str:\n    pass\n"
+     *             },
+     *             "commit_message": "Initial commit"
      *         }
      *     })
      */
@@ -424,8 +563,8 @@ export class Flows {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.3",
-                "User-Agent": "humanloop/0.8.3",
+                "X-Fern-SDK-Version": "0.8.4",
+                "User-Agent": "humanloop/0.8.4",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -483,102 +622,6 @@ export class Flows {
     }
 
     /**
-     * Log to a Flow.
-     *
-     * You can use query parameters `version_id`, or `environment`, to target
-     * an existing version of the Flow. Otherwise, the default deployed version will be chosen.
-     *
-     * @param {Humanloop.FlowLogRequest} request
-     * @param {Flows.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @throws {@link Humanloop.UnprocessableEntityError}
-     *
-     * @example
-     *     await client.flows.log()
-     */
-    public async log(
-        request: Humanloop.FlowLogRequest = {},
-        requestOptions?: Flows.RequestOptions
-    ): Promise<Humanloop.CreateFlowLogResponse> {
-        const { versionId, environment, ..._body } = request;
-        const _queryParams: Record<string, string | string[] | object | object[]> = {};
-        if (versionId != null) {
-            _queryParams["version_id"] = versionId;
-        }
-
-        if (environment != null) {
-            _queryParams["environment"] = environment;
-        }
-
-        const _response = await (this._options.fetcher ?? core.fetcher)({
-            url: urlJoin(
-                (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
-                "flows/log"
-            ),
-            method: "POST",
-            headers: {
-                "X-Fern-Language": "JavaScript",
-                "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.3",
-                "User-Agent": "humanloop/0.8.3",
-                "X-Fern-Runtime": core.RUNTIME.type,
-                "X-Fern-Runtime-Version": core.RUNTIME.version,
-                ...(await this._getCustomAuthorizationHeaders()),
-            },
-            contentType: "application/json",
-            queryParameters: _queryParams,
-            requestType: "json",
-            body: serializers.FlowLogRequest.jsonOrThrow(_body, { unrecognizedObjectKeys: "strip" }),
-            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-            maxRetries: requestOptions?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-        });
-        if (_response.ok) {
-            return serializers.CreateFlowLogResponse.parseOrThrow(_response.body, {
-                unrecognizedObjectKeys: "passthrough",
-                allowUnrecognizedUnionMembers: true,
-                allowUnrecognizedEnumValues: true,
-                skipValidation: true,
-                breadcrumbsPrefix: ["response"],
-            });
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 422:
-                    throw new Humanloop.UnprocessableEntityError(
-                        serializers.HttpValidationError.parseOrThrow(_response.error.body, {
-                            unrecognizedObjectKeys: "passthrough",
-                            allowUnrecognizedUnionMembers: true,
-                            allowUnrecognizedEnumValues: true,
-                            skipValidation: true,
-                            breadcrumbsPrefix: ["response"],
-                        })
-                    );
-                default:
-                    throw new errors.HumanloopError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                    });
-            }
-        }
-
-        switch (_response.error.reason) {
-            case "non-json":
-                throw new errors.HumanloopError({
-                    statusCode: _response.error.statusCode,
-                    body: _response.error.rawBody,
-                });
-            case "timeout":
-                throw new errors.HumanloopTimeoutError();
-            case "unknown":
-                throw new errors.HumanloopError({
-                    message: _response.error.errorMessage,
-                });
-        }
-    }
-
-    /**
      * Update the status, inputs, output of a Flow Log.
      *
      * Marking a Flow Log as complete will trigger any monitoring Evaluators to run.
@@ -591,7 +634,11 @@ export class Flows {
      * @throws {@link Humanloop.UnprocessableEntityError}
      *
      * @example
-     *     await client.flows.updateLog("log_id", {
+     *     await client.flows.updateLog("medqa_experiment_0001", {
+     *         inputs: {
+     *             "question": "Patient with a history of diabetes and normal tension presents with chest pain and shortness of breath."
+     *         },
+     *         output: "The patient is likely experiencing a myocardial infarction. Immediate medical attention is required.",
      *         traceStatus: "complete"
      *     })
      */
@@ -609,8 +656,8 @@ export class Flows {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.3",
-                "User-Agent": "humanloop/0.8.3",
+                "X-Fern-SDK-Version": "0.8.4",
+                "User-Agent": "humanloop/0.8.4",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -677,7 +724,9 @@ export class Flows {
      * @throws {@link Humanloop.UnprocessableEntityError}
      *
      * @example
-     *     await client.flows.listVersions("id")
+     *     await client.flows.listVersions("fl_6o701g4jmcanPVHxdqD0O", {
+     *         status: "committed"
+     *     })
      */
     public async listVersions(
         id: string,
@@ -703,8 +752,8 @@ export class Flows {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.3",
-                "User-Agent": "humanloop/0.8.3",
+                "X-Fern-SDK-Version": "0.8.4",
+                "User-Agent": "humanloop/0.8.4",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -774,8 +823,8 @@ export class Flows {
      * @throws {@link Humanloop.UnprocessableEntityError}
      *
      * @example
-     *     await client.flows.commit("id", "version_id", {
-     *         commitMessage: "commit_message"
+     *     await client.flows.commit("fl_6o701g4jmcanPVHxdqD0O", "flv_6o701g4jmcanPVHxdqD0O", {
+     *         commitMessage: "RAG lookup tool bug fixing"
      *     })
      */
     public async commit(
@@ -793,8 +842,8 @@ export class Flows {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.3",
-                "User-Agent": "humanloop/0.8.3",
+                "X-Fern-SDK-Version": "0.8.4",
+                "User-Agent": "humanloop/0.8.4",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -865,8 +914,8 @@ export class Flows {
      * @throws {@link Humanloop.UnprocessableEntityError}
      *
      * @example
-     *     await client.flows.setDeployment("id", "environment_id", {
-     *         versionId: "version_id"
+     *     await client.flows.setDeployment("fl_6o701g4jmcanPVHxdqD0O", "staging", {
+     *         versionId: "flv_6o701g4jmcanPVHxdqD0O"
      *     })
      */
     public async setDeployment(
@@ -887,8 +936,8 @@ export class Flows {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.3",
-                "User-Agent": "humanloop/0.8.3",
+                "X-Fern-SDK-Version": "0.8.4",
+                "User-Agent": "humanloop/0.8.4",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -958,7 +1007,7 @@ export class Flows {
      * @throws {@link Humanloop.UnprocessableEntityError}
      *
      * @example
-     *     await client.flows.removeDeployment("id", "environment_id")
+     *     await client.flows.removeDeployment("fl_6o701g4jmcanPVHxdqD0O", "staging")
      */
     public async removeDeployment(
         id: string,
@@ -974,8 +1023,8 @@ export class Flows {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.3",
-                "User-Agent": "humanloop/0.8.3",
+                "X-Fern-SDK-Version": "0.8.4",
+                "User-Agent": "humanloop/0.8.4",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1034,7 +1083,7 @@ export class Flows {
      * @throws {@link Humanloop.UnprocessableEntityError}
      *
      * @example
-     *     await client.flows.listEnvironments("id")
+     *     await client.flows.listEnvironments("fl_6o701g4jmcanPVHxdqD0O")
      */
     public async listEnvironments(
         id: string,
@@ -1049,8 +1098,8 @@ export class Flows {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.3",
-                "User-Agent": "humanloop/0.8.3",
+                "X-Fern-SDK-Version": "0.8.4",
+                "User-Agent": "humanloop/0.8.4",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1119,7 +1168,11 @@ export class Flows {
      * @throws {@link Humanloop.UnprocessableEntityError}
      *
      * @example
-     *     await client.flows.updateMonitoring("id", {})
+     *     await client.flows.updateMonitoring("fl_6o701g4jmcanPVHxdqD0O", {
+     *         activate: [{
+     *                 evaluatorVersionId: "evv_1abc4308abd"
+     *             }]
+     *     })
      */
     public async updateMonitoring(
         id: string,
@@ -1135,8 +1188,8 @@ export class Flows {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.3",
-                "User-Agent": "humanloop/0.8.3",
+                "X-Fern-SDK-Version": "0.8.4",
+                "User-Agent": "humanloop/0.8.4",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),

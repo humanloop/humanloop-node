@@ -4,7 +4,9 @@
 
 /**
  * @example
- *     {}
+ *     {
+ *         path: "new directory/new name"
+ *     }
  */
 export interface UpdateFlowRequest {
     /** Path of the Flow including the Flow name, which is used as a unique identifier. */

@@ -5,7 +5,7 @@
 /**
  * @example
  *     {
- *         versionId: "version_id"
+ *         versionId: "flv_6o701g4jmcanPVHxdqD0O"
  *     }
  */
 export interface SetDeploymentFlowsIdEnvironmentsEnvironmentIdPostRequest {
