@@ -28,37 +28,21 @@ import * as Humanloop from "../../../../index";
  *         toolChoice: "none",
  *         prompt: {
  *             model: "string",
- *             endpoint: "complete",
- *             template: "string",
- *             provider: "openai",
- *             maxTokens: 1,
- *             temperature: 1.1,
- *             topP: 1.1,
- *             stop: "string",
- *             presencePenalty: 1.1,
- *             frequencyPenalty: 1.1,
- *             other: {
- *                 "string": {
- *                     "key": "value"
- *                 }
- *             },
- *             seed: 1,
- *             responseFormat: {
- *                 type: "json_object",
- *                 jsonSchema: {}
- *             },
- *             tools: [{
- *                     name: "string",
- *                     description: "string",
- *                     strict: undefined,
- *                     parameters: undefined
- *                 }],
- *             linkedTools: ["string"],
- *             attributes: {
- *                 "string": {
- *                     "key": "value"
- *                 }
- *             }
+ *             endpoint: undefined,
+ *             template: undefined,
+ *             provider: undefined,
+ *             maxTokens: undefined,
+ *             temperature: undefined,
+ *             topP: undefined,
+ *             stop: undefined,
+ *             presencePenalty: undefined,
+ *             frequencyPenalty: undefined,
+ *             other: undefined,
+ *             seed: undefined,
+ *             responseFormat: undefined,
+ *             tools: undefined,
+ *             linkedTools: undefined,
+ *             attributes: undefined
  *         },
  *         inputs: {
  *             "string": {
@@ -104,7 +88,7 @@ export interface PromptsCallStreamRequest {
      * Name of the Environment identifying a deployed version to log to.
      */
     environment?: string;
-    /** Path of the Prompt, including the name. This locates the Prompt in the Humanloop filesystem and is used as as a unique identifier. Example: `folder/name` or just `name`. */
+    /** Path of the Prompt, including the name. This locates the Prompt in the Humanloop filesystem and is used as as a unique identifier. For example: `folder/name` or just `name`. */
     path?: string;
     /** ID for an existing Prompt. */
     id?: string;

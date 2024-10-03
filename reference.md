@@ -251,39 +251,21 @@ await client.prompts.callStream({
     toolChoice: "none",
     prompt: {
         model: "string",
-        endpoint: "complete",
-        template: "string",
-        provider: "openai",
-        maxTokens: 1,
-        temperature: 1.1,
-        topP: 1.1,
-        stop: "string",
-        presencePenalty: 1.1,
-        frequencyPenalty: 1.1,
-        other: {
-            string: {
-                key: "value",
-            },
-        },
-        seed: 1,
-        responseFormat: {
-            type: "json_object",
-            jsonSchema: {},
-        },
-        tools: [
-            {
-                name: "string",
-                description: "string",
-                strict: undefined,
-                parameters: undefined,
-            },
-        ],
-        linkedTools: ["string"],
-        attributes: {
-            string: {
-                key: "value",
-            },
-        },
+        endpoint: undefined,
+        template: undefined,
+        provider: undefined,
+        maxTokens: undefined,
+        temperature: undefined,
+        topP: undefined,
+        stop: undefined,
+        presencePenalty: undefined,
+        frequencyPenalty: undefined,
+        other: undefined,
+        seed: undefined,
+        responseFormat: undefined,
+        tools: undefined,
+        linkedTools: undefined,
+        attributes: undefined,
     },
     inputs: {
         string: {
@@ -4088,7 +4070,7 @@ await client.evaluators.updateMonitoring("id", {});
 
 Log to a Flow.
 
-You can use query parameters version_id, or environment, to target
+You can use query parameters `version_id`, or `environment`, to target
 an existing version of the Flow. Otherwise, the default deployed version will be chosen.
 
 </dd>
@@ -5052,6 +5034,325 @@ await client.flows.updateMonitoring("fl_6o701g4jmcanPVHxdqD0O", {
 <dd>
 
 **requestOptions:** `Flows.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+## Directories
+
+<details><summary><code>client.directories.<a href="/src/api/resources/directories/client/Client.ts">list</a>() -> Humanloop.DirectoryResponse[]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve a list of all Directories.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.directories.list();
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**requestOptions:** `Directories.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.directories.<a href="/src/api/resources/directories/client/Client.ts">create</a>({ ...params }) -> Humanloop.DirectoryResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Creates a Directory.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.directories.create();
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.CreateDirectoryRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Directories.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.directories.<a href="/src/api/resources/directories/client/Client.ts">get</a>(id) -> Humanloop.DirectoryWithParentsAndChildrenResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Fetches a directory by ID.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.directories.get("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — String ID of directory. Starts with `dir_`.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Directories.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.directories.<a href="/src/api/resources/directories/client/Client.ts">delete</a>(id) -> void</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Delete the Directory with the given ID.
+
+The Directory must be empty (i.e. contain no Directories or Files).
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.directories.delete("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Unique identifier for Directory. Starts with `dir_`.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Directories.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.directories.<a href="/src/api/resources/directories/client/Client.ts">update</a>(id, { ...params }) -> Humanloop.DirectoryResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Update the Directory with the given ID.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.directories.update("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Unique identifier for Directory. Starts with `dir_`.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.UpdateDirectoryRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Directories.RequestOptions`
 
 </dd>
 </dl>
