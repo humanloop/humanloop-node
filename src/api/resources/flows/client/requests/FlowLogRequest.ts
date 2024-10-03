@@ -43,7 +43,7 @@ export interface FlowLogRequest {
     environment?: string;
     /** Unique identifier for the Evaluation Report to associate the Log to. */
     evaluationId?: string;
-    /** Path of the Flow, including the name. This locates the Flow in the Humanloop filesystem and is used as as a unique identifier. Example: `folder/name` or just `name`. */
+    /** Path of the Flow, including the name. This locates the Flow in the Humanloop filesystem and is used as as a unique identifier. For example: `folder/name` or just `name`. */
     path?: string;
     /** ID for an existing Flow. */
     id?: string;
