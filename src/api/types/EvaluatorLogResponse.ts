@@ -48,6 +48,8 @@ export interface EvaluatorLogResponse {
     save?: boolean;
     /** Evaluator assessment of the Log. */
     judgment?: Humanloop.EvaluatorLogResponseJudgment;
+    /** Whether the Log has been manually marked as completed by a user. */
+    markedCompleted?: boolean;
     /** Unique identifier for the Log. */
     id: string;
     /** List of Evaluator Logs associated with the Log. These contain Evaluator judgments on the Log. */

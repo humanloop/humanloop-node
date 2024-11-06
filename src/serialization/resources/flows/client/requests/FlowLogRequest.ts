@@ -12,7 +12,7 @@ export const FlowLogRequest: core.serialization.Schema<
     serializers.FlowLogRequest.Raw,
     Omit<Humanloop.FlowLogRequest, "versionId" | "environment">
 > = core.serialization.object({
-    evaluationId: core.serialization.property("evaluation_id", core.serialization.string().optional()),
+    runId: core.serialization.property("run_id", core.serialization.string().optional()),
     path: core.serialization.string().optional(),
     id: core.serialization.string().optional(),
     startTime: core.serialization.property("start_time", core.serialization.date().optional()),
@@ -35,7 +35,6 @@ export const FlowLogRequest: core.serialization.Schema<
     metadata: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
     sourceDatapointId: core.serialization.property("source_datapoint_id", core.serialization.string().optional()),
     traceParentId: core.serialization.property("trace_parent_id", core.serialization.string().optional()),
-    batchId: core.serialization.property("batch_id", core.serialization.string().optional()),
     user: core.serialization.string().optional(),
     flowLogRequestEnvironment: core.serialization.property("environment", core.serialization.string().optional()),
     save: core.serialization.boolean().optional(),
@@ -46,7 +45,7 @@ export const FlowLogRequest: core.serialization.Schema<
 
 export declare namespace FlowLogRequest {
     interface Raw {
-        evaluation_id?: string | null;
+        run_id?: string | null;
         path?: string | null;
         id?: string | null;
         start_time?: string | null;
@@ -63,7 +62,6 @@ export declare namespace FlowLogRequest {
         metadata?: Record<string, unknown> | null;
         source_datapoint_id?: string | null;
         trace_parent_id?: string | null;
-        batch_id?: string | null;
         user?: string | null;
         environment?: string | null;
         save?: boolean | null;

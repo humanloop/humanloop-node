@@ -21,7 +21,7 @@ export interface EvaluateeRequest {
     fileId?: string;
     /** Name of the Environment a Version is deployed to. Only provide this when specifying a File. If not provided (and a File is specified), the default Environment is used. */
     environment?: string;
-    /** Unique identifier for the batch of Logs to include in the Evaluation Report. */
+    /** Unique identifier for the batch of Logs to include in the Evaluation. */
     batchId?: string;
     /** Whether the Prompt/Tool is orchestrated by Humanloop. Default is `True`. If `False`, a log for the Prompt/Tool should be submitted by the user via the API. */
     orchestrated?: boolean;

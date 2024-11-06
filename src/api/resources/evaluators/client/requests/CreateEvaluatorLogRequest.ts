@@ -53,8 +53,6 @@ export interface CreateEvaluatorLogRequest {
     sourceDatapointId?: string;
     /** The ID of the parent Log to nest this Log under in a Trace. */
     traceParentId?: string;
-    /** Unique identifier for the Batch to add this Batch to. Batches are used to group Logs together for Evaluations. A Batch will be created if one with the given ID does not exist. */
-    batchId?: string;
     /** End-user ID related to the Log. */
     user?: string;
     /** The name of the Environment the Log is associated to. */
@@ -63,5 +61,7 @@ export interface CreateEvaluatorLogRequest {
     save?: boolean;
     /** Evaluator assessment of the Log. */
     judgment?: Humanloop.CreateEvaluatorLogRequestJudgment;
+    /** Whether the Log has been manually marked as completed by a user. */
+    markedCompleted?: boolean;
     spec?: Humanloop.CreateEvaluatorLogRequestSpec;
 }

@@ -15,4 +15,8 @@ export interface ListVersionsDatasetsIdVersionsGetRequest {
      * Filter versions by status: 'uncommitted', 'committed'. If no status is provided, all versions are returned.
      */
     status?: Humanloop.VersionStatus;
+    /**
+     * If set to 'latest_committed', include the Datapoints for the latest committed version. Defaults to `None`.
+     */
+    includeDatapoints?: "latest_committed";
 }

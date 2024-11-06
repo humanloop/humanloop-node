@@ -4,7 +4,7 @@
 
 import * as Humanloop from "../../../index";
 
-export type SrcExternalAppModelsV5EvaluatorsEvaluatorRequestSpec =
+export type EvaluatorRequestSpec =
     | Humanloop.LlmEvaluatorRequest
     | Humanloop.CodeEvaluatorRequest
     | Humanloop.HumanEvaluatorRequest

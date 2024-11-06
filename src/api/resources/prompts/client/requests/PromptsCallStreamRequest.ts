@@ -59,7 +59,6 @@ import * as Humanloop from "../../../../index";
  *         endTime: "2024-01-15T09:30:00Z",
  *         sourceDatapointId: "string",
  *         traceParentId: "string",
- *         batchId: "string",
  *         user: "string",
  *         promptsCallStreamRequestEnvironment: "string",
  *         save: true,
@@ -118,8 +117,6 @@ export interface PromptsCallStreamRequest {
     sourceDatapointId?: string;
     /** The ID of the parent Log to nest this Log under in a Trace. */
     traceParentId?: string;
-    /** Unique identifier for the Batch to add this Batch to. Batches are used to group Logs together for Evaluations. A Batch will be created if one with the given ID does not exist. */
-    batchId?: string;
     /** End-user ID related to the Log. */
     user?: string;
     /** The name of the Environment the Log is associated to. */

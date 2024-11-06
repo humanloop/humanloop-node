@@ -5,28 +5,22 @@
 import * as serializers from "../../../../index";
 import * as Humanloop from "../../../../../api/index";
 import * as core from "../../../../../core";
-import { EvaluationsDatasetRequest } from "../../../../types/EvaluationsDatasetRequest";
-import { EvaluateeRequest } from "../../../../types/EvaluateeRequest";
-import { EvaluationsRequest } from "../../../../types/EvaluationsRequest";
 import { FileRequest } from "../../../../types/FileRequest";
+import { CreateEvaluationRequestEvaluatorsItem } from "../../types/CreateEvaluationRequestEvaluatorsItem";
 
 export const CreateEvaluationRequest: core.serialization.Schema<
     serializers.CreateEvaluationRequest.Raw,
     Humanloop.CreateEvaluationRequest
 > = core.serialization.object({
-    dataset: EvaluationsDatasetRequest,
-    evaluatees: core.serialization.list(EvaluateeRequest).optional(),
-    evaluators: core.serialization.list(EvaluationsRequest),
-    name: core.serialization.string().optional(),
     file: FileRequest.optional(),
+    name: core.serialization.string().optional(),
+    evaluators: core.serialization.list(CreateEvaluationRequestEvaluatorsItem),
 });
 
 export declare namespace CreateEvaluationRequest {
     interface Raw {
-        dataset: EvaluationsDatasetRequest.Raw;
-        evaluatees?: EvaluateeRequest.Raw[] | null;
-        evaluators: EvaluationsRequest.Raw[];
-        name?: string | null;
         file?: FileRequest.Raw | null;
+        name?: string | null;
+        evaluators: CreateEvaluationRequestEvaluatorsItem.Raw[];
     }
 }

@@ -6,9 +6,9 @@ import * as serializers from "../index";
 import * as Humanloop from "../../api/index";
 import * as core from "../../core";
 
-export const EvaluatedVersionResponse: core.serialization.Schema<
-    serializers.EvaluatedVersionResponse.Raw,
-    Humanloop.EvaluatedVersionResponse
+export const RunVersionResponse: core.serialization.Schema<
+    serializers.RunVersionResponse.Raw,
+    Humanloop.RunVersionResponse
 > = core.serialization.undiscriminatedUnion([
     core.serialization.lazyObject(() => serializers.PromptResponse),
     core.serialization.lazyObject(() => serializers.ToolResponse),
@@ -16,7 +16,7 @@ export const EvaluatedVersionResponse: core.serialization.Schema<
     core.serialization.lazyObject(() => serializers.FlowResponse),
 ]);
 
-export declare namespace EvaluatedVersionResponse {
+export declare namespace RunVersionResponse {
     type Raw =
         | serializers.PromptResponse.Raw
         | serializers.ToolResponse.Raw

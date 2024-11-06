@@ -4,7 +4,7 @@
 
 /**
  * Base attributes for stats for an Evaluator Version-Evaluated Version pair
- * in the Evaluation Report.
+ * in the Evaluation.
  */
 export interface NumericEvaluatorStatsResponse {
     /** Unique identifier for the Evaluator Version. */

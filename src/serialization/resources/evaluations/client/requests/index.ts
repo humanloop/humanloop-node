@@ -1,3 +1,5 @@
 export { CreateEvaluationRequest } from "./CreateEvaluationRequest";
-export { UpdateEvaluationRequest } from "./UpdateEvaluationRequest";
-export { BodyUpdateStatusEvaluationsIdStatusPatch } from "./BodyUpdateStatusEvaluationsIdStatusPatch";
+export { AddEvaluatorsRequest } from "./AddEvaluatorsRequest";
+export { CreateRunRequest } from "./CreateRunRequest";
+export { UpdateEvaluationRunRequest } from "./UpdateEvaluationRunRequest";
+export { AddLogsToRunRequest } from "./AddLogsToRunRequest";

@@ -41,8 +41,8 @@ export interface FlowLogRequest {
      * Name of the Environment identifying a deployed version to log to.
      */
     environment?: string;
-    /** Unique identifier for the Evaluation Report to associate the Log to. */
-    evaluationId?: string;
+    /** Unique identifier for the Run to associate the Log to. */
+    runId?: string;
     /** Path of the Flow, including the name. This locates the Flow in the Humanloop filesystem and is used as as a unique identifier. For example: `folder/name` or just `name`. */
     path?: string;
     /** ID for an existing Flow. */
@@ -75,8 +75,6 @@ export interface FlowLogRequest {
     sourceDatapointId?: string;
     /** The ID of the parent Log to nest this Log under in a Trace. */
     traceParentId?: string;
-    /** Unique identifier for the Batch to add this Batch to. Batches are used to group Logs together for Evaluations. A Batch will be created if one with the given ID does not exist. */
-    batchId?: string;
     /** End-user ID related to the Log. */
     user?: string;
     /** The name of the Environment the Log is associated to. */

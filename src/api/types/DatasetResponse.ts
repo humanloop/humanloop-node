@@ -28,6 +28,10 @@ export interface DatasetResponse {
     updatedAt: Date;
     /** The user who created the Dataset. */
     createdBy?: Humanloop.UserResponse | undefined;
+    /** The user who committed the Dataset Version. */
+    committedBy?: Humanloop.UserResponse | undefined;
+    /** The date and time the Dataset Version was committed. */
+    committedAt?: Date;
     /** The status of the Dataset Version. */
     status: Humanloop.VersionStatus;
     lastUsedAt: Date;

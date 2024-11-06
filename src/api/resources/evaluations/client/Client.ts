@@ -27,26 +27,25 @@ export declare namespace Evaluations {
 }
 
 /**
- * Evaluations help you measure the performance of your Prompts, Tools and LLM Evaluators.
+ * Evaluations help you measure the performance of your Prompts.
  *
- * An Evaluation consists of a Dataset, Evaluatees (i.e. Versions to evaluate), and Evaluators.
- * When an Evaluation is created, Humanloop will start generating Logs, iterating through Datapoints in the Dataset,
- * for each Evaluatee. The Evaluators will then be run on these Logs.
+ * An Evaluation consists of Runs and a set of Evaluators. These Evaluators judge the Logs in all Runs,
+ * allowing you to compare the performance of different Prompts.
+ * A Run can be created with a specific Dataset and Version, or by specifying the Logs directly.
+ * If a Run is created with a Dataset and Version, Humanloop will automatically start generating Logs, and
+ * the Evaluators will then be run on these Logs.
  *
  * Aggregate stats can be viewed in the Humanloop app or retrieved with the **Get Evaluation Stats** endpoint.
  *
- * Note that when an Evaluation is created, Humanloop will attempt to reuse any existing Logs for each Datapoint-Evaluatee
- * pair. This means that you can create multiple Evaluations without generating new Logs unnecessarily.
- *
+ * Note that when a Run is created, Humanloop will attempt to reuse any existing Logs for each Datapoint-Version
+ * pair. This means that you can create Runs without generating new Logs unnecessarily.
  *
  */
 export class Evaluations {
     constructor(protected readonly _options: Evaluations.Options) {}
 
     /**
-     * List all Evaluations for the specified `file_id`.
-     *
-     * Retrieve a list of Evaluations that evaluate versions of the specified File.
+     * Retrieve a list of Evaluations for the specified File.
      *
      * @param {Humanloop.ListEvaluationsGetRequest} request
      * @param {Evaluations.RequestOptions} requestOptions - Request-specific configuration.
@@ -84,8 +83,8 @@ export class Evaluations {
                 headers: {
                     "X-Fern-Language": "JavaScript",
                     "X-Fern-SDK-Name": "humanloop",
-                    "X-Fern-SDK-Version": "0.8.6",
-                    "User-Agent": "humanloop/0.8.6",
+                    "X-Fern-SDK-Version": "0.8.7",
+                    "User-Agent": "humanloop/0.8.7",
                     "X-Fern-Runtime": core.RUNTIME.type,
                     "X-Fern-Runtime-Version": core.RUNTIME.version,
                     ...(await this._getCustomAuthorizationHeaders()),
@@ -154,16 +153,9 @@ export class Evaluations {
     /**
      * Create an Evaluation.
      *
-     * Create a new Evaluation by specifying the Dataset, versions to be
-     * evaluated (Evaluatees), and which Evaluators to provide judgments.
-     *
-     * Humanloop will automatically start generating Logs and running Evaluators where
-     * `orchestrated=true`. If you own the runtime for the Evaluatee or Evaluator, you
-     * can set `orchestrated=false` and then generate and submit the required logs using
-     * your runtime.
-     *
-     * To keep updated on the progress of the Evaluation, you can poll the Evaluation using
-     * the `GET /evaluations/:id` endpoint and check its status.
+     * Create a new Evaluation by specifying the File to evaluate, and a name
+     * for the Evaluation.
+     * You can then add Runs to this Evaluation using the `POST /evaluations/{id}/runs` endpoint.
      *
      * @param {Humanloop.CreateEvaluationRequest} request
      * @param {Evaluations.RequestOptions} requestOptions - Request-specific configuration.
@@ -172,16 +164,8 @@ export class Evaluations {
      *
      * @example
      *     await client.evaluations.create({
-     *         dataset: {
-     *             versionId: "dsv_6L78pqrdFi2xa"
-     *         },
-     *         evaluatees: [{
-     *                 versionId: "prv_7ZlQREDScH0xkhUwtXruN",
-     *                 orchestrated: false
-     *             }],
      *         evaluators: [{
-     *                 versionId: "evv_012def",
-     *                 orchestrated: false
+     *                 versionId: "version_id"
      *             }]
      *     })
      */
@@ -198,8 +182,8 @@ export class Evaluations {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.6",
-                "User-Agent": "humanloop/0.8.6",
+                "X-Fern-SDK-Version": "0.8.7",
+                "User-Agent": "humanloop/0.8.7",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -257,7 +241,188 @@ export class Evaluations {
     }
 
     /**
+     * Add Evaluators to an Evaluation.
+     *
+     * The Evaluators will be run on the Logs generated for the Evaluation.
+     *
+     * @param {string} id - Unique identifier for Evaluation.
+     * @param {Humanloop.AddEvaluatorsRequest} request
+     * @param {Evaluations.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Humanloop.UnprocessableEntityError}
+     *
+     * @example
+     *     await client.evaluations.addEvaluators("id", {
+     *         evaluators: [{
+     *                 versionId: "version_id"
+     *             }]
+     *     })
+     */
+    public async addEvaluators(
+        id: string,
+        request: Humanloop.AddEvaluatorsRequest,
+        requestOptions?: Evaluations.RequestOptions
+    ): Promise<Humanloop.EvaluationResponse> {
+        const _response = await (this._options.fetcher ?? core.fetcher)({
+            url: urlJoin(
+                (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
+                `evaluations/${encodeURIComponent(id)}/evaluators`
+            ),
+            method: "POST",
+            headers: {
+                "X-Fern-Language": "JavaScript",
+                "X-Fern-SDK-Name": "humanloop",
+                "X-Fern-SDK-Version": "0.8.7",
+                "User-Agent": "humanloop/0.8.7",
+                "X-Fern-Runtime": core.RUNTIME.type,
+                "X-Fern-Runtime-Version": core.RUNTIME.version,
+                ...(await this._getCustomAuthorizationHeaders()),
+            },
+            contentType: "application/json",
+            requestType: "json",
+            body: serializers.AddEvaluatorsRequest.jsonOrThrow(request, { unrecognizedObjectKeys: "strip" }),
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return serializers.EvaluationResponse.parseOrThrow(_response.body, {
+                unrecognizedObjectKeys: "passthrough",
+                allowUnrecognizedUnionMembers: true,
+                allowUnrecognizedEnumValues: true,
+                skipValidation: true,
+                breadcrumbsPrefix: ["response"],
+            });
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 422:
+                    throw new Humanloop.UnprocessableEntityError(
+                        serializers.HttpValidationError.parseOrThrow(_response.error.body, {
+                            unrecognizedObjectKeys: "passthrough",
+                            allowUnrecognizedUnionMembers: true,
+                            allowUnrecognizedEnumValues: true,
+                            skipValidation: true,
+                            breadcrumbsPrefix: ["response"],
+                        })
+                    );
+                default:
+                    throw new errors.HumanloopError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                    });
+            }
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.HumanloopError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
+                });
+            case "timeout":
+                throw new errors.HumanloopTimeoutError();
+            case "unknown":
+                throw new errors.HumanloopError({
+                    message: _response.error.errorMessage,
+                });
+        }
+    }
+
+    /**
+     * Remove an Evaluator from an Evaluation.
+     *
+     * The Evaluator will no longer be run on the Logs in the Evaluation.
+     *
+     * @param {string} id - Unique identifier for Evaluation.
+     * @param {string} evaluatorVersionId - Unique identifier for Evaluator Version.
+     * @param {Evaluations.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Humanloop.UnprocessableEntityError}
+     *
+     * @example
+     *     await client.evaluations.removeEvaluator("id", "evaluator_version_id")
+     */
+    public async removeEvaluator(
+        id: string,
+        evaluatorVersionId: string,
+        requestOptions?: Evaluations.RequestOptions
+    ): Promise<Humanloop.EvaluationResponse> {
+        const _response = await (this._options.fetcher ?? core.fetcher)({
+            url: urlJoin(
+                (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
+                `evaluations/${encodeURIComponent(id)}/evaluators/${encodeURIComponent(evaluatorVersionId)}`
+            ),
+            method: "DELETE",
+            headers: {
+                "X-Fern-Language": "JavaScript",
+                "X-Fern-SDK-Name": "humanloop",
+                "X-Fern-SDK-Version": "0.8.7",
+                "User-Agent": "humanloop/0.8.7",
+                "X-Fern-Runtime": core.RUNTIME.type,
+                "X-Fern-Runtime-Version": core.RUNTIME.version,
+                ...(await this._getCustomAuthorizationHeaders()),
+            },
+            contentType: "application/json",
+            requestType: "json",
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return serializers.EvaluationResponse.parseOrThrow(_response.body, {
+                unrecognizedObjectKeys: "passthrough",
+                allowUnrecognizedUnionMembers: true,
+                allowUnrecognizedEnumValues: true,
+                skipValidation: true,
+                breadcrumbsPrefix: ["response"],
+            });
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 422:
+                    throw new Humanloop.UnprocessableEntityError(
+                        serializers.HttpValidationError.parseOrThrow(_response.error.body, {
+                            unrecognizedObjectKeys: "passthrough",
+                            allowUnrecognizedUnionMembers: true,
+                            allowUnrecognizedEnumValues: true,
+                            skipValidation: true,
+                            breadcrumbsPrefix: ["response"],
+                        })
+                    );
+                default:
+                    throw new errors.HumanloopError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                    });
+            }
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.HumanloopError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
+                });
+            case "timeout":
+                throw new errors.HumanloopTimeoutError();
+            case "unknown":
+                throw new errors.HumanloopError({
+                    message: _response.error.errorMessage,
+                });
+        }
+    }
+
+    /**
      * Get an Evaluation.
+     *
+     * This includes the Evaluators associated with the Evaluation and metadata about the Evaluation,
+     * such as its name.
+     *
+     * To get the Runs associated with the Evaluation, use the `GET /evaluations/{id}/runs` endpoint.
+     * To retrieve stats for the Evaluation, use the `GET /evaluations/{id}/stats` endpoint.
      *
      * @param {string} id - Unique identifier for Evaluation.
      * @param {Evaluations.RequestOptions} requestOptions - Request-specific configuration.
@@ -277,8 +442,8 @@ export class Evaluations {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.6",
-                "User-Agent": "humanloop/0.8.6",
+                "X-Fern-SDK-Version": "0.8.7",
+                "User-Agent": "humanloop/0.8.7",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -337,8 +502,7 @@ export class Evaluations {
     /**
      * Delete an Evaluation.
      *
-     * Remove an Evaluation from Humanloop. The Logs and Versions used in the Evaluation
-     * will not be deleted.
+     * The Runs and Evaluators in the Evaluation will not be deleted.
      *
      * @param {string} id - Unique identifier for Evaluation.
      * @param {Evaluations.RequestOptions} requestOptions - Request-specific configuration.
@@ -358,8 +522,8 @@ export class Evaluations {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.6",
-                "User-Agent": "humanloop/0.8.6",
+                "X-Fern-SDK-Version": "0.8.7",
+                "User-Agent": "humanloop/0.8.7",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -410,61 +574,43 @@ export class Evaluations {
     }
 
     /**
-     * Update an Evaluation.
-     *
-     * Update the setup of an Evaluation by specifying the Dataset, versions to be
-     * evaluated (Evaluatees), and which Evaluators to provide judgments.
+     * List all Runs for an Evaluation.
      *
      * @param {string} id - Unique identifier for Evaluation.
-     * @param {Humanloop.UpdateEvaluationRequest} request
      * @param {Evaluations.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Humanloop.UnprocessableEntityError}
      *
      * @example
-     *     await client.evaluations.updateSetup("ev_567yza", {
-     *         dataset: {
-     *             versionId: "dsv_6L78pqrdFi2xa"
-     *         },
-     *         evaluatees: [{
-     *                 versionId: "prv_7ZlQREDScH0xkhUwtXruN",
-     *                 orchestrated: false
-     *             }],
-     *         evaluators: [{
-     *                 versionId: "evv_012def",
-     *                 orchestrated: false
-     *             }]
-     *     })
+     *     await client.evaluations.listRunsForEvaluation("id")
      */
-    public async updateSetup(
+    public async listRunsForEvaluation(
         id: string,
-        request: Humanloop.UpdateEvaluationRequest = {},
         requestOptions?: Evaluations.RequestOptions
-    ): Promise<Humanloop.EvaluationResponse> {
+    ): Promise<Humanloop.EvaluationRunsResponse> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
-                `evaluations/${encodeURIComponent(id)}`
+                `evaluations/${encodeURIComponent(id)}/runs`
             ),
-            method: "PATCH",
+            method: "GET",
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.6",
-                "User-Agent": "humanloop/0.8.6",
+                "X-Fern-SDK-Version": "0.8.7",
+                "User-Agent": "humanloop/0.8.7",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
             },
             contentType: "application/json",
             requestType: "json",
-            body: serializers.UpdateEvaluationRequest.jsonOrThrow(request, { unrecognizedObjectKeys: "strip" }),
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return serializers.EvaluationResponse.parseOrThrow(_response.body, {
+            return serializers.EvaluationRunsResponse.parseOrThrow(_response.body, {
                 unrecognizedObjectKeys: "passthrough",
                 allowUnrecognizedUnionMembers: true,
                 allowUnrecognizedEnumValues: true,
@@ -509,53 +655,392 @@ export class Evaluations {
     }
 
     /**
-     * Update the status of an Evaluation.
+     * Create an Evaluation Run.
      *
-     * Can be used to cancel a running Evaluation, or mark an Evaluation that uses
-     * external or human evaluators as completed.
+     * Optionally specify the Dataset and version to be evaluated.
+     *
+     * Humanloop will automatically start generating Logs and running Evaluators where
+     * `orchestrated=true`. If you are generating Logs yourself, you can set `orchestrated=false`
+     * and then generate and submit the required Logs via the API.
+     *
+     * If `dataset` and `version` are provided, you can set `use_existing_logs=True` to reuse existing Logs,
+     * avoiding generating new Logs unnecessarily. Logs that are associated with the specified Version and have `source_datapoint_id`
+     * referencing a datapoint in the specified Dataset will be associated with the Run.
+     *
+     * To keep updated on the progress of the Run, you can poll the Run using
+     * the `GET /evaluations/{id}/runs` endpoint and check its status.
      *
      * @param {string} id - Unique identifier for Evaluation.
-     * @param {Humanloop.BodyUpdateStatusEvaluationsIdStatusPatch} request
+     * @param {Humanloop.CreateRunRequest} request
      * @param {Evaluations.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Humanloop.UnprocessableEntityError}
      *
      * @example
-     *     await client.evaluations.updateStatus("id", {
-     *         status: "pending"
-     *     })
+     *     await client.evaluations.createRun("id")
      */
-    public async updateStatus(
+    public async createRun(
         id: string,
-        request: Humanloop.BodyUpdateStatusEvaluationsIdStatusPatch,
+        request: Humanloop.CreateRunRequest = {},
         requestOptions?: Evaluations.RequestOptions
-    ): Promise<Humanloop.EvaluationResponse> {
+    ): Promise<Humanloop.EvaluationRunResponse> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
-                `evaluations/${encodeURIComponent(id)}/status`
+                `evaluations/${encodeURIComponent(id)}/runs`
             ),
-            method: "PATCH",
+            method: "POST",
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.6",
-                "User-Agent": "humanloop/0.8.6",
+                "X-Fern-SDK-Version": "0.8.7",
+                "User-Agent": "humanloop/0.8.7",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
             },
             contentType: "application/json",
             requestType: "json",
-            body: serializers.BodyUpdateStatusEvaluationsIdStatusPatch.jsonOrThrow(request, {
-                unrecognizedObjectKeys: "strip",
-            }),
+            body: serializers.CreateRunRequest.jsonOrThrow(request, { unrecognizedObjectKeys: "strip" }),
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return serializers.EvaluationResponse.parseOrThrow(_response.body, {
+            return serializers.EvaluationRunResponse.parseOrThrow(_response.body, {
+                unrecognizedObjectKeys: "passthrough",
+                allowUnrecognizedUnionMembers: true,
+                allowUnrecognizedEnumValues: true,
+                skipValidation: true,
+                breadcrumbsPrefix: ["response"],
+            });
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 422:
+                    throw new Humanloop.UnprocessableEntityError(
+                        serializers.HttpValidationError.parseOrThrow(_response.error.body, {
+                            unrecognizedObjectKeys: "passthrough",
+                            allowUnrecognizedUnionMembers: true,
+                            allowUnrecognizedEnumValues: true,
+                            skipValidation: true,
+                            breadcrumbsPrefix: ["response"],
+                        })
+                    );
+                default:
+                    throw new errors.HumanloopError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                    });
+            }
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.HumanloopError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
+                });
+            case "timeout":
+                throw new errors.HumanloopTimeoutError();
+            case "unknown":
+                throw new errors.HumanloopError({
+                    message: _response.error.errorMessage,
+                });
+        }
+    }
+
+    /**
+     * Add an existing Run to the specified Evaluation.
+     *
+     * This is useful if you want to compare the Runs in this Evaluation with an existing Run
+     * that exists within another Evaluation.
+     *
+     * @param {string} id - Unique identifier for Evaluation.
+     * @param {string} runId - Unique identifier for Run.
+     * @param {Evaluations.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Humanloop.UnprocessableEntityError}
+     *
+     * @example
+     *     await client.evaluations.addExistingRun("id", "run_id")
+     */
+    public async addExistingRun(
+        id: string,
+        runId: string,
+        requestOptions?: Evaluations.RequestOptions
+    ): Promise<unknown> {
+        const _response = await (this._options.fetcher ?? core.fetcher)({
+            url: urlJoin(
+                (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
+                `evaluations/${encodeURIComponent(id)}/runs/${encodeURIComponent(runId)}`
+            ),
+            method: "POST",
+            headers: {
+                "X-Fern-Language": "JavaScript",
+                "X-Fern-SDK-Name": "humanloop",
+                "X-Fern-SDK-Version": "0.8.7",
+                "User-Agent": "humanloop/0.8.7",
+                "X-Fern-Runtime": core.RUNTIME.type,
+                "X-Fern-Runtime-Version": core.RUNTIME.version,
+                ...(await this._getCustomAuthorizationHeaders()),
+            },
+            contentType: "application/json",
+            requestType: "json",
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return _response.body;
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 422:
+                    throw new Humanloop.UnprocessableEntityError(
+                        serializers.HttpValidationError.parseOrThrow(_response.error.body, {
+                            unrecognizedObjectKeys: "passthrough",
+                            allowUnrecognizedUnionMembers: true,
+                            allowUnrecognizedEnumValues: true,
+                            skipValidation: true,
+                            breadcrumbsPrefix: ["response"],
+                        })
+                    );
+                default:
+                    throw new errors.HumanloopError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                    });
+            }
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.HumanloopError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
+                });
+            case "timeout":
+                throw new errors.HumanloopTimeoutError();
+            case "unknown":
+                throw new errors.HumanloopError({
+                    message: _response.error.errorMessage,
+                });
+        }
+    }
+
+    /**
+     * Remove a Run from an Evaluation.
+     *
+     * The Logs and Versions used in the Run will not be deleted.
+     * If this Run is used in any other Evaluations, it will still be available in those Evaluations.
+     *
+     * @param {string} id - Unique identifier for Evaluation.
+     * @param {string} runId - Unique identifier for Run.
+     * @param {Evaluations.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Humanloop.UnprocessableEntityError}
+     *
+     * @example
+     *     await client.evaluations.removeRun("id", "run_id")
+     */
+    public async removeRun(id: string, runId: string, requestOptions?: Evaluations.RequestOptions): Promise<void> {
+        const _response = await (this._options.fetcher ?? core.fetcher)({
+            url: urlJoin(
+                (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
+                `evaluations/${encodeURIComponent(id)}/runs/${encodeURIComponent(runId)}`
+            ),
+            method: "DELETE",
+            headers: {
+                "X-Fern-Language": "JavaScript",
+                "X-Fern-SDK-Name": "humanloop",
+                "X-Fern-SDK-Version": "0.8.7",
+                "User-Agent": "humanloop/0.8.7",
+                "X-Fern-Runtime": core.RUNTIME.type,
+                "X-Fern-Runtime-Version": core.RUNTIME.version,
+                ...(await this._getCustomAuthorizationHeaders()),
+            },
+            contentType: "application/json",
+            requestType: "json",
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return;
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 422:
+                    throw new Humanloop.UnprocessableEntityError(
+                        serializers.HttpValidationError.parseOrThrow(_response.error.body, {
+                            unrecognizedObjectKeys: "passthrough",
+                            allowUnrecognizedUnionMembers: true,
+                            allowUnrecognizedEnumValues: true,
+                            skipValidation: true,
+                            breadcrumbsPrefix: ["response"],
+                        })
+                    );
+                default:
+                    throw new errors.HumanloopError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                    });
+            }
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.HumanloopError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
+                });
+            case "timeout":
+                throw new errors.HumanloopTimeoutError();
+            case "unknown":
+                throw new errors.HumanloopError({
+                    message: _response.error.errorMessage,
+                });
+        }
+    }
+
+    /**
+     * Update an Evaluation Run.
+     *
+     * Specify `control=true` to use this Run as the control Run for the Evaluation.
+     * You can cancel a running/pending Run, or mark a Run that uses external or human Evaluators as completed.
+     *
+     * @param {string} id - Unique identifier for Evaluation.
+     * @param {string} runId - Unique identifier for Run.
+     * @param {Humanloop.UpdateEvaluationRunRequest} request
+     * @param {Evaluations.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Humanloop.UnprocessableEntityError}
+     *
+     * @example
+     *     await client.evaluations.updateEvaluationRun("id", "run_id")
+     */
+    public async updateEvaluationRun(
+        id: string,
+        runId: string,
+        request: Humanloop.UpdateEvaluationRunRequest = {},
+        requestOptions?: Evaluations.RequestOptions
+    ): Promise<Humanloop.EvaluationRunResponse> {
+        const _response = await (this._options.fetcher ?? core.fetcher)({
+            url: urlJoin(
+                (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
+                `evaluations/${encodeURIComponent(id)}/runs/${encodeURIComponent(runId)}`
+            ),
+            method: "PATCH",
+            headers: {
+                "X-Fern-Language": "JavaScript",
+                "X-Fern-SDK-Name": "humanloop",
+                "X-Fern-SDK-Version": "0.8.7",
+                "User-Agent": "humanloop/0.8.7",
+                "X-Fern-Runtime": core.RUNTIME.type,
+                "X-Fern-Runtime-Version": core.RUNTIME.version,
+                ...(await this._getCustomAuthorizationHeaders()),
+            },
+            contentType: "application/json",
+            requestType: "json",
+            body: serializers.UpdateEvaluationRunRequest.jsonOrThrow(request, { unrecognizedObjectKeys: "strip" }),
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return serializers.EvaluationRunResponse.parseOrThrow(_response.body, {
+                unrecognizedObjectKeys: "passthrough",
+                allowUnrecognizedUnionMembers: true,
+                allowUnrecognizedEnumValues: true,
+                skipValidation: true,
+                breadcrumbsPrefix: ["response"],
+            });
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 422:
+                    throw new Humanloop.UnprocessableEntityError(
+                        serializers.HttpValidationError.parseOrThrow(_response.error.body, {
+                            unrecognizedObjectKeys: "passthrough",
+                            allowUnrecognizedUnionMembers: true,
+                            allowUnrecognizedEnumValues: true,
+                            skipValidation: true,
+                            breadcrumbsPrefix: ["response"],
+                        })
+                    );
+                default:
+                    throw new errors.HumanloopError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                    });
+            }
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.HumanloopError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
+                });
+            case "timeout":
+                throw new errors.HumanloopTimeoutError();
+            case "unknown":
+                throw new errors.HumanloopError({
+                    message: _response.error.errorMessage,
+                });
+        }
+    }
+
+    /**
+     * Add the specified Logs to a Run.
+     *
+     * @param {string} id - Unique identifier for Evaluation.
+     * @param {string} runId - Unique identifier for Run.
+     * @param {Humanloop.AddLogsToRunRequest} request
+     * @param {Evaluations.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Humanloop.UnprocessableEntityError}
+     *
+     * @example
+     *     await client.evaluations.addLogsToRun("id", "run_id", {
+     *         logIds: ["log_ids"]
+     *     })
+     */
+    public async addLogsToRun(
+        id: string,
+        runId: string,
+        request: Humanloop.AddLogsToRunRequest,
+        requestOptions?: Evaluations.RequestOptions
+    ): Promise<Humanloop.EvaluationRunResponse> {
+        const _response = await (this._options.fetcher ?? core.fetcher)({
+            url: urlJoin(
+                (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
+                `evaluations/${encodeURIComponent(id)}/runs/${encodeURIComponent(runId)}/logs`
+            ),
+            method: "POST",
+            headers: {
+                "X-Fern-Language": "JavaScript",
+                "X-Fern-SDK-Name": "humanloop",
+                "X-Fern-SDK-Version": "0.8.7",
+                "User-Agent": "humanloop/0.8.7",
+                "X-Fern-Runtime": core.RUNTIME.type,
+                "X-Fern-Runtime-Version": core.RUNTIME.version,
+                ...(await this._getCustomAuthorizationHeaders()),
+            },
+            contentType: "application/json",
+            requestType: "json",
+            body: serializers.AddLogsToRunRequest.jsonOrThrow(request, { unrecognizedObjectKeys: "strip" }),
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return serializers.EvaluationRunResponse.parseOrThrow(_response.body, {
                 unrecognizedObjectKeys: "passthrough",
                 allowUnrecognizedUnionMembers: true,
                 allowUnrecognizedEnumValues: true,
@@ -602,8 +1087,7 @@ export class Evaluations {
     /**
      * Get Evaluation Stats.
      *
-     * Retrieve aggregate stats for the specified Evaluation.
-     * This includes the number of generated Logs for each evaluated version and the
+     * Retrieve aggregate stats for the specified Evaluation. This includes the number of generated Logs for each Run and the
      * corresponding Evaluator statistics (such as the mean and percentiles).
      *
      * @param {string} id - Unique identifier for Evaluation.
@@ -624,8 +1108,8 @@ export class Evaluations {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.6",
-                "User-Agent": "humanloop/0.8.6",
+                "X-Fern-SDK-Version": "0.8.7",
+                "User-Agent": "humanloop/0.8.7",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -684,8 +1168,7 @@ export class Evaluations {
     /**
      * Get the Logs associated to a specific Evaluation.
      *
-     * Each Datapoint in your Dataset will have a corresponding Log for each File version evaluated.
-     * e.g. If you have 50 Datapoints and are evaluating 2 Prompts, there will be 100 Logs associated with the Evaluation.
+     * This returns the Logs associated to all Runs within with the Evaluation.
      *
      * @param {string} id - String ID of evaluation. Starts with `ev_` or `evr_`.
      * @param {Humanloop.GetLogsEvaluationsIdLogsGetRequest} request
@@ -700,7 +1183,7 @@ export class Evaluations {
         id: string,
         request: Humanloop.GetLogsEvaluationsIdLogsGetRequest = {},
         requestOptions?: Evaluations.RequestOptions
-    ): Promise<Humanloop.PaginatedDataEvaluationReportLogResponse> {
+    ): Promise<Humanloop.PaginatedDataEvaluationLogResponse> {
         const { page, size } = request;
         const _queryParams: Record<string, string | string[] | object | object[]> = {};
         if (page != null) {
@@ -720,8 +1203,8 @@ export class Evaluations {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.6",
-                "User-Agent": "humanloop/0.8.6",
+                "X-Fern-SDK-Version": "0.8.7",
+                "User-Agent": "humanloop/0.8.7",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -734,94 +1217,7 @@ export class Evaluations {
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return serializers.PaginatedDataEvaluationReportLogResponse.parseOrThrow(_response.body, {
-                unrecognizedObjectKeys: "passthrough",
-                allowUnrecognizedUnionMembers: true,
-                allowUnrecognizedEnumValues: true,
-                skipValidation: true,
-                breadcrumbsPrefix: ["response"],
-            });
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 422:
-                    throw new Humanloop.UnprocessableEntityError(
-                        serializers.HttpValidationError.parseOrThrow(_response.error.body, {
-                            unrecognizedObjectKeys: "passthrough",
-                            allowUnrecognizedUnionMembers: true,
-                            allowUnrecognizedEnumValues: true,
-                            skipValidation: true,
-                            breadcrumbsPrefix: ["response"],
-                        })
-                    );
-                default:
-                    throw new errors.HumanloopError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                    });
-            }
-        }
-
-        switch (_response.error.reason) {
-            case "non-json":
-                throw new errors.HumanloopError({
-                    statusCode: _response.error.statusCode,
-                    body: _response.error.rawBody,
-                });
-            case "timeout":
-                throw new errors.HumanloopTimeoutError();
-            case "unknown":
-                throw new errors.HumanloopError({
-                    message: _response.error.errorMessage,
-                });
-        }
-    }
-
-    /**
-     * Pin the specified Evaluatee.
-     *
-     * Pinned Evaluatees are always displayed in the Evaluation Overview,
-     * and serve as the baseline for comparison with other Evaluatees.
-     *
-     * @param {string} id - Unique identifier for Evaluation.
-     * @param {Humanloop.EvaluateeRequest} request
-     * @param {Evaluations.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @throws {@link Humanloop.UnprocessableEntityError}
-     *
-     * @example
-     *     await client.evaluations.pinEvaluatee("id", {})
-     */
-    public async pinEvaluatee(
-        id: string,
-        request: Humanloop.EvaluateeRequest,
-        requestOptions?: Evaluations.RequestOptions
-    ): Promise<Humanloop.EvaluationResponse> {
-        const _response = await (this._options.fetcher ?? core.fetcher)({
-            url: urlJoin(
-                (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
-                `evaluations/${encodeURIComponent(id)}/pin-evaluatee`
-            ),
-            method: "POST",
-            headers: {
-                "X-Fern-Language": "JavaScript",
-                "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.6",
-                "User-Agent": "humanloop/0.8.6",
-                "X-Fern-Runtime": core.RUNTIME.type,
-                "X-Fern-Runtime-Version": core.RUNTIME.version,
-                ...(await this._getCustomAuthorizationHeaders()),
-            },
-            contentType: "application/json",
-            requestType: "json",
-            body: serializers.EvaluateeRequest.jsonOrThrow(request, { unrecognizedObjectKeys: "strip" }),
-            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-            maxRetries: requestOptions?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-        });
-        if (_response.ok) {
-            return serializers.EvaluationResponse.parseOrThrow(_response.body, {
+            return serializers.PaginatedDataEvaluationLogResponse.parseOrThrow(_response.body, {
                 unrecognizedObjectKeys: "passthrough",
                 allowUnrecognizedUnionMembers: true,
                 allowUnrecognizedEnumValues: true,

@@ -17,12 +17,12 @@ import * as Humanloop from "../../../../index";
  *         commitMessage: "Initial commit"
  *     }
  */
-export interface EvaluatorsRequest {
+export interface EvaluatorRequest {
     /** Path of the Evaluator, including the name. This locates the Evaluator in the Humanloop filesystem and is used as as a unique identifier. For example: `folder/name` or just `name`. */
     path?: string;
     /** ID for an existing Evaluator. */
     id?: string;
     /** Message describing the changes made. */
     commitMessage?: string;
-    spec: Humanloop.SrcExternalAppModelsV5EvaluatorsEvaluatorRequestSpec;
+    spec: Humanloop.EvaluatorRequestSpec;
 }

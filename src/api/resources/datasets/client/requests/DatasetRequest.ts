@@ -50,7 +50,7 @@ import * as Humanloop from "../../../../index";
  *         commitMessage: "Add two new questions and answers"
  *     }
  */
-export interface DatasetsRequest {
+export interface DatasetRequest {
     /**
      * ID of the specific Dataset version to base the created Version on. Only used when `action` is `"add"` or `"remove"`.
      */

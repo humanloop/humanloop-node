@@ -1,5 +1,5 @@
 export { type ListDatasetsGetRequest } from "./ListDatasetsGetRequest";
-export { type DatasetsRequest } from "./DatasetsRequest";
+export { type DatasetRequest } from "./DatasetRequest";
 export { type GetDatasetsIdGetRequest } from "./GetDatasetsIdGetRequest";
 export { type UpdateDatasetRequest } from "./UpdateDatasetRequest";
 export { type ListDatapointsDatasetsIdDatapointsGetRequest } from "./ListDatapointsDatasetsIdDatapointsGetRequest";

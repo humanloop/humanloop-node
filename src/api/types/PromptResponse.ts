@@ -69,6 +69,10 @@ export interface PromptResponse {
     updatedAt: Date;
     /** The user who created the Prompt. */
     createdBy?: Humanloop.UserResponse | undefined;
+    /** The user who committed the Prompt Version. */
+    committedBy?: Humanloop.UserResponse | undefined;
+    /** The date and time the Prompt Version was committed. */
+    committedAt?: Date;
     /** The status of the Prompt Version. */
     status: Humanloop.VersionStatus;
     lastUsedAt: Date;

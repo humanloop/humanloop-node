@@ -282,7 +282,6 @@ await client.prompts.callStream({
     endTime: "2024-01-15T09:30:00Z",
     sourceDatapointId: "string",
     traceParentId: "string",
-    batchId: "string",
     user: "string",
     promptsCallStreamRequestEnvironment: "string",
     save: true,
@@ -2412,7 +2411,7 @@ await client.datasets.upsert({
 <dl>
 <dd>
 
-**request:** `Humanloop.DatasetsRequest`
+**request:** `Humanloop.DatasetRequest`
 
 </dd>
 </dl>
@@ -3376,7 +3375,7 @@ await client.evaluators.upsert({
 <dl>
 <dd>
 
-**request:** `Humanloop.EvaluatorsRequest`
+**request:** `Humanloop.EvaluatorRequest`
 
 </dd>
 </dl>
@@ -5442,9 +5441,7 @@ await client.files.list();
 <dl>
 <dd>
 
-List all Evaluations for the specified `file_id`.
-
-Retrieve a list of Evaluations that evaluate versions of the specified File.
+Retrieve a list of Evaluations for the specified File.
 
 </dd>
 </dl>
@@ -5512,16 +5509,9 @@ await client.evaluations.list({
 
 Create an Evaluation.
 
-Create a new Evaluation by specifying the Dataset, versions to be
-evaluated (Evaluatees), and which Evaluators to provide judgments.
-
-Humanloop will automatically start generating Logs and running Evaluators where
-`orchestrated=true`. If you own the runtime for the Evaluatee or Evaluator, you
-can set `orchestrated=false` and then generate and submit the required logs using
-your runtime.
-
-To keep updated on the progress of the Evaluation, you can poll the Evaluation using
-the `GET /evaluations/:id` endpoint and check its status.
+Create a new Evaluation by specifying the File to evaluate, and a name
+for the Evaluation.
+You can then add Runs to this Evaluation using the `POST /evaluations/{id}/runs` endpoint.
 
 </dd>
 </dl>
@@ -5538,19 +5528,9 @@ the `GET /evaluations/:id` endpoint and check its status.
 
 ```typescript
 await client.evaluations.create({
-    dataset: {
-        versionId: "dsv_6L78pqrdFi2xa",
-    },
-    evaluatees: [
-        {
-            versionId: "prv_7ZlQREDScH0xkhUwtXruN",
-            orchestrated: false,
-        },
-    ],
     evaluators: [
         {
-            versionId: "evv_012def",
-            orchestrated: false,
+            versionId: "version_id",
         },
     ],
 });
@@ -5588,6 +5568,158 @@ await client.evaluations.create({
 </dl>
 </details>
 
+<details><summary><code>client.evaluations.<a href="/src/api/resources/evaluations/client/Client.ts">addEvaluators</a>(id, { ...params }) -> Humanloop.EvaluationResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Add Evaluators to an Evaluation.
+
+The Evaluators will be run on the Logs generated for the Evaluation.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.evaluations.addEvaluators("id", {
+    evaluators: [
+        {
+            versionId: "version_id",
+        },
+    ],
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Unique identifier for Evaluation.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.AddEvaluatorsRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Evaluations.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.evaluations.<a href="/src/api/resources/evaluations/client/Client.ts">removeEvaluator</a>(id, evaluatorVersionId) -> Humanloop.EvaluationResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Remove an Evaluator from an Evaluation.
+
+The Evaluator will no longer be run on the Logs in the Evaluation.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.evaluations.removeEvaluator("id", "evaluator_version_id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Unique identifier for Evaluation.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**evaluatorVersionId:** `string` — Unique identifier for Evaluator Version.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Evaluations.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.evaluations.<a href="/src/api/resources/evaluations/client/Client.ts">get</a>(id) -> Humanloop.EvaluationResponse</code></summary>
 <dl>
 <dd>
@@ -5601,6 +5733,12 @@ await client.evaluations.create({
 <dd>
 
 Get an Evaluation.
+
+This includes the Evaluators associated with the Evaluation and metadata about the Evaluation,
+such as its name.
+
+To get the Runs associated with the Evaluation, use the `GET /evaluations/{id}/runs` endpoint.
+To retrieve stats for the Evaluation, use the `GET /evaluations/{id}/stats` endpoint.
 
 </dd>
 </dl>
@@ -5665,8 +5803,7 @@ await client.evaluations.get("ev_567yza");
 
 Delete an Evaluation.
 
-Remove an Evaluation from Humanloop. The Logs and Versions used in the Evaluation
-will not be deleted.
+The Runs and Evaluators in the Evaluation will not be deleted.
 
 </dd>
 </dl>
@@ -5717,7 +5854,7 @@ await client.evaluations.delete("ev_567yza");
 </dl>
 </details>
 
-<details><summary><code>client.evaluations.<a href="/src/api/resources/evaluations/client/Client.ts">updateSetup</a>(id, { ...params }) -> Humanloop.EvaluationResponse</code></summary>
+<details><summary><code>client.evaluations.<a href="/src/api/resources/evaluations/client/Client.ts">listRunsForEvaluation</a>(id) -> Humanloop.EvaluationRunsResponse</code></summary>
 <dl>
 <dd>
 
@@ -5729,10 +5866,7 @@ await client.evaluations.delete("ev_567yza");
 <dl>
 <dd>
 
-Update an Evaluation.
-
-Update the setup of an Evaluation by specifying the Dataset, versions to be
-evaluated (Evaluatees), and which Evaluators to provide judgments.
+List all Runs for an Evaluation.
 
 </dd>
 </dl>
@@ -5748,23 +5882,7 @@ evaluated (Evaluatees), and which Evaluators to provide judgments.
 <dd>
 
 ```typescript
-await client.evaluations.updateSetup("ev_567yza", {
-    dataset: {
-        versionId: "dsv_6L78pqrdFi2xa",
-    },
-    evaluatees: [
-        {
-            versionId: "prv_7ZlQREDScH0xkhUwtXruN",
-            orchestrated: false,
-        },
-    ],
-    evaluators: [
-        {
-            versionId: "evv_012def",
-            orchestrated: false,
-        },
-    ],
-});
+await client.evaluations.listRunsForEvaluation("id");
 ```
 
 </dd>
@@ -5781,14 +5899,6 @@ await client.evaluations.updateSetup("ev_567yza", {
 <dd>
 
 **id:** `string` — Unique identifier for Evaluation.
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request:** `Humanloop.UpdateEvaluationRequest`
 
 </dd>
 </dl>
@@ -5807,7 +5917,7 @@ await client.evaluations.updateSetup("ev_567yza", {
 </dl>
 </details>
 
-<details><summary><code>client.evaluations.<a href="/src/api/resources/evaluations/client/Client.ts">updateStatus</a>(id, { ...params }) -> Humanloop.EvaluationResponse</code></summary>
+<details><summary><code>client.evaluations.<a href="/src/api/resources/evaluations/client/Client.ts">createRun</a>(id, { ...params }) -> Humanloop.EvaluationRunResponse</code></summary>
 <dl>
 <dd>
 
@@ -5819,10 +5929,20 @@ await client.evaluations.updateSetup("ev_567yza", {
 <dl>
 <dd>
 
-Update the status of an Evaluation.
+Create an Evaluation Run.
 
-Can be used to cancel a running Evaluation, or mark an Evaluation that uses
-external or human evaluators as completed.
+Optionally specify the Dataset and version to be evaluated.
+
+Humanloop will automatically start generating Logs and running Evaluators where
+`orchestrated=true`. If you are generating Logs yourself, you can set `orchestrated=false`
+and then generate and submit the required Logs via the API.
+
+If `dataset` and `version` are provided, you can set `use_existing_logs=True` to reuse existing Logs,
+avoiding generating new Logs unnecessarily. Logs that are associated with the specified Version and have `source_datapoint_id`
+referencing a datapoint in the specified Dataset will be associated with the Run.
+
+To keep updated on the progress of the Run, you can poll the Run using
+the `GET /evaluations/{id}/runs` endpoint and check its status.
 
 </dd>
 </dl>
@@ -5838,8 +5958,309 @@ external or human evaluators as completed.
 <dd>
 
 ```typescript
-await client.evaluations.updateStatus("id", {
-    status: "pending",
+await client.evaluations.createRun("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Unique identifier for Evaluation.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.CreateRunRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Evaluations.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.evaluations.<a href="/src/api/resources/evaluations/client/Client.ts">addExistingRun</a>(id, runId) -> unknown</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Add an existing Run to the specified Evaluation.
+
+This is useful if you want to compare the Runs in this Evaluation with an existing Run
+that exists within another Evaluation.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.evaluations.addExistingRun("id", "run_id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Unique identifier for Evaluation.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**runId:** `string` — Unique identifier for Run.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Evaluations.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.evaluations.<a href="/src/api/resources/evaluations/client/Client.ts">removeRun</a>(id, runId) -> void</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Remove a Run from an Evaluation.
+
+The Logs and Versions used in the Run will not be deleted.
+If this Run is used in any other Evaluations, it will still be available in those Evaluations.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.evaluations.removeRun("id", "run_id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Unique identifier for Evaluation.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**runId:** `string` — Unique identifier for Run.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Evaluations.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.evaluations.<a href="/src/api/resources/evaluations/client/Client.ts">updateEvaluationRun</a>(id, runId, { ...params }) -> Humanloop.EvaluationRunResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Update an Evaluation Run.
+
+Specify `control=true` to use this Run as the control Run for the Evaluation.
+You can cancel a running/pending Run, or mark a Run that uses external or human Evaluators as completed.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.evaluations.updateEvaluationRun("id", "run_id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Unique identifier for Evaluation.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**runId:** `string` — Unique identifier for Run.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.UpdateEvaluationRunRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Evaluations.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.evaluations.<a href="/src/api/resources/evaluations/client/Client.ts">addLogsToRun</a>(id, runId, { ...params }) -> Humanloop.EvaluationRunResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Add the specified Logs to a Run.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.evaluations.addLogsToRun("id", "run_id", {
+    logIds: ["log_ids"],
 });
 ```
 
@@ -5864,7 +6285,15 @@ await client.evaluations.updateStatus("id", {
 <dl>
 <dd>
 
-**request:** `Humanloop.BodyUpdateStatusEvaluationsIdStatusPatch`
+**runId:** `string` — Unique identifier for Run.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.AddLogsToRunRequest`
 
 </dd>
 </dl>
@@ -5897,8 +6326,7 @@ await client.evaluations.updateStatus("id", {
 
 Get Evaluation Stats.
 
-Retrieve aggregate stats for the specified Evaluation.
-This includes the number of generated Logs for each evaluated version and the
+Retrieve aggregate stats for the specified Evaluation. This includes the number of generated Logs for each Run and the
 corresponding Evaluator statistics (such as the mean and percentiles).
 
 </dd>
@@ -5950,7 +6378,7 @@ await client.evaluations.getStats("id");
 </dl>
 </details>
 
-<details><summary><code>client.evaluations.<a href="/src/api/resources/evaluations/client/Client.ts">getLogs</a>(id, { ...params }) -> Humanloop.PaginatedDataEvaluationReportLogResponse</code></summary>
+<details><summary><code>client.evaluations.<a href="/src/api/resources/evaluations/client/Client.ts">getLogs</a>(id, { ...params }) -> Humanloop.PaginatedDataEvaluationLogResponse</code></summary>
 <dl>
 <dd>
 
@@ -5964,8 +6392,7 @@ await client.evaluations.getStats("id");
 
 Get the Logs associated to a specific Evaluation.
 
-Each Datapoint in your Dataset will have a corresponding Log for each File version evaluated.
-e.g. If you have 50 Datapoints and are evaluating 2 Prompts, there will be 100 Logs associated with the Evaluation.
+This returns the Logs associated to all Runs within with the Evaluation.
 
 </dd>
 </dl>
@@ -6006,80 +6433,6 @@ await client.evaluations.getLogs("id");
 <dd>
 
 **request:** `Humanloop.GetLogsEvaluationsIdLogsGetRequest`
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `Evaluations.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.evaluations.<a href="/src/api/resources/evaluations/client/Client.ts">pinEvaluatee</a>(id, { ...params }) -> Humanloop.EvaluationResponse</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Pin the specified Evaluatee.
-
-Pinned Evaluatees are always displayed in the Evaluation Overview,
-and serve as the baseline for comparison with other Evaluatees.
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.evaluations.pinEvaluatee("id", {});
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**id:** `string` — Unique identifier for Evaluation.
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request:** `Humanloop.EvaluateeRequest`
 
 </dd>
 </dl>

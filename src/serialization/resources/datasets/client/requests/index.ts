@@ -1,2 +1,2 @@
-export { DatasetsRequest } from "./DatasetsRequest";
+export { DatasetRequest } from "./DatasetRequest";
 export { UpdateDatasetRequest } from "./UpdateDatasetRequest";

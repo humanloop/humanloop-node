@@ -5,16 +5,14 @@
 import * as serializers from "../index";
 import * as Humanloop from "../../api/index";
 import * as core from "../../core";
-import { OverallStats } from "./OverallStats";
-import { VersionStatsResponse } from "./VersionStatsResponse";
+import { RunStatsResponse } from "./RunStatsResponse";
 import { EvaluationStatus } from "./EvaluationStatus";
 
 export const EvaluationStats: core.serialization.ObjectSchema<
     serializers.EvaluationStats.Raw,
     Humanloop.EvaluationStats
 > = core.serialization.object({
-    overallStats: core.serialization.property("overall_stats", OverallStats),
-    versionStats: core.serialization.property("version_stats", core.serialization.list(VersionStatsResponse)),
+    runStats: core.serialization.property("run_stats", core.serialization.list(RunStatsResponse)),
     progress: core.serialization.string().optional(),
     report: core.serialization.string().optional(),
     status: EvaluationStatus,
@@ -22,8 +20,7 @@ export const EvaluationStats: core.serialization.ObjectSchema<
 
 export declare namespace EvaluationStats {
     interface Raw {
-        overall_stats: OverallStats.Raw;
-        version_stats: VersionStatsResponse.Raw[];
+        run_stats: RunStatsResponse.Raw[];
         progress?: string | null;
         report?: string | null;
         status: EvaluationStatus.Raw;

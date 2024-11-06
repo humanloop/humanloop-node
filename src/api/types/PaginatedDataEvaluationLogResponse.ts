@@ -4,8 +4,8 @@
 
 import * as Humanloop from "../index";
 
-export interface PaginatedDataEvaluationReportLogResponse {
-    records: Humanloop.EvaluationReportLogResponse[];
+export interface PaginatedDataEvaluationLogResponse {
+    records: Humanloop.EvaluationLogResponse[];
     page: number;
     size: number;
     total: number;

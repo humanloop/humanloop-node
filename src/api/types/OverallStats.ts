@@ -3,10 +3,14 @@
  */
 
 export interface OverallStats {
-    /** The total number of Datapoints in the Evaluation Report's Dataset Version. */
+    /** The total number of Datapoints in the Evaluation's Dataset Version. */
     numDatapoints: number;
-    /** The total number of Logs in the Evaluation Report. */
+    /** The total number of Logs in the Evaluation. */
     totalLogs: number;
-    /** The total number of Evaluator Logs in the Evaluation Report. */
+    /** The total number of Evaluator Logs in the Evaluation. */
     totalEvaluatorLogs: number;
+    /** The total number of human Evaluator Logs in the Evaluation Report. */
+    totalHumanEvaluatorLogs: number;
+    /** The total number of non-None human Evaluator Logs in the Evaluation Report. */
+    totalCompletedHumanEvaluatorLogs: number;
 }

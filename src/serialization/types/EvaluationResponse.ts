@@ -5,10 +5,7 @@
 import * as serializers from "../index";
 import * as Humanloop from "../../api/index";
 import * as core from "../../core";
-import { DatasetResponse } from "./DatasetResponse";
-import { EvaluateeResponse } from "./EvaluateeResponse";
 import { EvaluationEvaluatorResponse } from "./EvaluationEvaluatorResponse";
-import { EvaluationStatus } from "./EvaluationStatus";
 import { UserResponse } from "./UserResponse";
 
 export const EvaluationResponse: core.serialization.ObjectSchema<
@@ -16,10 +13,8 @@ export const EvaluationResponse: core.serialization.ObjectSchema<
     Humanloop.EvaluationResponse
 > = core.serialization.object({
     id: core.serialization.string(),
-    dataset: DatasetResponse,
-    evaluatees: core.serialization.list(EvaluateeResponse),
+    runsCount: core.serialization.property("runs_count", core.serialization.number()),
     evaluators: core.serialization.list(EvaluationEvaluatorResponse),
-    status: EvaluationStatus,
     name: core.serialization.string().optional(),
     fileId: core.serialization.property("file_id", core.serialization.string().optional()),
     createdAt: core.serialization.property("created_at", core.serialization.date()),
@@ -31,10 +26,8 @@ export const EvaluationResponse: core.serialization.ObjectSchema<
 export declare namespace EvaluationResponse {
     interface Raw {
         id: string;
-        dataset: DatasetResponse.Raw;
-        evaluatees: EvaluateeResponse.Raw[];
+        runs_count: number;
         evaluators: EvaluationEvaluatorResponse.Raw[];
-        status: EvaluationStatus.Raw;
         name?: string | null;
         file_id?: string | null;
         created_at: string;

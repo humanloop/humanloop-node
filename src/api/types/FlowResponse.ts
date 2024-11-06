@@ -29,6 +29,10 @@ export interface FlowResponse {
     updatedAt: Date;
     /** The user who created the Flow. */
     createdBy?: Humanloop.UserResponse | undefined;
+    /** The user who committed the Flow Version. */
+    committedBy?: Humanloop.UserResponse | undefined;
+    /** The date and time the Flow Version was committed. */
+    committedAt?: Date;
     /** The status of the Flow Version. */
     status: Humanloop.VersionStatus;
     lastUsedAt: Date;

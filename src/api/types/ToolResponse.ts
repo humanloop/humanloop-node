@@ -40,6 +40,10 @@ export interface ToolResponse {
     updatedAt: Date;
     /** The user who created the Tool. */
     createdBy?: Humanloop.UserResponse | undefined;
+    /** The user who committed the Tool Version. */
+    committedBy?: Humanloop.UserResponse | undefined;
+    /** The date and time the Tool Version was committed. */
+    committedAt?: Date;
     /** The status of the Tool Version. */
     status: Humanloop.VersionStatus;
     lastUsedAt: Date;

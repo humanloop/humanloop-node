@@ -7,28 +7,16 @@ import * as Humanloop from "../../../../index";
 /**
  * @example
  *     {
- *         dataset: {
- *             versionId: "dsv_6L78pqrdFi2xa"
- *         },
- *         evaluatees: [{
- *                 versionId: "prv_7ZlQREDScH0xkhUwtXruN",
- *                 orchestrated: false
- *             }],
  *         evaluators: [{
- *                 versionId: "evv_012def",
- *                 orchestrated: false
+ *                 versionId: "version_id"
  *             }]
  *     }
  */
 export interface CreateEvaluationRequest {
-    /** Dataset to use in this Evaluation. */
-    dataset: Humanloop.EvaluationsDatasetRequest;
-    /** Unique identifiers for the Prompt/Tool Versions to include in the Evaluation. Can be left unpopulated if you wish to add Evaluatees to this Evaluation by specifying `evaluation_id` in Log calls. */
-    evaluatees?: Humanloop.EvaluateeRequest[];
-    /** The Evaluators used to evaluate. */
-    evaluators: Humanloop.EvaluationsRequest[];
+    /** The File to associate with the Evaluation. This File contains the Logs you're evaluating. */
+    file?: Humanloop.FileRequest;
     /** Name of the Evaluation to help identify it. Must be unique within the associated File. */
     name?: string;
-    /** The File to associate with the Evaluation. */
-    file?: Humanloop.FileRequest;
+    /** The Evaluators used to evaluate. */
+    evaluators: Humanloop.CreateEvaluationRequestEvaluatorsItem[];
 }

@@ -5,13 +5,13 @@
 import * as serializers from "../index";
 import * as Humanloop from "../../api/index";
 import * as core from "../../core";
-import { EvaluatedVersionResponse } from "./EvaluatedVersionResponse";
+import { RunVersionResponse } from "./RunVersionResponse";
 
 export const EvaluateeResponse: core.serialization.ObjectSchema<
     serializers.EvaluateeResponse.Raw,
     Humanloop.EvaluateeResponse
 > = core.serialization.object({
-    version: EvaluatedVersionResponse,
+    version: RunVersionResponse.optional(),
     batchId: core.serialization.property("batch_id", core.serialization.string().optional()),
     orchestrated: core.serialization.boolean(),
     pinned: core.serialization.boolean(),
@@ -20,7 +20,7 @@ export const EvaluateeResponse: core.serialization.ObjectSchema<
 
 export declare namespace EvaluateeResponse {
     interface Raw {
-        version: EvaluatedVersionResponse.Raw;
+        version?: RunVersionResponse.Raw | null;
         batch_id?: string | null;
         orchestrated: boolean;
         pinned: boolean;

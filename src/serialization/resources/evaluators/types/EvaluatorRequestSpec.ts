@@ -10,9 +10,9 @@ import { CodeEvaluatorRequest } from "../../../types/CodeEvaluatorRequest";
 import { HumanEvaluatorRequest } from "../../../types/HumanEvaluatorRequest";
 import { ExternalEvaluatorRequest } from "../../../types/ExternalEvaluatorRequest";
 
-export const SrcExternalAppModelsV5EvaluatorsEvaluatorRequestSpec: core.serialization.Schema<
-    serializers.SrcExternalAppModelsV5EvaluatorsEvaluatorRequestSpec.Raw,
-    Humanloop.SrcExternalAppModelsV5EvaluatorsEvaluatorRequestSpec
+export const EvaluatorRequestSpec: core.serialization.Schema<
+    serializers.EvaluatorRequestSpec.Raw,
+    Humanloop.EvaluatorRequestSpec
 > = core.serialization.undiscriminatedUnion([
     LlmEvaluatorRequest,
     CodeEvaluatorRequest,
@@ -20,7 +20,7 @@ export const SrcExternalAppModelsV5EvaluatorsEvaluatorRequestSpec: core.serializ
     ExternalEvaluatorRequest,
 ]);
 
-export declare namespace SrcExternalAppModelsV5EvaluatorsEvaluatorRequestSpec {
+export declare namespace EvaluatorRequestSpec {
     type Raw =
         | LlmEvaluatorRequest.Raw
         | CodeEvaluatorRequest.Raw

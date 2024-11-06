@@ -28,6 +28,10 @@ export interface EvaluatorResponse {
     updatedAt: Date;
     /** The user who created the Evaluator. */
     createdBy?: Humanloop.UserResponse | undefined;
+    /** The user who committed the Evaluator Version. */
+    committedBy?: Humanloop.UserResponse | undefined;
+    /** The date and time the Evaluator Version was committed. */
+    committedAt?: Date;
     status: Humanloop.VersionStatus;
     lastUsedAt: Date;
     /** The number of logs that have been generated for this Evaluator Version */

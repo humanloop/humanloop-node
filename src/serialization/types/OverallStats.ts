@@ -11,6 +11,11 @@ export const OverallStats: core.serialization.ObjectSchema<serializers.OverallSt
         numDatapoints: core.serialization.property("num_datapoints", core.serialization.number()),
         totalLogs: core.serialization.property("total_logs", core.serialization.number()),
         totalEvaluatorLogs: core.serialization.property("total_evaluator_logs", core.serialization.number()),
+        totalHumanEvaluatorLogs: core.serialization.property("total_human_evaluator_logs", core.serialization.number()),
+        totalCompletedHumanEvaluatorLogs: core.serialization.property(
+            "total_completed_human_evaluator_logs",
+            core.serialization.number()
+        ),
     });
 
 export declare namespace OverallStats {
@@ -18,5 +23,7 @@ export declare namespace OverallStats {
         num_datapoints: number;
         total_logs: number;
         total_evaluator_logs: number;
+        total_human_evaluator_logs: number;
+        total_completed_human_evaluator_logs: number;
     }
 }

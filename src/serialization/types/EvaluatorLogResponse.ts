@@ -37,6 +37,7 @@ export const EvaluatorLogResponse: core.serialization.ObjectSchema<
     environment: core.serialization.string().optional(),
     save: core.serialization.boolean().optional(),
     judgment: EvaluatorLogResponseJudgment.optional(),
+    markedCompleted: core.serialization.property("marked_completed", core.serialization.boolean().optional()),
     id: core.serialization.string(),
     evaluatorLogs: core.serialization.property(
         "evaluator_logs",
@@ -74,6 +75,7 @@ export declare namespace EvaluatorLogResponse {
         environment?: string | null;
         save?: boolean | null;
         judgment?: EvaluatorLogResponseJudgment.Raw | null;
+        marked_completed?: boolean | null;
         id: string;
         evaluator_logs: serializers.EvaluatorLogResponse.Raw[];
         trace_flow_id?: string | null;

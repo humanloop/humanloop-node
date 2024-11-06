@@ -6,21 +6,11 @@ import * as serializers from "../index";
 import * as Humanloop from "../../api/index";
 import * as core from "../../core";
 
-export const EvaluationsDatasetRequest: core.serialization.ObjectSchema<
+export const EvaluationsDatasetRequest: core.serialization.Schema<
     serializers.EvaluationsDatasetRequest.Raw,
     Humanloop.EvaluationsDatasetRequest
-> = core.serialization.object({
-    versionId: core.serialization.property("version_id", core.serialization.string().optional()),
-    path: core.serialization.string().optional(),
-    fileId: core.serialization.property("file_id", core.serialization.string().optional()),
-    environment: core.serialization.string().optional(),
-});
+> = core.serialization.unknown();
 
 export declare namespace EvaluationsDatasetRequest {
-    interface Raw {
-        version_id?: string | null;
-        path?: string | null;
-        file_id?: string | null;
-        environment?: string | null;
-    }
+    type Raw = unknown;
 }

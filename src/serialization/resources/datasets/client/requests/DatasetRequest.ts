@@ -8,9 +8,9 @@ import * as core from "../../../../../core";
 import { CreateDatapointRequest } from "../../../../types/CreateDatapointRequest";
 import { UpdateDatesetAction } from "../../../../types/UpdateDatesetAction";
 
-export const DatasetsRequest: core.serialization.Schema<
-    serializers.DatasetsRequest.Raw,
-    Omit<Humanloop.DatasetsRequest, "versionId" | "environment">
+export const DatasetRequest: core.serialization.Schema<
+    serializers.DatasetRequest.Raw,
+    Omit<Humanloop.DatasetRequest, "versionId" | "environment">
 > = core.serialization.object({
     path: core.serialization.string().optional(),
     id: core.serialization.string().optional(),
@@ -20,7 +20,7 @@ export const DatasetsRequest: core.serialization.Schema<
     commitMessage: core.serialization.property("commit_message", core.serialization.string().optional()),
 });
 
-export declare namespace DatasetsRequest {
+export declare namespace DatasetRequest {
     interface Raw {
         path?: string | null;
         id?: string | null;

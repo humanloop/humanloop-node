@@ -34,6 +34,8 @@ export const ToolResponse: core.serialization.ObjectSchema<serializers.ToolRespo
         createdAt: core.serialization.property("created_at", core.serialization.date()),
         updatedAt: core.serialization.property("updated_at", core.serialization.date()),
         createdBy: core.serialization.property("created_by", UserResponse.optional()),
+        committedBy: core.serialization.property("committed_by", UserResponse.optional()),
+        committedAt: core.serialization.property("committed_at", core.serialization.date().optional()),
         status: VersionStatus,
         lastUsedAt: core.serialization.property("last_used_at", core.serialization.date()),
         versionLogsCount: core.serialization.property("version_logs_count", core.serialization.number()),
@@ -67,6 +69,8 @@ export declare namespace ToolResponse {
         created_at: string;
         updated_at: string;
         created_by?: (UserResponse.Raw | undefined) | null;
+        committed_by?: (UserResponse.Raw | undefined) | null;
+        committed_at?: string | null;
         status: VersionStatus.Raw;
         last_used_at: string;
         version_logs_count: number;

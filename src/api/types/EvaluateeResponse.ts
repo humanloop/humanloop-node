@@ -8,8 +8,8 @@ import * as Humanloop from "../index";
  * Version of the Evaluatee being evaluated.
  */
 export interface EvaluateeResponse {
-    version: Humanloop.EvaluatedVersionResponse;
-    /** Unique identifier for the batch of Logs to include in the Evaluation Report. */
+    version?: Humanloop.RunVersionResponse;
+    /** Unique identifier for the batch of Logs to include in the Evaluation. */
     batchId?: string;
     /** Whether the Prompt/Tool is orchestrated by Humanloop. Default is `True`. If `False`, a log for the Prompt/Tool should be submitted by the user via the API. */
     orchestrated: boolean;

@@ -26,7 +26,6 @@ export const PromptsCallStreamRequest: core.serialization.Schema<
     endTime: core.serialization.property("end_time", core.serialization.date().optional()),
     sourceDatapointId: core.serialization.property("source_datapoint_id", core.serialization.string().optional()),
     traceParentId: core.serialization.property("trace_parent_id", core.serialization.string().optional()),
-    batchId: core.serialization.property("batch_id", core.serialization.string().optional()),
     user: core.serialization.string().optional(),
     promptsCallStreamRequestEnvironment: core.serialization.property(
         "environment",
@@ -54,7 +53,6 @@ export declare namespace PromptsCallStreamRequest {
         end_time?: string | null;
         source_datapoint_id?: string | null;
         trace_parent_id?: string | null;
-        batch_id?: string | null;
         user?: string | null;
         environment?: string | null;
         save?: boolean | null;

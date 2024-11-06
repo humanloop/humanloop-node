@@ -13,7 +13,7 @@ export const PromptLogRequest: core.serialization.Schema<
     serializers.PromptLogRequest.Raw,
     Omit<Humanloop.PromptLogRequest, "versionId" | "environment">
 > = core.serialization.object({
-    evaluationId: core.serialization.property("evaluation_id", core.serialization.string().optional()),
+    runId: core.serialization.property("run_id", core.serialization.string().optional()),
     path: core.serialization.string().optional(),
     id: core.serialization.string().optional(),
     outputMessage: core.serialization.property("output_message", ChatMessage.optional()),
@@ -45,7 +45,6 @@ export const PromptLogRequest: core.serialization.Schema<
     metadata: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
     sourceDatapointId: core.serialization.property("source_datapoint_id", core.serialization.string().optional()),
     traceParentId: core.serialization.property("trace_parent_id", core.serialization.string().optional()),
-    batchId: core.serialization.property("batch_id", core.serialization.string().optional()),
     user: core.serialization.string().optional(),
     promptLogRequestEnvironment: core.serialization.property("environment", core.serialization.string().optional()),
     save: core.serialization.boolean().optional(),
@@ -53,7 +52,7 @@ export const PromptLogRequest: core.serialization.Schema<
 
 export declare namespace PromptLogRequest {
     interface Raw {
-        evaluation_id?: string | null;
+        run_id?: string | null;
         path?: string | null;
         id?: string | null;
         output_message?: ChatMessage.Raw | null;
@@ -79,7 +78,6 @@ export declare namespace PromptLogRequest {
         metadata?: Record<string, unknown> | null;
         source_datapoint_id?: string | null;
         trace_parent_id?: string | null;
-        batch_id?: string | null;
         user?: string | null;
         environment?: string | null;
         save?: boolean | null;
