@@ -6,7 +6,7 @@ class ExtendedEvaluations extends BaseEvaluations {
   constructor(options: BaseHumanloopClient.Options) {
     super(options); // Pass options to the parent Evaluations constructor.
   }
-
+  // TODO: add new methods here
   run(): void {
     console.log("Running extended evaluation...");
   }
