@@ -56,4 +56,8 @@ export interface ListLogsGetRequest {
      * If true, return Logs that are associated to a Trace. False, return Logs that are not associated to a Trace.
      */
     inTraceFilter?: boolean | boolean[];
+    /**
+     * If provided, limit the response to a random subset of logs from the filtered results. (This will be an approximate sample, not a strict limit.)
+     */
+    sample?: number;
 }

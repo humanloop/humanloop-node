@@ -83,6 +83,8 @@ export interface ToolLogRequest {
     toolLogRequestEnvironment?: string;
     /** Whether the request/response payloads will be stored on Humanloop. */
     save?: boolean;
+    /** This will identify a Log. If you don't provide a Log ID, Humanloop will generate one for you. */
+    logId?: string;
     /** Details of your Tool. A new Tool version will be created if the provided details are new. */
     tool?: Humanloop.ToolKernelRequest;
 }

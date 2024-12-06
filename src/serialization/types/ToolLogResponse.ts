@@ -34,6 +34,7 @@ export const ToolLogResponse: core.serialization.ObjectSchema<
     user: core.serialization.string().optional(),
     environment: core.serialization.string().optional(),
     save: core.serialization.boolean().optional(),
+    logId: core.serialization.property("log_id", core.serialization.string().optional()),
     id: core.serialization.string(),
     evaluatorLogs: core.serialization.property(
         "evaluator_logs",
@@ -68,6 +69,7 @@ export declare namespace ToolLogResponse {
         user?: string | null;
         environment?: string | null;
         save?: boolean | null;
+        log_id?: string | null;
         id: string;
         evaluator_logs: serializers.EvaluatorLogResponse.Raw[];
         trace_flow_id?: string | null;

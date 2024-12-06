@@ -41,6 +41,7 @@ export const CreateEvaluatorLogRequest: core.serialization.Schema<
         core.serialization.string().optional()
     ),
     save: core.serialization.boolean().optional(),
+    logId: core.serialization.property("log_id", core.serialization.string().optional()),
     judgment: CreateEvaluatorLogRequestJudgment.optional(),
     markedCompleted: core.serialization.property("marked_completed", core.serialization.boolean().optional()),
     spec: CreateEvaluatorLogRequestSpec.optional(),
@@ -68,6 +69,7 @@ export declare namespace CreateEvaluatorLogRequest {
         user?: string | null;
         environment?: string | null;
         save?: boolean | null;
+        log_id?: string | null;
         judgment?: CreateEvaluatorLogRequestJudgment.Raw | null;
         marked_completed?: boolean | null;
         spec?: CreateEvaluatorLogRequestSpec.Raw | null;

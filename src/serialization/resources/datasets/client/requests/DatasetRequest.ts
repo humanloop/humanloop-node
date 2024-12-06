@@ -10,7 +10,7 @@ import { UpdateDatesetAction } from "../../../../types/UpdateDatesetAction";
 
 export const DatasetRequest: core.serialization.Schema<
     serializers.DatasetRequest.Raw,
-    Omit<Humanloop.DatasetRequest, "versionId" | "environment">
+    Omit<Humanloop.DatasetRequest, "versionId" | "environment" | "includeDatapoints">
 > = core.serialization.object({
     path: core.serialization.string().optional(),
     id: core.serialization.string().optional(),

@@ -44,6 +44,8 @@ export interface ToolLogResponse {
     environment?: string;
     /** Whether the request/response payloads will be stored on Humanloop. */
     save?: boolean;
+    /** This will identify a Log. If you don't provide a Log ID, Humanloop will generate one for you. */
+    logId?: string;
     /** Unique identifier for the Log. */
     id: string;
     /** List of Evaluator Logs associated with the Log. These contain Evaluator judgments on the Log. */

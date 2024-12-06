@@ -8,6 +8,10 @@ import * as Humanloop from "../index";
  * General request for creating a Log
  */
 export interface FlowLogResponse {
+    /** List of chat messages that were used as an input to the Flow. */
+    messages?: Humanloop.ChatMessage[];
+    /** The output message returned by this Flow. */
+    outputMessage?: Humanloop.ChatMessage;
     /** When the logged event started. */
     startTime?: Date;
     /** When the logged event ended. */
@@ -44,6 +48,8 @@ export interface FlowLogResponse {
     environment?: string;
     /** Whether the request/response payloads will be stored on Humanloop. */
     save?: boolean;
+    /** This will identify a Log. If you don't provide a Log ID, Humanloop will generate one for you. */
+    logId?: string;
     /** Unique identifier for the Log. */
     id: string;
     /** List of Evaluator Logs associated with the Log. These contain Evaluator judgments on the Log. */

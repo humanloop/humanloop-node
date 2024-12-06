@@ -41,6 +41,10 @@ export interface FlowLogRequest {
      * Name of the Environment identifying a deployed version to log to.
      */
     environment?: string;
+    /** List of chat messages that were used as an input to the Flow. */
+    messages?: Humanloop.ChatMessage[];
+    /** The output message returned by this Flow. */
+    outputMessage?: Humanloop.ChatMessage;
     /** Unique identifier for the Run to associate the Log to. */
     runId?: string;
     /** Path of the Flow, including the name. This locates the Flow in the Humanloop filesystem and is used as as a unique identifier. For example: `folder/name` or just `name`. */
@@ -81,7 +85,7 @@ export interface FlowLogRequest {
     flowLogRequestEnvironment?: string;
     /** Whether the request/response payloads will be stored on Humanloop. */
     save?: boolean;
-    /** The identifier for the Log. If not specified, a default ID will be generated. This allows additional Logs to be appended to the trace without waiting for Humanloop to return an ID. */
+    /** This will identify a Log. If you don't provide a Log ID, Humanloop will generate one for you. */
     logId?: string;
     /** Flow used to generate the Trace. */
     flow?: Humanloop.FlowKernelRequest;

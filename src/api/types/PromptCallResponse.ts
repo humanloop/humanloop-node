@@ -41,6 +41,8 @@ export interface PromptCallResponse {
     environment?: string;
     /** Whether the request/response payloads will be stored on Humanloop. */
     save?: boolean;
+    /** This will identify a Log. If you don't provide a Log ID, Humanloop will generate one for you. */
+    logId?: string;
     /** ID of the log. */
     id: string;
     /** ID of the Trace containing the Prompt Call Log. */

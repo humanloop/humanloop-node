@@ -5,6 +5,7 @@
 import * as serializers from "../../../../index";
 import * as Humanloop from "../../../../../api/index";
 import * as core from "../../../../../core";
+import { ChatMessage } from "../../../../types/ChatMessage";
 import { FlowKernelRequest } from "../../../../types/FlowKernelRequest";
 import { TraceStatus } from "../../../../types/TraceStatus";
 
@@ -12,6 +13,8 @@ export const FlowLogRequest: core.serialization.Schema<
     serializers.FlowLogRequest.Raw,
     Omit<Humanloop.FlowLogRequest, "versionId" | "environment">
 > = core.serialization.object({
+    messages: core.serialization.list(ChatMessage).optional(),
+    outputMessage: core.serialization.property("output_message", ChatMessage.optional()),
     runId: core.serialization.property("run_id", core.serialization.string().optional()),
     path: core.serialization.string().optional(),
     id: core.serialization.string().optional(),
@@ -45,6 +48,8 @@ export const FlowLogRequest: core.serialization.Schema<
 
 export declare namespace FlowLogRequest {
     interface Raw {
+        messages?: ChatMessage.Raw[] | null;
+        output_message?: ChatMessage.Raw | null;
         run_id?: string | null;
         path?: string | null;
         id?: string | null;

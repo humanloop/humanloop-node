@@ -46,6 +46,8 @@ export interface EvaluatorLogResponse {
     environment?: string;
     /** Whether the request/response payloads will be stored on Humanloop. */
     save?: boolean;
+    /** This will identify a Log. If you don't provide a Log ID, Humanloop will generate one for you. */
+    logId?: string;
     /** Evaluator assessment of the Log. */
     judgment?: Humanloop.EvaluatorLogResponseJudgment;
     /** Whether the Log has been manually marked as completed by a user. */

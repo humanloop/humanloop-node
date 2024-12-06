@@ -5,12 +5,15 @@
 import * as serializers from "../index";
 import * as Humanloop from "../../api/index";
 import * as core from "../../core";
+import { ChatMessage } from "./ChatMessage";
 import { TraceStatus } from "./TraceStatus";
 
 export const FlowLogResponse: core.serialization.ObjectSchema<
     serializers.FlowLogResponse.Raw,
     Humanloop.FlowLogResponse
 > = core.serialization.object({
+    messages: core.serialization.list(ChatMessage).optional(),
+    outputMessage: core.serialization.property("output_message", ChatMessage.optional()),
     startTime: core.serialization.property("start_time", core.serialization.date().optional()),
     endTime: core.serialization.property("end_time", core.serialization.date().optional()),
     output: core.serialization.string().optional(),
@@ -35,6 +38,7 @@ export const FlowLogResponse: core.serialization.ObjectSchema<
     user: core.serialization.string().optional(),
     environment: core.serialization.string().optional(),
     save: core.serialization.boolean().optional(),
+    logId: core.serialization.property("log_id", core.serialization.string().optional()),
     id: core.serialization.string(),
     evaluatorLogs: core.serialization.property(
         "evaluator_logs",
@@ -52,6 +56,8 @@ export const FlowLogResponse: core.serialization.ObjectSchema<
 
 export declare namespace FlowLogResponse {
     interface Raw {
+        messages?: ChatMessage.Raw[] | null;
+        output_message?: ChatMessage.Raw | null;
         start_time?: string | null;
         end_time?: string | null;
         output?: string | null;
@@ -70,6 +76,7 @@ export declare namespace FlowLogResponse {
         user?: string | null;
         environment?: string | null;
         save?: boolean | null;
+        log_id?: string | null;
         id: string;
         evaluator_logs: serializers.EvaluatorLogResponse.Raw[];
         trace_flow_id?: string | null;

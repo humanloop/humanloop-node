@@ -36,6 +36,7 @@ export const ToolLogRequest: core.serialization.Schema<
     user: core.serialization.string().optional(),
     toolLogRequestEnvironment: core.serialization.property("environment", core.serialization.string().optional()),
     save: core.serialization.boolean().optional(),
+    logId: core.serialization.property("log_id", core.serialization.string().optional()),
     tool: ToolKernelRequest.optional(),
 });
 
@@ -60,6 +61,7 @@ export declare namespace ToolLogRequest {
         user?: string | null;
         environment?: string | null;
         save?: boolean | null;
+        log_id?: string | null;
         tool?: ToolKernelRequest.Raw | null;
     }
 }

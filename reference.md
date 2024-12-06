@@ -62,7 +62,7 @@ await client.prompts.log({
     providerLatency: 6.5931549072265625,
     outputMessage: {
         content:
-            "Well, you know, there is so much secrecy involved in government, folks, it's unbelievable. They don't want to tell you everything. They don't tell me everything! But about Roswell, it\u2019s a very popular question. I know, I just know, that something very, very peculiar happened there. Was it a weather balloon? Maybe. Was it something extraterrestrial? Could be. I'd love to go down and open up all the classified documents, believe me, I would. But they don't let that happen. The Deep State, folks, the Deep State. They\u2019re unbelievable. They want to keep everything a secret. But whatever the truth is, I can tell you this: it\u2019s something big, very very big. Tremendous, in fact.",
+            "Well, you know, there is so much secrecy involved in government, folks, it's unbelievable. They don't want to tell you everything. They don't tell me everything! But about Roswell, it's a very popular question. I know, I just know, that something very, very peculiar happened there. Was it a weather balloon? Maybe. Was it something extraterrestrial? Could be. I'd love to go down and open up all the classified documents, believe me, I would. But they don't let that happen. The Deep State, folks, the Deep State. They're unbelievable. They want to keep everything a secret. But whatever the truth is, I can tell you this: it's something big, very very big. Tremendous, in fact.",
         role: "assistant",
     },
     promptTokens: 100,
@@ -285,6 +285,7 @@ await client.prompts.callStream({
     user: "string",
     promptsCallStreamRequestEnvironment: "string",
     save: true,
+    logId: "string",
     providerApiKeys: {
         openai: "string",
         ai21: "string",
@@ -944,6 +945,77 @@ await client.prompts.commit("pr_30gco7dx6JDq4200GVOHa", "prv_F34aba5f3asp0", {
 <dd>
 
 **request:** `Humanloop.CommitRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Prompts.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.prompts.<a href="/src/api/resources/prompts/client/Client.ts">deletePromptVersion</a>(id, versionId) -> void</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Delete a version of the Prompt.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.prompts.deletePromptVersion("id", "version_id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Unique identifier for Prompt.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**versionId:** `string` — Unique identifier for the specific version of the Prompt.
 
 </dd>
 </dl>
@@ -1961,6 +2033,77 @@ await client.tools.commit("tl_789ghi", "tv_012jkl", {
 </dl>
 </details>
 
+<details><summary><code>client.tools.<a href="/src/api/resources/tools/client/Client.ts">deleteToolVersion</a>(id, versionId) -> void</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Delete a version of the Tool.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.tools.deleteToolVersion("id", "version_id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Unique identifier for Tool.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**versionId:** `string` — Unique identifier for the specific version of the Tool.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Tools.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.tools.<a href="/src/api/resources/tools/client/Client.ts">setDeployment</a>(id, environmentId, { ...params }) -> Humanloop.ToolResponse</code></summary>
 <dl>
 <dd>
@@ -2875,6 +3018,77 @@ await client.datasets.commit("ds_b0baF1ca7652", "dsv_6L78pqrdFi2xa", {
 </dl>
 </details>
 
+<details><summary><code>client.datasets.<a href="/src/api/resources/datasets/client/Client.ts">deleteDatasetVersion</a>(id, versionId) -> void</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Delete a version of the Dataset.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.datasets.deleteDatasetVersion("id", "version_id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Unique identifier for Dataset.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**versionId:** `string` — Unique identifier for the specific version of the Dataset.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Datasets.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.datasets.<a href="/src/api/resources/datasets/client/Client.ts">uploadCsv</a>(file, id, { ...params }) -> Humanloop.DatasetResponse</code></summary>
 <dl>
 <dd>
@@ -3758,6 +3972,77 @@ await client.evaluators.commit("ev_890bcd", "evv_012def", {
 </dl>
 </details>
 
+<details><summary><code>client.evaluators.<a href="/src/api/resources/evaluators/client/Client.ts">deleteEvaluatorVersion</a>(id, versionId) -> void</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Delete a version of the Evaluator.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.evaluators.deleteEvaluatorVersion("id", "version_id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Unique identifier for Evaluator.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**versionId:** `string` — Unique identifier for the specific version of the Evaluator.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Evaluators.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.evaluators.<a href="/src/api/resources/evaluators/client/Client.ts">setDeployment</a>(id, environmentId, { ...params }) -> Humanloop.EvaluatorResponse</code></summary>
 <dl>
 <dd>
@@ -4522,6 +4807,8 @@ Update the status, inputs, output of a Flow Log.
 Marking a Flow Log as complete will trigger any monitoring Evaluators to run.
 Inputs and output (or error) must be provided in order to mark it as complete.
 
+The end_time log attribute will be set to match the time the log is marked as complete.
+
 </dd>
 </dl>
 </dd>
@@ -4724,6 +5011,77 @@ await client.flows.commit("fl_6o701g4jmcanPVHxdqD0O", "flv_6o701g4jmcanPVHxdqD0O
 <dd>
 
 **request:** `Humanloop.CommitRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Flows.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.flows.<a href="/src/api/resources/flows/client/Client.ts">deleteFlowVersion</a>(id, versionId) -> void</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Delete a version of the Flow.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.flows.deleteFlowVersion("id", "version_id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Unique identifier for Flow.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**versionId:** `string` — Unique identifier for the specific version of the Flow.
 
 </dd>
 </dl>

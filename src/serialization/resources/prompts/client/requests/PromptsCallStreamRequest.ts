@@ -32,6 +32,7 @@ export const PromptsCallStreamRequest: core.serialization.Schema<
         core.serialization.string().optional()
     ),
     save: core.serialization.boolean().optional(),
+    logId: core.serialization.property("log_id", core.serialization.string().optional()),
     providerApiKeys: core.serialization.property("provider_api_keys", ProviderApiKeys.optional()),
     numSamples: core.serialization.property("num_samples", core.serialization.number().optional()),
     returnInputs: core.serialization.property("return_inputs", core.serialization.boolean().optional()),
@@ -56,6 +57,7 @@ export declare namespace PromptsCallStreamRequest {
         user?: string | null;
         environment?: string | null;
         save?: boolean | null;
+        log_id?: string | null;
         provider_api_keys?: ProviderApiKeys.Raw | null;
         num_samples?: number | null;
         return_inputs?: boolean | null;

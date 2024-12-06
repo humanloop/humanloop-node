@@ -26,6 +26,7 @@ export const PromptCallResponse: core.serialization.ObjectSchema<
     user: core.serialization.string().optional(),
     environment: core.serialization.string().optional(),
     save: core.serialization.boolean().optional(),
+    logId: core.serialization.property("log_id", core.serialization.string().optional()),
     id: core.serialization.string(),
     traceId: core.serialization.property("trace_id", core.serialization.string().optional()),
     logs: core.serialization.list(PromptCallLogResponse),
@@ -46,6 +47,7 @@ export declare namespace PromptCallResponse {
         user?: string | null;
         environment?: string | null;
         save?: boolean | null;
+        log_id?: string | null;
         id: string;
         trace_id?: string | null;
         logs: PromptCallLogResponse.Raw[];

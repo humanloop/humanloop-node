@@ -48,6 +48,7 @@ export const PromptLogRequest: core.serialization.Schema<
     user: core.serialization.string().optional(),
     promptLogRequestEnvironment: core.serialization.property("environment", core.serialization.string().optional()),
     save: core.serialization.boolean().optional(),
+    logId: core.serialization.property("log_id", core.serialization.string().optional()),
 });
 
 export declare namespace PromptLogRequest {
@@ -81,5 +82,6 @@ export declare namespace PromptLogRequest {
         user?: string | null;
         environment?: string | null;
         save?: boolean | null;
+        log_id?: string | null;
     }
 }

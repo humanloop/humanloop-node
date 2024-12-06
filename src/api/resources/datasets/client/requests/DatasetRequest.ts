@@ -59,6 +59,10 @@ export interface DatasetRequest {
      * Name of the Environment identifying a deployed Version to base the created Version on. Only used when `action` is `"add"` or `"remove"`.
      */
     environment?: string;
+    /**
+     * If set to `true`, include all Datapoints in the response. Defaults to `false`. Consider using the paginated List Datapoints endpoint instead.
+     */
+    includeDatapoints?: boolean;
     /** Path of the Dataset, including the name. This locates the Dataset in the Humanloop filesystem and is used as as a unique identifier. For example: `folder/name` or just `name`. */
     path?: string;
     /** ID for an existing Dataset. */

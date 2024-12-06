@@ -62,6 +62,7 @@ import * as Humanloop from "../../../../index";
  *         user: "string",
  *         promptsCallStreamRequestEnvironment: "string",
  *         save: true,
+ *         logId: "string",
  *         providerApiKeys: {
  *             openai: "string",
  *             ai21: "string",
@@ -123,6 +124,8 @@ export interface PromptsCallStreamRequest {
     promptsCallStreamRequestEnvironment?: string;
     /** Whether the request/response payloads will be stored on Humanloop. */
     save?: boolean;
+    /** This will identify a Log. If you don't provide a Log ID, Humanloop will generate one for you. */
+    logId?: string;
     /** API keys required by each provider to make API calls. The API keys provided here are not stored by Humanloop. If not specified here, Humanloop will fall back to the key saved to your organization. */
     providerApiKeys?: Humanloop.ProviderApiKeys;
     /** The number of generations. */

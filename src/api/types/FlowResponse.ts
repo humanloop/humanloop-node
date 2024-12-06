@@ -10,7 +10,7 @@ import * as Humanloop from "../index";
 export interface FlowResponse {
     /** Path of the Flow, including the name, which is used as a unique identifier. */
     path: string;
-    /** Unique identifier for the Flow. Starts with fl\_. */
+    /** Unique identifier for the Flow. */
     id: string;
     /** ID of the directory that the file is in on Humanloop. */
     directoryId?: string;
