@@ -21,13 +21,6 @@ export class HumanloopSpanExporter implements SpanExporter {
     }
 
     export(spans: ReadableSpan[]): ExportResult {
-        console.log(
-            "EXPORT",
-            spans[0].attributes[HUMANLOOP_FILE_TYPE_KEY],
-            spans[0].spanContext().spanId,
-            spans[0].parentSpanId
-        );
-
         if (this.shutdownFlag) {
             return {
                 code: ExportResultCode.FAILED,
@@ -37,7 +30,6 @@ export class HumanloopSpanExporter implements SpanExporter {
 
         for (const span of spans) {
             if (isHumanloopSpan(span)) {
-                console.log(span, isHumanloopSpan(span));
                 this.uploadPromises.push(this.exportSpanDispatch(span));
             }
         }
@@ -50,29 +42,21 @@ export class HumanloopSpanExporter implements SpanExporter {
     }
 
     async shutdown(): Promise<void> {
-        setTimeout(async () => {
-            // Signal promises to stop
-            this.shutdownFlag = true;
-            // Wait for all promises to finish
-            await Promise.all(this.uploadPromises);
-        }, 5000);
+        this.shutdownFlag = true;
+        await Promise.all(this.uploadPromises);
     }
 
     async forceFlush(): Promise<void> {
-        this.shutdownFlag = true;
-        await Promise.all(this.uploadPromises);
+        await this.shutdown();
     }
 
     private async exportSpanDispatch(span: ReadableSpan): Promise<void> {
         const fileType = span.attributes[HUMANLOOP_FILE_TYPE_KEY];
         const parentSpanId = span.parentSpanId;
 
-        while (!this.shutdownFlag && parentSpanId && !this.spanIdToUploadedLogId.has(parentSpanId)) {
-            if (this.shutdownFlag) await new Promise((resolve) => setTimeout(resolve, 100));
+        while (parentSpanId && !this.spanIdToUploadedLogId.has(parentSpanId)) {
+            await new Promise((resolve) => setTimeout(resolve, 100));
         }
-
-        // End early if the exporter is shutting down
-        if (this.shutdownFlag) return;
 
         try {
             switch (fileType) {
@@ -103,7 +87,8 @@ export class HumanloopSpanExporter implements SpanExporter {
         const path = span.attributes[HUMANLOOP_PATH_KEY] as string;
 
         const spanParentId = span.parentSpanId;
-        const traceParentId = spanParentId ? (this.spanIdToUploadedLogId.get(spanParentId) as string) : undefined;
+        const traceParentId =
+            spanParentId !== undefined ? (this.spanIdToUploadedLogId.get(spanParentId) as string) : undefined;
 
         const prompt: PromptKernelRequest = (fileObject.prompt || {}) as unknown as PromptKernelRequest;
 
@@ -148,8 +133,6 @@ export class HumanloopSpanExporter implements SpanExporter {
         const spanParentId = span.parentSpanId;
         const traceParentId = spanParentId ? (this.spanIdToUploadedLogId.get(spanParentId) as string) : undefined;
         const path = span.attributes[HUMANLOOP_PATH_KEY] as string;
-
-        console.log("BEFORE FLOW", span.spanContext().spanId, spanParentId, traceParentId);
 
         try {
             const response = await this.client.flows.log({

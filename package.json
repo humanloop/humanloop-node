@@ -9,7 +9,7 @@
         "format": "prettier . --write --ignore-unknown",
         "build": "tsc",
         "prepack": "cp -rv dist/. .",
-        "test": "jest"
+        "test": "jest --detectOpenHandles --forceExit"
     },
     "dependencies": {
         "@opentelemetry/api": "^1.9.0",

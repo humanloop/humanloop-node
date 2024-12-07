@@ -141,8 +141,7 @@ export class HumanloopSpanProcessor extends SimpleSpanProcessor {
         prompt.tools = prompt.tools || [];
 
         // Write the enriched prompt kernel back to the span
-        hlFile.prompt = prompt as unknown as NestedDict;
-        writeToOpenTelemetrySpan(promptSpan, hlFile, HUMANLOOP_FILE_KEY);
+        writeToOpenTelemetrySpan(promptSpan, prompt as unknown as NestedDict, `${HUMANLOOP_FILE_KEY}.prompt`);
     }
 
     /**

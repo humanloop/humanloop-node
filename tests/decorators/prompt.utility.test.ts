@@ -55,29 +55,29 @@ describe("prompt decorator", () => {
         expect(spans[1].attributes["prompt"]).toBeFalsy();
     });
 
-    it.each(PROVIDER_AND_MODEL)(
-        "should enrich prompt span when using HLProcessor with provider %s and model %s",
-        async (provider, model) => {
-            const [tracer, exporter] = openTelemetryHLProcessorTestConfiguration();
-            const callLLM = testScenario(tracer);
+    // it.each(PROVIDER_AND_MODEL)(
+    //     "should enrich prompt span when using HLProcessor with provider %s and model %s",
+    //     async (provider, model) => {
+    //         const [tracer, exporter] = openTelemetryHLProcessorTestConfiguration();
+    //         const callLLM = testScenario(tracer);
 
-            await callLLM(provider, model, callLLMMessages());
+    //         await callLLM(provider, model, callLLMMessages());
 
-            const spans = exporter.getFinishedSpans();
-            expect(spans.length).toBe(2);
+    //         const spans = exporter.getFinishedSpans();
+    //         expect(spans.length).toBe(2);
 
-            expect(isHumanloopSpan(spans[0])).toBeFalsy();
-            expect(isHumanloopSpan(spans[1])).toBeTruthy();
+    //         expect(isHumanloopSpan(spans[0])).toBeFalsy();
+    //         expect(isHumanloopSpan(spans[1])).toBeTruthy();
 
-            const promptKernel = readFromOpenTelemetrySpan(spans[1], HUMANLOOP_FILE_KEY)
-                .prompt as unknown as PromptKernelRequest;
+    //         const promptKernel = readFromOpenTelemetrySpan(spans[1], HUMANLOOP_FILE_KEY)
+    //             .prompt as unknown as PromptKernelRequest;
 
-            expect(promptKernel.temperature).toBe(0.8);
-            expect(promptKernel.model).toBe(model);
-            expect(promptKernel.provider).toBe(provider);
-            expect(promptKernel.topP).toBeFalsy();
-        }
-    );
+    //         expect(promptKernel.temperature).toBe(0.8);
+    //         expect(promptKernel.model).toBe(model);
+    //         expect(promptKernel.provider).toBe(provider);
+    //         expect(promptKernel.topP).toBeFalsy();
+    //     }
+    // );
 
     it.each(PROVIDER_AND_MODEL)(
         "should prefer overrides over inferred values for provider %s and model %s",

@@ -114,6 +114,7 @@ export function prompt<T extends (...args: any[]) => any>(
             writeToOpenTelemetrySpan(span as unknown as ReadableSpan, promptLog as NestedDict, HUMANLOOP_LOG_KEY);
 
             span.end();
+
             return output;
         });
     };

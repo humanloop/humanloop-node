@@ -11,7 +11,6 @@ import {
 } from "./fixtures";
 import { isLLMProviderCall } from "../../src/otel";
 import { AsyncFunction } from "../../src/otel/constants";
-import { assert } from "console";
 
 function testScenario(opentelemetryTracer: Tracer): [AsyncFunction, AsyncFunction, AsyncFunction, AsyncFunction] {
     const randomString = tool(
@@ -109,32 +108,26 @@ describe("flow decorator", () => {
         expect(spans[3].parentSpanId).toBe(spans[4].spanContext().spanId);
     });
 
-    it(
-        "should export logs with mocked HL API",
-        async () => {
-            const [tracer, exporter, createPromptLogResponse, createToolLogResponse, createFlowLogResponse] =
-                openTelemetryMockedHLExporterConfiguration();
+    it("should export logs with mocked HL API", async () => {
+        const [tracer, exporter, createPromptLogResponse, createToolLogResponse, createFlowLogResponse] =
+            openTelemetryMockedHLExporterConfiguration();
 
-            const flowOverFlow = testScenario(tracer)[3];
+        const flowOverFlow = testScenario(tracer)[3];
 
-            await flowOverFlow(callLLMMessages());
+        await flowOverFlow(callLLMMessages());
 
-            await exporter.shutdown();
+        await exporter.shutdown();
 
-            expect(exporter.getExportedSpans().length).toBe(5);
+        expect(exporter.getExportedSpans().length).toBe(5);
 
-            expect(createFlowLogResponse.mock.calls).toHaveLength(2);
+        expect(createFlowLogResponse.mock.calls).toHaveLength(2);
 
-            const argsInnerFlowLog = createFlowLogResponse.mock.calls[1];
-            expect(argsInnerFlowLog[0].traceParentId).toBe("flow_log_0");
+        const argsInnerFlowLog = createFlowLogResponse.mock.calls[1];
+        expect(argsInnerFlowLog[0].traceParentId).toBe("flow_log_0");
 
-            expect(createPromptLogResponse.mock.calls).toHaveLength(1);
-            expect(createPromptLogResponse.mock.calls[0].traceParentId).toBe("flow_log_1");
+        expect(createPromptLogResponse.mock.calls).toHaveLength(1);
+        expect(createPromptLogResponse.mock.calls[0][0].traceParentId).toBe("flow_log_1");
 
-            // expect(createPromptLogResponse.mock.calls).toHaveLength(1);
-
-            // const spans = exporter.getFinishedSpans();
-        },
-        50 * 1000
-    );
+        expect(createToolLogResponse.mock.calls).toHaveLength(1);
+    });
 });
