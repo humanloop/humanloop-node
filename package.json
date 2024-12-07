@@ -27,7 +27,8 @@
         "readable-stream": "^4.5.2",
         "ts-json-schema-generator": "^2.3.0",
         "url-join": "4.0.1",
-        "uuid": "^11.0.3"
+        "uuid": "^11.0.3",
+        "yarn": "^1.22.22"
     },
     "devDependencies": {
         "@types/jest": "29.5.5",
