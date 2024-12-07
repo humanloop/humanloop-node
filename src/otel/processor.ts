@@ -1,4 +1,4 @@
-import { ReadableSpan, SpanExporter, SimpleSpanProcessor } from "@opentelemetry/sdk-trace-base";
+import { ReadableSpan, Span, SpanExporter, SpanProcessor } from "@opentelemetry/sdk-trace-base";
 import { ExportResult, ExportResultCode } from "@opentelemetry/core";
 import {
     isHumanloopSpan,
@@ -11,6 +11,7 @@ import { HUMANLOOP_FILE_KEY, HUMANLOOP_FILE_TYPE_KEY, HUMANLOOP_LOG_KEY } from "
 import { PromptKernelRequest } from "api/types/PromptKernelRequest";
 import { ModelEndpoints, ModelProviders } from "api";
 import { SpanAttributes as AiSemanticConventions } from "@traceloop/ai-semantic-conventions";
+import { Context } from "@opentelemetry/api";
 
 /**
  * Converts HrTime to seconds with fractions.
@@ -26,15 +27,20 @@ function hrTimeToSeconds(hrTime: [number, number]): number {
 /**
  * Enriches Humanloop spans with data from their child spans.
  */
-export class HumanloopSpanProcessor extends SimpleSpanProcessor {
+export class HumanloopSpanProcessor implements SpanProcessor {
     private spanExporter: SpanExporter;
     private children: Map<string, ReadableSpan[]>;
 
     constructor(exporter: SpanExporter) {
-        super(exporter);
         this.spanExporter = exporter;
         this.children = new Map();
     }
+
+    async forceFlush(): Promise<void> {}
+
+    onStart(span: Span, parentContext: Context): void {}
+
+    async shutdown(): Promise<void> {}
 
     /**
      * Handles spans at the end of their lifecycle.
