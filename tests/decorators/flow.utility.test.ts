@@ -108,26 +108,32 @@ describe("flow decorator", () => {
         expect(spans[3].parentSpanId).toBe(spans[4].spanContext().spanId);
     });
 
-    it("should export logs with mocked HL API", async () => {
-        const [tracer, exporter, createPromptLogResponse, createToolLogResponse, createFlowLogResponse] =
-            openTelemetryMockedHLExporterConfiguration();
+    it(
+        "should export logs with mocked HL API",
+        async () => {
+            const [tracer, exporter, createPromptLogResponse, createToolLogResponse, createFlowLogResponse] =
+                openTelemetryMockedHLExporterConfiguration();
 
-        const flowOverFlow = testScenario(tracer)[3];
+            const flowOverFlow = testScenario(tracer)[3];
 
-        await flowOverFlow(callLLMMessages());
+            await flowOverFlow(callLLMMessages());
 
-        await exporter.shutdown();
+            await exporter.shutdown();
 
-        expect(exporter.getExportedSpans().length).toBe(5);
+            await new Promise((resolve) => setTimeout(resolve, 5000));
 
-        expect(createFlowLogResponse.mock.calls).toHaveLength(2);
+            expect(exporter.getExportedSpans().length).toBe(5);
 
-        const argsInnerFlowLog = createFlowLogResponse.mock.calls[1];
-        expect(argsInnerFlowLog[0].traceParentId).toBe("flow_log_0");
+            expect(createFlowLogResponse.mock.calls).toHaveLength(2);
 
-        expect(createPromptLogResponse.mock.calls).toHaveLength(1);
-        expect(createPromptLogResponse.mock.calls[0][0].traceParentId).toBe("flow_log_1");
+            const argsInnerFlowLog = createFlowLogResponse.mock.calls[1];
+            expect(argsInnerFlowLog[0].traceParentId).toBe("flow_log_0");
 
-        expect(createToolLogResponse.mock.calls).toHaveLength(1);
-    });
+            expect(createPromptLogResponse.mock.calls).toHaveLength(1);
+            expect(createPromptLogResponse.mock.calls[0][0].traceParentId).toBe("flow_log_1");
+
+            expect(createToolLogResponse.mock.calls).toHaveLength(1);
+        },
+        10 * 1000
+    );
 });

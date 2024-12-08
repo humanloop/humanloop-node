@@ -76,11 +76,11 @@ export class HumanloopSpanProcessor implements SpanProcessor {
 
         // Common processing for all Humanloop spans
         if (span.startTime) {
-            span.attributes[`${HUMANLOOP_LOG_KEY}.start_time`] = hrTimeToSeconds(span.startTime);
+            span.attributes[`${HUMANLOOP_LOG_KEY}.startTime`] = hrTimeToSeconds(span.startTime);
         }
         if (span.endTime) {
-            span.attributes[`${HUMANLOOP_LOG_KEY}.end_time`] = hrTimeToSeconds(span.endTime);
-            span.attributes[`${HUMANLOOP_LOG_KEY}.created_at`] = hrTimeToSeconds(span.endTime);
+            span.attributes[`${HUMANLOOP_LOG_KEY}.endTime`] = hrTimeToSeconds(span.endTime);
+            span.attributes[`${HUMANLOOP_LOG_KEY}.createdAt`] = hrTimeToSeconds(span.endTime);
         }
 
         switch (fileType) {

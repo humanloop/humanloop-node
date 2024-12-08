@@ -163,9 +163,8 @@ export function isLLMProviderCall(span: ReadableSpan): boolean {
     const spanInstrumentor = span.instrumentationLibrary.name;
     const instrumentorPrefixes = [
         "@traceloop/instrumentation-openai",
-        // "opentelemetry.instrumentation.groq",
-        // "opentelemetry.instrumentation.anthropic",
-        // "opentelemetry.instrumentation.cohere",
+        "@traceloop/instrumentation-anthropic",
+        "@traceloop/instrumentation-cohere",
         // "opentelemetry.instrumentation.replicate",
     ];
 

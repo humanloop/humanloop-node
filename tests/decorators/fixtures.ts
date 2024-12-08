@@ -5,6 +5,10 @@ import { HumanloopSpanExporter } from "../../src/otel/exporter";
 import { HumanloopClient } from "../../src/Client";
 import openai from "openai";
 import { CreateFlowLogResponse, CreatePromptLogResponse, CreateToolLogResponse } from "../../src/api";
+import { AnthropicInstrumentation } from "@traceloop/instrumentation-anthropic";
+import * as anthropic from "@anthropic-ai/sdk";
+import * as cohere from "cohere-ai";
+import { CohereInstrumentation } from "@traceloop/instrumentation-cohere";
 
 export function getFixtures() {
     return TEST_FIXTURES;
@@ -48,8 +52,12 @@ export function openTelemetryTestConfiguration(): [Tracer, InMemorySpanExporter]
         new OpenAIInstrumentation({
             enrichTokens: true,
         }),
+        new AnthropicInstrumentation(),
+        new CohereInstrumentation(),
     ];
-    instrumentors[0].manuallyInstrument(openai);
+    (instrumentors[0] as OpenAIInstrumentation).manuallyInstrument(openai);
+    (instrumentors[1] as AnthropicInstrumentation).manuallyInstrument(anthropic);
+    (instrumentors[2] as CohereInstrumentation).manuallyInstrument(cohere);
     for (const instrumentor of instrumentors) {
         instrumentor.setTracerProvider(provider);
         instrumentor.enable();
@@ -72,8 +80,12 @@ export function openTelemetryHLProcessorTestConfiguration(): [Tracer, InMemorySp
         new OpenAIInstrumentation({
             enrichTokens: true,
         }),
+        new AnthropicInstrumentation(),
+        new CohereInstrumentation(),
     ];
-    instrumentors[0].manuallyInstrument(openai);
+    (instrumentors[0] as OpenAIInstrumentation).manuallyInstrument(openai);
+    (instrumentors[1] as AnthropicInstrumentation).manuallyInstrument(anthropic);
+    (instrumentors[2] as CohereInstrumentation).manuallyInstrument(cohere);
     for (const instrumentor of instrumentors) {
         instrumentor.setTracerProvider(provider);
         instrumentor.enable();
@@ -119,8 +131,12 @@ export function openTelemetryMockedHLExporterConfiguration(): [
         new OpenAIInstrumentation({
             enrichTokens: true,
         }),
+        new AnthropicInstrumentation(),
+        new CohereInstrumentation(),
     ];
-    instrumentors[0].manuallyInstrument(openai);
+    (instrumentors[0] as OpenAIInstrumentation).manuallyInstrument(openai);
+    (instrumentors[1] as AnthropicInstrumentation).manuallyInstrument(anthropic);
+    (instrumentors[2] as CohereInstrumentation).manuallyInstrument(cohere);
     for (const instrumentor of instrumentors) {
         instrumentor.setTracerProvider(provider);
         instrumentor.enable();

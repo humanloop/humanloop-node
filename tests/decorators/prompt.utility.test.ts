@@ -1,5 +1,6 @@
 import { Tracer } from "@opentelemetry/sdk-trace-node";
 import { ModelProviders } from "../../src/api/types/ModelProviders";
+import Anthropic from "@anthropic-ai/sdk";
 import {
     callLLMMessages,
     openTelemetryHLProcessorTestConfiguration,
@@ -12,23 +13,72 @@ import { prompt, UtilityPromptKernel } from "../../src/decorators/prompt";
 import OpenAI from "openai";
 import { HUMANLOOP_FILE_KEY, isHumanloopSpan, readFromOpenTelemetrySpan } from "../../src/otel";
 import { PromptKernelRequest } from "../../src/api/types/PromptKernelRequest";
+import { MessageParam } from "@anthropic-ai/sdk/resources/messages";
+import { CohereClient } from "cohere-ai";
+import { Message as CohereMessage } from "cohere-ai/api";
 
-const PROVIDER_AND_MODEL: [ModelProviders, string][] = [[ModelProviders.Openai, "gpt-4o"]];
+const PROVIDER_AND_MODEL: [ModelProviders, string][] = [
+    [ModelProviders.Openai, "gpt-4o"],
+    [ModelProviders.Anthropic, "claude-3-opus-latest"],
+    [ModelProviders.Cohere, "command"],
+];
 
 function testScenario(opentelemetryTracer: Tracer, promptKernel?: UtilityPromptKernel) {
     dotenv.config({
         path: __dirname + "/../../.env",
     });
-    async function callLLMBase(provider: ModelProviders, model: string, messages: any[]): Promise<string | null> {
+    async function callLLMBase(
+        provider: ModelProviders,
+        model: string,
+        messages: { role: "system" | "user" | "assistant"; content: string }[]
+    ): Promise<string | null> {
         switch (provider) {
             case ModelProviders.Openai:
-                const client = new OpenAI({ apiKey: process.env.OPENAI_KEY });
-                const response = await client.chat.completions.create({
+                const openAIClient = new OpenAI({ apiKey: process.env.OPENAI_KEY });
+                const openAIResponse = await openAIClient.chat.completions.create({
                     model: model,
                     messages: messages,
                     temperature: 0.8,
                 });
-                return response.choices[0].message.content;
+                return openAIResponse.choices[0].message.content;
+            case ModelProviders.Anthropic:
+                const anthropicClient = new Anthropic({ apiKey: process.env.ANTHROPIC_KEY });
+                const anthropicResponse = await anthropicClient.messages.create({
+                    model: model,
+                    system: messages[0].content,
+                    temperature: 0.8,
+                    messages: messages.slice(1).map((m) => {
+                        return {
+                            role: m.role,
+                            content: m.content,
+                        } as MessageParam;
+                    }),
+                    max_tokens: 500,
+                });
+                return anthropicResponse.content
+                    .map((c) => {
+                        if ("text" in c) {
+                            return c.text;
+                        }
+                        return "";
+                    })
+                    .join("");
+            case ModelProviders.Cohere:
+                const cohereClient = new CohereClient({ token: process.env.COHERE_KEY });
+                const chat = await cohereClient.chat({
+                    temperature: 0.8,
+                    model: model,
+                    // The system message/ template
+                    preamble: messages[0].content,
+                    chatHistory: messages.slice(1, -1).map((message) => {
+                        return {
+                            message: message.content,
+                            role: message.role === "user" ? "USER" : "ASSISTANT",
+                        };
+                    }) as CohereMessage[],
+                    message: messages[messages.length - 1].content,
+                });
+                return chat.text;
             default:
                 throw new Error(`Unsupported provider: ${provider}`);
         }
@@ -43,17 +93,21 @@ jest.retryTimes(3);
 describe("prompt decorator", () => {
     afterEach(tearDown);
 
-    it.each(PROVIDER_AND_MODEL)("should work with provider %s and model %s", async (provider, model) => {
-        const [tracer, exporter] = openTelemetryTestConfiguration();
+    it.each(PROVIDER_AND_MODEL)(
+        "should work with provider %s and model %s",
+        async (provider, model) => {
+            const [tracer, exporter] = openTelemetryTestConfiguration();
 
-        const callLLM = testScenario(tracer);
+            const callLLM = testScenario(tracer);
 
-        await callLLM(provider, model, callLLMMessages());
-        const spans = exporter.getFinishedSpans();
-        expect(isHumanloopSpan(spans[0])).toBeFalsy();
-        expect(isHumanloopSpan(spans[1])).toBeTruthy();
-        expect(spans[1].attributes["prompt"]).toBeFalsy();
-    });
+            await callLLM(provider, model, callLLMMessages());
+            const spans = exporter.getFinishedSpans();
+            expect(isHumanloopSpan(spans[0])).toBeFalsy();
+            expect(isHumanloopSpan(spans[1])).toBeTruthy();
+            expect(spans[1].attributes["prompt"]).toBeFalsy();
+        },
+        PROVIDER_AND_MODEL.length * 5 * 1000
+    );
 
     it.each(PROVIDER_AND_MODEL)(
         "should enrich prompt span when using HLProcessor with provider %s and model %s",
@@ -76,7 +130,8 @@ describe("prompt decorator", () => {
             expect(promptKernel.model).toBe(model);
             expect(promptKernel.provider).toBe(provider);
             expect(promptKernel.topP).toBeFalsy();
-        }
+        },
+        PROVIDER_AND_MODEL.length * 5 * 1000
     );
 
     it.each(PROVIDER_AND_MODEL)(
@@ -100,7 +155,8 @@ describe("prompt decorator", () => {
             expect(promptKernel.temperature).toBe(0.9);
             expect(promptKernel.topP).toBe(0.1);
             expect(promptKernel.model).toBe(model);
-        }
+        },
+        PROVIDER_AND_MODEL.length * 5 * 1000
     );
 
     it.each([
