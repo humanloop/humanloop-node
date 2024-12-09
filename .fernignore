@@ -1,1 +1,17 @@
 # Specify files that shouldn't be modified by Fern
+
+# Custom code
+
+src/otel
+src/eval_utils
+src/decorators
+src/index.ts
+src/humanloop.client/ts
+
+# Tests
+
+tests
+
+# CI Action
+
+.github/workflows/ci.yml
