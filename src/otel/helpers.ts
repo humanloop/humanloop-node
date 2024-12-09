@@ -1,10 +1,15 @@
 import { ReadableSpan } from "@opentelemetry/sdk-trace-base";
 import { SpanKind } from "@opentelemetry/api";
 import { AttributeValue } from "@opentelemetry/api";
+import { InstrumentationBase } from "@opentelemetry/instrumentation";
 import { v4 as uuidv4 } from "uuid";
 
 // Constants for Humanloop attributes
-import { HUMANLOOP_FILE_KEY, HUMANLOOP_FILE_TYPE_KEY, HUMANLOOP_LOG_KEY } from "./constants";
+import { HUMANLOOP_FILE_TYPE_KEY } from "./constants";
+import { NodeTracerProvider } from "@opentelemetry/sdk-trace-node";
+import { OpenAIInstrumentation } from "@traceloop/instrumentation-openai";
+import { AnthropicInstrumentation } from "@traceloop/instrumentation-anthropic";
+import { CohereInstrumentation } from "@traceloop/instrumentation-cohere";
 
 export type NestedDict = { [key: string]: NestedDict | AttributeValue };
 export type NestedList = Array<NestedDict | AttributeValue>;
@@ -225,4 +230,30 @@ export function jsonifyIfNotString(func: Function, output: any): string {
         }
     }
     return output;
+}
+
+export function instrumentProvider(provider: NodeTracerProvider) {
+    const instrumentors = [];
+    try {
+        const openai = require("openai").openai;
+        const openaiInstrumentor = new OpenAIInstrumentation({ enrichTokens: true });
+        openaiInstrumentor.manuallyInstrument(openai);
+        instrumentors.push(openaiInstrumentor);
+    } catch (error) {}
+    try {
+        const anthropic = require("@anthropic-ai/sdk");
+        const anthropicInstrumentor = new AnthropicInstrumentation();
+        anthropicInstrumentor.manuallyInstrument(anthropic);
+        instrumentors.push(anthropicInstrumentor);
+    } catch (error) {}
+    try {
+        const cohere = require("cohere");
+        const cohereInstrumentor = new CohereInstrumentation();
+        cohereInstrumentor.manuallyInstrument(cohere);
+        instrumentors.push(cohereInstrumentor);
+    } catch (error) {}
+    for (const instrumentor of instrumentors) {
+        instrumentor.setTracerProvider(provider);
+        instrumentor.enable();
+    }
 }
