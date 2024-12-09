@@ -24,7 +24,6 @@ const PROVIDER_AND_MODEL: [ModelProviders, string][] = [
 ];
 
 function testScenario(opentelemetryTracer: Tracer, promptKernel?: UtilityPromptKernel) {
-    console.log("HEY", process.env);
     dotenv.config({
         path: __dirname + "/../../.env",
     });
