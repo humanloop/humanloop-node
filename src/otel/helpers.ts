@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 
 // Constants for Humanloop attributes
 import { HUMANLOOP_FILE_KEY, HUMANLOOP_FILE_TYPE_KEY, HUMANLOOP_LOG_KEY } from "./constants";
+import { NodeTracerProvider } from "@opentelemetry/sdk-trace-node";
 
 export type NestedDict = { [key: string]: NestedDict | AttributeValue };
 export type NestedList = Array<NestedDict | AttributeValue>;
@@ -226,3 +227,5 @@ export function jsonifyIfNotString(func: Function, output: any): string {
     }
     return output;
 }
+
+export function instrumentProvider(provider: NodeTracerProvider) {}
