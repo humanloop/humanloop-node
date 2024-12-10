@@ -5,6 +5,19 @@ import { HumanloopClient } from "humanloop.client";
 import { FlowKernelRequest, PromptKernelRequest, ToolKernelRequest } from "api";
 import { HUMANLOOP_FILE_KEY, HUMANLOOP_FILE_TYPE_KEY, HUMANLOOP_LOG_KEY, HUMANLOOP_PATH_KEY } from "./constants";
 
+/**
+ * Converts a high-resolution time tuple to a JavaScript Date object.
+ *
+ * @param hrTime - A tuple containing the high-resolution time, where the first element is the number of seconds
+ * and the second element is the number of nanoseconds.
+ * @returns A Date object representing the high-resolution time.
+ */
+function hrTimeToDate(hrTime: [number, number]): Date {
+    const [seconds, nanoseconds] = hrTime;
+    const secondsTotal = seconds + nanoseconds / 1e9;
+    return new Date(secondsTotal * 1000);
+}
+
 export class HumanloopSpanExporter implements SpanExporter {
     private readonly client: HumanloopClient;
     private readonly spanIdToUploadedLogId: Map<string, string | null>;
@@ -83,7 +96,10 @@ export class HumanloopSpanExporter implements SpanExporter {
 
     private async exportPrompt(span: ReadableSpan): Promise<void> {
         const fileObject = readFromOpenTelemetrySpan(span, HUMANLOOP_FILE_KEY);
-        const logObject = readFromOpenTelemetrySpan(span, HUMANLOOP_LOG_KEY);
+        const logObject = readFromOpenTelemetrySpan(span, HUMANLOOP_LOG_KEY) as { [key: string]: unknown };
+        logObject.startTime = hrTimeToDate(span.startTime);
+        logObject.endTime = hrTimeToDate(span.endTime);
+        logObject.createdAt = hrTimeToDate(span.endTime);
         const path = span.attributes[HUMANLOOP_PATH_KEY] as string;
 
         const spanParentId = span.parentSpanId;
@@ -107,7 +123,10 @@ export class HumanloopSpanExporter implements SpanExporter {
 
     private async exportTool(span: ReadableSpan): Promise<void> {
         const fileObject = readFromOpenTelemetrySpan(span, HUMANLOOP_FILE_KEY);
-        const logObject = readFromOpenTelemetrySpan(span, HUMANLOOP_LOG_KEY);
+        const logObject = readFromOpenTelemetrySpan(span, HUMANLOOP_LOG_KEY) as { [key: string]: unknown };
+        logObject.startTime = hrTimeToDate(span.startTime);
+        logObject.endTime = hrTimeToDate(span.endTime);
+        logObject.createdAt = hrTimeToDate(span.endTime);
         const path = span.attributes[HUMANLOOP_PATH_KEY] as string;
 
         const spanParentId = span.parentSpanId;
@@ -128,7 +147,10 @@ export class HumanloopSpanExporter implements SpanExporter {
 
     private async exportFlow(span: ReadableSpan): Promise<void> {
         const fileObject = readFromOpenTelemetrySpan(span, HUMANLOOP_FILE_KEY);
-        const logObject = readFromOpenTelemetrySpan(span, HUMANLOOP_LOG_KEY);
+        const logObject = readFromOpenTelemetrySpan(span, HUMANLOOP_LOG_KEY) as { [key: string]: unknown };
+        logObject.startTime = hrTimeToDate(span.startTime);
+        logObject.endTime = hrTimeToDate(span.endTime);
+        logObject.createdAt = hrTimeToDate(span.endTime);
 
         const spanParentId = span.parentSpanId;
         const traceParentId = spanParentId ? (this.spanIdToUploadedLogId.get(spanParentId) as string) : undefined;
@@ -137,7 +159,7 @@ export class HumanloopSpanExporter implements SpanExporter {
         try {
             const response = await this.client.flows.log({
                 path: path as string,
-                flow: (fileObject.flow as unknown as FlowKernelRequest) || {},
+                flow: (fileObject.flow as unknown as FlowKernelRequest) || { attributes: {} },
                 traceParentId,
                 ...logObject,
             });

@@ -1,8 +1,8 @@
 import { Tracer } from "@opentelemetry/sdk-trace-node";
 import dotenv from "dotenv";
-import { tool } from "../../src/decorators/tool";
-import { prompt } from "../../src/decorators/prompt";
-import { flow } from "../../src/decorators/flow";
+import { toolUtilityFactory } from "../../src/utilities/tool";
+import { promptUtilityFactory } from "../../src/utilities/prompt";
+import { flowUtilityFactory } from "../../src/utilities/flow";
 import OpenAI from "openai";
 import {
     callLLMMessages,
@@ -13,7 +13,7 @@ import { isLLMProviderCall } from "../../src/otel";
 import { AsyncFunction } from "../../src/otel/constants";
 
 function testScenario(opentelemetryTracer: Tracer): [AsyncFunction, AsyncFunction, AsyncFunction, AsyncFunction] {
-    const randomString = tool(
+    const randomString = toolUtilityFactory(
         opentelemetryTracer,
         () => {
             return Math.random().toString(36).substring(2, 14);
@@ -31,7 +31,7 @@ function testScenario(opentelemetryTracer: Tracer): [AsyncFunction, AsyncFunctio
     dotenv.config({
         path: __dirname + "/../../.env",
     });
-    const callLLM = prompt(opentelemetryTracer, async (messages: any[]) => {
+    const callLLM = promptUtilityFactory(opentelemetryTracer, async (messages: any[]) => {
         const client = new OpenAI({ apiKey: process.env.OPENAI_KEY });
         const response = await client.chat.completions.create({
             model: "gpt-4o",
@@ -41,11 +41,11 @@ function testScenario(opentelemetryTracer: Tracer): [AsyncFunction, AsyncFunctio
         return (response.choices[0].message.content || "") + " " + (await randomString());
     });
 
-    const agentCall = flow(opentelemetryTracer, async (messages: any[]) => {
+    const agentCall = flowUtilityFactory(opentelemetryTracer, async (messages: any[]) => {
         return await callLLM(messages);
     });
 
-    const flowOverFlow = flow(opentelemetryTracer, async (messages: any[]) => {
+    const flowOverFlow = flowUtilityFactory(opentelemetryTracer, async (messages: any[]) => {
         return await agentCall(messages);
     });
 

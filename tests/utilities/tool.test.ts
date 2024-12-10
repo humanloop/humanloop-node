@@ -1,4 +1,4 @@
-import { tool } from "../../src/decorators/tool";
+import { toolUtilityFactory } from "../../src/utilities/tool";
 import { Validator } from "jsonschema";
 import {
     HUMANLOOP_FILE_KEY,
@@ -42,7 +42,7 @@ describe("tool decorator", () => {
     it("should return 3 when adding 1 and 2", async () => {
         const [tracer, exporter] = openTelemetryTestConfiguration();
 
-        const calculatorDecorated = tool(
+        const calculatorDecorated = toolUtilityFactory(
             tracer,
             calculator,
             {
@@ -94,7 +94,7 @@ describe("tool decorator", () => {
     it("should support functions that return void", async () => {
         const [tracer, exporter] = openTelemetryTestConfiguration();
 
-        const decorated = tool(
+        const decorated = toolUtilityFactory(
             tracer,
             () => {},
             {

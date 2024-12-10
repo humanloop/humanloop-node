@@ -12,7 +12,7 @@
 
 "@anthropic-ai/sdk@^0.32.1":
   version "0.32.1"
-  resolved "https://registry.yarnpkg.com/@anthropic-ai/sdk/-/sdk-0.32.1.tgz#d22c8ebae2adccc59d78fb416e89de337ff09014"
+  resolved "https://registry.npmjs.org/@anthropic-ai/sdk/-/sdk-0.32.1.tgz"
   integrity sha512-U9JwTrDvdQ9iWuABVsMLj8nJVwAyQz6QXvgLsVhryhCEPkLsbcP/MXxm+jYcAwLoV8ESbaTTjnD4kuAFa+Hyjg==
   dependencies:
     "@types/node" "^18.11.18"

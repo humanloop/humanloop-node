@@ -1,7 +1,6 @@
 import { ReadableSpan } from "@opentelemetry/sdk-trace-base";
 import { SpanKind } from "@opentelemetry/api";
 import { AttributeValue } from "@opentelemetry/api";
-import { InstrumentationBase } from "@opentelemetry/instrumentation";
 import { v4 as uuidv4 } from "uuid";
 
 // Constants for Humanloop attributes
@@ -230,30 +229,4 @@ export function jsonifyIfNotString(func: Function, output: any): string {
         }
     }
     return output;
-}
-
-export function instrumentProvider(provider: NodeTracerProvider) {
-    const instrumentors = [];
-    try {
-        const openai = require("openai").openai;
-        const openaiInstrumentor = new OpenAIInstrumentation({ enrichTokens: true });
-        openaiInstrumentor.manuallyInstrument(openai);
-        instrumentors.push(openaiInstrumentor);
-    } catch (error) {}
-    try {
-        const anthropic = require("@anthropic-ai/sdk");
-        const anthropicInstrumentor = new AnthropicInstrumentation();
-        anthropicInstrumentor.manuallyInstrument(anthropic);
-        instrumentors.push(anthropicInstrumentor);
-    } catch (error) {}
-    try {
-        const cohere = require("cohere");
-        const cohereInstrumentor = new CohereInstrumentation();
-        cohereInstrumentor.manuallyInstrument(cohere);
-        instrumentors.push(cohereInstrumentor);
-    } catch (error) {}
-    for (const instrumentor of instrumentors) {
-        instrumentor.setTracerProvider(provider);
-        instrumentor.enable();
-    }
 }

@@ -9,9 +9,7 @@ import {
     HUMANLOOP_PARENT_SPAN_CTX_KEY,
     HUMANLOOP_TRACE_FLOW_CTX_KEY,
 } from "../otel/constants";
-import { ToolKernelRequest } from "api/types/ToolKernelRequest";
-import { Humanloop } from "index";
-import { json } from "stream/consumers";
+import { ToolKernelRequest } from "../api/types/ToolKernelRequest";
 
 /**
  * Higher-order function for wrapping a function with OpenTelemetry instrumentation.
@@ -23,15 +21,15 @@ import { json } from "stream/consumers";
  * @param toolKernel - Additional metadata for the function
  * @returns Wrapped function with OpenTelemetry instrumentation
  */
-export function tool<T extends (...args: any[]) => any>(
+export function toolUtilityFactory<T extends (...args: any[]) => any>(
     opentelemetryTracer: Tracer,
     func: T,
     toolKernel: ToolKernelRequest,
     path?: string
-): { (...args: any[]): Promise<ReturnType<T>>; jsonSchema: ToolKernelRequest } {
+): { (...args: any[]): Promise<ReturnType<T>>; jsonSchema: Record<string, any> } {
     // Attach JSON schema metadata to the function for external use
     if (toolKernel) {
-        (func as any).jsonSchema = toolKernel.function;
+        (func as any).jsonSchema = toolKernel.function || {};
     }
 
     const wrappedFunction = async (...args: Parameters<T>): Promise<ReturnType<T> | null> => {
@@ -104,7 +102,7 @@ export function tool<T extends (...args: any[]) => any>(
         });
     };
 
-    // @ts-ignore
+    // @ts-ignore Adding jsonSchema property to utility-wrapped function
     return Object.assign(wrappedFunction, { jsonSchema: (func as any).jsonSchema });
 }
 
@@ -132,7 +130,7 @@ function validateArgumentsAgainstSchema(func: (...args: any[]) => any[], args: a
         return;
     }
 
-    const parameters = toolKernel.function?.parameters || {};
+    const parameters = toolKernel.function?.parameters?.properties as {};
 
     if (!parameters || Object.keys(parameters).length === 0) {
         return;

@@ -2,7 +2,7 @@ import { InMemorySpanExporter, NodeTracerProvider, SimpleSpanProcessor, Tracer }
 import { OpenAIInstrumentation } from "@traceloop/instrumentation-openai";
 import { HumanloopSpanProcessor } from "../../src/otel/processor";
 import { HumanloopSpanExporter } from "../../src/otel/exporter";
-import { HumanloopClient } from "../../src/Client";
+import { HumanloopClient } from "../../src/humanloop.client";
 import openai from "openai";
 import { CreateFlowLogResponse, CreatePromptLogResponse, CreateToolLogResponse } from "../../src/api";
 import { AnthropicInstrumentation } from "@traceloop/instrumentation-anthropic";
@@ -12,15 +12,6 @@ import { CohereInstrumentation } from "@traceloop/instrumentation-cohere";
 
 export function getFixtures() {
     return TEST_FIXTURES;
-}
-
-// Is set inside openTelemetryTestConfiguration
-let unregisterInstrumentationsCallback: (() => void) | null = null;
-
-export function tearDown() {
-    if (unregisterInstrumentationsCallback) {
-        unregisterInstrumentationsCallback();
-    }
 }
 
 let TEST_FIXTURES: {
@@ -65,7 +56,9 @@ export function openTelemetryTestConfiguration(): [Tracer, InMemorySpanExporter]
 
     provider.register();
 
-    return [provider.getTracer("test"), exporter];
+    const tracer = provider.getTracer("test");
+
+    return [tracer, exporter];
 }
 
 export function openTelemetryHLProcessorTestConfiguration(): [Tracer, InMemorySpanExporter] {

@@ -14,17 +14,6 @@ import { SpanAttributes as AiSemanticConventions } from "@traceloop/ai-semantic-
 import { Context } from "@opentelemetry/api";
 
 /**
- * Converts HrTime to seconds with fractions.
- *
- * @param hrTime - The High-Resolution Time tuple [seconds, nanoseconds].
- * @returns The time in seconds as a floating-point number.
- */
-function hrTimeToSeconds(hrTime: [number, number]): number {
-    const [seconds, nanoseconds] = hrTime;
-    return (seconds + nanoseconds) / 1e9;
-}
-
-/**
  * Enriches Humanloop spans with data from their child spans.
  */
 export class HumanloopSpanProcessor implements SpanProcessor {
@@ -47,6 +36,7 @@ export class HumanloopSpanProcessor implements SpanProcessor {
      * Enriches Humanloop spans or forwards non-Humanloop spans to the exporter.
      */
     onEnd(span: ReadableSpan): void {
+        console.log("onEnd", span.attributes);
         if (isHumanloopSpan(span)) {
             this.processSpanDispatch(span, this.children.get(span.spanContext().spanId) || []);
             this.children.delete(span.spanContext().spanId); // Release references
@@ -76,11 +66,11 @@ export class HumanloopSpanProcessor implements SpanProcessor {
 
         // Common processing for all Humanloop spans
         if (span.startTime) {
-            span.attributes[`${HUMANLOOP_LOG_KEY}.startTime`] = hrTimeToSeconds(span.startTime);
+            span.attributes[`${HUMANLOOP_LOG_KEY}.startTime`] = span.startTime;
         }
         if (span.endTime) {
-            span.attributes[`${HUMANLOOP_LOG_KEY}.endTime`] = hrTimeToSeconds(span.endTime);
-            span.attributes[`${HUMANLOOP_LOG_KEY}.createdAt`] = hrTimeToSeconds(span.endTime);
+            span.attributes[`${HUMANLOOP_LOG_KEY}.endTime`] = span.endTime;
+            span.attributes[`${HUMANLOOP_LOG_KEY}.createdAt`] = span.endTime;
         }
 
         switch (fileType) {
@@ -154,6 +144,7 @@ export class HumanloopSpanProcessor implements SpanProcessor {
      * Enriches the prompt log of a prompt span using information from a child span.
      */
     private enrichPromptLog(promptSpan: ReadableSpan, llmProviderCallSpan: ReadableSpan): void {
+        console.log("WOW", promptSpan.attributes, llmProviderCallSpan.attributes);
         let hlLog = readFromOpenTelemetrySpan(promptSpan, HUMANLOOP_LOG_KEY) || {};
 
         if (!hlLog.output_tokens) {

@@ -1,15 +1,10 @@
 import { Tracer } from "@opentelemetry/sdk-trace-node";
 import { ModelProviders } from "../../src/api/types/ModelProviders";
 import Anthropic from "@anthropic-ai/sdk";
-import {
-    callLLMMessages,
-    openTelemetryHLProcessorTestConfiguration,
-    openTelemetryTestConfiguration,
-    tearDown,
-} from "./fixtures";
+import { callLLMMessages, openTelemetryHLProcessorTestConfiguration, openTelemetryTestConfiguration } from "./fixtures";
 import * as dotenv from "dotenv";
 
-import { prompt, UtilityPromptKernel } from "../../src/decorators/prompt";
+import { promptUtilityFactory, UtilityPromptKernel } from "../../src/utilities/prompt";
 import OpenAI from "openai";
 import { HUMANLOOP_FILE_KEY, isHumanloopSpan, readFromOpenTelemetrySpan } from "../../src/otel";
 import { PromptKernelRequest } from "../../src/api/types/PromptKernelRequest";
@@ -26,6 +21,11 @@ const PROVIDER_AND_MODEL: [ModelProviders, string][] = [
 function testScenario(opentelemetryTracer: Tracer, promptKernel?: UtilityPromptKernel) {
     dotenv.config({
         path: __dirname + "/../../.env",
+    });
+    ["OPENAI_KEY", "ANTHROPIC_KEY", "COHERE_KEY"].forEach((key) => {
+        if (!process.env[key]) {
+            throw new Error(`Missing ${key} in environment. Have you added it inside .env?`);
+        }
     });
     async function callLLMBase(
         provider: ModelProviders,
@@ -84,15 +84,13 @@ function testScenario(opentelemetryTracer: Tracer, promptKernel?: UtilityPromptK
         }
     }
 
-    return prompt(opentelemetryTracer, callLLMBase, promptKernel, "Call LLM");
+    return promptUtilityFactory(opentelemetryTracer, callLLMBase, promptKernel, "Call LLM");
 }
 
 // LLM providers might not be available, retry if needed
 jest.retryTimes(3);
 
 describe("prompt decorator", () => {
-    afterEach(tearDown);
-
     it.each(PROVIDER_AND_MODEL)(
         "should work with provider %s and model %s",
         async (provider, model) => {
@@ -102,6 +100,7 @@ describe("prompt decorator", () => {
 
             await callLLM(provider, model, callLLMMessages());
             const spans = exporter.getFinishedSpans();
+            expect(spans.length).toBe(2);
             expect(isHumanloopSpan(spans[0])).toBeFalsy();
             expect(isHumanloopSpan(spans[1])).toBeTruthy();
             expect(spans[1].attributes["prompt"]).toBeFalsy();
