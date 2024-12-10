@@ -1,4 +1,3 @@
-import { toolUtilityFactory } from "../../src/utilities/tool";
 import { Validator } from "jsonschema";
 import {
     HUMANLOOP_FILE_KEY,
@@ -6,8 +5,8 @@ import {
     HUMANLOOP_LOG_KEY,
     readFromOpenTelemetrySpan,
 } from "../../src/otel";
+import { toolUtilityFactory } from "../../src/utilities/tool";
 import { openTelemetryTestConfiguration } from "./fixtures";
-import { Schema } from "ts-json-schema-generator";
 
 /**
  * Perform arithmetic operations on two numbers.

@@ -15,3 +15,7 @@ tests
 # CI Action
 
 .github/workflows/ci.yml
+
+# Prettier
+
+.prettierrc.yml

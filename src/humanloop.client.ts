@@ -1,16 +1,16 @@
 import { NodeTracerProvider, Tracer } from "@opentelemetry/sdk-trace-node";
-import { HumanloopClient as BaseHumanloopClient } from "./Client";
-import { HumanloopSpanProcessor } from "./otel/processor";
-import { HumanloopSpanExporter } from "./otel/exporter";
-import { UtilityPromptKernel, promptUtilityFactory } from "./utilities/prompt";
-import { toolUtilityFactory } from "./utilities/tool";
-import { flowUtilityFactory } from "./utilities/flow";
-import { ToolKernelRequest } from "./api/types/ToolKernelRequest";
-import { FlowKernelRequest } from "./api/types/FlowKernelRequest";
-import { OpenAIInstrumentation } from "@traceloop/instrumentation-openai";
-import { CohereInstrumentation } from "@traceloop/instrumentation-cohere";
 import { AnthropicInstrumentation } from "@traceloop/instrumentation-anthropic";
+import { CohereInstrumentation } from "@traceloop/instrumentation-cohere";
+import { OpenAIInstrumentation } from "@traceloop/instrumentation-openai";
+import { FlowKernelRequest } from "./api/types/FlowKernelRequest";
+import { ToolKernelRequest } from "./api/types/ToolKernelRequest";
+import { HumanloopClient as BaseHumanloopClient } from "./Client";
+import { HumanloopSpanExporter } from "./otel/exporter";
 import { moduleIsInstalled } from "./otel/helpers";
+import { HumanloopSpanProcessor } from "./otel/processor";
+import { flowUtilityFactory } from "./utilities/flow";
+import { promptUtilityFactory, UtilityPromptKernel } from "./utilities/prompt";
+import { toolUtilityFactory } from "./utilities/tool";
 
 export class HumanloopClient extends BaseHumanloopClient {
     protected readonly opentelemetryTracerProvider: NodeTracerProvider;

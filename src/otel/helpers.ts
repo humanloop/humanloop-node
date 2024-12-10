@@ -1,14 +1,8 @@
+import { AttributeValue, SpanKind } from "@opentelemetry/api";
 import { ReadableSpan } from "@opentelemetry/sdk-trace-base";
-import { SpanKind } from "@opentelemetry/api";
-import { AttributeValue } from "@opentelemetry/api";
 import { v4 as uuidv4 } from "uuid";
-
 // Constants for Humanloop attributes
 import { HUMANLOOP_FILE_TYPE_KEY } from "./constants";
-import { NodeTracerProvider } from "@opentelemetry/sdk-trace-node";
-import { OpenAIInstrumentation } from "@traceloop/instrumentation-openai";
-import { AnthropicInstrumentation } from "@traceloop/instrumentation-anthropic";
-import { CohereInstrumentation } from "@traceloop/instrumentation-cohere";
 
 export type NestedDict = { [key: string]: NestedDict | AttributeValue };
 export type NestedList = Array<NestedDict | AttributeValue>;

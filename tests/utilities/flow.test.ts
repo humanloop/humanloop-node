@@ -1,16 +1,16 @@
 import { Tracer } from "@opentelemetry/sdk-trace-node";
 import dotenv from "dotenv";
-import { toolUtilityFactory } from "../../src/utilities/tool";
-import { promptUtilityFactory } from "../../src/utilities/prompt";
-import { flowUtilityFactory } from "../../src/utilities/flow";
 import OpenAI from "openai";
+import { isLLMProviderCall } from "../../src/otel";
+import { AsyncFunction } from "../../src/otel/constants";
+import { flowUtilityFactory } from "../../src/utilities/flow";
+import { promptUtilityFactory } from "../../src/utilities/prompt";
+import { toolUtilityFactory } from "../../src/utilities/tool";
 import {
     callLLMMessages,
     openTelemetryMockedHLExporterConfiguration,
     openTelemetryTestConfiguration,
 } from "./fixtures";
-import { isLLMProviderCall } from "../../src/otel";
-import { AsyncFunction } from "../../src/otel/constants";
 
 function testScenario(opentelemetryTracer: Tracer): [AsyncFunction, AsyncFunction, AsyncFunction, AsyncFunction] {
     const randomString = toolUtilityFactory(

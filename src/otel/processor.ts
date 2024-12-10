@@ -1,5 +1,10 @@
-import { ReadableSpan, Span, SpanExporter, SpanProcessor } from "@opentelemetry/sdk-trace-base";
+import { Context } from "@opentelemetry/api";
 import { ExportResult, ExportResultCode } from "@opentelemetry/core";
+import { ReadableSpan, Span, SpanExporter, SpanProcessor } from "@opentelemetry/sdk-trace-base";
+import { SpanAttributes as AiSemanticConventions } from "@traceloop/ai-semantic-conventions";
+import { ModelEndpoints, ModelProviders } from "api";
+import { PromptKernelRequest } from "api/types/PromptKernelRequest";
+import { HUMANLOOP_FILE_KEY, HUMANLOOP_FILE_TYPE_KEY, HUMANLOOP_LOG_KEY } from "./constants";
 import {
     isHumanloopSpan,
     isLLMProviderCall,
@@ -7,11 +12,6 @@ import {
     readFromOpenTelemetrySpan,
     writeToOpenTelemetrySpan,
 } from "./helpers";
-import { HUMANLOOP_FILE_KEY, HUMANLOOP_FILE_TYPE_KEY, HUMANLOOP_LOG_KEY } from "./constants";
-import { PromptKernelRequest } from "api/types/PromptKernelRequest";
-import { ModelEndpoints, ModelProviders } from "api";
-import { SpanAttributes as AiSemanticConventions } from "@traceloop/ai-semantic-conventions";
-import { Context } from "@opentelemetry/api";
 
 /**
  * Enriches Humanloop spans with data from their child spans.

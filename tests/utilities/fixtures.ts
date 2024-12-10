@@ -1,14 +1,14 @@
+import * as anthropic from "@anthropic-ai/sdk";
 import { InMemorySpanExporter, NodeTracerProvider, SimpleSpanProcessor, Tracer } from "@opentelemetry/sdk-trace-node";
+import { AnthropicInstrumentation } from "@traceloop/instrumentation-anthropic";
+import { CohereInstrumentation } from "@traceloop/instrumentation-cohere";
 import { OpenAIInstrumentation } from "@traceloop/instrumentation-openai";
-import { HumanloopSpanProcessor } from "../../src/otel/processor";
-import { HumanloopSpanExporter } from "../../src/otel/exporter";
-import { HumanloopClient } from "../../src/humanloop.client";
+import * as cohere from "cohere-ai";
 import openai from "openai";
 import { CreateFlowLogResponse, CreatePromptLogResponse, CreateToolLogResponse } from "../../src/api";
-import { AnthropicInstrumentation } from "@traceloop/instrumentation-anthropic";
-import * as anthropic from "@anthropic-ai/sdk";
-import * as cohere from "cohere-ai";
-import { CohereInstrumentation } from "@traceloop/instrumentation-cohere";
+import { HumanloopClient } from "../../src/humanloop.client";
+import { HumanloopSpanExporter } from "../../src/otel/exporter";
+import { HumanloopSpanProcessor } from "../../src/otel/processor";
 
 export function getFixtures() {
     return TEST_FIXTURES;

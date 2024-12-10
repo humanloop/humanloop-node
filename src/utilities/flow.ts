@@ -1,18 +1,18 @@
 import { context, createContextKey } from "@opentelemetry/api";
-import { ReadableSpan } from "@opentelemetry/sdk-trace-node";
-import { Tracer } from "@opentelemetry/sdk-trace-node";
+import { ReadableSpan, Tracer } from "@opentelemetry/sdk-trace-node";
+import { FlowKernelRequest } from "api/types/FlowKernelRequest";
 import {
     generateSpanId,
     HUMANLOOP_FILE_TYPE_KEY,
     HUMANLOOP_LOG_KEY,
+    HUMANLOOP_PARENT_SPAN_CTX_KEY,
     HUMANLOOP_PATH_KEY,
     HUMANLOOP_TRACE_FLOW_CTX_KEY,
     jsonifyIfNotString,
+    NestedDict,
     writeToOpenTelemetrySpan,
 } from "../otel"; // Define or import similar helpers
 import { argsToInputs } from "./helpers";
-import { HUMANLOOP_PARENT_SPAN_CTX_KEY, NestedDict } from "../otel"; // Define or import constants and context structures
-import { FlowKernelRequest } from "api/types/FlowKernelRequest";
 
 export function flowUtilityFactory<T extends (...args: any[]) => any>(
     opentelemetryTracer: Tracer,

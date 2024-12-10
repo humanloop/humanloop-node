@@ -1,17 +1,18 @@
 import { context, createContextKey } from "@opentelemetry/api";
 import { ReadableSpan, Tracer } from "@opentelemetry/sdk-trace-node";
+import { PromptKernelRequest } from "../api/types/PromptKernelRequest";
 import {
     generateSpanId,
     HUMANLOOP_FILE_TYPE_KEY,
     HUMANLOOP_LOG_KEY,
+    HUMANLOOP_PARENT_SPAN_CTX_KEY,
     HUMANLOOP_PATH_KEY,
     HUMANLOOP_TRACE_FLOW_CTX_KEY,
     jsonifyIfNotString,
+    NestedDict,
     writeToOpenTelemetrySpan,
 } from "../otel";
 import { argsToInputs } from "./helpers";
-import { HUMANLOOP_PARENT_SPAN_CTX_KEY, NestedDict } from "../otel";
-import { PromptKernelRequest } from "../api/types/PromptKernelRequest";
 
 export type UtilityPromptKernel = Omit<PromptKernelRequest, "model"> & {
     model?: string;

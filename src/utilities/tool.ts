@@ -1,16 +1,16 @@
 import { context, createContextKey } from "@opentelemetry/api";
 import { ReadableSpan, Tracer } from "@opentelemetry/sdk-trace-node";
-import { argsToInputs } from "./helpers";
-import { writeToOpenTelemetrySpan, generateSpanId, jsonifyIfNotString, NestedDict } from "../otel";
+import { ToolKernelRequest } from "../api/types/ToolKernelRequest";
+import { generateSpanId, jsonifyIfNotString, NestedDict, writeToOpenTelemetrySpan } from "../otel";
 import {
-    HUMANLOOP_PATH_KEY,
+    HUMANLOOP_FILE_KEY,
     HUMANLOOP_FILE_TYPE_KEY,
     HUMANLOOP_LOG_KEY,
     HUMANLOOP_PARENT_SPAN_CTX_KEY,
+    HUMANLOOP_PATH_KEY,
     HUMANLOOP_TRACE_FLOW_CTX_KEY,
-    HUMANLOOP_FILE_KEY,
 } from "../otel/constants";
-import { ToolKernelRequest } from "../api/types/ToolKernelRequest";
+import { argsToInputs } from "./helpers";
 
 /**
  * Higher-order function for wrapping a function with OpenTelemetry instrumentation.
