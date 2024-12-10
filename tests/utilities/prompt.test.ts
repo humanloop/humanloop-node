@@ -12,6 +12,7 @@ import { MessageParam } from "@anthropic-ai/sdk/resources/messages";
 import { CohereClient } from "cohere-ai";
 import { Message as CohereMessage } from "cohere-ai/api";
 
+// NOTE: Add here as more Providers are added
 const PROVIDER_AND_MODEL: [ModelProviders, string][] = [
     [ModelProviders.Openai, "gpt-4o"],
     [ModelProviders.Anthropic, "claude-3-opus-latest"],
@@ -22,6 +23,7 @@ function testScenario(opentelemetryTracer: Tracer, promptKernel?: UtilityPromptK
     dotenv.config({
         path: __dirname + "/../../.env",
     });
+    // NOTE: Add here as more Providers are added
     ["OPENAI_KEY", "ANTHROPIC_KEY", "COHERE_KEY"].forEach((key) => {
         if (!process.env[key]) {
             throw new Error(`Missing ${key} in environment. Have you added it inside .env?`);
