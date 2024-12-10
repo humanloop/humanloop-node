@@ -24,7 +24,7 @@ export class HumanloopClient extends BaseHumanloopClient {
         });
 
         if (moduleIsInstalled("openai")) {
-            const openai = require("openai");
+            const openai = require("openai").default;
             const instrumentor = new OpenAIInstrumentation({ enrichTokens: true });
             instrumentor.manuallyInstrument(openai);
             instrumentor.setTracerProvider(this.opentelemetryTracerProvider);

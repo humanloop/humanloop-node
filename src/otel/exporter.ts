@@ -161,6 +161,7 @@ export class HumanloopSpanExporter implements SpanExporter {
                 path: path as string,
                 flow: (fileObject.flow as unknown as FlowKernelRequest) || { attributes: {} },
                 traceParentId,
+                traceStatus: "complete",
                 ...logObject,
             });
             this.spanIdToUploadedLogId.set(span.spanContext().spanId, response.id);

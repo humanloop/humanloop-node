@@ -8,6 +8,7 @@ import {
     HUMANLOOP_LOG_KEY,
     HUMANLOOP_PARENT_SPAN_CTX_KEY,
     HUMANLOOP_TRACE_FLOW_CTX_KEY,
+    HUMANLOOP_FILE_KEY,
 } from "../otel/constants";
 import { ToolKernelRequest } from "../api/types/ToolKernelRequest";
 
@@ -95,6 +96,14 @@ export function toolUtilityFactory<T extends (...args: any[]) => any>(
                 span as unknown as ReadableSpan,
                 toolLog as unknown as NestedDict,
                 HUMANLOOP_LOG_KEY
+            );
+
+            writeToOpenTelemetrySpan(
+                span as unknown as ReadableSpan,
+                {
+                    ...toolKernel,
+                } as unknown as NestedDict,
+                `${HUMANLOOP_FILE_KEY}.tool`
             );
 
             span.end();
