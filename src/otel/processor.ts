@@ -143,7 +143,6 @@ export class HumanloopSpanProcessor implements SpanProcessor {
      * Enriches the prompt log of a prompt span using information from a child span.
      */
     private enrichPromptLog(promptSpan: ReadableSpan, llmProviderCallSpan: ReadableSpan): void {
-        console.log("WOW", promptSpan.attributes, llmProviderCallSpan.attributes);
         let hlLog = readFromOpenTelemetrySpan(promptSpan, HUMANLOOP_LOG_KEY) || {};
 
         if (!hlLog.output_tokens) {
