@@ -65,6 +65,18 @@ describe("tool decorator", () => {
         expect(hlFile).toStrictEqual({
             path: "Calculator",
             type: "tool",
+            tool: {
+                function: {
+                    name: "calculator",
+                    description: "Perform arithmetic operations on two numbers.",
+                    strict: true,
+                    parameters: {
+                        operation: "string",
+                        num1: "number",
+                        num2: "number",
+                    },
+                },
+            },
         });
         const type = readFromOpenTelemetrySpan(span, HUMANLOOP_FILE_TYPE_KEY);
         expect(type).toBe("tool");
