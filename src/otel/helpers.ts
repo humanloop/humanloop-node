@@ -169,7 +169,6 @@ export function isLLMProviderCall(span: ReadableSpan): boolean {
         "@traceloop/instrumentation-openai",
         "@traceloop/instrumentation-anthropic",
         "@traceloop/instrumentation-cohere",
-        // "opentelemetry.instrumentation.replicate",
     ];
 
     return (

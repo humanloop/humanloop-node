@@ -6,7 +6,7 @@ src/otel
 src/eval_utils
 src/decorators
 src/index.ts
-src/humanloop.client/ts
+src/humanloop.client.ts
 
 # Tests
 

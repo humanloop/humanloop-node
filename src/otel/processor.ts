@@ -36,7 +36,6 @@ export class HumanloopSpanProcessor implements SpanProcessor {
      * Enriches Humanloop spans or forwards non-Humanloop spans to the exporter.
      */
     onEnd(span: ReadableSpan): void {
-        console.log("onEnd", span.attributes);
         if (isHumanloopSpan(span)) {
             this.processSpanDispatch(span, this.children.get(span.spanContext().spanId) || []);
             this.children.delete(span.spanContext().spanId); // Release references

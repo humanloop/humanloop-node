@@ -6,7 +6,7 @@ import {
     HUMANLOOP_LOG_KEY,
     readFromOpenTelemetrySpan,
 } from "../../src/otel";
-import { openTelemetryTestConfiguration, tearDown } from "./fixtures";
+import { openTelemetryTestConfiguration } from "./fixtures";
 import { Schema } from "ts-json-schema-generator";
 
 /**
@@ -37,8 +37,6 @@ function calculator(operation: string, num1: number, num2: number): number {
 }
 
 describe("tool decorator", () => {
-    afterEach(tearDown);
-
     it("should return 3 when adding 1 and 2", async () => {
         const [tracer, exporter] = openTelemetryTestConfiguration();
 

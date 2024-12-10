@@ -18,6 +18,9 @@ describe("test env compatibility", () => {
                     },
                     resolve: {
                         extensions: [".tsx", ".ts", ".js"],
+                        fallback: {
+                            async_hooks: false,
+                        },
                     },
                 },
                 (err, stats) => {
