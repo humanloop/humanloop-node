@@ -1,15 +1,16 @@
 import { context, createContextKey } from "@opentelemetry/api";
 import { ReadableSpan, Tracer } from "@opentelemetry/sdk-trace-node";
+
 import { PromptKernelRequest } from "../api/types/PromptKernelRequest";
 import {
-    generateSpanId,
     HUMANLOOP_FILE_TYPE_KEY,
     HUMANLOOP_LOG_KEY,
     HUMANLOOP_PARENT_SPAN_CTX_KEY,
     HUMANLOOP_PATH_KEY,
     HUMANLOOP_TRACE_FLOW_CTX_KEY,
-    jsonifyIfNotString,
     NestedDict,
+    generateSpanId,
+    jsonifyIfNotString,
     writeToOpenTelemetrySpan,
 } from "../otel";
 import { argsToInputs } from "./helpers";
@@ -32,9 +33,11 @@ export function promptUtilityFactory<T extends (...args: any[]) => any>(
     opentelemetryTracer: Tracer,
     func: T,
     promptKernel?: UtilityPromptKernel,
-    path?: string
+    path?: string,
 ): (...args: any[]) => Promise<ReturnType<T>> {
-    const wrappedFunction = async (...args: Parameters<T>): Promise<ReturnType<T> | null> => {
+    const wrappedFunction = async (
+        ...args: Parameters<T>
+    ): Promise<ReturnType<T> | null> => {
         // Filter out undefined attributes
         if (promptKernel?.attributes) {
             promptKernel.attributes = Object.entries(promptKernel.attributes)
@@ -48,7 +51,9 @@ export function promptUtilityFactory<T extends (...args: any[]) => any>(
         return opentelemetryTracer.startActiveSpan(generateSpanId(), async (span) => {
             const ctx = context.active();
             const spanId = span.spanContext().spanId;
-            const parentSpanId = ctx.getValue(parentSpanContextKey) as string | undefined;
+            const parentSpanId = ctx.getValue(parentSpanContextKey) as
+                | string
+                | undefined;
             const parentFlowMetadata = ctx.getValue(flowMetadataKey) as {
                 traceId: string;
                 isFlowLog: boolean;
@@ -76,7 +81,7 @@ export function promptUtilityFactory<T extends (...args: any[]) => any>(
                     {
                         ...promptKernel,
                     } as unknown as NestedDict,
-                    "humanloop.file.prompt"
+                    "humanloop.file.prompt",
                 );
             }
 
@@ -84,7 +89,9 @@ export function promptUtilityFactory<T extends (...args: any[]) => any>(
 
             // Execute the wrapped function in a child context
             const { output, error } = await context.with(
-                ctx.setValue(parentSpanContextKey, spanId).setValue(flowMetadataKey, flowMetadata),
+                ctx
+                    .setValue(parentSpanContextKey, spanId)
+                    .setValue(flowMetadataKey, flowMetadata),
                 async () => {
                     let output: ReturnType<T> | null;
                     let error: string | null = null;
@@ -101,7 +108,7 @@ export function promptUtilityFactory<T extends (...args: any[]) => any>(
                         output,
                         error,
                     };
-                }
+                },
             );
 
             const outputStringified = jsonifyIfNotString(func, output);
@@ -112,7 +119,11 @@ export function promptUtilityFactory<T extends (...args: any[]) => any>(
                 error,
             };
 
-            writeToOpenTelemetrySpan(span as unknown as ReadableSpan, promptLog as NestedDict, HUMANLOOP_LOG_KEY);
+            writeToOpenTelemetrySpan(
+                span as unknown as ReadableSpan,
+                promptLog as NestedDict,
+                HUMANLOOP_LOG_KEY,
+            );
 
             span.end();
 

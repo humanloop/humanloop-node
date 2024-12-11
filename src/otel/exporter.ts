@@ -1,8 +1,14 @@
 import { ExportResult, ExportResultCode } from "@opentelemetry/core";
 import { ReadableSpan, SpanExporter } from "@opentelemetry/sdk-trace-base";
-import { FlowKernelRequest, PromptKernelRequest, ToolKernelRequest } from "api";
-import { HumanloopClient } from "humanloop.client";
-import { HUMANLOOP_FILE_KEY, HUMANLOOP_FILE_TYPE_KEY, HUMANLOOP_LOG_KEY, HUMANLOOP_PATH_KEY } from "./constants";
+
+import { FlowKernelRequest, PromptKernelRequest, ToolKernelRequest } from "../api";
+import { HumanloopClient } from "../humanloop.client";
+import {
+    HUMANLOOP_FILE_KEY,
+    HUMANLOOP_FILE_TYPE_KEY,
+    HUMANLOOP_LOG_KEY,
+    HUMANLOOP_PATH_KEY,
+} from "./constants";
 import { isHumanloopSpan, readFromOpenTelemetrySpan } from "./helpers";
 
 /**
@@ -96,7 +102,9 @@ export class HumanloopSpanExporter implements SpanExporter {
 
     private async exportPrompt(span: ReadableSpan): Promise<void> {
         const fileObject = readFromOpenTelemetrySpan(span, HUMANLOOP_FILE_KEY);
-        const logObject = readFromOpenTelemetrySpan(span, HUMANLOOP_LOG_KEY) as { [key: string]: unknown };
+        const logObject = readFromOpenTelemetrySpan(span, HUMANLOOP_LOG_KEY) as {
+            [key: string]: unknown;
+        };
         logObject.startTime = hrTimeToDate(span.startTime);
         logObject.endTime = hrTimeToDate(span.endTime);
         logObject.createdAt = hrTimeToDate(span.endTime);
@@ -104,9 +112,12 @@ export class HumanloopSpanExporter implements SpanExporter {
 
         const spanParentId = span.parentSpanId;
         const traceParentId =
-            spanParentId !== undefined ? (this.spanIdToUploadedLogId.get(spanParentId) as string) : undefined;
+            spanParentId !== undefined
+                ? (this.spanIdToUploadedLogId.get(spanParentId) as string)
+                : undefined;
 
-        const prompt: PromptKernelRequest = (fileObject.prompt || {}) as unknown as PromptKernelRequest;
+        const prompt: PromptKernelRequest = (fileObject.prompt ||
+            {}) as unknown as PromptKernelRequest;
 
         try {
             const response = await this.client.prompts.log({
@@ -123,14 +134,18 @@ export class HumanloopSpanExporter implements SpanExporter {
 
     private async exportTool(span: ReadableSpan): Promise<void> {
         const fileObject = readFromOpenTelemetrySpan(span, HUMANLOOP_FILE_KEY);
-        const logObject = readFromOpenTelemetrySpan(span, HUMANLOOP_LOG_KEY) as { [key: string]: unknown };
+        const logObject = readFromOpenTelemetrySpan(span, HUMANLOOP_LOG_KEY) as {
+            [key: string]: unknown;
+        };
         logObject.startTime = hrTimeToDate(span.startTime);
         logObject.endTime = hrTimeToDate(span.endTime);
         logObject.createdAt = hrTimeToDate(span.endTime);
         const path = span.attributes[HUMANLOOP_PATH_KEY] as string;
 
         const spanParentId = span.parentSpanId;
-        const traceParentId = spanParentId ? (this.spanIdToUploadedLogId.get(spanParentId) as string) : undefined;
+        const traceParentId = spanParentId
+            ? (this.spanIdToUploadedLogId.get(spanParentId) as string)
+            : undefined;
 
         try {
             const response = await this.client.tools.log({
@@ -147,25 +162,35 @@ export class HumanloopSpanExporter implements SpanExporter {
 
     private async exportFlow(span: ReadableSpan): Promise<void> {
         const fileObject = readFromOpenTelemetrySpan(span, HUMANLOOP_FILE_KEY);
-        const logObject = readFromOpenTelemetrySpan(span, HUMANLOOP_LOG_KEY) as { [key: string]: unknown };
+        const logObject = readFromOpenTelemetrySpan(span, HUMANLOOP_LOG_KEY) as {
+            [key: string]: unknown;
+        };
         logObject.startTime = hrTimeToDate(span.startTime);
         logObject.endTime = hrTimeToDate(span.endTime);
         logObject.createdAt = hrTimeToDate(span.endTime);
 
         const spanParentId = span.parentSpanId;
-        const traceParentId = spanParentId ? (this.spanIdToUploadedLogId.get(spanParentId) as string) : undefined;
+        const traceParentId = spanParentId
+            ? (this.spanIdToUploadedLogId.get(spanParentId) as string)
+            : undefined;
         const path = span.attributes[HUMANLOOP_PATH_KEY] as string;
 
         try {
             const response = await this.client.flows.log({
                 path: path as string,
-                flow: (fileObject.flow as unknown as FlowKernelRequest) || { attributes: {} },
+                flow: (fileObject.flow as unknown as FlowKernelRequest) || {
+                    attributes: {},
+                },
                 traceParentId,
                 ...logObject,
             });
             this.spanIdToUploadedLogId.set(span.spanContext().spanId, response.id);
         } catch (error) {
-            console.error(`Error exporting flow: ${JSON.stringify(error)} ${span.spanContext().spanId}`);
+            console.error(
+                `Error exporting flow: ${JSON.stringify(error)} ${
+                    span.spanContext().spanId
+                }`,
+            );
         }
     }
 }

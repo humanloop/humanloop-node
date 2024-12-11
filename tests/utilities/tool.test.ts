@@ -1,4 +1,5 @@
 import { Validator } from "jsonschema";
+
 import {
     HUMANLOOP_FILE_KEY,
     HUMANLOOP_FILE_TYPE_KEY,
@@ -45,7 +46,8 @@ describe("tool decorator", () => {
             {
                 function: {
                     name: "calculator",
-                    description: "Perform arithmetic operations on two numbers.",
+                    description:
+                        "Perform arithmetic operations on two numbers.",
                     strict: true,
                     parameters: {
                         operation: "string",
@@ -54,7 +56,7 @@ describe("tool decorator", () => {
                     },
                 },
             },
-            "Calculator"
+            "Calculator",
         );
         const result = await calculatorDecorated("add", 1, 2);
         expect(result).toBe(3);
@@ -67,7 +69,8 @@ describe("tool decorator", () => {
             tool: {
                 function: {
                     name: "calculator",
-                    description: "Perform arithmetic operations on two numbers.",
+                    description:
+                        "Perform arithmetic operations on two numbers.",
                     strict: true,
                     parameters: {
                         operation: "string",
@@ -112,7 +115,7 @@ describe("tool decorator", () => {
                     description: "Dummy function that does nothing.",
                 },
             },
-            "Calculator"
+            "Calculator",
         );
         const result = await decorated();
         expect(result).toBe(undefined);

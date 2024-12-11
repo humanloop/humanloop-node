@@ -1,6 +1,7 @@
 import { Tracer } from "@opentelemetry/sdk-trace-node";
 import dotenv from "dotenv";
 import OpenAI from "openai";
+
 import { isLLMProviderCall } from "../../src/otel";
 import { AsyncFunction } from "../../src/otel/constants";
 import { flowUtilityFactory } from "../../src/utilities/flow";
@@ -12,7 +13,9 @@ import {
     openTelemetryTestConfiguration,
 } from "./fixtures";
 
-function testScenario(opentelemetryTracer: Tracer): [AsyncFunction, AsyncFunction, AsyncFunction, AsyncFunction] {
+function testScenario(
+    opentelemetryTracer: Tracer,
+): [AsyncFunction, AsyncFunction, AsyncFunction, AsyncFunction] {
     const randomString = toolUtilityFactory(
         opentelemetryTracer,
         () => {
@@ -25,29 +28,42 @@ function testScenario(opentelemetryTracer: Tracer): [AsyncFunction, AsyncFunctio
                 strict: true,
                 parameters: {},
             },
-        }
+        },
     );
 
     dotenv.config({
         path: __dirname + "/../../.env",
     });
-    const callLLM = promptUtilityFactory(opentelemetryTracer, async (messages: any[]) => {
-        const client = new OpenAI({ apiKey: process.env.OPENAI_KEY });
-        const response = await client.chat.completions.create({
-            model: "gpt-4o",
-            messages: messages,
-            temperature: 0.8,
-        });
-        return (response.choices[0].message.content || "") + " " + (await randomString());
-    });
+    const callLLM = promptUtilityFactory(
+        opentelemetryTracer,
+        async (messages: any[]) => {
+            const client = new OpenAI({ apiKey: process.env.OPENAI_KEY });
+            const response = await client.chat.completions.create({
+                model: "gpt-4o",
+                messages: messages,
+                temperature: 0.8,
+            });
+            return (
+                (response.choices[0].message.content || "") +
+                " " +
+                (await randomString())
+            );
+        },
+    );
 
-    const agentCall = flowUtilityFactory(opentelemetryTracer, async (messages: any[]) => {
-        return await callLLM(messages);
-    });
+    const agentCall = flowUtilityFactory(
+        opentelemetryTracer,
+        async (messages: any[]) => {
+            return await callLLM(messages);
+        },
+    );
 
-    const flowOverFlow = flowUtilityFactory(opentelemetryTracer, async (messages: any[]) => {
-        return await agentCall(messages);
-    });
+    const flowOverFlow = flowUtilityFactory(
+        opentelemetryTracer,
+        async (messages: any[]) => {
+            return await agentCall(messages);
+        },
+    );
 
     return [randomString, callLLM, agentCall, flowOverFlow];
 }
@@ -81,7 +97,9 @@ describe("flow decorator", () => {
         expect(spans[1].attributes["humanloop.file_type"]).toBe("tool");
         expect(spans[2].attributes["humanloop.file_type"]).toBe("prompt");
         expect(spans[3].attributes["humanloop.file_type"]).toBe("flow");
-        expect(spans[3].attributes["humanloop.log.inputs.messages"]).toEqual(callLLMMessages());
+        expect(spans[3].attributes["humanloop.log.inputs.messages"]).toEqual(
+            callLLMMessages(),
+        );
         expect(spans[0].parentSpanId).toBe(spans[2].spanContext().spanId);
         expect(spans[1].parentSpanId).toBe(spans[2].spanContext().spanId);
         expect(spans[2].parentSpanId).toBe(spans[3].spanContext().spanId);
@@ -101,7 +119,9 @@ describe("flow decorator", () => {
         expect(spans[2].attributes["humanloop.file_type"]).toBe("prompt");
         expect(spans[3].attributes["humanloop.file_type"]).toBe("flow");
         expect(spans[4].attributes["humanloop.file_type"]).toBe("flow");
-        expect(spans[4].attributes["humanloop.log.inputs.messages"]).toEqual(callLLMMessages());
+        expect(spans[4].attributes["humanloop.log.inputs.messages"]).toEqual(
+            callLLMMessages(),
+        );
         expect(spans[0].parentSpanId).toBe(spans[2].spanContext().spanId);
         expect(spans[1].parentSpanId).toBe(spans[2].spanContext().spanId);
         expect(spans[2].parentSpanId).toBe(spans[3].spanContext().spanId);
@@ -111,8 +131,13 @@ describe("flow decorator", () => {
     it(
         "should export logs with mocked HL API",
         async () => {
-            const [tracer, exporter, createPromptLogResponse, createToolLogResponse, createFlowLogResponse] =
-                openTelemetryMockedHLExporterConfiguration();
+            const [
+                tracer,
+                exporter,
+                createPromptLogResponse,
+                createToolLogResponse,
+                createFlowLogResponse,
+            ] = openTelemetryMockedHLExporterConfiguration();
 
             const flowOverFlow = testScenario(tracer)[3];
 
@@ -130,10 +155,12 @@ describe("flow decorator", () => {
             expect(argsInnerFlowLog[0].traceParentId).toBe("flow_log_0");
 
             expect(createPromptLogResponse.mock.calls).toHaveLength(1);
-            expect(createPromptLogResponse.mock.calls[0][0].traceParentId).toBe("flow_log_1");
+            expect(createPromptLogResponse.mock.calls[0][0].traceParentId).toBe(
+                "flow_log_1",
+            );
 
             expect(createToolLogResponse.mock.calls).toHaveLength(1);
         },
-        10 * 1000
+        10 * 1000,
     );
 });

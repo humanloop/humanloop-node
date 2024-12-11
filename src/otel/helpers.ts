@@ -1,6 +1,7 @@
 import { AttributeValue, SpanKind } from "@opentelemetry/api";
 import { ReadableSpan } from "@opentelemetry/sdk-trace-base";
 import { v4 as uuidv4 } from "uuid";
+
 // Constants for Humanloop attributes
 import { HUMANLOOP_FILE_TYPE_KEY } from "./constants";
 
@@ -16,7 +17,9 @@ export type NestedList = Array<NestedDict | AttributeValue>;
  */
 function _listToOtelFormat(lst: NestedList): NestedDict {
     return lst.reduce<NestedDict>((acc, val, idx) => {
-        acc[idx.toString()] = Array.isArray(val) ? _listToOtelFormat(val as (NestedDict | AttributeValue)[]) : val;
+        acc[idx.toString()] = Array.isArray(val)
+            ? _listToOtelFormat(val as (NestedDict | AttributeValue)[])
+            : val;
         return acc;
     }, {});
 }
@@ -32,7 +35,7 @@ function _listToOtelFormat(lst: NestedList): NestedDict {
 export function writeToOpenTelemetrySpan(
     span: ReadableSpan,
     value: NestedDict | NestedList | AttributeValue,
-    key: string
+    key: string,
 ): void {
     let toWriteCopy: NestedDict;
 
@@ -45,7 +48,9 @@ export function writeToOpenTelemetrySpan(
     }
 
     const linearisedAttributes: Record<string, AttributeValue> = {};
-    const workStack: Array<[string, NestedDict | AttributeValue]> = [[key, toWriteCopy]];
+    const workStack: Array<[string, NestedDict | AttributeValue]> = [
+        [key, toWriteCopy],
+    ];
 
     // Remove existing attributes with the same prefix
     Object.keys(span.attributes || {}).forEach((attributeKey) => {
@@ -63,7 +68,10 @@ export function writeToOpenTelemetrySpan(
 
         if (typeof currentValue === "object" && !Array.isArray(currentValue)) {
             Object.entries(currentValue).forEach(([subKey, subValue]) => {
-                workStack.push([currentKey ? `${currentKey}.${subKey}` : subKey, subValue]);
+                workStack.push([
+                    currentKey ? `${currentKey}.${subKey}` : subKey,
+                    subValue,
+                ]);
             });
         } else {
             linearisedAttributes[currentKey] = currentValue as AttributeValue;
@@ -85,7 +93,10 @@ export function writeToOpenTelemetrySpan(
  * @param key - Key prefix to read from the span attributes
  * @returns Reconstructed object from the span attributes
  */
-export function readFromOpenTelemetrySpan(span: ReadableSpan, key: string = ""): NestedDict {
+export function readFromOpenTelemetrySpan(
+    span: ReadableSpan,
+    key: string = "",
+): NestedDict {
     if (!span.attributes) {
         throw new Error("Span attributes are empty");
     }
@@ -167,7 +178,9 @@ export function isLLMProviderCall(span: ReadableSpan): boolean {
 
     return (
         span.kind === SpanKind.CLIENT &&
-        instrumentorPrefixes.some((instrumentLibrary) => spanInstrumentor === instrumentLibrary)
+        instrumentorPrefixes.some(
+            (instrumentLibrary) => spanInstrumentor === instrumentLibrary,
+        )
     );
 }
 
@@ -218,7 +231,9 @@ export function jsonifyIfNotString(func: Function, output: any): string {
         try {
             return JSON.stringify(output);
         } catch (error) {
-            throw new TypeError(`Output of ${func.name} must be a string or JSON serializable`);
+            throw new TypeError(
+                `Output of ${func.name} must be a string or JSON serializable`,
+            );
         }
     }
     return output;

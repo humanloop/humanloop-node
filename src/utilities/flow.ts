@@ -1,30 +1,36 @@
 import { context, createContextKey } from "@opentelemetry/api";
 import { ReadableSpan, Tracer } from "@opentelemetry/sdk-trace-node";
-import { FlowKernelRequest } from "api/types/FlowKernelRequest";
+
+import { FlowKernelRequest } from "../api/types/FlowKernelRequest";
 import {
-    generateSpanId,
     HUMANLOOP_FILE_TYPE_KEY,
     HUMANLOOP_LOG_KEY,
     HUMANLOOP_PARENT_SPAN_CTX_KEY,
     HUMANLOOP_PATH_KEY,
     HUMANLOOP_TRACE_FLOW_CTX_KEY,
-    jsonifyIfNotString,
     NestedDict,
+    generateSpanId,
+    jsonifyIfNotString,
     writeToOpenTelemetrySpan,
-} from "../otel"; // Define or import similar helpers
+} from "../otel";
+// Define or import similar helpers
 import { argsToInputs } from "./helpers";
 
 export function flowUtilityFactory<T extends (...args: any[]) => any>(
     opentelemetryTracer: Tracer,
     func: T,
     flowKernel?: FlowKernelRequest,
-    path?: string
+    path?: string,
 ): (...args: any[]) => Promise<ReturnType<T>> {
-    const wrappedFunction = async (...args: Parameters<T>): Promise<ReturnType<T> | null> => {
+    const wrappedFunction = async (
+        ...args: Parameters<T>
+    ): Promise<ReturnType<T> | null> => {
         // Filter out undefined attributes
         if (flowKernel?.attributes) {
             flowKernel.attributes = Object.fromEntries(
-                Object.entries(flowKernel.attributes || {}).filter(([_, v]) => v !== undefined)
+                Object.entries(flowKernel.attributes || {}).filter(
+                    ([_, v]) => v !== undefined,
+                ),
             );
         }
 
@@ -33,7 +39,9 @@ export function flowUtilityFactory<T extends (...args: any[]) => any>(
         return opentelemetryTracer.startActiveSpan(generateSpanId(), async (span) => {
             const ctx = context.active();
             const spanId = span.spanContext().spanId;
-            const parentSpanId = ctx.getValue(parentSpanContextKey) as string | undefined;
+            const parentSpanId = ctx.getValue(parentSpanContextKey) as
+                | string
+                | undefined;
             const parentFlowMetadata = ctx.getValue(flowMetadataKey) as {
                 traceId: string;
                 isFlowLog: boolean;
@@ -61,14 +69,16 @@ export function flowUtilityFactory<T extends (...args: any[]) => any>(
                 writeToOpenTelemetrySpan(
                     span as unknown as ReadableSpan,
                     flowKernel as unknown as NestedDict,
-                    "humanloop.file.flow"
+                    "humanloop.file.flow",
                 );
             }
 
             const inputs = argsToInputs(func, args);
 
             const { output, error } = await context.with(
-                ctx.setValue(parentSpanContextKey, spanId).setValue(flowMetadataKey, flowMetadata),
+                ctx
+                    .setValue(parentSpanContextKey, spanId)
+                    .setValue(flowMetadataKey, flowMetadata),
                 async () => {
                     let output: ReturnType<T> | null;
                     let error: string | null = null;
@@ -83,7 +93,7 @@ export function flowUtilityFactory<T extends (...args: any[]) => any>(
                         output,
                         error,
                     };
-                }
+                },
             );
 
             const outputStringified = jsonifyIfNotString(func, output);
@@ -94,7 +104,11 @@ export function flowUtilityFactory<T extends (...args: any[]) => any>(
                 error,
             };
 
-            writeToOpenTelemetrySpan(span as unknown as ReadableSpan, flowLog as NestedDict, HUMANLOOP_LOG_KEY);
+            writeToOpenTelemetrySpan(
+                span as unknown as ReadableSpan,
+                flowLog as NestedDict,
+                HUMANLOOP_LOG_KEY,
+            );
 
             span.end();
             return output;

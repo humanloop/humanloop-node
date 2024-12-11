@@ -2,14 +2,15 @@ import { NodeTracerProvider, Tracer } from "@opentelemetry/sdk-trace-node";
 import { AnthropicInstrumentation } from "@traceloop/instrumentation-anthropic";
 import { CohereInstrumentation } from "@traceloop/instrumentation-cohere";
 import { OpenAIInstrumentation } from "@traceloop/instrumentation-openai";
+
+import { HumanloopClient as BaseHumanloopClient } from "./Client";
 import { FlowKernelRequest } from "./api/types/FlowKernelRequest";
 import { ToolKernelRequest } from "./api/types/ToolKernelRequest";
-import { HumanloopClient as BaseHumanloopClient } from "./Client";
 import { HumanloopSpanExporter } from "./otel/exporter";
 import { moduleIsInstalled } from "./otel/helpers";
 import { HumanloopSpanProcessor } from "./otel/processor";
 import { flowUtilityFactory } from "./utilities/flow";
-import { promptUtilityFactory, UtilityPromptKernel } from "./utilities/prompt";
+import { UtilityPromptKernel, promptUtilityFactory } from "./utilities/prompt";
 import { toolUtilityFactory } from "./utilities/tool";
 
 export class HumanloopClient extends BaseHumanloopClient {
@@ -20,12 +21,16 @@ export class HumanloopClient extends BaseHumanloopClient {
         super(_options);
 
         this.opentelemetryTracerProvider = new NodeTracerProvider({
-            spanProcessors: [new HumanloopSpanProcessor(new HumanloopSpanExporter(this))],
+            spanProcessors: [
+                new HumanloopSpanProcessor(new HumanloopSpanExporter(this)),
+            ],
         });
 
         if (moduleIsInstalled("openai")) {
             const openai = require("openai").default;
-            const instrumentor = new OpenAIInstrumentation({ enrichTokens: true });
+            const instrumentor = new OpenAIInstrumentation({
+                enrichTokens: true,
+            });
             instrumentor.manuallyInstrument(openai);
             instrumentor.setTracerProvider(this.opentelemetryTracerProvider);
             instrumentor.enable();
@@ -49,7 +54,8 @@ export class HumanloopClient extends BaseHumanloopClient {
 
         this.opentelemetryTracerProvider.register();
 
-        this.opentelemetryTracer = this.opentelemetryTracerProvider.getTracer("humanloop.sdk");
+        this.opentelemetryTracer =
+            this.opentelemetryTracerProvider.getTracer("humanloop.sdk");
     }
 
     public prompt<T extends (...args: any[]) => any>(promptUtilityArguments: {
@@ -61,7 +67,7 @@ export class HumanloopClient extends BaseHumanloopClient {
             this.opentelemetryTracer,
             promptUtilityArguments.callable,
             promptUtilityArguments.promptKernel,
-            promptUtilityArguments.path
+            promptUtilityArguments.path,
         );
     }
 
@@ -74,7 +80,7 @@ export class HumanloopClient extends BaseHumanloopClient {
             this.opentelemetryTracer,
             toolUtilityArguments.callable,
             toolUtilityArguments.toolKernel,
-            toolUtilityArguments.path
+            toolUtilityArguments.path,
         );
     }
 
@@ -87,7 +93,7 @@ export class HumanloopClient extends BaseHumanloopClient {
             this.opentelemetryTracer,
             flowUtilityArguments.callable,
             flowUtilityArguments.flowKernel,
-            flowUtilityArguments.path
+            flowUtilityArguments.path,
         );
     }
 }

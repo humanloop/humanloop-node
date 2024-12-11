@@ -1,7 +1,13 @@
 import { context, createContextKey } from "@opentelemetry/api";
 import { ReadableSpan, Tracer } from "@opentelemetry/sdk-trace-node";
+
 import { ToolKernelRequest } from "../api/types/ToolKernelRequest";
-import { generateSpanId, jsonifyIfNotString, NestedDict, writeToOpenTelemetrySpan } from "../otel";
+import {
+    NestedDict,
+    generateSpanId,
+    jsonifyIfNotString,
+    writeToOpenTelemetrySpan,
+} from "../otel";
 import {
     HUMANLOOP_FILE_KEY,
     HUMANLOOP_FILE_TYPE_KEY,
@@ -26,15 +32,20 @@ export function toolUtilityFactory<T extends (...args: any[]) => any>(
     opentelemetryTracer: Tracer,
     func: T,
     toolKernel: ToolKernelRequest,
-    path?: string
-): { (...args: any[]): Promise<ReturnType<T>>; jsonSchema: Record<string, any> } {
+    path?: string,
+): {
+    (...args: any[]): Promise<ReturnType<T>>;
+    jsonSchema: Record<string, any>;
+} {
     // Attach JSON schema metadata to the function for external use
     if (toolKernel) {
         (func as any).jsonSchema = toolKernel.function || {};
     }
 
-    const wrappedFunction = async (...args: Parameters<T>): Promise<ReturnType<T> | null> => {
-        validateArgumentsAgainstSchema(func, args, toolKernel);
+    const wrappedFunction = async (
+        ...args: Parameters<T>
+    ): Promise<ReturnType<T> | null> => {
+        validateArgumentsAgainstSchema(func, toolKernel);
 
         const parentSpanContextKey = createContextKey(HUMANLOOP_PARENT_SPAN_CTX_KEY);
         const flowMetadataKey = createContextKey(HUMANLOOP_TRACE_FLOW_CTX_KEY);
@@ -42,7 +53,9 @@ export function toolUtilityFactory<T extends (...args: any[]) => any>(
         return opentelemetryTracer.startActiveSpan(generateSpanId(), async (span) => {
             const ctx = context.active();
             const spanId = span.spanContext().spanId;
-            const parentSpanId = ctx.getValue(parentSpanContextKey) as string | undefined;
+            const parentSpanId = ctx.getValue(parentSpanContextKey) as
+                | string
+                | undefined;
             const parentFlowMetadata = ctx.getValue(flowMetadataKey) as {
                 traceId: string;
                 isFlowLog: boolean;
@@ -67,7 +80,9 @@ export function toolUtilityFactory<T extends (...args: any[]) => any>(
 
             // Execute the wrapped function in the appropriate context
             const { output, error } = await context.with(
-                ctx.setValue(parentSpanContextKey, spanId).setValue(flowMetadataKey, flowMetadata),
+                ctx
+                    .setValue(parentSpanContextKey, spanId)
+                    .setValue(flowMetadataKey, flowMetadata),
                 async () => {
                     let output: ReturnType<T> | null;
                     let error: string | null = null;
@@ -81,7 +96,7 @@ export function toolUtilityFactory<T extends (...args: any[]) => any>(
                     }
 
                     return { output, error };
-                }
+                },
             );
 
             const outputStringified = jsonifyIfNotString(func, output);
@@ -95,7 +110,7 @@ export function toolUtilityFactory<T extends (...args: any[]) => any>(
             writeToOpenTelemetrySpan(
                 span as unknown as ReadableSpan,
                 toolLog as unknown as NestedDict,
-                HUMANLOOP_LOG_KEY
+                HUMANLOOP_LOG_KEY,
             );
 
             writeToOpenTelemetrySpan(
@@ -103,7 +118,7 @@ export function toolUtilityFactory<T extends (...args: any[]) => any>(
                 {
                     ...toolKernel,
                 } as unknown as NestedDict,
-                `${HUMANLOOP_FILE_KEY}.tool`
+                `${HUMANLOOP_FILE_KEY}.tool`,
             );
 
             span.end();
@@ -112,7 +127,9 @@ export function toolUtilityFactory<T extends (...args: any[]) => any>(
     };
 
     // @ts-ignore Adding jsonSchema property to utility-wrapped function
-    return Object.assign(wrappedFunction, { jsonSchema: (func as any).jsonSchema });
+    return Object.assign(wrappedFunction, {
+        jsonSchema: (func as any).jsonSchema,
+    });
 }
 
 function computeOriginalArguments(originalFunc: Function): null | string[] {
@@ -133,7 +150,10 @@ function computeOriginalArguments(originalFunc: Function): null | string[] {
     return params;
 }
 
-function validateArgumentsAgainstSchema(func: (...args: any[]) => any[], args: any[], toolKernel: ToolKernelRequest) {
+function validateArgumentsAgainstSchema(
+    func: (...args: any[]) => any[],
+    toolKernel: ToolKernelRequest,
+) {
     const funcArgumentNames = computeOriginalArguments(func);
     if (!funcArgumentNames || funcArgumentNames.length === 0) {
         return;
@@ -147,7 +167,9 @@ function validateArgumentsAgainstSchema(func: (...args: any[]) => any[], args: a
 
     funcArgumentNames.forEach((argName) => {
         if (!parameters.hasOwnProperty(argName)) {
-            throw new Error(`Function argument '${argName}' does not match the provided parameters.`);
+            throw new Error(
+                `Function argument '${argName}' does not match the provided parameters.`,
+            );
         }
     });
 }
