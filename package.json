@@ -8,8 +8,8 @@
     "scripts": {
         "format": "prettier . --write --ignore-unknown",
         "build": "tsc",
-        "prepack": "sh ./scripts/prepack.sh",
-        "clean": "sh ./scripts/clean.sh",
+        "prepack": "yarn build && ./scripts/prepack.sh",
+        "clean": "./scripts/clean.sh",
         "test": "jest --detectOpenHandles --forceExit"
     },
     "dependencies": {
