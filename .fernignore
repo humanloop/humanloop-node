@@ -20,6 +20,6 @@ tests
 
 .prettierrc.yml
 
-# NPM Scripts
+# Package Scripts
 
 scripts
