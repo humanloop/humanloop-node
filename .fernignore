@@ -19,3 +19,7 @@ tests
 # Prettier
 
 .prettierrc.yml
+
+# NPM Scripts
+
+scripts

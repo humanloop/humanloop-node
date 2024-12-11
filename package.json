@@ -8,7 +8,8 @@
     "scripts": {
         "format": "prettier . --write --ignore-unknown",
         "build": "tsc",
-        "prepack": "cp -rv dist/. .",
+        "prepack": "sh ./scripts/prepack.sh",
+        "clean": "sh ./scripts/clean.sh",
         "test": "jest --detectOpenHandles --forceExit"
     },
     "dependencies": {
