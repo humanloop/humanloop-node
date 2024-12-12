@@ -1,1 +1,25 @@
 # Specify files that shouldn't be modified by Fern
+
+# Custom code
+
+src/otel
+src/eval_utils
+src/utilities
+src/index.ts
+src/humanloop.client.ts
+
+# Tests
+
+tests
+
+# CI Action
+
+.github/workflows/ci.yml
+
+# Prettier
+
+.prettierrc.yml
+
+# Package Scripts
+
+scripts
