@@ -1,11 +1,21 @@
 import * as anthropic from "@anthropic-ai/sdk";
-import { InMemorySpanExporter, NodeTracerProvider, SimpleSpanProcessor, Tracer } from "@opentelemetry/sdk-trace-node";
+import * as cohere from "cohere-ai";
+import {
+    InMemorySpanExporter,
+    NodeTracerProvider,
+    SimpleSpanProcessor,
+    Tracer,
+} from "@opentelemetry/sdk-trace-node";
 import { AnthropicInstrumentation } from "@traceloop/instrumentation-anthropic";
 import { CohereInstrumentation } from "@traceloop/instrumentation-cohere";
 import { OpenAIInstrumentation } from "@traceloop/instrumentation-openai";
-import * as cohere from "cohere-ai";
 import openai from "openai";
-import { CreateFlowLogResponse, CreatePromptLogResponse, CreateToolLogResponse } from "../../src/api";
+
+import {
+    CreateFlowLogResponse,
+    CreatePromptLogResponse,
+    CreateToolLogResponse,
+} from "../../src/api";
 import { HumanloopClient } from "../../src/humanloop.client";
 import { HumanloopSpanExporter } from "../../src/otel/exporter";
 import { HumanloopSpanProcessor } from "../../src/otel/processor";
@@ -22,7 +32,8 @@ export function callLLMMessages() {
     return [
         {
             role: "system",
-            content: "You are an assistant on the following topics: greetings in foreign languages.",
+            content:
+                "You are an assistant on the following topics: greetings in foreign languages.",
         },
         {
             role: "user",
@@ -61,7 +72,10 @@ export function openTelemetryTestConfiguration(): [Tracer, InMemorySpanExporter]
     return [tracer, exporter];
 }
 
-export function openTelemetryHLProcessorTestConfiguration(): [Tracer, InMemorySpanExporter] {
+export function openTelemetryHLProcessorTestConfiguration(): [
+    Tracer,
+    InMemorySpanExporter,
+] {
     const exporter = new InMemorySpanExporter();
     const processor = new HumanloopSpanProcessor(exporter);
 
@@ -94,7 +108,7 @@ export function openTelemetryMockedHLExporterConfiguration(): [
     HumanloopSpanExporter,
     jest.Mock<Promise<CreatePromptLogResponse>>,
     jest.Mock<Promise<CreateToolLogResponse>>,
-    jest.Mock<Promise<CreateFlowLogResponse>>
+    jest.Mock<Promise<CreateFlowLogResponse>>,
 ] {
     const client = new HumanloopClient({
         apiKey: "test",

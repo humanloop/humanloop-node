@@ -7,11 +7,9 @@
  * Functions in this module should be accessed via the Humanloop client. They should
  * not be called directly.
  */
-import { HumanloopClient as BaseHumanloopClient } from "Client";
 import cliProgress from "cli-progress";
 import { Humanloop, HumanloopClient } from "index";
 import { AsyncFunction } from "otel";
-import pMap from "p-map";
 
 import {
     BooleanEvaluatorStatsResponse,
@@ -65,7 +63,6 @@ export function overloadLog<T extends Flows | Prompts>(client: T): T {
         request: FlowLogRequest | PromptLogRequest,
         options?: Flows.RequestOptions | Prompts.RequestOptions,
     ) => {
-        const { fileId, path } = evaluationContext.getState() ?? {};
         let response: LogResponse | undefined;
         if (evaluationContext.isEvaluatedFile(request)) {
             const { runId, sourceDatapointId, uploadCallback } =
@@ -108,7 +105,6 @@ export async function runEval(
     dataset: Dataset,
     name?: string,
     evaluators: Evaluator[] = [],
-    workers: number = 4,
 ): Promise<EvaluatorCheck[]> {
     // Get or create the file on Humanloop
     if (!file.path && !file.id) {
@@ -396,18 +392,15 @@ export async function runEval(
     // Generate locally if a function is provided
     if (function_) {
         console.log(
-            `${CYAN}\nRunning ${hlFile.name} over the Dataset ${hlDataset.name} using ${workers} workers${RESET}`,
+            `${CYAN}\nRunning ${hlFile.name} over the Dataset ${hlDataset.name}${RESET}`,
         );
         const totalDatapoints = hlDataset.datapoints!.length;
         progressBar.start(totalDatapoints, 0);
-        await pMap(
-            hlDataset.datapoints!,
-            async (datapoint: DatapointResponse) => {
-                await processDatapoint(datapoint, runId);
-                progressBar.increment();
-            },
-            { concurrency: workers },
-        );
+        const promises = hlDataset.datapoints!.map(async (datapoint) => {
+            await processDatapoint(datapoint, runId);
+            progressBar.increment();
+        });
+        await Promise.all(promises);
         progressBar.stop();
     } else {
         // TODO: trigger run when updated API is available
@@ -468,7 +461,7 @@ export async function runEval(
 }
 
 function getLogFunction(
-    client: BaseHumanloopClient,
+    client: HumanloopClient,
     type: FileType,
     fileId: string,
     versionId: string,

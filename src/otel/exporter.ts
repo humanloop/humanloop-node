@@ -186,11 +186,8 @@ export class HumanloopSpanExporter implements SpanExporter {
             });
             this.spanIdToUploadedLogId.set(span.spanContext().spanId, response.id);
         } catch (error) {
-            console.error(
-                `Error exporting flow: ${JSON.stringify(error)} ${
-                    span.spanContext().spanId
-                }`,
-            );
+            console.error("WOW", error);
+            console.error("Error exporting flow: ", error, span.spanContext().spanId);
         }
     }
 }

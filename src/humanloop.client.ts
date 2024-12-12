@@ -2,15 +2,16 @@ import { NodeTracerProvider, Tracer } from "@opentelemetry/sdk-trace-node";
 import { AnthropicInstrumentation } from "@traceloop/instrumentation-anthropic";
 import { CohereInstrumentation } from "@traceloop/instrumentation-cohere";
 import { OpenAIInstrumentation } from "@traceloop/instrumentation-openai";
-import { Flows } from "api/resources/flows/client/Client";
-import { Prompts } from "api/resources/prompts/client/Client";
-import { overloadLog, runEval } from "eval_utils/run";
-import { Dataset, Evaluator, EvaluatorCheck, File } from "eval_utils/types";
+import CohereAI from "cohere-ai";
 
+import { Dataset, Evaluator, EvaluatorCheck, File } from "../eval_utils/types";
 import { HumanloopClient as BaseHumanloopClient } from "./Client";
 import { Evaluations as BaseEvaluations } from "./api/resources/evaluations/client/Client";
+import { Flows } from "./api/resources/flows/client/Client";
+import { Prompts } from "./api/resources/prompts/client/Client";
 import { FlowKernelRequest } from "./api/types/FlowKernelRequest";
 import { ToolKernelRequest } from "./api/types/ToolKernelRequest";
+import { overloadLog, runEval } from "./eval_utils/run";
 import { HumanloopSpanExporter } from "./otel/exporter";
 import { moduleIsInstalled } from "./otel/helpers";
 import { HumanloopSpanProcessor } from "./otel/processor";
@@ -31,25 +32,38 @@ class ExtendedEvaluations extends BaseEvaluations {
         dataset: Dataset,
         name?: string,
         evaluators: Evaluator[] = [],
-        workers: number = 4,
     ): Promise<EvaluatorCheck[]> {
-        return runEval(this._client, file, dataset, name, evaluators, workers);
+        return runEval(this._client, file, dataset, name, evaluators);
     }
 }
 
 export class HumanloopClient extends BaseHumanloopClient {
+    protected readonly _evaluations: ExtendedEvaluations;
+    protected readonly _prompts_overloaded: Prompts;
+    protected readonly _flows_overloaded: Flows;
+
+    protected readonly OpenAI?: any;
+    protected readonly Anthropic?: any;
+    protected readonly CohereAI?: any;
+
     protected readonly opentelemetryTracerProvider: NodeTracerProvider;
     protected readonly opentelemetryTracer: Tracer;
-    protected readonly _evaluations: ExtendedEvaluations;
-    protected readonly _prompts: Prompts;
-    protected readonly _flows: Flows;
 
-    constructor(_options: BaseHumanloopClient.Options) {
+    constructor(
+        _options: BaseHumanloopClient.Options,
+        OpenAI?: any,
+        Anthropic?: any,
+        CohereAI?: any,
+    ) {
         super(_options);
 
-        this._prompts = overloadLog(this.prompts);
+        this.OpenAI = OpenAI;
+        this.Anthropic = Anthropic;
+        this.CohereAI = CohereAI;
 
-        this._flows = overloadLog(this.flows);
+        this._prompts_overloaded = overloadLog(super.prompts);
+
+        this._flows_overloaded = overloadLog(super.flows);
 
         this._evaluations = new ExtendedEvaluations(_options, this);
 
@@ -59,28 +73,25 @@ export class HumanloopClient extends BaseHumanloopClient {
             ],
         });
 
-        if (moduleIsInstalled("openai")) {
-            const openai = require("openai").default;
+        if (OpenAI) {
             const instrumentor = new OpenAIInstrumentation({
                 enrichTokens: true,
             });
-            instrumentor.manuallyInstrument(openai);
+            instrumentor.manuallyInstrument(OpenAI);
             instrumentor.setTracerProvider(this.opentelemetryTracerProvider);
             instrumentor.enable();
         }
 
-        if (moduleIsInstalled("@anthropic-ai/sdk")) {
-            const anthropic = require("@anthropic-ai/sdk");
+        if (Anthropic) {
             const instrumentor = new AnthropicInstrumentation();
-            instrumentor.manuallyInstrument(anthropic);
+            instrumentor.manuallyInstrument(Anthropic);
             instrumentor.setTracerProvider(this.opentelemetryTracerProvider);
             instrumentor.enable();
         }
 
-        if (moduleIsInstalled("cohere-ai")) {
-            const cohere = require("cohere-ai");
+        if (CohereAI) {
             const instrumentor = new CohereInstrumentation();
-            instrumentor.manuallyInstrument(cohere);
+            instrumentor.manuallyInstrument(CohereAI);
             instrumentor.setTracerProvider(this.opentelemetryTracerProvider);
             instrumentor.enable();
         }
@@ -91,11 +102,26 @@ export class HumanloopClient extends BaseHumanloopClient {
             this.opentelemetryTracerProvider.getTracer("humanloop.sdk");
     }
 
+    private _checkProviders() {
+        const noProviderInstrumented = [
+            this.OpenAI,
+            this.Anthropic,
+            this.CohereAI,
+        ].every((p) => !p);
+        if (noProviderInstrumented) {
+            throw new Error(
+                "Using File utilities without passing any provider in the " +
+                    "HumanloopClient constructor. Did you forget to pass them?",
+            );
+        }
+    }
+
     public prompt<T extends (...args: any[]) => any>(promptUtilityArguments: {
         callable: T;
         promptKernel?: UtilityPromptKernel;
         path?: string;
     }) {
+        this._checkProviders();
         return promptUtilityFactory(
             this.opentelemetryTracer,
             promptUtilityArguments.callable,
@@ -109,6 +135,7 @@ export class HumanloopClient extends BaseHumanloopClient {
         toolKernel: ToolKernelRequest;
         path?: string;
     }) {
+        this._checkProviders();
         return toolUtilityFactory(
             this.opentelemetryTracer,
             toolUtilityArguments.callable,
@@ -122,6 +149,7 @@ export class HumanloopClient extends BaseHumanloopClient {
         flowKernel?: FlowKernelRequest;
         path?: string;
     }) {
+        this._checkProviders();
         return flowUtilityFactory(
             this.opentelemetryTracer,
             flowUtilityArguments.callable,
@@ -134,11 +162,13 @@ export class HumanloopClient extends BaseHumanloopClient {
         return this._evaluations;
     }
 
+    // @ts-ignore
     public get prompts(): Prompts {
-        return this._prompts;
+        return this._prompts_overloaded;
     }
 
+    // @ts-ignore
     public get flows(): Flows {
-        return this._flows;
+        return this._flows_overloaded;
     }
 }
