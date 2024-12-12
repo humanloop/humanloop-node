@@ -7,38 +7,39 @@
  * Functions in this module should be accessed via the Humanloop client. They should
  * not be called directly.
  */
+import { HumanloopClient as BaseHumanloopClient } from "Client";
+import cliProgress from "cli-progress";
+import { Humanloop, HumanloopClient } from "index";
+import { AsyncFunction } from "otel";
+import pMap from "p-map";
 
 import {
-    CodeEvaluatorRequest,
+    BooleanEvaluatorStatsResponse,
     CreateEvaluatorLogRequest,
     CreateEvaluatorLogResponse,
     CreateFlowLogResponse,
     CreatePromptLogResponse,
     CreateToolLogResponse,
     DatapointResponse,
+    EvaluationResponse,
+    EvaluationStats,
     EvaluatorResponse,
     EvaluatorsRequest,
     ExternalEvaluatorRequest,
     FileType,
-    FlowKernelRequest,
     FlowLogRequest,
     FlowRequest,
-    FlowResponse,
-    HumanEvaluatorRequest,
-    LlmEvaluatorRequest,
-    PromptKernelRequest,
+    NumericEvaluatorStatsResponse,
     PromptLogRequest,
     PromptRequest,
-    PromptResponse,
-    ToolKernelRequest,
+    RunStatsResponse,
     ToolLogRequest,
     ToolRequest,
-    ToolResponse,
-} from "api";
-import cliProgress from "cli-progress";
-import { HumanloopClient as BaseHumanloopClient } from "Client";
-import pMap from "p-map";
-import { Dataset, Evaluator, EvaluatorCheck, File } from "./types";
+} from "../api";
+import { Flows } from "../api/resources/flows/client/Client";
+import { Prompts } from "../api/resources/prompts/client/Client";
+import { evaluationContext } from "./context";
+import { Dataset, Evaluator, EvaluatorCheck, File, FileResponse } from "./types";
 
 // ANSI escape codes for logging colors
 const YELLOW = "\x1b[93m";
@@ -47,26 +48,6 @@ const GREEN = "\x1b[92m";
 const RED = "\x1b[91m";
 const RESET = "\x1b[0m";
 
-type EvaluatorVersion =
-    | LlmEvaluatorRequest
-    | HumanEvaluatorRequest
-    | CodeEvaluatorRequest
-    | ExternalEvaluatorRequest;
-type Version =
-    | FlowKernelRequest
-    | PromptKernelRequest
-    | ToolKernelRequest
-    | EvaluatorVersion;
-type FileRequest =
-    | FlowRequest
-    | PromptRequest
-    | ToolRequest
-    | EvaluatorsRequest;
-type FileResponse =
-    | FlowResponse
-    | PromptResponse
-    | ToolResponse
-    | EvaluatorResponse;
 type LogResponse =
     | CreateFlowLogResponse
     | CreatePromptLogResponse
@@ -78,13 +59,56 @@ type LogRequest =
     | ToolLogRequest
     | CreateEvaluatorLogRequest;
 
+export function overloadLog<T extends Flows | Prompts>(client: T): T {
+    // @ts-ignore
+    const _overloadedLog: T["log"] = async (
+        request: FlowLogRequest | PromptLogRequest,
+        options?: Flows.RequestOptions | Prompts.RequestOptions,
+    ) => {
+        const { fileId, path } = evaluationContext.getState() ?? {};
+        let response: LogResponse | undefined;
+        if (evaluationContext.isEvaluatedFile(request)) {
+            const { runId, sourceDatapointId, uploadCallback } =
+                evaluationContext.getDatapoint({
+                    inputs: request.inputs,
+                    messages: request.messages,
+                });
+            if (request.runId === undefined) {
+                request = {
+                    ...request,
+                    runId,
+                };
+            }
+            if (request.sourceDatapointId === undefined) {
+                request = {
+                    ...request,
+                    sourceDatapointId: sourceDatapointId,
+                };
+            }
+
+            response = await client.log(request, options);
+
+            uploadCallback(response.id);
+        } else {
+            response = await client.log(request, options);
+        }
+
+        return response;
+    };
+
+    return {
+        ...client,
+        log: _overloadedLog,
+    };
+}
+
 export async function runEval(
-    client: BaseHumanloopClient,
+    client: HumanloopClient,
     file: File,
     dataset: Dataset,
     name?: string,
     evaluators: Evaluator[] = [],
-    workers: number = 4
+    workers: number = 4,
 ): Promise<EvaluatorCheck[]> {
     // Get or create the file on Humanloop
     if (!file.path && !file.id) {
@@ -95,7 +119,7 @@ export async function runEval(
     if (file.type) {
         type = file.type;
         console.info(
-            `${CYAN}Evaluating your ${type} function corresponding to ${file.path} on Humanloop${RESET}\n\n`
+            `${CYAN}Evaluating your ${type} function corresponding to ${file.path} on Humanloop${RESET}\n\n`,
         );
     } else {
         type = "flow";
@@ -106,11 +130,11 @@ export async function runEval(
     if (!function_) {
         if (type === "flow") {
             throw new Error(
-                "You must provide a callable for your Flow file to run a local eval."
+                "You must provide a callable for your Flow file to run a local eval.",
             );
         } else {
             console.info(
-                `No callable provided for your ${type} file - will attempt to generate logs on Humanloop.`
+                `No callable provided for your ${type} file - will attempt to generate logs on Humanloop.`,
             );
         }
     }
@@ -141,6 +165,8 @@ export async function runEval(
             break;
         }
         case "evaluator": {
+            // @ts-ignore EvaluatorRequest is generated by Fern as 'unknown'
+            // Leading to a type error here
             hlFile = await client.evaluators.upsert({
                 ...rest,
                 ...version,
@@ -167,27 +193,24 @@ export async function runEval(
     });
 
     // Upsert the local Evaluators; other Evaluators are just referenced by `path` or `id`
-    let localEvaluators: Evaluator[] = [];
+    let localEvaluators: [EvaluatorResponse, Function][] = [];
     if (evaluators) {
-        const evaluatorsWithCallable = evaluators.filter(
-            (e) => e.callable != null
-        );
+        const evaluatorsWithCallable = evaluators.filter((e) => e.callable != null);
 
         if (evaluatorsWithCallable.length > 0 && function_ == null) {
             throw new Error(
-                `Local Evaluators are only supported when generating Logs locally using your ${type}'s 'callable'. Please provide a 'callable' for your file in order to run Evaluators locally.`
+                `Local Evaluators are only supported when generating Logs locally using your ${type}'s 'callable'. Please provide a 'callable' for your file in order to run Evaluators locally.`,
             );
         }
 
         const upsertEvaluatorsPromises = evaluatorsWithCallable.map(
             async (evaluator) => {
-                localEvaluators.push(evaluator);
                 if (
                     evaluator.argsType === undefined ||
                     evaluator.returnType === undefined
                 ) {
                     throw new Error(
-                        `You must provide 'argsType', 'returnType' and for your local Evaluator: ${evaluator.path}`
+                        `You must provide 'argsType', 'returnType' and for your local Evaluator: ${evaluator.path}`,
                     );
                 }
                 const spec: ExternalEvaluatorRequest = {
@@ -196,12 +219,13 @@ export async function runEval(
                     attributes: { code: evaluator.callable!.toString() },
                     evaluatorType: "external",
                 };
-                await client.evaluators.upsert({
+                const evaluatorResponse = await client.evaluators.upsert({
                     id: evaluator.id,
                     path: evaluator.path,
                     spec,
                 });
-            }
+                localEvaluators.push([evaluatorResponse, evaluator.callable!]);
+            },
         );
 
         await Promise.all(upsertEvaluatorsPromises);
@@ -209,7 +233,7 @@ export async function runEval(
 
     // Validate upfront that the local Evaluators and Dataset fit
     const requiresTarget = localEvaluators.find(
-        (evaluator) => evaluator.argsType === "target_required"
+        ([evaluator, _]) => evaluator.spec.argumentsType === "target_required",
     );
 
     if (requiresTarget) {
@@ -217,14 +241,14 @@ export async function runEval(
             throw new Error("Datapoints are undefined.");
         }
         const missingTargets = hlDataset.datapoints.filter(
-            (datapoint) => !datapoint.target
+            (datapoint) => !datapoint.target,
         ).length;
 
         if (missingTargets > 0) {
-            localEvaluators.forEach((evaluator) => {
-                if (evaluator.argsType === "target_required") {
+            localEvaluators.forEach(([evaluator, _]) => {
+                if (evaluator.spec.argumentsType === "target_required") {
                     throw new Error(
-                        `${missingTargets} Datapoints have no target. A target is required for the Evaluator: ${evaluator.path}`
+                        `${missingTargets} Datapoints have no target. A target is required for the Evaluator: ${evaluator.path}`,
                     );
                 }
             });
@@ -237,7 +261,7 @@ export async function runEval(
         evaluation = await client.evaluations.create({
             name,
             evaluators: evaluators.map(
-                (evaluator) => ({ path: evaluator.path } as { path: string })
+                (evaluator) => ({ path: evaluator.path }) as { path: string },
             ),
             file: { id: hlFile.id },
         });
@@ -270,6 +294,7 @@ export async function runEval(
     });
     const runId = run.id;
 
+    // Configure the progress bar
     const progressBar = new cliProgress.SingleBar(
         {
             format:
@@ -277,43 +302,74 @@ export async function runEval(
                 "{bar}" +
                 "| {percentage}% || {value}/{total} Datapoints",
         },
-        cliProgress.Presets.shades_classic
+        cliProgress.Presets.shades_classic,
     );
 
-    const logFunc = getLogFunction(
-        client,
-        type,
-        hlFile.id,
-        hlFile.versionId,
-        runId
-    );
+    // Set the Evaluation context
+    evaluationContext.setState({
+        fileId: hlFile.id,
+        path: hlFile.path,
+        uploadCallback: async (logId: string, datapoint: DatapointResponse) => {
+            await runLocalEvaluators(client, logId, datapoint, localEvaluators);
+            progressBar.increment();
+        },
+    });
 
-    function processDatapoint(datapoint: DatapointResponse): void {
+    async function processDatapoint(
+        datapoint: DatapointResponse,
+        runId: string,
+    ): Promise<void> {
         const start_time = new Date();
+        const logFunc = getLogFunction(
+            client,
+            type,
+            hlFile.id,
+            hlFile.versionId,
+            runId,
+        );
 
         try {
-            // TODO: add json deserialization logic if output is not a string
+            evaluationContext.addDatapoint(datapoint, runId);
             let output: string;
             if ("messages" in datapoint) {
-                output = function_!({
+                output = await function_!({
                     ...datapoint.inputs,
                     messages: datapoint.messages,
                 });
             } else {
-                output = function_!(datapoint.inputs);
+                output = await function_!(datapoint.inputs);
             }
             if (typeof output !== "string") {
-                throw new Error(
-                    `Your ${type}'s callable must return a string if you do not provide a custom logger.`
-                );
+                try {
+                    output = JSON.stringify(output);
+                } catch (_) {
+                    throw new Error(
+                        `Your ${type}'s callable must return a string or a JSON serializable object.`,
+                    );
+                }
             }
-            logFunc({
-                inputs: datapoint.inputs,
-                output: output,
-                sourceDatapointId: datapoint.id,
-                startTime: start_time,
-                endTime: new Date(),
-            });
+            if (
+                evaluationContext.peekDatapoint({
+                    inputs: datapoint.inputs,
+                    messages: datapoint.messages,
+                })
+            ) {
+                // function_ is a simple callable, so we create the log here
+                // if function_ was a utility wrapped function, the utility
+                // would have created the log in otel.HumanloopSpanExporter
+
+                // The log function will take care of the sourceDatapointId and runId from the context
+                // See overloadLog in this module for more details
+                console.debug(
+                    `function_ ${function_} is a simple callable, datapoint context was not consumed`,
+                );
+                logFunc({
+                    inputs: datapoint.inputs,
+                    output: output,
+                    startTime: start_time,
+                    endTime: new Date(),
+                });
+            }
         } catch (e) {
             const errorMessage = e instanceof Error ? e.message : String(e);
             logFunc({
@@ -323,44 +379,40 @@ export async function runEval(
                 startTime: start_time,
                 endTime: new Date(),
             });
-            console.log(
-                `\nYour ${type}'s callable failed for Datapoint: ${datapoint.id}.\nError: ${errorMessage}`
+            console.warn(
+                `\nYour ${type}'s callable failed for Datapoint: ${datapoint.id}.\nError: ${errorMessage}`,
             );
         }
-        // TODO add external evaluator logic
     }
 
-    const total_datapoints = hlDataset.datapoints!.length;
-
-    console.log(
-        `\n${CYAN}Navigate to your Evaluation:${RESET}\n${evaluation.url}\n`
-    );
+    console.log(`\n${CYAN}Navigate to your Evaluation:${RESET}\n${evaluation.url}\n`);
     console.log(
         `${CYAN}${type.charAt(0).toUpperCase() + type.slice(1)} Version ID: ${
             hlFile.versionId
-        }${RESET}`
+        }${RESET}`,
     );
-    console.log(`${CYAN}Run ID: ${batchId}${RESET}`);
+    console.log(`${CYAN}Run ID: ${runId}${RESET}`);
 
     // Generate locally if a function is provided
     if (function_) {
         console.log(
-            `${CYAN}\nRunning ${hlFile.name} over the Dataset ${hlDataset.name} using ${workers} workers${RESET}`
+            `${CYAN}\nRunning ${hlFile.name} over the Dataset ${hlDataset.name} using ${workers} workers${RESET}`,
         );
-        progressBar.start(total_datapoints, 0);
+        const totalDatapoints = hlDataset.datapoints!.length;
+        progressBar.start(totalDatapoints, 0);
         await pMap(
             hlDataset.datapoints!,
             async (datapoint: DatapointResponse) => {
-                await processDatapoint(datapoint);
+                await processDatapoint(datapoint, runId);
                 progressBar.increment();
             },
-            { concurrency: workers }
+            { concurrency: workers },
         );
         progressBar.stop();
     } else {
         // TODO: trigger run when updated API is available
         console.log(
-            `${CYAN}\nRunning ${hlFile.name} over the Dataset ${hlDataset.name}${RESET}`
+            `${CYAN}\nRunning ${hlFile.name} over the Dataset ${hlDataset.name}${RESET}`,
         );
     }
 
@@ -376,48 +428,42 @@ export async function runEval(
     console.log(stats.report);
 
     const checks: EvaluatorCheck[] = [];
-    // TODO: Move the calculation of these checks server side so they can be included
-    // in the stats endpoint, so that we don't need to re-implement them over different
-    // clients.
-    // if (
-    //     evaluators.every(evaluator => evaluator.threshold === undefined) &&
-    //     stats.versionStats.length === 1
-    // ) {
-    //     return checks;
-    // }
-    // for (const evaluator of evaluators) {
-    //     const { improvementCheck, score, delta } = await checkEvaluationImprovement({
-    //         evaluation,
-    //         stats,
-    //         evaluatorPath: evaluator.path,
-    //         batchId,
-    //     });
-
-    //     let thresholdCheck: boolean | undefined = undefined;
-    //     const threshold = evaluator.threshold;
-
-    //     if (threshold !== undefined) {
-    //         thresholdCheck = await checkEvaluationThreshold({
-    //             evaluation,
-    //             stats,
-    //             evaluatorPath: evaluator.path,
-    //             threshold,
-    //             batchId,
-    //         });
-    //     }
-
-    //     checks.push({
-    //         path: evaluator.path,
-    //         improvementCheck,
-    //         score,
-    //         delta,
-    //         threshold,
-    //         thresholdCheck,
-    //     });
-    // }
+    if (
+        evaluators.some((evaluator) => evaluator.threshold !== undefined) ||
+        stats.runStats.length > 1
+    ) {
+        for (const evaluator of evaluators) {
+            const [_, score, delta] = checkEvaluationImprovement(
+                evaluation,
+                evaluator.path!,
+                stats,
+                runId,
+            );
+            let thresholdCheck = undefined;
+            if (evaluator.threshold !== undefined) {
+                thresholdCheck = score >= evaluator.threshold;
+                thresholdCheck = checkEvaluationThreshold(
+                    evaluation,
+                    stats,
+                    evaluator.path!,
+                    evaluator.threshold,
+                    runId,
+                );
+            }
+            checks.push({
+                path: evaluator.path!,
+                // TODO: Add back in with number valence on Evaluators
+                // improvementCheck: improvementCheck,
+                score: score,
+                delta: delta,
+                threshold: evaluator.threshold,
+                thresholdCheck: thresholdCheck,
+                evaluationId: evaluation.id,
+            });
+        }
+    }
 
     console.info(`\n${CYAN}View your Evaluation:${RESET}\n${evaluation.url}\n`);
-
     return checks;
 }
 
@@ -426,7 +472,7 @@ function getLogFunction(
     type: FileType,
     fileId: string,
     versionId: string,
-    runId: string
+    runId: string,
 ): (args: LogRequest) => Promise<LogResponse> {
     /** Returns the appropriate log function pre-filled with common parameters. */
     const logRequest = {
@@ -457,5 +503,161 @@ function getLogFunction(
                 client.tools.log({ ...logRequest, ...args });
         default:
             throw new Error(`Unsupported File version: ${type}`);
+    }
+}
+
+async function runLocalEvaluators(
+    client: HumanloopClient,
+    logId: string,
+    datapoint: DatapointResponse | undefined,
+    localEvaluators: [EvaluatorResponse, Function | AsyncFunction][],
+) {
+    const log = await client.logs.get(logId);
+
+    const promises = localEvaluators.map(async ([evaluator, evalFunction]) => {
+        const startTime = new Date();
+        let judgment: any | undefined;
+        try {
+            if (evaluator.spec.argumentsType === "target_required") {
+                judgment = await evalFunction(log, datapoint);
+            } else {
+                judgment = evalFunction(log);
+            }
+
+            client.evaluators.log({
+                versionId: evaluator.versionId,
+                parentId: logId,
+                judgment: judgment,
+                startTime: startTime,
+                endTime: new Date(),
+            });
+        } catch (e) {
+            client.evaluators.log({
+                versionId: evaluator.versionId,
+                parentId: logId,
+                error: e instanceof Error ? e.message : String(e),
+                startTime: startTime,
+                endTime: new Date(),
+            });
+            console.warn(`\nEvaluator ${evaluator.path} failed with error ${e}`);
+        }
+    });
+
+    await Promise.all(promises);
+}
+
+function checkEvaluationImprovement(
+    evaluation: EvaluationResponse,
+    evaluatorPath: string,
+    stats: EvaluationStats,
+    runId: string,
+): [boolean, number, number] {
+    const runStats = stats.runStats.find((run) => run.runId === runId);
+    if (!runStats) {
+        throw new Error(`Run ${runId} not found in Evaluation ${evaluation.id}`);
+    }
+    const latestEvaluatorStatsByPath = getEvaluatorStatsByPath(runStats, evaluation);
+    if (stats.runStats.length == 1) {
+        console.log(`${YELLOW}⚠️ No previous versions to compare with.${RESET}`);
+        return [true, 0, 0];
+    }
+
+    // Latest Run is at index 0, previous Run is at index 1
+    const previousEvaluatorStatsByPath = getEvaluatorStatsByPath(
+        stats.runStats[1],
+        evaluation,
+    );
+    if (
+        evaluatorPath in latestEvaluatorStatsByPath &&
+        evaluatorPath in previousEvaluatorStatsByPath
+    ) {
+        const latestEvaluatorStats = latestEvaluatorStatsByPath[evaluatorPath];
+        const previousEvaluatorStats = previousEvaluatorStatsByPath[evaluatorPath];
+        const latestScore = getScoreFromEvaluatorStat(latestEvaluatorStats);
+        const previousScore = getScoreFromEvaluatorStat(previousEvaluatorStats);
+        if (latestScore === null || previousScore === null) {
+            throw new Error(`Could not find score for Evaluator ${evaluatorPath}`);
+        }
+        let diff = latestScore - previousScore;
+        // Round to 2 decimal places
+        diff = Math.round(diff * 100) / 100;
+        console.log(
+            `${CYAN}Change of [${diff}] for Evaluator ${evaluatorPath}${RESET}`,
+        );
+        return [diff >= 0, latestScore, diff];
+    } else {
+        throw Error(`Evaluator ${evaluatorPath} not found in the stats.`);
+    }
+}
+
+function getScoreFromEvaluatorStat(
+    stat: NumericEvaluatorStatsResponse | BooleanEvaluatorStatsResponse,
+): number | null {
+    let score: number | null = null;
+    if ("num_true" in stat) {
+        score = (stat.num_true as number) / stat.totalLogs;
+        // Round to 2 decimal places
+        score = Math.round(score * 100) / 100;
+    } else if ("mean" in stat && stat.mean !== undefined) {
+        // Round to 2 decimal places
+        score = Math.round(stat.mean * 100) / 100;
+    } else {
+        throw new Error(`Unexpected EvaluatorStats type: ${stat}`);
+    }
+    return score;
+}
+
+function getEvaluatorStatsByPath(
+    stats: RunStatsResponse,
+    evaluation: EvaluationResponse,
+): { [key: string]: NumericEvaluatorStatsResponse | BooleanEvaluatorStatsResponse } {
+    const evaluatorsById = {} as {
+        [key: string]: Humanloop.EvaluationEvaluatorResponse;
+    };
+    for (const evaluator of evaluation.evaluators) {
+        evaluatorsById[evaluator.version.versionId] = evaluator;
+    }
+    const evaluatorStatsByPath = {} as {
+        [key: string]: NumericEvaluatorStatsResponse | BooleanEvaluatorStatsResponse;
+    };
+    for (const evaluatorStats of stats.evaluatorStats) {
+        const evaluator = evaluatorsById[evaluatorStats.evaluatorVersionId];
+        evaluatorStatsByPath[evaluator.version.path] = evaluatorStats as
+            | NumericEvaluatorStatsResponse
+            | BooleanEvaluatorStatsResponse;
+    }
+    return evaluatorStatsByPath;
+}
+
+function checkEvaluationThreshold(
+    evaluation: EvaluationResponse,
+    stats: EvaluationStats,
+    evaluatorPath: string,
+    threshold: number,
+    runId: string,
+) {
+    const runStats = stats.runStats.find((run) => run.runId === runId);
+    if (!runStats) {
+        throw new Error(`Run ${runId} not found in Evaluation ${evaluation.id}`);
+    }
+    const evaluatorStatsByPath = getEvaluatorStatsByPath(runStats, evaluation);
+    if (evaluatorPath in evaluatorStatsByPath) {
+        const evaluatorStats = evaluatorStatsByPath[evaluatorPath];
+        const score = getScoreFromEvaluatorStat(evaluatorStats);
+        if (score === null) {
+            throw new Error(`Could not find score for Evaluator ${evaluatorPath}`);
+        }
+        if (score >= threshold) {
+            console.log(
+                `${GREEN}✅ Latest eval [${score}] above threshold [${threshold}] for Evaluator ${evaluatorPath}.${RESET}`,
+            );
+        } else {
+            console.log(
+                `${RED}❌ Latest eval [${score}] below threshold [${threshold}] for Evaluator ${evaluatorPath}.${RESET}`,
+            );
+        }
+        return score >= threshold;
+    } else {
+        throw new Error(`Evaluator ${evaluatorPath} not found in the stats.`);
     }
 }

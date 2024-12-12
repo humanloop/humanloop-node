@@ -2,7 +2,9 @@ import { NodeTracerProvider, Tracer } from "@opentelemetry/sdk-trace-node";
 import { AnthropicInstrumentation } from "@traceloop/instrumentation-anthropic";
 import { CohereInstrumentation } from "@traceloop/instrumentation-cohere";
 import { OpenAIInstrumentation } from "@traceloop/instrumentation-openai";
-import { runEval } from "eval_utils/run";
+import { Flows } from "api/resources/flows/client/Client";
+import { Prompts } from "api/resources/prompts/client/Client";
+import { overloadLog, runEval } from "eval_utils/run";
 import { Dataset, Evaluator, EvaluatorCheck, File } from "eval_utils/types";
 
 import { HumanloopClient as BaseHumanloopClient } from "./Client";
@@ -38,10 +40,16 @@ class ExtendedEvaluations extends BaseEvaluations {
 export class HumanloopClient extends BaseHumanloopClient {
     protected readonly opentelemetryTracerProvider: NodeTracerProvider;
     protected readonly opentelemetryTracer: Tracer;
-    protected _evaluations: ExtendedEvaluations;
+    protected readonly _evaluations: ExtendedEvaluations;
+    protected readonly _prompts: Prompts;
+    protected readonly _flows: Flows;
 
     constructor(_options: BaseHumanloopClient.Options) {
         super(_options);
+
+        this._prompts = overloadLog(this.prompts);
+
+        this._flows = overloadLog(this.flows);
 
         this._evaluations = new ExtendedEvaluations(_options, this);
 
@@ -124,5 +132,13 @@ export class HumanloopClient extends BaseHumanloopClient {
 
     public get evaluations(): ExtendedEvaluations {
         return this._evaluations;
+    }
+
+    public get prompts(): Prompts {
+        return this._prompts;
+    }
+
+    public get flows(): Flows {
+        return this._flows;
     }
 }

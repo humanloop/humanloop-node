@@ -1,11 +1,11 @@
 import {
     CodeEvaluatorRequest,
-    CreateDatapointRequest as DatapointRequest,
     CreateEvaluatorLogRequest,
     CreateEvaluatorLogResponse,
     CreateFlowLogResponse,
     CreatePromptLogResponse,
     CreateToolLogResponse,
+    CreateDatapointRequest as DatapointRequest,
     EvaluatorArgumentsType,
     EvaluatorResponse,
     EvaluatorReturnTypeEnum,
@@ -27,6 +27,7 @@ import {
     ToolResponse,
     UpdateDatesetAction as UpdateDatasetAction,
 } from "api";
+
 import { FileType } from "../api/types/FileType";
 
 type EvaluatorVersion =
@@ -39,12 +40,8 @@ type Version =
     | PromptKernelRequest
     | ToolKernelRequest
     | EvaluatorVersion;
-type FileRequest =
-    | FlowRequest
-    | PromptRequest
-    | ToolRequest
-    | EvaluatorsRequest;
-type FileResponse =
+export type FileRequest = FlowRequest | PromptRequest | ToolRequest | EvaluatorsRequest;
+export type FileResponse =
     | FlowResponse
     | PromptResponse
     | ToolResponse
@@ -78,7 +75,7 @@ export interface File extends Identifiers {
      * `output = callable(datapoint.inputs, messages=datapoint.messages)`.
      * It should return a single string output. If not, you must provide a custom_logger.
      */
-    callable?: (...args: any[]) => string;
+    callable?: (...args: any[]) => string | Promise<string>;
 }
 
 export interface Dataset extends Identifiers {
@@ -127,9 +124,11 @@ export interface Evaluator extends Identifiers {
  */
 export interface EvaluatorCheck {
     path: string;
-    improvementCheck: boolean;
+    // TODO: Add number valence and improvement check
+    // improvementCheck: boolean;
     score: number;
     delta: number;
     threshold?: number;
     thresholdCheck?: boolean;
+    evaluationId: string;
 }

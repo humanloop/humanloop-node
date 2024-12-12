@@ -1,0 +1,17 @@
+# Ignore Fern auto-generated files
+
+src/Client.ts
+src/api
+src/core
+src/errors
+src/serialization
+src/environment.ts
+src/version.ts
+
+tests/custom.test.ts
+tests/unit
+
+jest.config.js
+package.json
+yarn.lock
+tsconfig.json
