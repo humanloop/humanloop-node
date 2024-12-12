@@ -1252,11 +1252,6 @@
   resolved "https://registry.npmjs.org/@opentelemetry/context-async-hooks/-/context-async-hooks-1.28.0.tgz"
   integrity sha512-igcl4Ve+F1N2063PJUkesk/GkYyuGIWinYkSyAFTnIj3gzrOgvOA4k747XNdL47HRRL1w/qh7UW8NDuxOLvKFA==
 
-"@opentelemetry/context-async-hooks@^1.29.0":
-  version "1.29.0"
-  resolved "https://registry.yarnpkg.com/@opentelemetry/context-async-hooks/-/context-async-hooks-1.29.0.tgz#3b3836c913834afa7720fdcf9687620f49b2cf37"
-  integrity sha512-TKT91jcFXgHyIDF1lgJF3BHGIakn6x0Xp7Tq3zoS3TMPzT9IlP0xEavWP8C1zGjU9UmZP2VR1tJhW9Az1A3w8Q==
-
 "@opentelemetry/core@1.28.0", "@opentelemetry/core@^1.0.0", "@opentelemetry/core@^1.1.0", "@opentelemetry/core@^1.25.0", "@opentelemetry/core@^1.25.1", "@opentelemetry/core@^1.26.0", "@opentelemetry/core@^1.8.0":
   version "1.28.0"
   resolved "https://registry.npmjs.org/@opentelemetry/core/-/core-1.28.0.tgz"
@@ -5683,11 +5678,6 @@ yargs@^17.3.1, yargs@^17.7.2:
     string-width "^4.2.3"
     y18n "^5.0.5"
     yargs-parser "^21.1.1"
-
-yarn@^1.22.22:
-  version "1.22.22"
-  resolved "https://registry.npmjs.org/yarn/-/yarn-1.22.22.tgz"
-  integrity sha512-prL3kGtyG7o9Z9Sv8IPfBNrWTDmXB4Qbes8A9rEzt6wkJV8mUvoirjU0Mp3GGAU06Y0XQyA3/2/RQFVuK7MTfg==
 
 yocto-queue@^0.1.0:
   version "0.1.0"
