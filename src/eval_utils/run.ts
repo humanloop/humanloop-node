@@ -594,8 +594,10 @@ function getScoreFromEvaluatorStat(
     stat: NumericEvaluatorStatsResponse | BooleanEvaluatorStatsResponse,
 ): number | null {
     let score: number | null = null;
-    if ("num_true" in stat) {
-        score = (stat.num_true as number) / stat.totalLogs;
+    if ("numTrue" in stat) {
+        score =
+            ((stat as BooleanEvaluatorStatsResponse).numTrue as number) /
+            (stat as BooleanEvaluatorStatsResponse).totalLogs;
         // Round to 2 decimal places
         score = Math.round(score * 100) / 100;
     } else if ("mean" in stat && stat.mean !== undefined) {
