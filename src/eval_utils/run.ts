@@ -10,10 +10,10 @@
 import cliProgress from "cli-progress";
 import { Humanloop, HumanloopClient } from "index";
 import { AsyncFunction } from "otel";
+import pMap from "p-map";
 
 import {
     BooleanEvaluatorStatsResponse,
-    CreateEvaluatorLogRequest,
     CreateEvaluatorLogResponse,
     CreateFlowLogResponse,
     CreatePromptLogResponse,
@@ -51,13 +51,10 @@ type LogResponse =
     | CreatePromptLogResponse
     | CreateToolLogResponse
     | CreateEvaluatorLogResponse;
-type LogRequest =
-    | FlowLogRequest
-    | PromptLogRequest
-    | ToolLogRequest
-    | CreateEvaluatorLogRequest;
 
 export function overloadLog<T extends Flows | Prompts>(client: T): T {
+    const originalLog = client.log.bind(client);
+
     // @ts-ignore
     const _overloadedLog: T["log"] = async (
         request: FlowLogRequest | PromptLogRequest,
@@ -83,20 +80,22 @@ export function overloadLog<T extends Flows | Prompts>(client: T): T {
                 };
             }
 
-            response = await client.log(request, options);
+            // @ts-ignore
+            response = await originalLog(request, options);
 
+            // @ts-ignore
             uploadCallback(response.id);
         } else {
-            response = await client.log(request, options);
+            // @ts-ignore
+            response = await originalLog(request, options);
         }
 
         return response;
     };
 
-    return {
-        ...client,
-        log: _overloadedLog,
-    };
+    client.log = _overloadedLog.bind(client);
+
+    return client;
 }
 
 export async function runEval(
@@ -105,6 +104,7 @@ export async function runEval(
     dataset: Dataset,
     name?: string,
     evaluators: Evaluator[] = [],
+    workers: number = 8,
 ): Promise<EvaluatorCheck[]> {
     // Get or create the file on Humanloop
     if (!file.path && !file.id) {
@@ -145,6 +145,7 @@ export async function runEval(
             }
             const updatedData = { ...rest, ...version } as FlowRequest;
             hlFile = await client.flows.upsert(updatedData);
+            break;
         }
         case "prompt": {
             hlFile = await client.prompts.upsert({
@@ -307,7 +308,6 @@ export async function runEval(
         path: hlFile.path,
         uploadCallback: async (logId: string, datapoint: DatapointResponse) => {
             await runLocalEvaluators(client, logId, datapoint, localEvaluators);
-            progressBar.increment();
         },
     });
 
@@ -327,11 +327,8 @@ export async function runEval(
         try {
             evaluationContext.addDatapoint(datapoint, runId);
             let output: string;
-            if ("messages" in datapoint) {
-                output = await function_!({
-                    ...datapoint.inputs,
-                    messages: datapoint.messages,
-                });
+            if ("messages" in datapoint && datapoint.messages !== undefined) {
+                output = await function_!(datapoint.inputs, datapoint.messages);
             } else {
                 output = await function_!(datapoint.inputs);
             }
@@ -356,10 +353,7 @@ export async function runEval(
 
                 // The log function will take care of the sourceDatapointId and runId from the context
                 // See overloadLog in this module for more details
-                console.debug(
-                    `function_ ${function_} is a simple callable, datapoint context was not consumed`,
-                );
-                logFunc({
+                await logFunc({
                     inputs: datapoint.inputs,
                     output: output,
                     startTime: start_time,
@@ -368,13 +362,14 @@ export async function runEval(
             }
         } catch (e) {
             const errorMessage = e instanceof Error ? e.message : String(e);
-            logFunc({
+            await logFunc({
                 inputs: datapoint.inputs,
                 error: errorMessage,
                 sourceDatapointId: datapoint.id,
                 startTime: start_time,
                 endTime: new Date(),
             });
+            // console.log(e);
             console.warn(
                 `\nYour ${type}'s callable failed for Datapoint: ${datapoint.id}.\nError: ${errorMessage}`,
             );
@@ -396,11 +391,14 @@ export async function runEval(
         );
         const totalDatapoints = hlDataset.datapoints!.length;
         progressBar.start(totalDatapoints, 0);
-        const promises = hlDataset.datapoints!.map(async (datapoint) => {
-            await processDatapoint(datapoint, runId);
-            progressBar.increment();
-        });
-        await Promise.all(promises);
+        await pMap(
+            hlDataset.datapoints!,
+            async (datapoint) => {
+                await processDatapoint(datapoint, runId);
+                progressBar.increment();
+            },
+            { concurrency: workers },
+        );
         progressBar.stop();
     } else {
         // TODO: trigger run when updated API is available
@@ -466,8 +464,9 @@ function getLogFunction(
     fileId: string,
     versionId: string,
     runId: string,
-): (args: LogRequest) => Promise<LogResponse> {
+) {
     /** Returns the appropriate log function pre-filled with common parameters. */
+
     const logRequest = {
         // TODO: why does the Log `id` field refer to the file ID in the API?
         // Why are both `id` and `version_id` needed in the API?
@@ -478,22 +477,21 @@ function getLogFunction(
 
     switch (type) {
         case "flow":
-            return (args: FlowLogRequest) =>
-                client.flows.log({
+            return async (args: FlowLogRequest) =>
+                await client.flows.log({
                     ...logRequest,
                     traceStatus: "complete",
                     ...args,
                 });
         case "prompt":
-            return (args: PromptLogRequest) =>
-                client.prompts.log({ ...logRequest, ...args });
-        case "evaluator":
-            // @ts-ignore
-            return (args: CreateEvaluatorLogRequest) =>
-                client.evaluators.log({ ...logRequest, ...args });
+            return async (args: PromptLogRequest) =>
+                await client.prompts.log({ ...logRequest, ...args });
+        // case "evaluator":
+        //     return (args: CreateEvaluatorLogRequest) =>
+        //         client.evaluators.log({ ...logRequest, ...args });
         case "tool":
-            return (args: ToolLogRequest) =>
-                client.tools.log({ ...logRequest, ...args });
+            return async (args: ToolLogRequest) =>
+                await client.tools.log({ ...logRequest, ...args });
         default:
             throw new Error(`Unsupported File version: ${type}`);
     }
@@ -517,7 +515,8 @@ async function runLocalEvaluators(
                 judgment = evalFunction(log);
             }
 
-            client.evaluators.log({
+            await client.evaluators.log({
+                path: evaluator.path,
                 versionId: evaluator.versionId,
                 parentId: logId,
                 judgment: judgment,
@@ -525,7 +524,7 @@ async function runLocalEvaluators(
                 endTime: new Date(),
             });
         } catch (e) {
-            client.evaluators.log({
+            await client.evaluators.log({
                 versionId: evaluator.versionId,
                 parentId: logId,
                 error: e instanceof Error ? e.message : String(e),

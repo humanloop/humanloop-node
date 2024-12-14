@@ -1,3 +1,5 @@
+import hash from "stable-hash";
+
 import { FlowLogRequest, PromptLogRequest } from "../api";
 import { DatapointResponse } from "../api";
 import { Humanloop } from "../index";
@@ -22,8 +24,7 @@ type EvaluationContextValue = {
 class EvaluationContext {
     private state?: EvaluationContextState;
     private static instance: EvaluationContext;
-    private inputMappings: Map<EvaluationContextKey, EvaluationContextValue[]> =
-        new Map();
+    private inputMappings: Map<string, EvaluationContextValue[]> = new Map();
 
     private constructor() {}
 
@@ -51,7 +52,7 @@ class EvaluationContext {
         if (this.state === undefined) {
             throw new Error("EvaluationContext state is not set");
         }
-        const key = { inputs: datapoint.inputs, messages: datapoint.messages };
+        const key = hash({ inputs: datapoint.inputs, messages: datapoint.messages });
 
         if (!this.inputMappings.has(key)) {
             this.inputMappings.set(key, []);
@@ -65,7 +66,7 @@ class EvaluationContext {
     }
 
     public getDatapoint(key: EvaluationContextKey): EvaluationContextValue {
-        const mappings = this.inputMappings.get(key);
+        const mappings = this.inputMappings.get(hash(key));
         if (!mappings || mappings.length === 0) {
             throw new Error(`No input mappings found for: ${JSON.stringify(key)}`);
         }
@@ -73,13 +74,14 @@ class EvaluationContext {
     }
 
     public peekDatapoint(key: EvaluationContextKey): boolean {
-        const mappings = this.inputMappings.get(key);
+        const mappings = this.inputMappings.get(hash(key));
         return mappings !== undefined && mappings.length > 0;
     }
 
     public isEvaluatedFile(args: FlowLogRequest | PromptLogRequest) {
         return (
-            this.state && this.state.fileId === args.id && this.state.path === args.path
+            this.state &&
+            (this.state.fileId === args.id || this.state.path === args.path)
         );
     }
 }

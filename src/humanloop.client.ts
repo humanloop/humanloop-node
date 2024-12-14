@@ -2,9 +2,7 @@ import { NodeTracerProvider, Tracer } from "@opentelemetry/sdk-trace-node";
 import { AnthropicInstrumentation } from "@traceloop/instrumentation-anthropic";
 import { CohereInstrumentation } from "@traceloop/instrumentation-cohere";
 import { OpenAIInstrumentation } from "@traceloop/instrumentation-openai";
-import CohereAI from "cohere-ai";
 
-import { Dataset, Evaluator, EvaluatorCheck, File } from "../eval_utils/types";
 import { HumanloopClient as BaseHumanloopClient } from "./Client";
 import { Evaluations as BaseEvaluations } from "./api/resources/evaluations/client/Client";
 import { Flows } from "./api/resources/flows/client/Client";
@@ -12,8 +10,8 @@ import { Prompts } from "./api/resources/prompts/client/Client";
 import { FlowKernelRequest } from "./api/types/FlowKernelRequest";
 import { ToolKernelRequest } from "./api/types/ToolKernelRequest";
 import { overloadLog, runEval } from "./eval_utils/run";
+import { Dataset, Evaluator, EvaluatorCheck, File } from "./eval_utils/types";
 import { HumanloopSpanExporter } from "./otel/exporter";
-import { moduleIsInstalled } from "./otel/helpers";
 import { HumanloopSpanProcessor } from "./otel/processor";
 import { flowUtilityFactory } from "./utilities/flow";
 import { UtilityPromptKernel, promptUtilityFactory } from "./utilities/prompt";
@@ -32,8 +30,9 @@ class ExtendedEvaluations extends BaseEvaluations {
         dataset: Dataset,
         name?: string,
         evaluators: Evaluator[] = [],
+        workers: number = 8,
     ): Promise<EvaluatorCheck[]> {
-        return runEval(this._client, file, dataset, name, evaluators);
+        return runEval(this._client, file, dataset, name, evaluators, workers);
     }
 }
 

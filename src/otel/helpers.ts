@@ -195,21 +195,6 @@ export function isHumanloopSpan(span: ReadableSpan): boolean {
 }
 
 /**
- * Determines if the current Node.js environment has a specific module installed.
- *
- * @param moduleName - Name of the module to check
- * @returns True if the module is installed, false otherwise
- */
-export function moduleIsInstalled(moduleName: string): boolean {
-    try {
-        require.resolve(moduleName);
-        return true;
-    } catch {
-        return false;
-    }
-}
-
-/**
  * Generates a unique span ID.
  *
  * @returns A UUID string
