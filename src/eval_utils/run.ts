@@ -9,6 +9,7 @@
  */
 import cliProgress from "cli-progress";
 import { Humanloop, HumanloopClient } from "index";
+import _ from "lodash";
 import pMap from "p-map";
 
 import {
@@ -88,10 +89,7 @@ export function overloadLog<T extends Flows | Prompts>(client: T): T {
             }
 
             if ("flow" in request) {
-                if (
-                    JSON.stringify(state!.evaluatedVersion) !==
-                    JSON.stringify(request.flow)
-                ) {
+                if (!_.isEqual(state!.evaluatedVersion, request.flow)) {
                     response = await originalLog(
                         {
                             ...request,
@@ -107,10 +105,7 @@ export function overloadLog<T extends Flows | Prompts>(client: T): T {
             }
 
             if ("prompt" in request) {
-                if (
-                    JSON.stringify(state!.evaluatedVersion) !==
-                    JSON.stringify(request.prompt)
-                ) {
+                if (!_.isEqual(state!.evaluatedVersion, request.prompt)) {
                     response = await originalLog({
                         ...request,
                         // @ts-ignore Log under the version expected by evaluation, not
@@ -167,7 +162,7 @@ export async function runEval(
     }
 
     if (file.callable && "version" in file.callable) {
-        if (file.version !== file.callable.version) {
+        if (!_.isEqual(file.version, file.callable.version)) {
             throw new Error(
                 "The version of the evaluated `file` must match the version of your decorated `callable`. Expected version: " +
                     JSON.stringify(file.version) +
