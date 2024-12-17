@@ -3,7 +3,6 @@ import dotenv from "dotenv";
 import OpenAI from "openai";
 
 import { isLLMProviderCall } from "../../src/otel";
-import { AsyncFunction } from "../../src/otel/constants";
 import { flowUtilityFactory } from "../../src/utilities/flow";
 import { promptUtilityFactory } from "../../src/utilities/prompt";
 import { toolUtilityFactory } from "../../src/utilities/tool";
@@ -13,9 +12,7 @@ import {
     openTelemetryTestConfiguration,
 } from "./fixtures";
 
-function testScenario(
-    opentelemetryTracer: Tracer,
-): [AsyncFunction, AsyncFunction, AsyncFunction, AsyncFunction] {
+function testScenario(opentelemetryTracer: Tracer) {
     const randomString = toolUtilityFactory(
         opentelemetryTracer,
         () => {
@@ -34,36 +31,43 @@ function testScenario(
     dotenv.config({
         path: __dirname + "/../../.env",
     });
-    const callLLM = promptUtilityFactory(
-        opentelemetryTracer,
-        async (messages: any[]) => {
-            const client = new OpenAI({ apiKey: process.env.OPENAI_KEY });
-            const response = await client.chat.completions.create({
-                model: "gpt-4o",
-                messages: messages,
-                temperature: 0.8,
-            });
-            return (
-                (response.choices[0].message.content || "") +
-                " " +
-                (await randomString())
-            );
-        },
-    );
+    const callLLM = async (messages: any[]) => {
+        return await promptUtilityFactory(
+            opentelemetryTracer,
+            async (_: any, messages: any[]) => {
+                const client = new OpenAI({ apiKey: process.env.OPENAI_KEY });
+                const response = await client.chat.completions.create({
+                    model: "gpt-4o",
+                    messages: messages,
+                    temperature: 0.8,
+                });
+                return (
+                    (response.choices[0].message.content || "") +
+                    " " +
+                    (await randomString())
+                );
+            },
+            "Call LLM",
+        )({}, messages);
+    };
 
-    const agentCall = flowUtilityFactory(
-        opentelemetryTracer,
-        async (messages: any[]) => {
-            return await callLLM(messages);
-        },
-    );
+    const agentCall = async (messages: any[]) =>
+        await flowUtilityFactory(
+            opentelemetryTracer,
+            async (_: any, messages: any[]) => {
+                return await callLLM(messages);
+            },
+            "Small Flow",
+        )({}, messages);
 
-    const flowOverFlow = flowUtilityFactory(
-        opentelemetryTracer,
-        async (messages: any[]) => {
-            return await agentCall(messages);
-        },
-    );
+    const flowOverFlow = async (messages: any[]) =>
+        await flowUtilityFactory(
+            opentelemetryTracer,
+            async (_: any, messages: any[]) => {
+                return await agentCall(messages);
+            },
+            "Big Flow",
+        )({}, messages);
 
     return [randomString, callLLM, agentCall, flowOverFlow];
 }
@@ -97,7 +101,7 @@ describe("flow decorator", () => {
         expect(spans[1].attributes["humanloop.file_type"]).toBe("tool");
         expect(spans[2].attributes["humanloop.file_type"]).toBe("prompt");
         expect(spans[3].attributes["humanloop.file_type"]).toBe("flow");
-        expect(spans[3].attributes["humanloop.log.inputs.messages"]).toEqual(
+        expect(spans[3].attributes["humanloop.log.messages"]).toEqual(
             callLLMMessages(),
         );
         expect(spans[0].parentSpanId).toBe(spans[2].spanContext().spanId);
@@ -119,7 +123,7 @@ describe("flow decorator", () => {
         expect(spans[2].attributes["humanloop.file_type"]).toBe("prompt");
         expect(spans[3].attributes["humanloop.file_type"]).toBe("flow");
         expect(spans[4].attributes["humanloop.file_type"]).toBe("flow");
-        expect(spans[4].attributes["humanloop.log.inputs.messages"]).toEqual(
+        expect(spans[4].attributes["humanloop.log.messages"]).toEqual(
             callLLMMessages(),
         );
         expect(spans[0].parentSpanId).toBe(spans[2].spanContext().spanId);

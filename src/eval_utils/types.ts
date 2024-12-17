@@ -6,7 +6,6 @@ import {
     CreatePromptLogResponse,
     CreateToolLogResponse,
     CreateDatapointRequest as DatapointRequest,
-    EvaluatorArgumentsType,
     EvaluatorResponse,
     EvaluatorReturnTypeEnum,
     EvaluatorsRequest,
@@ -26,8 +25,8 @@ import {
     ToolRequest,
     ToolResponse,
     UpdateDatesetAction as UpdateDatasetAction,
-} from "api";
-
+} from "../api";
+import { DatapointResponse, EvaluatorArgumentsType } from "../api/types";
 import { FileType } from "../api/types/FileType";
 
 type EvaluatorVersion =
@@ -35,7 +34,7 @@ type EvaluatorVersion =
     | HumanEvaluatorRequest
     | CodeEvaluatorRequest
     | ExternalEvaluatorRequest;
-type Version =
+export type Version =
     | FlowKernelRequest
     | PromptKernelRequest
     | ToolKernelRequest
@@ -75,7 +74,15 @@ export interface File extends Identifiers {
      * `output = callable(datapoint.inputs, messages=datapoint.messages)`.
      * It should return a single string output. If not, you must provide a custom_logger.
      */
-    callable?: (...args: any[]) => string | Promise<string>;
+    callable?:
+        | ((inputs: any, messages?: any[]) => string | Promise<string>)
+        // Decorated callables carry metadata about path and version
+        // Which should match the ones provided in the File
+        | {
+              (inputs: any, messages?: any[]): string | Promise<string>;
+              version: Version;
+              path: string;
+          };
 }
 
 export interface Dataset extends Identifiers {
@@ -89,26 +96,25 @@ export interface Dataset extends Identifiers {
 }
 
 export interface Evaluator extends Identifiers {
-    /** The type of arguments the Evaluator expects - only required for local Evaluators. */
-    argsType?: EvaluatorArgumentsType;
     /** The type of return value the Evaluator produces - only required for local Evaluators. */
     returnType?: EvaluatorReturnTypeEnum;
-    /** The function to run on the logs to produce the judgment - only required for local Evaluators. */
-    callable?: (...args: any[]) => any; // TODO define explicitly the args and return type
-    /**
-     * Optional function that logs the output judgment from your Evaluator to Humanloop.
-     * If provided, it will be called as follows:
-     *
-     * ```typescript
-     * judgment = callable(log);
-     * log = custom_logger(client, judgment);
-     * ```
-     *
-     * Inside the custom_logger, you can use the Humanloop client to log the judgment to Humanloop.
-     * If not provided, your function must return a single string, and by default, the code will be used to inform the version of the external Evaluator on Humanloop.
-     */
     /**The threshold to check the Evaluator against. If the aggregate value of the Evaluator is below this threshold, the check will fail.*/
     threshold?: number;
+    callable: Function;
+    argsType: EvaluatorArgumentsType;
+}
+
+export interface TargetFreeEvaluator extends Evaluator {
+    argsType: "target_free";
+    callable: (log: LogResponse) => string | number | boolean;
+}
+
+export interface TargetedEvaluator extends Evaluator {
+    argsType: "target_required";
+    callable: (
+        inputs: LogResponse,
+        target: DatapointResponse,
+    ) => string | number | boolean;
 }
 
 /**

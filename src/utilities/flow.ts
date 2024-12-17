@@ -13,18 +13,20 @@ import {
     jsonifyIfNotString,
     writeToOpenTelemetrySpan,
 } from "../otel";
-// Define or import similar helpers
-import { argsToInputs } from "./helpers";
+import { InputsMessagesCallableType } from "./types";
 
-export function flowUtilityFactory<T extends (...args: any[]) => any>(
+export function flowUtilityFactory<I, M, O>(
     opentelemetryTracer: Tracer,
-    func: T,
+    func: InputsMessagesCallableType<I, M, O>,
+    path: string,
     flowKernel?: FlowKernelRequest,
-    path?: string,
-): (...args: any[]) => Promise<ReturnType<T>> {
-    const wrappedFunction = async (
-        ...args: Parameters<T>
-    ): Promise<ReturnType<T> | null> => {
+): {
+    (inputs: I, messages: M): O extends Promise<infer R> ? Promise<R> : Promise<O>;
+    path: string;
+    version: FlowKernelRequest;
+} {
+    // @ts-ignore
+    const wrappedFunction = async (inputs: I, messages: M) => {
         // Filter out undefined attributes
         if (flowKernel?.attributes) {
             flowKernel.attributes = Object.fromEntries(
@@ -36,6 +38,7 @@ export function flowUtilityFactory<T extends (...args: any[]) => any>(
 
         const parentSpanContextKey = createContextKey(HUMANLOOP_PARENT_SPAN_CTX_KEY);
         const flowMetadataKey = createContextKey(HUMANLOOP_TRACE_FLOW_CTX_KEY);
+        // @ts-ignore
         return opentelemetryTracer.startActiveSpan(generateSpanId(), async (span) => {
             const ctx = context.active();
             const spanId = span.spanContext().spanId;
@@ -73,17 +76,15 @@ export function flowUtilityFactory<T extends (...args: any[]) => any>(
                 );
             }
 
-            const inputs = argsToInputs(func, args);
-
             const { output, error } = await context.with(
                 ctx
                     .setValue(parentSpanContextKey, spanId)
                     .setValue(flowMetadataKey, flowMetadata),
                 async () => {
-                    let output: ReturnType<T> | null;
+                    let output: O | null;
                     let error: string | null = null;
                     try {
-                        output = await func(...args);
+                        output = await func(inputs, messages);
                     } catch (err: any) {
                         console.error(`Error calling ${func.name}:`, err);
                         output = null;
@@ -99,14 +100,16 @@ export function flowUtilityFactory<T extends (...args: any[]) => any>(
             const outputStringified = jsonifyIfNotString(func, output);
 
             const flowLog = {
-                inputs,
                 output: outputStringified,
+                inputs: inputs,
+                messages: messages,
                 error,
             };
 
             writeToOpenTelemetrySpan(
                 span as unknown as ReadableSpan,
-                flowLog as NestedDict,
+                // @ts-ignore
+                flowLog,
                 HUMANLOOP_LOG_KEY,
             );
 
@@ -115,5 +118,9 @@ export function flowUtilityFactory<T extends (...args: any[]) => any>(
         });
     };
 
-    return wrappedFunction as T;
+    // @ts-ignore
+    return Object.assign(wrappedFunction, {
+        path,
+        version: flowKernel || { attributes: {} },
+    });
 }

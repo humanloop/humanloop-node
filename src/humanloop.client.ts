@@ -16,6 +16,7 @@ import { HumanloopSpanProcessor } from "./otel/processor";
 import { flowUtilityFactory } from "./utilities/flow";
 import { UtilityPromptKernel, promptUtilityFactory } from "./utilities/prompt";
 import { toolUtilityFactory } from "./utilities/tool";
+import { InputsMessagesCallableType, ToolCallableType } from "./utilities/types";
 
 class ExtendedEvaluations extends BaseEvaluations {
     protected readonly _client: HumanloopClient;
@@ -101,7 +102,8 @@ export class HumanloopClient extends BaseHumanloopClient {
             this.opentelemetryTracerProvider.getTracer("humanloop.sdk");
     }
 
-    private _checkProviders() {
+    // Check if user has passed the LLM provider instrumentors
+    private _assertProviders() {
         const noProviderInstrumented = [
             this.OpenAI,
             this.Anthropic,
@@ -109,52 +111,52 @@ export class HumanloopClient extends BaseHumanloopClient {
         ].every((p) => !p);
         if (noProviderInstrumented) {
             throw new Error(
-                "Using File utilities without passing any provider in the " +
+                "Using Prompt File utility without passing any provider in the " +
                     "HumanloopClient constructor. Did you forget to pass them?",
             );
         }
     }
 
-    public prompt<T extends (...args: any[]) => any>(promptUtilityArguments: {
-        callable: T;
+    public prompt<I, M, O>({
+        callable,
+        promptKernel,
+        path,
+    }: {
+        callable: InputsMessagesCallableType<I, M, O>;
+        path: string;
         promptKernel?: UtilityPromptKernel;
-        path?: string;
     }) {
-        this._checkProviders();
+        this._assertProviders();
         return promptUtilityFactory(
             this.opentelemetryTracer,
-            promptUtilityArguments.callable,
-            promptUtilityArguments.promptKernel,
-            promptUtilityArguments.path,
+            callable,
+            path,
+            promptKernel,
         );
     }
 
-    public tool<T extends (...args: any[]) => any>(toolUtilityArguments: {
-        callable: T;
+    public tool<I, O>({
+        callable,
+        toolKernel,
+        path,
+    }: {
+        callable: ToolCallableType<I, O>;
         toolKernel: ToolKernelRequest;
         path?: string;
     }) {
-        this._checkProviders();
-        return toolUtilityFactory(
-            this.opentelemetryTracer,
-            toolUtilityArguments.callable,
-            toolUtilityArguments.toolKernel,
-            toolUtilityArguments.path,
-        );
+        return toolUtilityFactory(this.opentelemetryTracer, callable, toolKernel, path);
     }
 
-    public flow<T extends (...args: any[]) => any>(flowUtilityArguments: {
-        callable: T;
+    public flow<I, M, O>({
+        callable,
+        flowKernel,
+        path,
+    }: {
+        callable: InputsMessagesCallableType<I, M, O>;
+        path: string;
         flowKernel?: FlowKernelRequest;
-        path?: string;
     }) {
-        this._checkProviders();
-        return flowUtilityFactory(
-            this.opentelemetryTracer,
-            flowUtilityArguments.callable,
-            flowUtilityArguments.flowKernel,
-            flowUtilityArguments.path,
-        );
+        return flowUtilityFactory(this.opentelemetryTracer, callable, path, flowKernel);
     }
 
     public get evaluations(): ExtendedEvaluations {

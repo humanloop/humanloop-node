@@ -18,7 +18,15 @@ import { openTelemetryTestConfiguration } from "./fixtures";
  * @returns The result of the arithmetic operation.
  * @throws Error if the operation is invalid.
  */
-function calculator(operation: string, num1: number, num2: number): number {
+function calculator({
+    operation,
+    num1,
+    num2,
+}: {
+    operation: string;
+    num1: number;
+    num2: number;
+}): number {
     switch (operation) {
         case "add":
             return num1 + num2;
@@ -46,8 +54,7 @@ describe("tool decorator", () => {
             {
                 function: {
                     name: "calculator",
-                    description:
-                        "Perform arithmetic operations on two numbers.",
+                    description: "Perform arithmetic operations on two numbers.",
                     strict: true,
                     parameters: {
                         operation: "string",
@@ -58,7 +65,11 @@ describe("tool decorator", () => {
             },
             "Calculator",
         );
-        const result = await calculatorDecorated("add", 1, 2);
+        const result = await calculatorDecorated({
+            operation: "add",
+            num1: 1,
+            num2: 2,
+        });
         expect(result).toBe(3);
         expect(exporter.getFinishedSpans().length).toBe(1);
         const span = exporter.getFinishedSpans()[0];
@@ -69,8 +80,7 @@ describe("tool decorator", () => {
             tool: {
                 function: {
                     name: "calculator",
-                    description:
-                        "Perform arithmetic operations on two numbers.",
+                    description: "Perform arithmetic operations on two numbers.",
                     strict: true,
                     parameters: {
                         operation: "string",
@@ -119,6 +129,30 @@ describe("tool decorator", () => {
         );
         const result = await decorated();
         expect(result).toBe(undefined);
+        expect(exporter.getFinishedSpans().length).toBe(1);
+    });
+
+    it("should support functions that use unpack syntax", async () => {
+        const [tracer, exporter] = openTelemetryTestConfiguration();
+
+        const decorated = toolUtilityFactory(
+            tracer,
+            ({ a, b }: { a: number; b: number }) => a + b,
+            {
+                function: {
+                    name: "Add",
+                    description: "Add two numbers.",
+                    strict: true,
+                    parameters: {
+                        a: "number",
+                        b: "number",
+                    },
+                },
+            },
+            "Calculator",
+        );
+        const result = await decorated({ a: 1, b: 2 });
+        expect(result).toBe(3);
         expect(exporter.getFinishedSpans().length).toBe(1);
     });
 });

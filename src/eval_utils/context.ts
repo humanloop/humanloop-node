@@ -3,11 +3,13 @@ import hash from "stable-hash";
 import { FlowLogRequest, PromptLogRequest } from "../api";
 import { DatapointResponse } from "../api";
 import { Humanloop } from "../index";
+import { Version } from "./types";
 
 type EvaluationContextState = {
     fileId?: string;
     path?: string;
     uploadCallback: (logId: string, datapoint: DatapointResponse) => void;
+    evaluatedVersion?: Version;
 };
 
 type EvaluationContextKey = {
@@ -45,6 +47,7 @@ class EvaluationContext {
             : {
                   fileId: this.state.fileId,
                   path: this.state.path,
+                  evaluatedVersion: this.state.evaluatedVersion,
               };
     }
 
@@ -66,9 +69,14 @@ class EvaluationContext {
     }
 
     public getDatapoint(key: EvaluationContextKey): EvaluationContextValue {
+        if (key.inputs !== undefined && "inputs" in key.inputs) {
+            key = { ...key, inputs: key.inputs.inputs as Record<string, unknown> };
+        }
         const mappings = this.inputMappings.get(hash(key));
         if (!mappings || mappings.length === 0) {
-            throw new Error(`No input mappings found for: ${JSON.stringify(key)}`);
+            throw new Error(
+                `No input mappings found for: ${JSON.stringify(key)}. Try using peekDatapoint() first.`,
+            );
         }
         return mappings.pop()!;
     }

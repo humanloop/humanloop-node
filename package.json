@@ -38,6 +38,9 @@
     },
     "devDependencies": {
         "@anthropic-ai/sdk": "^0.32.1",
+        "@babel/core": "^7.26.0",
+        "@babel/plugin-transform-modules-commonjs": "^7.26.3",
+        "@babel/preset-env": "^7.26.0",
         "@trivago/prettier-plugin-sort-imports": "^5.2.0",
         "@types/cli-progress": "^3.11.6",
         "@types/jest": "29.5.5",
@@ -46,6 +49,7 @@
         "@types/qs": "6.9.8",
         "@types/readable-stream": "^4.0.15",
         "@types/url-join": "4.0.1",
+        "babel-jest": "^29.7.0",
         "cohere-ai": "^7.15.0",
         "dotenv": "^16.4.6",
         "fetch-mock-jest": "^1.5.1",

@@ -13,8 +13,9 @@ import {
     jsonifyIfNotString,
     writeToOpenTelemetrySpan,
 } from "../otel";
-import { argsToInputs } from "./helpers";
+import { InputsMessagesCallableType } from "./types";
 
+// Make model optional since it can be inferred by Instrumentors
 export type UtilityPromptKernel = Omit<PromptKernelRequest, "model"> & {
     model?: string;
 };
@@ -29,15 +30,18 @@ export type UtilityPromptKernel = Omit<PromptKernelRequest, "model"> & {
  * @param path - The span's path attribute
  * @returns Wrapped function with OpenTelemetry instrumentation
  */
-export function promptUtilityFactory<T extends (...args: any[]) => any>(
+export function promptUtilityFactory<I, M, O>(
     opentelemetryTracer: Tracer,
-    func: T,
+    func: InputsMessagesCallableType<I, M, O>,
+    path: string,
     promptKernel?: UtilityPromptKernel,
-    path?: string,
-): (...args: any[]) => Promise<ReturnType<T>> {
-    const wrappedFunction = async (
-        ...args: Parameters<T>
-    ): Promise<ReturnType<T> | null> => {
+): {
+    (inputs: I, messages: M): O extends Promise<infer R> ? Promise<R> : Promise<O>;
+    path: string;
+    version: UtilityPromptKernel;
+} {
+    // @ts-ignore
+    return async (inputs: I, messages: M) => {
         // Filter out undefined attributes
         if (promptKernel?.attributes) {
             promptKernel.attributes = Object.entries(promptKernel.attributes)
@@ -48,6 +52,7 @@ export function promptUtilityFactory<T extends (...args: any[]) => any>(
         const parentSpanContextKey = createContextKey(HUMANLOOP_PARENT_SPAN_CTX_KEY);
         const flowMetadataKey = createContextKey(HUMANLOOP_TRACE_FLOW_CTX_KEY);
 
+        // @ts-ignore
         return opentelemetryTracer.startActiveSpan(generateSpanId(), async (span) => {
             const ctx = context.active();
             const spanId = span.spanContext().spanId;
@@ -85,21 +90,20 @@ export function promptUtilityFactory<T extends (...args: any[]) => any>(
                 );
             }
 
-            const inputs = argsToInputs(func, args);
-
             // Execute the wrapped function in a child context
             const { output, error } = await context.with(
                 ctx
                     .setValue(parentSpanContextKey, spanId)
                     .setValue(flowMetadataKey, flowMetadata),
                 async () => {
-                    let output: ReturnType<T> | null;
+                    let output: O | null;
                     let error: string | null = null;
 
                     try {
-                        output = await func(...args);
+                        output = await func(inputs, messages);
                     } catch (err: any) {
                         console.error(`Error calling ${func.name}:`, err);
+                        // @ts-ignore
                         output = null;
                         error = err.message || String(err);
                     }
@@ -114,14 +118,16 @@ export function promptUtilityFactory<T extends (...args: any[]) => any>(
             const outputStringified = jsonifyIfNotString(func, output);
 
             const promptLog = {
-                inputs,
                 output: outputStringified,
                 error,
+                inputs: inputs,
+                messages: messages,
             };
 
             writeToOpenTelemetrySpan(
                 span as unknown as ReadableSpan,
-                promptLog as NestedDict,
+                // @ts-ignore
+                promptLog,
                 HUMANLOOP_LOG_KEY,
             );
 
@@ -130,6 +136,4 @@ export function promptUtilityFactory<T extends (...args: any[]) => any>(
             return output;
         });
     };
-
-    return wrappedFunction as T;
 }

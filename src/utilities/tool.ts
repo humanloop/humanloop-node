@@ -16,7 +16,7 @@ import {
     HUMANLOOP_PATH_KEY,
     HUMANLOOP_TRACE_FLOW_CTX_KEY,
 } from "../otel/constants";
-import { argsToInputs } from "./helpers";
+import { ToolCallableType } from "./types";
 
 /**
  * Higher-order function for wrapping a function with OpenTelemetry instrumentation.
@@ -28,13 +28,13 @@ import { argsToInputs } from "./helpers";
  * @param toolKernel - Additional metadata for the function
  * @returns Wrapped function with OpenTelemetry instrumentation
  */
-export function toolUtilityFactory<T extends (...args: any[]) => any>(
+export function toolUtilityFactory<I, O>(
     opentelemetryTracer: Tracer,
-    func: T,
+    func: ToolCallableType<I, O>,
     toolKernel: ToolKernelRequest,
     path?: string,
 ): {
-    (...args: any[]): Promise<ReturnType<T>>;
+    (args?: I): O extends Promise<infer R> ? Promise<R> : Promise<O>;
     jsonSchema: Record<string, any>;
 } {
     // Attach JSON schema metadata to the function for external use
@@ -43,13 +43,15 @@ export function toolUtilityFactory<T extends (...args: any[]) => any>(
     }
 
     const wrappedFunction = async (
-        ...args: Parameters<T>
-    ): Promise<ReturnType<T> | null> => {
-        validateArgumentsAgainstSchema(func, toolKernel);
+        inputs: I,
+        // @ts-ignore
+    ): O extends Promise<infer R> ? Promise<R> : Promise<O> => {
+        validateArgumentsAgainstSchema(toolKernel, inputs);
 
         const parentSpanContextKey = createContextKey(HUMANLOOP_PARENT_SPAN_CTX_KEY);
         const flowMetadataKey = createContextKey(HUMANLOOP_TRACE_FLOW_CTX_KEY);
 
+        // @ts-ignore
         return opentelemetryTracer.startActiveSpan(generateSpanId(), async (span) => {
             const ctx = context.active();
             const spanId = span.spanContext().spanId;
@@ -76,19 +78,18 @@ export function toolUtilityFactory<T extends (...args: any[]) => any>(
             span.setAttribute(HUMANLOOP_PATH_KEY, path || func.name);
             span.setAttribute(HUMANLOOP_FILE_TYPE_KEY, "tool");
 
-            const inputs = argsToInputs(func, args);
-
+            // @ts-ignore
             // Execute the wrapped function in the appropriate context
             const { output, error } = await context.with(
                 ctx
                     .setValue(parentSpanContextKey, spanId)
                     .setValue(flowMetadataKey, flowMetadata),
                 async () => {
-                    let output: ReturnType<T> | null;
+                    let output: O | null;
                     let error: string | null = null;
 
                     try {
-                        output = await func(...args);
+                        output = await func(inputs);
                     } catch (err: any) {
                         console.error(`Error calling ${func.name}:`, err);
                         output = null;
@@ -102,7 +103,7 @@ export function toolUtilityFactory<T extends (...args: any[]) => any>(
             const outputStringified = jsonifyIfNotString(func, output);
 
             const toolLog = {
-                inputs,
+                inputs: inputs,
                 output: outputStringified,
                 error,
             };
@@ -132,44 +133,29 @@ export function toolUtilityFactory<T extends (...args: any[]) => any>(
     });
 }
 
-function computeOriginalArguments(originalFunc: Function): null | string[] {
-    const stringified: string = originalFunc.toString();
-    const startBracket = stringified.indexOf("(");
-    if (startBracket < 0) {
-        return null;
-    }
-    const endBracket = stringified.indexOf(")", startBracket);
-    if (endBracket < 0) {
-        return null;
-    }
-    const paramsString = stringified.substring(startBracket + 1, endBracket);
-    if (paramsString.length === 0) {
-        return [];
-    }
-    const params = paramsString.split(",").map((e) => e.trim());
-    return params;
-}
-
-function validateArgumentsAgainstSchema(
-    func: (...args: any[]) => any[],
-    toolKernel: ToolKernelRequest,
-) {
-    const funcArgumentNames = computeOriginalArguments(func);
-    if (!funcArgumentNames || funcArgumentNames.length === 0) {
-        return;
-    }
-
-    const parameters = toolKernel.function?.parameters?.properties as {};
+function validateArgumentsAgainstSchema(toolKernel: ToolKernelRequest, inputs?: any) {
+    const parameters = toolKernel.function?.parameters || {};
 
     if (!parameters || Object.keys(parameters).length === 0) {
-        return;
+        if (inputs === undefined) {
+            return;
+        }
+        throw new Error(
+            `Tool function ${toolKernel.function?.name} received inputs when the JSON schema defines none.`,
+        );
     }
 
-    funcArgumentNames.forEach((argName) => {
-        if (!parameters.hasOwnProperty(argName)) {
+    if (inputs === undefined) {
+        if (Object.keys(parameters).length > 0 || !parameters) {
             throw new Error(
-                `Function argument '${argName}' does not match the provided parameters.`,
+                `Tool function ${toolKernel.function?.name} expected inputs but received none.`,
             );
+        }
+    }
+
+    Object.keys(inputs!).forEach((inputKey) => {
+        if (!parameters.hasOwnProperty(inputKey)) {
+            throw new Error(`Inputs key '${inputKey}' does not match the JSON schema.`);
         }
     });
 }

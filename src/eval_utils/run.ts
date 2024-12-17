@@ -9,7 +9,6 @@
  */
 import cliProgress from "cli-progress";
 import { Humanloop, HumanloopClient } from "index";
-import { AsyncFunction } from "otel";
 import pMap from "p-map";
 
 import {
@@ -62,11 +61,13 @@ export function overloadLog<T extends Flows | Prompts>(client: T): T {
     ) => {
         let response: LogResponse | undefined;
         if (evaluationContext.isEvaluatedFile(request)) {
+            const state = evaluationContext.getState();
             const { runId, sourceDatapointId, uploadCallback } =
                 evaluationContext.getDatapoint({
                     inputs: request.inputs,
                     messages: request.messages,
                 });
+
             if (request.runId === undefined) {
                 request = {
                     ...request,
@@ -79,9 +80,52 @@ export function overloadLog<T extends Flows | Prompts>(client: T): T {
                     sourceDatapointId: sourceDatapointId,
                 };
             }
+            if (client instanceof Flows) {
+                request = {
+                    ...request,
+                    traceStatus: "complete",
+                };
+            }
 
-            // @ts-ignore
-            response = await originalLog(request, options);
+            if ("flow" in request) {
+                if (
+                    JSON.stringify(state!.evaluatedVersion) !==
+                    JSON.stringify(request.flow)
+                ) {
+                    response = await originalLog(
+                        {
+                            ...request,
+                            // @ts-ignore Log under the version expected by evaluation, not
+                            // one determined by decorators. Otherwise the evaluation will stale
+                            flow: state?.evaluatedVersion,
+                            output: undefined,
+                            error: `The version of the evaluated Flow must match the version of the callable. Expected: ${JSON.stringify(state!.evaluatedVersion)}, got: ${JSON.stringify(request.flow)}`,
+                        },
+                        options,
+                    );
+                }
+            }
+
+            if ("prompt" in request) {
+                if (
+                    JSON.stringify(state!.evaluatedVersion) !==
+                    JSON.stringify(request.prompt)
+                ) {
+                    response = await originalLog({
+                        ...request,
+                        // @ts-ignore Log under the version expected by evaluation, not
+                        // one determined by decorators. Otherwise the evaluation will stale
+                        prompt: state?.evaluatedVersion,
+                        output: undefined,
+                        error: `The version of the evaluated Prompt must match the version of the callable. Expected: ${JSON.stringify(state!.evaluatedVersion)}, got: ${JSON.stringify(request.prompt)}`,
+                    });
+                }
+            }
+
+            if (response === undefined) {
+                // Version validation passed, make a normal request
+                response = await originalLog(request, options);
+            }
 
             // @ts-ignore
             uploadCallback(response.id);
@@ -109,6 +153,28 @@ export async function runEval(
     // Get or create the file on Humanloop
     if (!file.path && !file.id) {
         throw new Error("You must provide a path or id in your `file`.");
+    }
+
+    if (file.callable && "path" in file.callable) {
+        if (file.path !== file.callable.path) {
+            throw new Error(
+                "The path of the evaluated `file` must match the path of your decorated `callable`. Expected path: " +
+                    file.path +
+                    ", got: " +
+                    file.callable.path,
+            );
+        }
+    }
+
+    if (file.callable && "version" in file.callable) {
+        if (file.version !== file.callable.version) {
+            throw new Error(
+                "The version of the evaluated `file` must match the version of your decorated `callable`. Expected version: " +
+                    JSON.stringify(file.version) +
+                    ", got: " +
+                    JSON.stringify(file.callable.version),
+            );
+        }
     }
 
     let type: FileType;
@@ -308,7 +374,9 @@ export async function runEval(
         path: hlFile.path,
         uploadCallback: async (logId: string, datapoint: DatapointResponse) => {
             await runLocalEvaluators(client, logId, datapoint, localEvaluators);
+            progressBar.increment();
         },
+        evaluatedVersion: file.version,
     });
 
     async function processDatapoint(
@@ -327,11 +395,15 @@ export async function runEval(
         try {
             evaluationContext.addDatapoint(datapoint, runId);
             let output: string;
-            if ("messages" in datapoint && datapoint.messages !== undefined) {
-                output = await function_!(datapoint.inputs, datapoint.messages);
-            } else {
-                output = await function_!(datapoint.inputs);
+            if (datapoint.inputs === undefined) {
+                throw new Error(`Datapoint 'inputs' attribute is undefined.`);
             }
+            output = await function_!(
+                // @ts-ignore
+                datapoint.inputs,
+                datapoint.messages,
+            );
+
             if (typeof output !== "string") {
                 try {
                     output = JSON.stringify(output);
@@ -354,7 +426,8 @@ export async function runEval(
                 // The log function will take care of the sourceDatapointId and runId from the context
                 // See overloadLog in this module for more details
                 await logFunc({
-                    inputs: datapoint.inputs,
+                    inputs: { ...datapoint.inputs },
+                    messages: datapoint.messages,
                     output: output,
                     startTime: start_time,
                     endTime: new Date(),
@@ -363,7 +436,7 @@ export async function runEval(
         } catch (e) {
             const errorMessage = e instanceof Error ? e.message : String(e);
             await logFunc({
-                inputs: datapoint.inputs,
+                inputs: { ...datapoint.inputs },
                 error: errorMessage,
                 sourceDatapointId: datapoint.id,
                 startTime: start_time,
@@ -395,7 +468,6 @@ export async function runEval(
             hlDataset.datapoints!,
             async (datapoint) => {
                 await processDatapoint(datapoint, runId);
-                progressBar.increment();
             },
             { concurrency: workers },
         );
@@ -471,8 +543,8 @@ function getLogFunction(
         // TODO: why does the Log `id` field refer to the file ID in the API?
         // Why are both `id` and `version_id` needed in the API?
         id: fileId,
-        versionId: versionId,
-        runId: runId,
+        versionId,
+        runId,
     };
 
     switch (type) {
@@ -501,7 +573,7 @@ async function runLocalEvaluators(
     client: HumanloopClient,
     logId: string,
     datapoint: DatapointResponse | undefined,
-    localEvaluators: [EvaluatorResponse, Function | AsyncFunction][],
+    localEvaluators: [EvaluatorResponse, Function][],
 ) {
     const log = await client.logs.get(logId);
 
@@ -512,7 +584,7 @@ async function runLocalEvaluators(
             if (evaluator.spec.argumentsType === "target_required") {
                 judgment = await evalFunction(log, datapoint);
             } else {
-                judgment = evalFunction(log);
+                judgment = await evalFunction(log);
             }
 
             await client.evaluators.log({
@@ -525,6 +597,7 @@ async function runLocalEvaluators(
             });
         } catch (e) {
             await client.evaluators.log({
+                path: evaluator.path,
                 versionId: evaluator.versionId,
                 parentId: logId,
                 error: e instanceof Error ? e.message : String(e),
