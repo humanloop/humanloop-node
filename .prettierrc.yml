@@ -1,2 +1,10 @@
 tabWidth: 4
-printWidth: 120
+printWidth: 88
+semi: true
+importOrderSeparation: true
+importOrderSortSpecifiers: true
+importOrderGroupNamespaceSpecifiers: true
+importOrder: ["<THIRD_PARTY_MODULES>", "^[./]"]
+trailingComma: "all"
+plugins:
+    - "@trivago/prettier-plugin-sort-imports"
