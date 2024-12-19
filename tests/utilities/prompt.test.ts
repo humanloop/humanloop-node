@@ -23,9 +23,9 @@ import {
 
 // NOTE: Add here as more Providers are added
 const PROVIDER_AND_MODEL: [ModelProviders, string][] = [
-    [ModelProviders.Openai, "gpt-4o"],
-    [ModelProviders.Anthropic, "claude-3-opus-latest"],
-    [ModelProviders.Cohere, "command"],
+    [ModelProviders.Openai, "gpt-4o-mini"],
+    [ModelProviders.Anthropic, "claude-3-5-haiku-latest"],
+    [ModelProviders.Cohere, "command-r7b-12-2024"],
 ];
 
 function testScenario(opentelemetryTracer: Tracer, promptKernel?: UtilityPromptKernel) {
