@@ -25,7 +25,6 @@ export function flowUtilityFactory<I, M, O>(
     path: string;
     version: FlowKernelRequest;
 } {
-    // @ts-ignore
     const wrappedFunction = async (inputs: I, messages: M) => {
         // Filter out undefined attributes
         if (flowKernel?.attributes) {

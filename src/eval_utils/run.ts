@@ -36,6 +36,7 @@ import {
 } from "../api";
 import { Flows } from "../api/resources/flows/client/Client";
 import { Prompts } from "../api/resources/prompts/client/Client";
+import { jsonifyIfNotString } from "../otel/helpers";
 import { evaluationContext } from "./context";
 import { Dataset, Evaluator, EvaluatorCheck, File, FileResponse } from "./types";
 
@@ -63,6 +64,12 @@ export function overloadLog<T extends Flows | Prompts>(client: T): T {
         let response: LogResponse | undefined;
         if (evaluationContext.isEvaluatedFile(request)) {
             const state = evaluationContext.getState();
+            if (state === undefined) {
+                throw Error(
+                    "Internal Error: EvaluationContext state used without being called set before.",
+                );
+            }
+
             const { runId, sourceDatapointId, uploadCallback } =
                 evaluationContext.getDatapoint({
                     inputs: request.inputs,
@@ -89,12 +96,14 @@ export function overloadLog<T extends Flows | Prompts>(client: T): T {
             }
 
             if ("flow" in request) {
-                if (!_.isEqual(state!.evaluatedVersion, request.flow)) {
+                if (!_.isEqual(state.evaluatedVersion, request.flow)) {
                     response = await originalLog(
                         {
                             ...request,
                             // @ts-ignore Log under the version expected by evaluation, not
-                            // one determined by decorators. Otherwise the evaluation will stale
+                            // one determined by decorators. Otherwise the log will be found
+                            // in the File's Log but not appear in the Evaluation, which can
+                            // lead to confusion
                             flow: state?.evaluatedVersion,
                             output: undefined,
                             error: `The version of the evaluated Flow must match the version of the callable. Expected: ${JSON.stringify(state!.evaluatedVersion)}, got: ${JSON.stringify(request.flow)}`,
@@ -105,7 +114,7 @@ export function overloadLog<T extends Flows | Prompts>(client: T): T {
             }
 
             if ("prompt" in request) {
-                if (!_.isEqual(state!.evaluatedVersion, request.prompt)) {
+                if (!_.isEqual(state.evaluatedVersion, request.prompt)) {
                     response = await originalLog({
                         ...request,
                         // @ts-ignore Log under the version expected by evaluation, not
@@ -122,7 +131,6 @@ export function overloadLog<T extends Flows | Prompts>(client: T): T {
                 response = await originalLog(request, options);
             }
 
-            // @ts-ignore
             uploadCallback(response.id);
         } else {
             // @ts-ignore
@@ -150,13 +158,15 @@ export async function runEval(
         throw new Error("You must provide a path or id in your `file`.");
     }
 
+    if (workers > 32) {
+        console.log("Warning: Too many parallel workers, capping the number to 32.");
+    }
+    workers = Math.min(workers, 32);
+
     if (file.callable && "path" in file.callable) {
         if (file.path !== file.callable.path) {
             throw new Error(
-                "The path of the evaluated `file` must match the path of your decorated `callable`. Expected path: " +
-                    file.path +
-                    ", got: " +
-                    file.callable.path,
+                `The path of the evaluated \`file\` must match the path of your decorated \`callable\`. Expected path: ${file.path}, got: ${file.callable.path}`,
             );
         }
     }
@@ -164,10 +174,7 @@ export async function runEval(
     if (file.callable && "version" in file.callable) {
         if (!_.isEqual(file.version, file.callable.version)) {
             throw new Error(
-                "The version of the evaluated `file` must match the version of your decorated `callable`. Expected version: " +
-                    JSON.stringify(file.version) +
-                    ", got: " +
-                    JSON.stringify(file.callable.version),
+                `The version of the evaluated \`file\` must match the version of your decorated \`callable\`. Expected version: ${JSON.stringify(file.version)}, got: ${JSON.stringify(file.callable.version)}`,
             );
         }
     }
@@ -253,7 +260,7 @@ export async function runEval(
     // Upsert the local Evaluators; other Evaluators are just referenced by `path` or `id`
     let localEvaluators: [EvaluatorResponse, Function][] = [];
     if (evaluators) {
-        const evaluatorsWithCallable = evaluators.filter((e) => e.callable != null);
+        const evaluatorsWithCallable = evaluators.filter((e) => e.callable !== null);
 
         if (evaluatorsWithCallable.length > 0 && function_ == null) {
             throw new Error(
@@ -399,15 +406,8 @@ export async function runEval(
                 datapoint.messages,
             );
 
-            if (typeof output !== "string") {
-                try {
-                    output = JSON.stringify(output);
-                } catch (_) {
-                    throw new Error(
-                        `Your ${type}'s callable must return a string or a JSON serializable object.`,
-                    );
-                }
-            }
+            output = jsonifyIfNotString(function_!, output);
+
             if (
                 evaluationContext.peekDatapoint({
                     inputs: datapoint.inputs,
@@ -525,6 +525,17 @@ export async function runEval(
     return checks;
 }
 
+/**
+ * Returns the appropriate log function pre-filled with common parameters.
+ *
+ * @param client - The HumanloopClient instance used to make API calls.
+ * @param type - The type of file for which the log function is being generated. Can be "flow", "prompt", or "tool".
+ * @param fileId - The ID of the file.
+ * @param versionId - The version ID of the file.
+ * @param runId - The run ID associated with the log.
+ * @returns A function that logs data to the appropriate endpoint based on the file type.
+ * @throws {Error} If the provided file type is unsupported.
+ */
 function getLogFunction(
     client: HumanloopClient,
     type: FileType,
@@ -532,8 +543,6 @@ function getLogFunction(
     versionId: string,
     runId: string,
 ) {
-    /** Returns the appropriate log function pre-filled with common parameters. */
-
     const logRequest = {
         // TODO: why does the Log `id` field refer to the file ID in the API?
         // Why are both `id` and `version_id` needed in the API?

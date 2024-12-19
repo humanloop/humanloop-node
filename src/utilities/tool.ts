@@ -134,7 +134,8 @@ export function toolUtilityFactory<I, O>(
 }
 
 function validateArgumentsAgainstSchema(toolKernel: ToolKernelRequest, inputs?: any) {
-    const parameters = toolKernel.function?.parameters || {};
+    const parameters =
+        (toolKernel.function?.parameters?.properties as Record<any, unknown>) || {};
 
     if (!parameters || Object.keys(parameters).length === 0) {
         if (inputs === undefined) {

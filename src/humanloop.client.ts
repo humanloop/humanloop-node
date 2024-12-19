@@ -49,17 +49,25 @@ export class HumanloopClient extends BaseHumanloopClient {
     protected readonly opentelemetryTracerProvider: NodeTracerProvider;
     protected readonly opentelemetryTracer: Tracer;
 
+    /**
+     * Constructs a new instance of the Humanloop client.
+     *
+     * @param _options - The base options for the Humanloop client.
+     * @param providerModules - Provider clients to instrument by File utilities.
+     */
     constructor(
         _options: BaseHumanloopClient.Options,
-        OpenAI?: any,
-        Anthropic?: any,
-        CohereAI?: any,
+        providerModules?: {
+            OpenAI?: any;
+            Anthropic?: any;
+            CohereAI?: any;
+        },
     ) {
         super(_options);
 
-        this.OpenAI = OpenAI;
-        this.Anthropic = Anthropic;
-        this.CohereAI = CohereAI;
+        this.OpenAI = providerModules?.OpenAI;
+        this.Anthropic = providerModules?.Anthropic;
+        this.CohereAI = providerModules?.CohereAI;
 
         this._prompts_overloaded = overloadLog(super.prompts);
 
@@ -73,25 +81,25 @@ export class HumanloopClient extends BaseHumanloopClient {
             ],
         });
 
-        if (OpenAI) {
+        if (providerModules?.OpenAI) {
             const instrumentor = new OpenAIInstrumentation({
                 enrichTokens: true,
             });
-            instrumentor.manuallyInstrument(OpenAI);
+            instrumentor.manuallyInstrument(providerModules?.OpenAI);
             instrumentor.setTracerProvider(this.opentelemetryTracerProvider);
             instrumentor.enable();
         }
 
-        if (Anthropic) {
+        if (providerModules?.Anthropic) {
             const instrumentor = new AnthropicInstrumentation();
-            instrumentor.manuallyInstrument(Anthropic);
+            instrumentor.manuallyInstrument(providerModules?.Anthropic);
             instrumentor.setTracerProvider(this.opentelemetryTracerProvider);
             instrumentor.enable();
         }
 
-        if (CohereAI) {
+        if (providerModules?.CohereAI) {
             const instrumentor = new CohereInstrumentation();
-            instrumentor.manuallyInstrument(CohereAI);
+            instrumentor.manuallyInstrument(providerModules?.CohereAI);
             instrumentor.setTracerProvider(this.opentelemetryTracerProvider);
             instrumentor.enable();
         }
@@ -103,7 +111,7 @@ export class HumanloopClient extends BaseHumanloopClient {
     }
 
     // Check if user has passed the LLM provider instrumentors
-    private _assertProviders() {
+    private _assertProviders(func: Function) {
         const noProviderInstrumented = [
             this.OpenAI,
             this.Anthropic,
@@ -111,12 +119,23 @@ export class HumanloopClient extends BaseHumanloopClient {
         ].every((p) => !p);
         if (noProviderInstrumented) {
             throw new Error(
-                "Using Prompt File utility without passing any provider in the " +
-                    "HumanloopClient constructor. Did you forget to pass them?",
+                `${func.name}: You must pass at least one LLM client library in the Humanloop client constructor. Otherwise the prompt() utility will not work properly.`,
             );
         }
     }
 
+    /**
+     * Utility for managing a Prompt
+     *
+     * @template I - The input type for the callable.
+     * @template M - The message type for the callable.
+     * @template O - The output type for the callable.
+     * @param {Object} params - The parameters for the prompt.
+     * @param {InputsMessagesCallableType<I, M, O>} params.callable - The callable to be used for the prompt.
+     * @param {string} params.path - The path to be used for the prompt.
+     * @param {UtilityPromptKernel} [params.promptKernel] - Optional prompt kernel to be used.
+     * @returns {ReturnType<typeof promptUtilityFactory>} The result of the prompt utility factory.
+     */
     public prompt<I, M, O>({
         callable,
         promptKernel,
@@ -126,7 +145,7 @@ export class HumanloopClient extends BaseHumanloopClient {
         path: string;
         promptKernel?: UtilityPromptKernel;
     }) {
-        this._assertProviders();
+        this._assertProviders(callable);
         return promptUtilityFactory(
             this.opentelemetryTracer,
             callable,
@@ -137,12 +156,12 @@ export class HumanloopClient extends BaseHumanloopClient {
 
     public tool<I, O>({
         callable,
-        toolKernel,
         path,
+        toolKernel,
     }: {
         callable: ToolCallableType<I, O>;
+        path: string;
         toolKernel: ToolKernelRequest;
-        path?: string;
     }) {
         return toolUtilityFactory(this.opentelemetryTracer, callable, toolKernel, path);
     }
