@@ -13,7 +13,7 @@ jobs:
             - name: Set up node
               uses: actions/setup-node@v3
               with:
-                  node-version: "20"
+                  node-version: "22"
 
             - name: Compile
               run: yarn && yarn build
@@ -28,7 +28,7 @@ jobs:
             - name: Set up node
               uses: actions/setup-node@v3
               with:
-                  node-version: "20"
+                  node-version: "22"
 
             - name: Compile
               run: yarn && yarn test
@@ -47,7 +47,7 @@ jobs:
             - name: Set up node
               uses: actions/setup-node@v3
               with:
-                  node-version: "20"
+                  node-version: "22"
             - name: Install dependencies
               run: yarn install
             - name: Build
