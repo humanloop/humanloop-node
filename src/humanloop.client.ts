@@ -109,7 +109,7 @@ export class HumanloopClient extends BaseHumanloopClient {
      * Constructs a new instance of the Humanloop client.
      *
      * @param _options - The base options for the Humanloop client.
-     * @param providerModules - LLM provider clients to instrument by File utilities.
+     * @param providerModules - LLM provider modules to instrument. Pass all LLM providers that you will use in your program if you intend to use File utilities such as `prompt()`.
      */
     constructor(
         _options: BaseHumanloopClient.Options,
@@ -175,7 +175,7 @@ export class HumanloopClient extends BaseHumanloopClient {
         ].every((p) => !p);
         if (noProviderInstrumented) {
             throw new Error(
-                `${func.name}: You must pass at least one LLM client library in the Humanloop client constructor. Otherwise the prompt() utility will not work properly.`,
+                `${func.name}: To use the 'prompt()' utility, pass your LLM client library into the Humanloop client constructor; e.g. 'HumanloopClient(..., { providerModules: {OpenAI} } )'.`,
             );
         }
     }
