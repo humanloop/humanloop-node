@@ -69,7 +69,7 @@ export class Flows {
      */
     public async log(
         request: Humanloop.FlowLogRequest = {},
-        requestOptions?: Flows.RequestOptions
+        requestOptions?: Flows.RequestOptions,
     ): Promise<Humanloop.CreateFlowLogResponse> {
         const { versionId, environment, ..._body } = request;
         const _queryParams: Record<string, string | string[] | object | object[]> = {};
@@ -84,14 +84,14 @@ export class Flows {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
-                "flows/log"
+                "flows/log",
             ),
             method: "POST",
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.8",
-                "User-Agent": "humanloop/0.8.8",
+                "X-Fern-SDK-Version": "0.8.8-beta1",
+                "User-Agent": "humanloop/0.8.8-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -124,7 +124,7 @@ export class Flows {
                             allowUnrecognizedEnumValues: true,
                             skipValidation: true,
                             breadcrumbsPrefix: ["response"],
-                        })
+                        }),
                     );
                 default:
                     throw new errors.HumanloopError({
@@ -167,7 +167,7 @@ export class Flows {
     public async get(
         id: string,
         request: Humanloop.GetFlowsIdGetRequest = {},
-        requestOptions?: Flows.RequestOptions
+        requestOptions?: Flows.RequestOptions,
     ): Promise<Humanloop.FlowResponse> {
         const { versionId, environment } = request;
         const _queryParams: Record<string, string | string[] | object | object[]> = {};
@@ -182,14 +182,14 @@ export class Flows {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
-                `flows/${encodeURIComponent(id)}`
+                `flows/${encodeURIComponent(id)}`,
             ),
             method: "GET",
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.8",
-                "User-Agent": "humanloop/0.8.8",
+                "X-Fern-SDK-Version": "0.8.8-beta1",
+                "User-Agent": "humanloop/0.8.8-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -221,7 +221,7 @@ export class Flows {
                             allowUnrecognizedEnumValues: true,
                             skipValidation: true,
                             breadcrumbsPrefix: ["response"],
-                        })
+                        }),
                     );
                 default:
                     throw new errors.HumanloopError({
@@ -261,14 +261,14 @@ export class Flows {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
-                `flows/${encodeURIComponent(id)}`
+                `flows/${encodeURIComponent(id)}`,
             ),
             method: "DELETE",
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.8",
-                "User-Agent": "humanloop/0.8.8",
+                "X-Fern-SDK-Version": "0.8.8-beta1",
+                "User-Agent": "humanloop/0.8.8-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -293,7 +293,7 @@ export class Flows {
                             allowUnrecognizedEnumValues: true,
                             skipValidation: true,
                             breadcrumbsPrefix: ["response"],
-                        })
+                        }),
                     );
                 default:
                     throw new errors.HumanloopError({
@@ -335,19 +335,19 @@ export class Flows {
     public async move(
         id: string,
         request: Humanloop.UpdateFlowRequest = {},
-        requestOptions?: Flows.RequestOptions
+        requestOptions?: Flows.RequestOptions,
     ): Promise<Humanloop.FlowResponse> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
-                `flows/${encodeURIComponent(id)}`
+                `flows/${encodeURIComponent(id)}`,
             ),
             method: "PATCH",
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.8",
-                "User-Agent": "humanloop/0.8.8",
+                "X-Fern-SDK-Version": "0.8.8-beta1",
+                "User-Agent": "humanloop/0.8.8-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -379,7 +379,7 @@ export class Flows {
                             allowUnrecognizedEnumValues: true,
                             skipValidation: true,
                             breadcrumbsPrefix: ["response"],
-                        })
+                        }),
                     );
                 default:
                     throw new errors.HumanloopError({
@@ -419,7 +419,7 @@ export class Flows {
      */
     public async list(
         request: Humanloop.ListFlowsGetRequest = {},
-        requestOptions?: Flows.RequestOptions
+        requestOptions?: Flows.RequestOptions,
     ): Promise<core.Page<Humanloop.FlowResponse>> {
         const list = async (request: Humanloop.ListFlowsGetRequest): Promise<Humanloop.PaginatedDataFlowResponse> => {
             const { page, size, name, userFilter, sortBy, order } = request;
@@ -445,14 +445,14 @@ export class Flows {
             const _response = await (this._options.fetcher ?? core.fetcher)({
                 url: urlJoin(
                     (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
-                    "flows"
+                    "flows",
                 ),
                 method: "GET",
                 headers: {
                     "X-Fern-Language": "JavaScript",
                     "X-Fern-SDK-Name": "humanloop",
-                    "X-Fern-SDK-Version": "0.8.8",
-                    "User-Agent": "humanloop/0.8.8",
+                    "X-Fern-SDK-Version": "0.8.8-beta1",
+                    "User-Agent": "humanloop/0.8.8-beta1",
                     "X-Fern-Runtime": core.RUNTIME.type,
                     "X-Fern-Runtime-Version": core.RUNTIME.version,
                     ...(await this._getCustomAuthorizationHeaders()),
@@ -483,7 +483,7 @@ export class Flows {
                                 allowUnrecognizedEnumValues: true,
                                 skipValidation: true,
                                 breadcrumbsPrefix: ["response"],
-                            })
+                            }),
                         );
                     default:
                         throw new errors.HumanloopError({
@@ -552,19 +552,19 @@ export class Flows {
      */
     public async upsert(
         request: Humanloop.FlowRequest,
-        requestOptions?: Flows.RequestOptions
+        requestOptions?: Flows.RequestOptions,
     ): Promise<Humanloop.FlowResponse> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
-                "flows"
+                "flows",
             ),
             method: "POST",
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.8",
-                "User-Agent": "humanloop/0.8.8",
+                "X-Fern-SDK-Version": "0.8.8-beta1",
+                "User-Agent": "humanloop/0.8.8-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -596,7 +596,7 @@ export class Flows {
                             allowUnrecognizedEnumValues: true,
                             skipValidation: true,
                             breadcrumbsPrefix: ["response"],
-                        })
+                        }),
                     );
                 default:
                     throw new errors.HumanloopError({
@@ -647,19 +647,19 @@ export class Flows {
     public async updateLog(
         logId: string,
         request: Humanloop.UpdateTraceRequest,
-        requestOptions?: Flows.RequestOptions
+        requestOptions?: Flows.RequestOptions,
     ): Promise<Humanloop.FlowLogResponse> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
-                `flows/logs/${encodeURIComponent(logId)}`
+                `flows/logs/${encodeURIComponent(logId)}`,
             ),
             method: "PATCH",
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.8",
-                "User-Agent": "humanloop/0.8.8",
+                "X-Fern-SDK-Version": "0.8.8-beta1",
+                "User-Agent": "humanloop/0.8.8-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -691,7 +691,7 @@ export class Flows {
                             allowUnrecognizedEnumValues: true,
                             skipValidation: true,
                             breadcrumbsPrefix: ["response"],
-                        })
+                        }),
                     );
                 default:
                     throw new errors.HumanloopError({
@@ -733,7 +733,7 @@ export class Flows {
     public async listVersions(
         id: string,
         request: Humanloop.ListVersionsFlowsIdVersionsGetRequest = {},
-        requestOptions?: Flows.RequestOptions
+        requestOptions?: Flows.RequestOptions,
     ): Promise<Humanloop.ListFlows> {
         const { status, evaluatorAggregates } = request;
         const _queryParams: Record<string, string | string[] | object | object[]> = {};
@@ -748,14 +748,14 @@ export class Flows {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
-                `flows/${encodeURIComponent(id)}/versions`
+                `flows/${encodeURIComponent(id)}/versions`,
             ),
             method: "GET",
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.8",
-                "User-Agent": "humanloop/0.8.8",
+                "X-Fern-SDK-Version": "0.8.8-beta1",
+                "User-Agent": "humanloop/0.8.8-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -787,7 +787,7 @@ export class Flows {
                             allowUnrecognizedEnumValues: true,
                             skipValidation: true,
                             breadcrumbsPrefix: ["response"],
-                        })
+                        }),
                     );
                 default:
                     throw new errors.HumanloopError({
@@ -833,19 +833,19 @@ export class Flows {
         id: string,
         versionId: string,
         request: Humanloop.CommitRequest,
-        requestOptions?: Flows.RequestOptions
+        requestOptions?: Flows.RequestOptions,
     ): Promise<Humanloop.FlowResponse> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
-                `flows/${encodeURIComponent(id)}/versions/${encodeURIComponent(versionId)}/commit`
+                `flows/${encodeURIComponent(id)}/versions/${encodeURIComponent(versionId)}/commit`,
             ),
             method: "POST",
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.8",
-                "User-Agent": "humanloop/0.8.8",
+                "X-Fern-SDK-Version": "0.8.8-beta1",
+                "User-Agent": "humanloop/0.8.8-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -877,7 +877,7 @@ export class Flows {
                             allowUnrecognizedEnumValues: true,
                             skipValidation: true,
                             breadcrumbsPrefix: ["response"],
-                        })
+                        }),
                     );
                 default:
                     throw new errors.HumanloopError({
@@ -917,19 +917,19 @@ export class Flows {
     public async deleteFlowVersion(
         id: string,
         versionId: string,
-        requestOptions?: Flows.RequestOptions
+        requestOptions?: Flows.RequestOptions,
     ): Promise<void> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
-                `flows/${encodeURIComponent(id)}/versions/${encodeURIComponent(versionId)}`
+                `flows/${encodeURIComponent(id)}/versions/${encodeURIComponent(versionId)}`,
             ),
             method: "DELETE",
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.8",
-                "User-Agent": "humanloop/0.8.8",
+                "X-Fern-SDK-Version": "0.8.8-beta1",
+                "User-Agent": "humanloop/0.8.8-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -954,7 +954,7 @@ export class Flows {
                             allowUnrecognizedEnumValues: true,
                             skipValidation: true,
                             breadcrumbsPrefix: ["response"],
-                        })
+                        }),
                     );
                 default:
                     throw new errors.HumanloopError({
@@ -1001,7 +1001,7 @@ export class Flows {
         id: string,
         environmentId: string,
         request: Humanloop.SetDeploymentFlowsIdEnvironmentsEnvironmentIdPostRequest,
-        requestOptions?: Flows.RequestOptions
+        requestOptions?: Flows.RequestOptions,
     ): Promise<Humanloop.FlowResponse> {
         const { versionId } = request;
         const _queryParams: Record<string, string | string[] | object | object[]> = {};
@@ -1009,14 +1009,14 @@ export class Flows {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
-                `flows/${encodeURIComponent(id)}/environments/${encodeURIComponent(environmentId)}`
+                `flows/${encodeURIComponent(id)}/environments/${encodeURIComponent(environmentId)}`,
             ),
             method: "POST",
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.8",
-                "User-Agent": "humanloop/0.8.8",
+                "X-Fern-SDK-Version": "0.8.8-beta1",
+                "User-Agent": "humanloop/0.8.8-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1048,7 +1048,7 @@ export class Flows {
                             allowUnrecognizedEnumValues: true,
                             skipValidation: true,
                             breadcrumbsPrefix: ["response"],
-                        })
+                        }),
                     );
                 default:
                     throw new errors.HumanloopError({
@@ -1091,19 +1091,19 @@ export class Flows {
     public async removeDeployment(
         id: string,
         environmentId: string,
-        requestOptions?: Flows.RequestOptions
+        requestOptions?: Flows.RequestOptions,
     ): Promise<void> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
-                `flows/${encodeURIComponent(id)}/environments/${encodeURIComponent(environmentId)}`
+                `flows/${encodeURIComponent(id)}/environments/${encodeURIComponent(environmentId)}`,
             ),
             method: "DELETE",
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.8",
-                "User-Agent": "humanloop/0.8.8",
+                "X-Fern-SDK-Version": "0.8.8-beta1",
+                "User-Agent": "humanloop/0.8.8-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1128,7 +1128,7 @@ export class Flows {
                             allowUnrecognizedEnumValues: true,
                             skipValidation: true,
                             breadcrumbsPrefix: ["response"],
-                        })
+                        }),
                     );
                 default:
                     throw new errors.HumanloopError({
@@ -1166,19 +1166,19 @@ export class Flows {
      */
     public async listEnvironments(
         id: string,
-        requestOptions?: Flows.RequestOptions
+        requestOptions?: Flows.RequestOptions,
     ): Promise<Humanloop.FileEnvironmentResponse[]> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
-                `flows/${encodeURIComponent(id)}/environments`
+                `flows/${encodeURIComponent(id)}/environments`,
             ),
             method: "GET",
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.8",
-                "User-Agent": "humanloop/0.8.8",
+                "X-Fern-SDK-Version": "0.8.8-beta1",
+                "User-Agent": "humanloop/0.8.8-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1209,7 +1209,7 @@ export class Flows {
                             allowUnrecognizedEnumValues: true,
                             skipValidation: true,
                             breadcrumbsPrefix: ["response"],
-                        })
+                        }),
                     );
                 default:
                     throw new errors.HumanloopError({
@@ -1256,19 +1256,19 @@ export class Flows {
     public async updateMonitoring(
         id: string,
         request: Humanloop.EvaluatorActivationDeactivationRequest,
-        requestOptions?: Flows.RequestOptions
+        requestOptions?: Flows.RequestOptions,
     ): Promise<Humanloop.FlowResponse> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
-                `flows/${encodeURIComponent(id)}/evaluators`
+                `flows/${encodeURIComponent(id)}/evaluators`,
             ),
             method: "POST",
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.8",
-                "User-Agent": "humanloop/0.8.8",
+                "X-Fern-SDK-Version": "0.8.8-beta1",
+                "User-Agent": "humanloop/0.8.8-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1302,7 +1302,7 @@ export class Flows {
                             allowUnrecognizedEnumValues: true,
                             skipValidation: true,
                             breadcrumbsPrefix: ["response"],
-                        })
+                        }),
                     );
                 default:
                     throw new errors.HumanloopError({

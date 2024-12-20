@@ -58,7 +58,7 @@ export class Logs {
      */
     public async list(
         request: Humanloop.ListLogsGetRequest,
-        requestOptions?: Logs.RequestOptions
+        requestOptions?: Logs.RequestOptions,
     ): Promise<core.Page<Humanloop.LogResponse>> {
         const list = async (request: Humanloop.ListLogsGetRequest): Promise<Humanloop.PaginatedDataLogResponse> => {
             const {
@@ -117,14 +117,14 @@ export class Logs {
             const _response = await (this._options.fetcher ?? core.fetcher)({
                 url: urlJoin(
                     (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
-                    "logs"
+                    "logs",
                 ),
                 method: "GET",
                 headers: {
                     "X-Fern-Language": "JavaScript",
                     "X-Fern-SDK-Name": "humanloop",
-                    "X-Fern-SDK-Version": "0.8.8",
-                    "User-Agent": "humanloop/0.8.8",
+                    "X-Fern-SDK-Version": "0.8.8-beta1",
+                    "User-Agent": "humanloop/0.8.8-beta1",
                     "X-Fern-Runtime": core.RUNTIME.type,
                     "X-Fern-Runtime-Version": core.RUNTIME.version,
                     ...(await this._getCustomAuthorizationHeaders()),
@@ -155,7 +155,7 @@ export class Logs {
                                 allowUnrecognizedEnumValues: true,
                                 skipValidation: true,
                                 breadcrumbsPrefix: ["response"],
-                            })
+                            }),
                         );
                     default:
                         throw new errors.HumanloopError({
@@ -205,7 +205,7 @@ export class Logs {
      */
     public async delete(
         request: Humanloop.LogsDeleteRequest = {},
-        requestOptions?: Logs.RequestOptions
+        requestOptions?: Logs.RequestOptions,
     ): Promise<void> {
         const { id } = request;
         const _queryParams: Record<string, string | string[] | object | object[]> = {};
@@ -220,14 +220,14 @@ export class Logs {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
-                "logs"
+                "logs",
             ),
             method: "DELETE",
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.8",
-                "User-Agent": "humanloop/0.8.8",
+                "X-Fern-SDK-Version": "0.8.8-beta1",
+                "User-Agent": "humanloop/0.8.8-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -253,7 +253,7 @@ export class Logs {
                             allowUnrecognizedEnumValues: true,
                             skipValidation: true,
                             breadcrumbsPrefix: ["response"],
-                        })
+                        }),
                     );
                 default:
                     throw new errors.HumanloopError({
@@ -293,14 +293,14 @@ export class Logs {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
-                `logs/${encodeURIComponent(id)}`
+                `logs/${encodeURIComponent(id)}`,
             ),
             method: "GET",
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.8",
-                "User-Agent": "humanloop/0.8.8",
+                "X-Fern-SDK-Version": "0.8.8-beta1",
+                "User-Agent": "humanloop/0.8.8-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -331,7 +331,7 @@ export class Logs {
                             allowUnrecognizedEnumValues: true,
                             skipValidation: true,
                             breadcrumbsPrefix: ["response"],
-                        })
+                        }),
                     );
                 default:
                     throw new errors.HumanloopError({

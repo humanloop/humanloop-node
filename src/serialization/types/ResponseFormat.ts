@@ -12,7 +12,7 @@ export const ResponseFormat: core.serialization.ObjectSchema<serializers.Respons
         type: ResponseFormatType,
         jsonSchema: core.serialization.property(
             "json_schema",
-            core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional()
+            core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
         ),
     });
 

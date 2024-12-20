@@ -46,7 +46,7 @@ export class Evaluators {
      */
     public async log(
         request: Humanloop.CreateEvaluatorLogRequest,
-        requestOptions?: Evaluators.RequestOptions
+        requestOptions?: Evaluators.RequestOptions,
     ): Promise<Humanloop.CreateEvaluatorLogResponse> {
         const { versionId, environment, ..._body } = request;
         const _queryParams: Record<string, string | string[] | object | object[]> = {};
@@ -61,14 +61,14 @@ export class Evaluators {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
-                "evaluators/log"
+                "evaluators/log",
             ),
             method: "POST",
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.8",
-                "User-Agent": "humanloop/0.8.8",
+                "X-Fern-SDK-Version": "0.8.8-beta1",
+                "User-Agent": "humanloop/0.8.8-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -101,7 +101,7 @@ export class Evaluators {
                             allowUnrecognizedEnumValues: true,
                             skipValidation: true,
                             breadcrumbsPrefix: ["response"],
-                        })
+                        }),
                     );
                 default:
                     throw new errors.HumanloopError({
@@ -141,10 +141,10 @@ export class Evaluators {
      */
     public async list(
         request: Humanloop.ListEvaluatorsGetRequest = {},
-        requestOptions?: Evaluators.RequestOptions
+        requestOptions?: Evaluators.RequestOptions,
     ): Promise<core.Page<Humanloop.EvaluatorResponse>> {
         const list = async (
-            request: Humanloop.ListEvaluatorsGetRequest
+            request: Humanloop.ListEvaluatorsGetRequest,
         ): Promise<Humanloop.PaginatedDataEvaluatorResponse> => {
             const { page, size, name, userFilter, sortBy, order } = request;
             const _queryParams: Record<string, string | string[] | object | object[]> = {};
@@ -169,14 +169,14 @@ export class Evaluators {
             const _response = await (this._options.fetcher ?? core.fetcher)({
                 url: urlJoin(
                     (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
-                    "evaluators"
+                    "evaluators",
                 ),
                 method: "GET",
                 headers: {
                     "X-Fern-Language": "JavaScript",
                     "X-Fern-SDK-Name": "humanloop",
-                    "X-Fern-SDK-Version": "0.8.8",
-                    "User-Agent": "humanloop/0.8.8",
+                    "X-Fern-SDK-Version": "0.8.8-beta1",
+                    "User-Agent": "humanloop/0.8.8-beta1",
                     "X-Fern-Runtime": core.RUNTIME.type,
                     "X-Fern-Runtime-Version": core.RUNTIME.version,
                     ...(await this._getCustomAuthorizationHeaders()),
@@ -207,7 +207,7 @@ export class Evaluators {
                                 allowUnrecognizedEnumValues: true,
                                 skipValidation: true,
                                 breadcrumbsPrefix: ["response"],
-                            })
+                            }),
                         );
                     default:
                         throw new errors.HumanloopError({
@@ -270,19 +270,19 @@ export class Evaluators {
      */
     public async upsert(
         request: Humanloop.EvaluatorRequest,
-        requestOptions?: Evaluators.RequestOptions
+        requestOptions?: Evaluators.RequestOptions,
     ): Promise<Humanloop.EvaluatorResponse> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
-                "evaluators"
+                "evaluators",
             ),
             method: "POST",
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.8",
-                "User-Agent": "humanloop/0.8.8",
+                "X-Fern-SDK-Version": "0.8.8-beta1",
+                "User-Agent": "humanloop/0.8.8-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -314,7 +314,7 @@ export class Evaluators {
                             allowUnrecognizedEnumValues: true,
                             skipValidation: true,
                             breadcrumbsPrefix: ["response"],
-                        })
+                        }),
                     );
                 default:
                     throw new errors.HumanloopError({
@@ -357,7 +357,7 @@ export class Evaluators {
     public async get(
         id: string,
         request: Humanloop.GetEvaluatorsIdGetRequest = {},
-        requestOptions?: Evaluators.RequestOptions
+        requestOptions?: Evaluators.RequestOptions,
     ): Promise<Humanloop.EvaluatorResponse> {
         const { versionId, environment } = request;
         const _queryParams: Record<string, string | string[] | object | object[]> = {};
@@ -372,14 +372,14 @@ export class Evaluators {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
-                `evaluators/${encodeURIComponent(id)}`
+                `evaluators/${encodeURIComponent(id)}`,
             ),
             method: "GET",
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.8",
-                "User-Agent": "humanloop/0.8.8",
+                "X-Fern-SDK-Version": "0.8.8-beta1",
+                "User-Agent": "humanloop/0.8.8-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -411,7 +411,7 @@ export class Evaluators {
                             allowUnrecognizedEnumValues: true,
                             skipValidation: true,
                             breadcrumbsPrefix: ["response"],
-                        })
+                        }),
                     );
                 default:
                     throw new errors.HumanloopError({
@@ -451,14 +451,14 @@ export class Evaluators {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
-                `evaluators/${encodeURIComponent(id)}`
+                `evaluators/${encodeURIComponent(id)}`,
             ),
             method: "DELETE",
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.8",
-                "User-Agent": "humanloop/0.8.8",
+                "X-Fern-SDK-Version": "0.8.8-beta1",
+                "User-Agent": "humanloop/0.8.8-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -483,7 +483,7 @@ export class Evaluators {
                             allowUnrecognizedEnumValues: true,
                             skipValidation: true,
                             breadcrumbsPrefix: ["response"],
-                        })
+                        }),
                     );
                 default:
                     throw new errors.HumanloopError({
@@ -525,19 +525,19 @@ export class Evaluators {
     public async move(
         id: string,
         request: Humanloop.UpdateEvaluatorRequest = {},
-        requestOptions?: Evaluators.RequestOptions
+        requestOptions?: Evaluators.RequestOptions,
     ): Promise<Humanloop.EvaluatorResponse> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
-                `evaluators/${encodeURIComponent(id)}`
+                `evaluators/${encodeURIComponent(id)}`,
             ),
             method: "PATCH",
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.8",
-                "User-Agent": "humanloop/0.8.8",
+                "X-Fern-SDK-Version": "0.8.8-beta1",
+                "User-Agent": "humanloop/0.8.8-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -569,7 +569,7 @@ export class Evaluators {
                             allowUnrecognizedEnumValues: true,
                             skipValidation: true,
                             breadcrumbsPrefix: ["response"],
-                        })
+                        }),
                     );
                 default:
                     throw new errors.HumanloopError({
@@ -609,7 +609,7 @@ export class Evaluators {
     public async listVersions(
         id: string,
         request: Humanloop.ListVersionsEvaluatorsIdVersionsGetRequest = {},
-        requestOptions?: Evaluators.RequestOptions
+        requestOptions?: Evaluators.RequestOptions,
     ): Promise<Humanloop.ListEvaluators> {
         const { status, evaluatorAggregates } = request;
         const _queryParams: Record<string, string | string[] | object | object[]> = {};
@@ -624,14 +624,14 @@ export class Evaluators {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
-                `evaluators/${encodeURIComponent(id)}/versions`
+                `evaluators/${encodeURIComponent(id)}/versions`,
             ),
             method: "GET",
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.8",
-                "User-Agent": "humanloop/0.8.8",
+                "X-Fern-SDK-Version": "0.8.8-beta1",
+                "User-Agent": "humanloop/0.8.8-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -663,7 +663,7 @@ export class Evaluators {
                             allowUnrecognizedEnumValues: true,
                             skipValidation: true,
                             breadcrumbsPrefix: ["response"],
-                        })
+                        }),
                     );
                 default:
                     throw new errors.HumanloopError({
@@ -709,19 +709,19 @@ export class Evaluators {
         id: string,
         versionId: string,
         request: Humanloop.CommitRequest,
-        requestOptions?: Evaluators.RequestOptions
+        requestOptions?: Evaluators.RequestOptions,
     ): Promise<Humanloop.EvaluatorResponse> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
-                `evaluators/${encodeURIComponent(id)}/versions/${encodeURIComponent(versionId)}/commit`
+                `evaluators/${encodeURIComponent(id)}/versions/${encodeURIComponent(versionId)}/commit`,
             ),
             method: "POST",
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.8",
-                "User-Agent": "humanloop/0.8.8",
+                "X-Fern-SDK-Version": "0.8.8-beta1",
+                "User-Agent": "humanloop/0.8.8-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -753,7 +753,7 @@ export class Evaluators {
                             allowUnrecognizedEnumValues: true,
                             skipValidation: true,
                             breadcrumbsPrefix: ["response"],
-                        })
+                        }),
                     );
                 default:
                     throw new errors.HumanloopError({
@@ -793,19 +793,19 @@ export class Evaluators {
     public async deleteEvaluatorVersion(
         id: string,
         versionId: string,
-        requestOptions?: Evaluators.RequestOptions
+        requestOptions?: Evaluators.RequestOptions,
     ): Promise<void> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
-                `evaluators/${encodeURIComponent(id)}/versions/${encodeURIComponent(versionId)}`
+                `evaluators/${encodeURIComponent(id)}/versions/${encodeURIComponent(versionId)}`,
             ),
             method: "DELETE",
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.8",
-                "User-Agent": "humanloop/0.8.8",
+                "X-Fern-SDK-Version": "0.8.8-beta1",
+                "User-Agent": "humanloop/0.8.8-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -830,7 +830,7 @@ export class Evaluators {
                             allowUnrecognizedEnumValues: true,
                             skipValidation: true,
                             breadcrumbsPrefix: ["response"],
-                        })
+                        }),
                     );
                 default:
                     throw new errors.HumanloopError({
@@ -877,7 +877,7 @@ export class Evaluators {
         id: string,
         environmentId: string,
         request: Humanloop.SetDeploymentEvaluatorsIdEnvironmentsEnvironmentIdPostRequest,
-        requestOptions?: Evaluators.RequestOptions
+        requestOptions?: Evaluators.RequestOptions,
     ): Promise<Humanloop.EvaluatorResponse> {
         const { versionId } = request;
         const _queryParams: Record<string, string | string[] | object | object[]> = {};
@@ -885,14 +885,14 @@ export class Evaluators {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
-                `evaluators/${encodeURIComponent(id)}/environments/${encodeURIComponent(environmentId)}`
+                `evaluators/${encodeURIComponent(id)}/environments/${encodeURIComponent(environmentId)}`,
             ),
             method: "POST",
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.8",
-                "User-Agent": "humanloop/0.8.8",
+                "X-Fern-SDK-Version": "0.8.8-beta1",
+                "User-Agent": "humanloop/0.8.8-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -924,7 +924,7 @@ export class Evaluators {
                             allowUnrecognizedEnumValues: true,
                             skipValidation: true,
                             breadcrumbsPrefix: ["response"],
-                        })
+                        }),
                     );
                 default:
                     throw new errors.HumanloopError({
@@ -967,19 +967,19 @@ export class Evaluators {
     public async removeDeployment(
         id: string,
         environmentId: string,
-        requestOptions?: Evaluators.RequestOptions
+        requestOptions?: Evaluators.RequestOptions,
     ): Promise<void> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
-                `evaluators/${encodeURIComponent(id)}/environments/${encodeURIComponent(environmentId)}`
+                `evaluators/${encodeURIComponent(id)}/environments/${encodeURIComponent(environmentId)}`,
             ),
             method: "DELETE",
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.8",
-                "User-Agent": "humanloop/0.8.8",
+                "X-Fern-SDK-Version": "0.8.8-beta1",
+                "User-Agent": "humanloop/0.8.8-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1004,7 +1004,7 @@ export class Evaluators {
                             allowUnrecognizedEnumValues: true,
                             skipValidation: true,
                             breadcrumbsPrefix: ["response"],
-                        })
+                        }),
                     );
                 default:
                     throw new errors.HumanloopError({
@@ -1042,19 +1042,19 @@ export class Evaluators {
      */
     public async listEnvironments(
         id: string,
-        requestOptions?: Evaluators.RequestOptions
+        requestOptions?: Evaluators.RequestOptions,
     ): Promise<Humanloop.FileEnvironmentResponse[]> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
-                `evaluators/${encodeURIComponent(id)}/environments`
+                `evaluators/${encodeURIComponent(id)}/environments`,
             ),
             method: "GET",
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.8",
-                "User-Agent": "humanloop/0.8.8",
+                "X-Fern-SDK-Version": "0.8.8-beta1",
+                "User-Agent": "humanloop/0.8.8-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1085,7 +1085,7 @@ export class Evaluators {
                             allowUnrecognizedEnumValues: true,
                             skipValidation: true,
                             breadcrumbsPrefix: ["response"],
-                        })
+                        }),
                     );
                 default:
                     throw new errors.HumanloopError({
@@ -1128,19 +1128,19 @@ export class Evaluators {
     public async updateMonitoring(
         id: string,
         request: Humanloop.EvaluatorActivationDeactivationRequest,
-        requestOptions?: Evaluators.RequestOptions
+        requestOptions?: Evaluators.RequestOptions,
     ): Promise<Humanloop.EvaluatorResponse> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
-                `evaluators/${encodeURIComponent(id)}/evaluators`
+                `evaluators/${encodeURIComponent(id)}/evaluators`,
             ),
             method: "POST",
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.8",
-                "User-Agent": "humanloop/0.8.8",
+                "X-Fern-SDK-Version": "0.8.8-beta1",
+                "User-Agent": "humanloop/0.8.8-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1174,7 +1174,7 @@ export class Evaluators {
                             allowUnrecognizedEnumValues: true,
                             skipValidation: true,
                             breadcrumbsPrefix: ["response"],
-                        })
+                        }),
                     );
                 default:
                     throw new errors.HumanloopError({

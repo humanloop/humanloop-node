@@ -19,11 +19,11 @@ export const ToolLogResponse: core.serialization.ObjectSchema<
     stdout: core.serialization.string().optional(),
     providerRequest: core.serialization.property(
         "provider_request",
-        core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional()
+        core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
     ),
     providerResponse: core.serialization.property(
         "provider_response",
-        core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional()
+        core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
     ),
     inputs: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
     source: core.serialization.string().optional(),
@@ -38,13 +38,13 @@ export const ToolLogResponse: core.serialization.ObjectSchema<
     id: core.serialization.string(),
     evaluatorLogs: core.serialization.property(
         "evaluator_logs",
-        core.serialization.list(core.serialization.lazyObject(() => serializers.EvaluatorLogResponse))
+        core.serialization.list(core.serialization.lazyObject(() => serializers.EvaluatorLogResponse)),
     ),
     traceFlowId: core.serialization.property("trace_flow_id", core.serialization.string().optional()),
     traceId: core.serialization.property("trace_id", core.serialization.string().optional()),
     traceChildren: core.serialization.property(
         "trace_children",
-        core.serialization.list(core.serialization.lazy(() => serializers.LogResponse)).optional()
+        core.serialization.list(core.serialization.lazy(() => serializers.LogResponse)).optional(),
     ),
     tool: core.serialization.lazyObject(() => serializers.ToolResponse),
 });

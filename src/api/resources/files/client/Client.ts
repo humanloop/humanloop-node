@@ -42,7 +42,7 @@ export class Files {
      */
     public async list(
         request: Humanloop.FilesListRequest = {},
-        requestOptions?: Files.RequestOptions
+        requestOptions?: Files.RequestOptions,
     ): Promise<Humanloop.PaginatedDataUnionPromptResponseToolResponseDatasetResponseEvaluatorResponseFlowResponse> {
         const { page, size, name, type: type_, environment, sortBy, order } = request;
         const _queryParams: Record<string, string | string[] | object | object[]> = {};
@@ -81,14 +81,14 @@ export class Files {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
-                "files"
+                "files",
             ),
             method: "GET",
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.8",
-                "User-Agent": "humanloop/0.8.8",
+                "X-Fern-SDK-Version": "0.8.8-beta1",
+                "User-Agent": "humanloop/0.8.8-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -109,7 +109,7 @@ export class Files {
                     allowUnrecognizedEnumValues: true,
                     skipValidation: true,
                     breadcrumbsPrefix: ["response"],
-                }
+                },
             );
         }
 
@@ -123,7 +123,7 @@ export class Files {
                             allowUnrecognizedEnumValues: true,
                             skipValidation: true,
                             breadcrumbsPrefix: ["response"],
-                        })
+                        }),
                     );
                 default:
                     throw new errors.HumanloopError({

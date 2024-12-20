@@ -32,7 +32,7 @@ export const PromptRequest: core.serialization.Schema<serializers.PromptRequest.
         tools: core.serialization.list(ToolFunction).optional(),
         linkedTools: core.serialization.property(
             "linked_tools",
-            core.serialization.list(core.serialization.string()).optional()
+            core.serialization.list(core.serialization.string()).optional(),
         ),
         attributes: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
         commitMessage: core.serialization.property("commit_message", core.serialization.string().optional()),

@@ -14,7 +14,7 @@ export const OverallStats: core.serialization.ObjectSchema<serializers.OverallSt
         totalHumanEvaluatorLogs: core.serialization.property("total_human_evaluator_logs", core.serialization.number()),
         totalCompletedHumanEvaluatorLogs: core.serialization.property(
             "total_completed_human_evaluator_logs",
-            core.serialization.number()
+            core.serialization.number(),
         ),
     });
 

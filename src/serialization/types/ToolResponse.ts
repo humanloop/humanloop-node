@@ -22,7 +22,7 @@ export const ToolResponse: core.serialization.ObjectSchema<serializers.ToolRespo
         sourceCode: core.serialization.property("source_code", core.serialization.string().optional()),
         setupValues: core.serialization.property(
             "setup_values",
-            core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional()
+            core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
         ),
         attributes: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
         toolType: core.serialization.property("tool_type", FilesToolType.optional()),
@@ -47,7 +47,7 @@ export const ToolResponse: core.serialization.ObjectSchema<serializers.ToolRespo
         signature: core.serialization.string().optional(),
         evaluatorAggregates: core.serialization.property(
             "evaluator_aggregates",
-            core.serialization.list(EvaluatorAggregate).optional()
+            core.serialization.list(EvaluatorAggregate).optional(),
         ),
     });
 

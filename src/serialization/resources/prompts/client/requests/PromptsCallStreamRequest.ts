@@ -29,7 +29,7 @@ export const PromptsCallStreamRequest: core.serialization.Schema<
     user: core.serialization.string().optional(),
     promptsCallStreamRequestEnvironment: core.serialization.property(
         "environment",
-        core.serialization.string().optional()
+        core.serialization.string().optional(),
     ),
     save: core.serialization.boolean().optional(),
     logId: core.serialization.property("log_id", core.serialization.string().optional()),

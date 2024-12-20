@@ -16,7 +16,7 @@ export const EvaluationLogResponse: core.serialization.ObjectSchema<
     log: core.serialization.lazy(() => serializers.LogResponse),
     evaluatorLogs: core.serialization.property(
         "evaluator_logs",
-        core.serialization.list(core.serialization.lazy(() => serializers.LogResponse))
+        core.serialization.list(core.serialization.lazy(() => serializers.LogResponse)),
     ),
 });
 

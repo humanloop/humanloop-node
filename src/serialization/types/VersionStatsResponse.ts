@@ -16,7 +16,7 @@ export const VersionStatsResponse: core.serialization.ObjectSchema<
     numLogs: core.serialization.property("num_logs", core.serialization.number()),
     evaluatorVersionStats: core.serialization.property(
         "evaluator_version_stats",
-        core.serialization.list(VersionStatsResponseEvaluatorVersionStatsItem)
+        core.serialization.list(VersionStatsResponseEvaluatorVersionStatsItem),
     ),
 });
 

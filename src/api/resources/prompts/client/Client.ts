@@ -102,7 +102,7 @@ export class Prompts {
      */
     public async log(
         request: Humanloop.PromptLogRequest = {},
-        requestOptions?: Prompts.RequestOptions
+        requestOptions?: Prompts.RequestOptions,
     ): Promise<Humanloop.CreatePromptLogResponse> {
         const { versionId, environment, ..._body } = request;
         const _queryParams: Record<string, string | string[] | object | object[]> = {};
@@ -117,14 +117,14 @@ export class Prompts {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
-                "prompts/log"
+                "prompts/log",
             ),
             method: "POST",
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.8",
-                "User-Agent": "humanloop/0.8.8",
+                "X-Fern-SDK-Version": "0.8.8-beta1",
+                "User-Agent": "humanloop/0.8.8-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -157,7 +157,7 @@ export class Prompts {
                             allowUnrecognizedEnumValues: true,
                             skipValidation: true,
                             breadcrumbsPrefix: ["response"],
-                        })
+                        }),
                     );
                 default:
                     throw new errors.HumanloopError({
@@ -201,19 +201,19 @@ export class Prompts {
         id: string,
         logId: string,
         request: Humanloop.PromptLogUpdateRequest = {},
-        requestOptions?: Prompts.RequestOptions
+        requestOptions?: Prompts.RequestOptions,
     ): Promise<Humanloop.LogResponse> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
-                `prompts/${encodeURIComponent(id)}/log/${encodeURIComponent(logId)}`
+                `prompts/${encodeURIComponent(id)}/log/${encodeURIComponent(logId)}`,
             ),
             method: "PATCH",
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.8",
-                "User-Agent": "humanloop/0.8.8",
+                "X-Fern-SDK-Version": "0.8.8-beta1",
+                "User-Agent": "humanloop/0.8.8-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -245,7 +245,7 @@ export class Prompts {
                             allowUnrecognizedEnumValues: true,
                             skipValidation: true,
                             breadcrumbsPrefix: ["response"],
-                        })
+                        }),
                     );
                 default:
                     throw new errors.HumanloopError({
@@ -286,7 +286,7 @@ export class Prompts {
      */
     public async callStream(
         request: Humanloop.PromptsCallStreamRequest,
-        requestOptions?: Prompts.RequestOptions
+        requestOptions?: Prompts.RequestOptions,
     ): Promise<core.Stream<Humanloop.PromptCallStreamResponse>> {
         const { versionId, environment, ..._body } = request;
         const _queryParams: Record<string, string | string[] | object | object[]> = {};
@@ -301,14 +301,14 @@ export class Prompts {
         const _response = await (this._options.fetcher ?? core.fetcher)<stream.Readable>({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
-                "prompts/call"
+                "prompts/call",
             ),
             method: "POST",
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.8",
-                "User-Agent": "humanloop/0.8.8",
+                "X-Fern-SDK-Version": "0.8.8-beta1",
+                "User-Agent": "humanloop/0.8.8-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -355,7 +355,7 @@ export class Prompts {
                             allowUnrecognizedEnumValues: true,
                             skipValidation: true,
                             breadcrumbsPrefix: ["response"],
-                        })
+                        }),
                     );
                 default:
                     throw new errors.HumanloopError({
@@ -464,7 +464,7 @@ export class Prompts {
      */
     public async call(
         request: Humanloop.PromptsCallRequest,
-        requestOptions?: Prompts.RequestOptions
+        requestOptions?: Prompts.RequestOptions,
     ): Promise<Humanloop.PromptCallResponse> {
         const { versionId, environment, ..._body } = request;
         const _queryParams: Record<string, string | string[] | object | object[]> = {};
@@ -479,14 +479,14 @@ export class Prompts {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
-                "prompts/call"
+                "prompts/call",
             ),
             method: "POST",
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.8",
-                "User-Agent": "humanloop/0.8.8",
+                "X-Fern-SDK-Version": "0.8.8-beta1",
+                "User-Agent": "humanloop/0.8.8-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -522,7 +522,7 @@ export class Prompts {
                             allowUnrecognizedEnumValues: true,
                             skipValidation: true,
                             breadcrumbsPrefix: ["response"],
-                        })
+                        }),
                     );
                 default:
                     throw new errors.HumanloopError({
@@ -562,10 +562,10 @@ export class Prompts {
      */
     public async list(
         request: Humanloop.ListPromptsGetRequest = {},
-        requestOptions?: Prompts.RequestOptions
+        requestOptions?: Prompts.RequestOptions,
     ): Promise<core.Page<Humanloop.PromptResponse>> {
         const list = async (
-            request: Humanloop.ListPromptsGetRequest
+            request: Humanloop.ListPromptsGetRequest,
         ): Promise<Humanloop.PaginatedDataPromptResponse> => {
             const { page, size, name, userFilter, sortBy, order } = request;
             const _queryParams: Record<string, string | string[] | object | object[]> = {};
@@ -590,14 +590,14 @@ export class Prompts {
             const _response = await (this._options.fetcher ?? core.fetcher)({
                 url: urlJoin(
                     (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
-                    "prompts"
+                    "prompts",
                 ),
                 method: "GET",
                 headers: {
                     "X-Fern-Language": "JavaScript",
                     "X-Fern-SDK-Name": "humanloop",
-                    "X-Fern-SDK-Version": "0.8.8",
-                    "User-Agent": "humanloop/0.8.8",
+                    "X-Fern-SDK-Version": "0.8.8-beta1",
+                    "User-Agent": "humanloop/0.8.8-beta1",
                     "X-Fern-Runtime": core.RUNTIME.type,
                     "X-Fern-Runtime-Version": core.RUNTIME.version,
                     ...(await this._getCustomAuthorizationHeaders()),
@@ -628,7 +628,7 @@ export class Prompts {
                                 allowUnrecognizedEnumValues: true,
                                 skipValidation: true,
                                 breadcrumbsPrefix: ["response"],
-                            })
+                            }),
                         );
                     default:
                         throw new errors.HumanloopError({
@@ -689,30 +689,24 @@ export class Prompts {
      *         provider: "openai",
      *         maxTokens: -1,
      *         temperature: 0.7,
-     *         topP: 1,
-     *         presencePenalty: 0,
-     *         frequencyPenalty: 0,
-     *         other: {},
-     *         tools: [],
-     *         linkedTools: [],
      *         commitMessage: "Initial commit"
      *     })
      */
     public async upsert(
         request: Humanloop.PromptRequest,
-        requestOptions?: Prompts.RequestOptions
+        requestOptions?: Prompts.RequestOptions,
     ): Promise<Humanloop.PromptResponse> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
-                "prompts"
+                "prompts",
             ),
             method: "POST",
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.8",
-                "User-Agent": "humanloop/0.8.8",
+                "X-Fern-SDK-Version": "0.8.8-beta1",
+                "User-Agent": "humanloop/0.8.8-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -744,7 +738,7 @@ export class Prompts {
                             allowUnrecognizedEnumValues: true,
                             skipValidation: true,
                             breadcrumbsPrefix: ["response"],
-                        })
+                        }),
                     );
                 default:
                     throw new errors.HumanloopError({
@@ -787,7 +781,7 @@ export class Prompts {
     public async get(
         id: string,
         request: Humanloop.GetPromptsIdGetRequest = {},
-        requestOptions?: Prompts.RequestOptions
+        requestOptions?: Prompts.RequestOptions,
     ): Promise<Humanloop.PromptResponse> {
         const { versionId, environment } = request;
         const _queryParams: Record<string, string | string[] | object | object[]> = {};
@@ -802,14 +796,14 @@ export class Prompts {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
-                `prompts/${encodeURIComponent(id)}`
+                `prompts/${encodeURIComponent(id)}`,
             ),
             method: "GET",
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.8",
-                "User-Agent": "humanloop/0.8.8",
+                "X-Fern-SDK-Version": "0.8.8-beta1",
+                "User-Agent": "humanloop/0.8.8-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -841,7 +835,7 @@ export class Prompts {
                             allowUnrecognizedEnumValues: true,
                             skipValidation: true,
                             breadcrumbsPrefix: ["response"],
-                        })
+                        }),
                     );
                 default:
                     throw new errors.HumanloopError({
@@ -881,14 +875,14 @@ export class Prompts {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
-                `prompts/${encodeURIComponent(id)}`
+                `prompts/${encodeURIComponent(id)}`,
             ),
             method: "DELETE",
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.8",
-                "User-Agent": "humanloop/0.8.8",
+                "X-Fern-SDK-Version": "0.8.8-beta1",
+                "User-Agent": "humanloop/0.8.8-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -913,7 +907,7 @@ export class Prompts {
                             allowUnrecognizedEnumValues: true,
                             skipValidation: true,
                             breadcrumbsPrefix: ["response"],
-                        })
+                        }),
                     );
                 default:
                     throw new errors.HumanloopError({
@@ -955,19 +949,19 @@ export class Prompts {
     public async move(
         id: string,
         request: Humanloop.UpdatePromptRequest = {},
-        requestOptions?: Prompts.RequestOptions
+        requestOptions?: Prompts.RequestOptions,
     ): Promise<Humanloop.PromptResponse> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
-                `prompts/${encodeURIComponent(id)}`
+                `prompts/${encodeURIComponent(id)}`,
             ),
             method: "PATCH",
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.8",
-                "User-Agent": "humanloop/0.8.8",
+                "X-Fern-SDK-Version": "0.8.8-beta1",
+                "User-Agent": "humanloop/0.8.8-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -999,7 +993,7 @@ export class Prompts {
                             allowUnrecognizedEnumValues: true,
                             skipValidation: true,
                             breadcrumbsPrefix: ["response"],
-                        })
+                        }),
                     );
                 default:
                     throw new errors.HumanloopError({
@@ -1041,7 +1035,7 @@ export class Prompts {
     public async listVersions(
         id: string,
         request: Humanloop.ListVersionsPromptsIdVersionsGetRequest = {},
-        requestOptions?: Prompts.RequestOptions
+        requestOptions?: Prompts.RequestOptions,
     ): Promise<Humanloop.ListPrompts> {
         const { status, evaluatorAggregates } = request;
         const _queryParams: Record<string, string | string[] | object | object[]> = {};
@@ -1056,14 +1050,14 @@ export class Prompts {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
-                `prompts/${encodeURIComponent(id)}/versions`
+                `prompts/${encodeURIComponent(id)}/versions`,
             ),
             method: "GET",
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.8",
-                "User-Agent": "humanloop/0.8.8",
+                "X-Fern-SDK-Version": "0.8.8-beta1",
+                "User-Agent": "humanloop/0.8.8-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1095,7 +1089,7 @@ export class Prompts {
                             allowUnrecognizedEnumValues: true,
                             skipValidation: true,
                             breadcrumbsPrefix: ["response"],
-                        })
+                        }),
                     );
                 default:
                     throw new errors.HumanloopError({
@@ -1141,19 +1135,19 @@ export class Prompts {
         id: string,
         versionId: string,
         request: Humanloop.CommitRequest,
-        requestOptions?: Prompts.RequestOptions
+        requestOptions?: Prompts.RequestOptions,
     ): Promise<Humanloop.PromptResponse> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
-                `prompts/${encodeURIComponent(id)}/versions/${encodeURIComponent(versionId)}/commit`
+                `prompts/${encodeURIComponent(id)}/versions/${encodeURIComponent(versionId)}/commit`,
             ),
             method: "POST",
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.8",
-                "User-Agent": "humanloop/0.8.8",
+                "X-Fern-SDK-Version": "0.8.8-beta1",
+                "User-Agent": "humanloop/0.8.8-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1185,7 +1179,7 @@ export class Prompts {
                             allowUnrecognizedEnumValues: true,
                             skipValidation: true,
                             breadcrumbsPrefix: ["response"],
-                        })
+                        }),
                     );
                 default:
                     throw new errors.HumanloopError({
@@ -1225,19 +1219,19 @@ export class Prompts {
     public async deletePromptVersion(
         id: string,
         versionId: string,
-        requestOptions?: Prompts.RequestOptions
+        requestOptions?: Prompts.RequestOptions,
     ): Promise<void> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
-                `prompts/${encodeURIComponent(id)}/versions/${encodeURIComponent(versionId)}`
+                `prompts/${encodeURIComponent(id)}/versions/${encodeURIComponent(versionId)}`,
             ),
             method: "DELETE",
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.8",
-                "User-Agent": "humanloop/0.8.8",
+                "X-Fern-SDK-Version": "0.8.8-beta1",
+                "User-Agent": "humanloop/0.8.8-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1262,7 +1256,7 @@ export class Prompts {
                             allowUnrecognizedEnumValues: true,
                             skipValidation: true,
                             breadcrumbsPrefix: ["response"],
-                        })
+                        }),
                     );
                 default:
                     throw new errors.HumanloopError({
@@ -1309,7 +1303,7 @@ export class Prompts {
         id: string,
         environmentId: string,
         request: Humanloop.SetDeploymentPromptsIdEnvironmentsEnvironmentIdPostRequest,
-        requestOptions?: Prompts.RequestOptions
+        requestOptions?: Prompts.RequestOptions,
     ): Promise<Humanloop.PromptResponse> {
         const { versionId } = request;
         const _queryParams: Record<string, string | string[] | object | object[]> = {};
@@ -1317,14 +1311,14 @@ export class Prompts {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
-                `prompts/${encodeURIComponent(id)}/environments/${encodeURIComponent(environmentId)}`
+                `prompts/${encodeURIComponent(id)}/environments/${encodeURIComponent(environmentId)}`,
             ),
             method: "POST",
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.8",
-                "User-Agent": "humanloop/0.8.8",
+                "X-Fern-SDK-Version": "0.8.8-beta1",
+                "User-Agent": "humanloop/0.8.8-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1356,7 +1350,7 @@ export class Prompts {
                             allowUnrecognizedEnumValues: true,
                             skipValidation: true,
                             breadcrumbsPrefix: ["response"],
-                        })
+                        }),
                     );
                 default:
                     throw new errors.HumanloopError({
@@ -1399,19 +1393,19 @@ export class Prompts {
     public async removeDeployment(
         id: string,
         environmentId: string,
-        requestOptions?: Prompts.RequestOptions
+        requestOptions?: Prompts.RequestOptions,
     ): Promise<void> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
-                `prompts/${encodeURIComponent(id)}/environments/${encodeURIComponent(environmentId)}`
+                `prompts/${encodeURIComponent(id)}/environments/${encodeURIComponent(environmentId)}`,
             ),
             method: "DELETE",
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.8",
-                "User-Agent": "humanloop/0.8.8",
+                "X-Fern-SDK-Version": "0.8.8-beta1",
+                "User-Agent": "humanloop/0.8.8-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1436,7 +1430,7 @@ export class Prompts {
                             allowUnrecognizedEnumValues: true,
                             skipValidation: true,
                             breadcrumbsPrefix: ["response"],
-                        })
+                        }),
                     );
                 default:
                     throw new errors.HumanloopError({
@@ -1474,19 +1468,19 @@ export class Prompts {
      */
     public async listEnvironments(
         id: string,
-        requestOptions?: Prompts.RequestOptions
+        requestOptions?: Prompts.RequestOptions,
     ): Promise<Humanloop.FileEnvironmentResponse[]> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
-                `prompts/${encodeURIComponent(id)}/environments`
+                `prompts/${encodeURIComponent(id)}/environments`,
             ),
             method: "GET",
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.8",
-                "User-Agent": "humanloop/0.8.8",
+                "X-Fern-SDK-Version": "0.8.8-beta1",
+                "User-Agent": "humanloop/0.8.8-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1517,7 +1511,7 @@ export class Prompts {
                             allowUnrecognizedEnumValues: true,
                             skipValidation: true,
                             breadcrumbsPrefix: ["response"],
-                        })
+                        }),
                     );
                 default:
                     throw new errors.HumanloopError({
@@ -1564,19 +1558,19 @@ export class Prompts {
     public async updateMonitoring(
         id: string,
         request: Humanloop.EvaluatorActivationDeactivationRequest,
-        requestOptions?: Prompts.RequestOptions
+        requestOptions?: Prompts.RequestOptions,
     ): Promise<Humanloop.PromptResponse> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
-                `prompts/${encodeURIComponent(id)}/evaluators`
+                `prompts/${encodeURIComponent(id)}/evaluators`,
             ),
             method: "POST",
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.8",
-                "User-Agent": "humanloop/0.8.8",
+                "X-Fern-SDK-Version": "0.8.8-beta1",
+                "User-Agent": "humanloop/0.8.8-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1610,7 +1604,7 @@ export class Prompts {
                             allowUnrecognizedEnumValues: true,
                             skipValidation: true,
                             breadcrumbsPrefix: ["response"],
-                        })
+                        }),
                     );
                 default:
                     throw new errors.HumanloopError({

@@ -27,11 +27,11 @@ export const FlowLogRequest: core.serialization.Schema<
     stdout: core.serialization.string().optional(),
     providerRequest: core.serialization.property(
         "provider_request",
-        core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional()
+        core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
     ),
     providerResponse: core.serialization.property(
         "provider_response",
-        core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional()
+        core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
     ),
     inputs: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
     source: core.serialization.string().optional(),

@@ -4,7 +4,7 @@ const DEFAULT_MAX_RETRIES = 2;
 
 export async function requestWithRetries(
     requestFn: () => Promise<Response>,
-    maxRetries: number = DEFAULT_MAX_RETRIES
+    maxRetries: number = DEFAULT_MAX_RETRIES,
 ): Promise<Response> {
     let response: Response = await requestFn();
 

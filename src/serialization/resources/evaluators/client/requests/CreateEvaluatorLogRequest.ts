@@ -23,11 +23,11 @@ export const CreateEvaluatorLogRequest: core.serialization.Schema<
     stdout: core.serialization.string().optional(),
     providerRequest: core.serialization.property(
         "provider_request",
-        core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional()
+        core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
     ),
     providerResponse: core.serialization.property(
         "provider_response",
-        core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional()
+        core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
     ),
     inputs: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
     source: core.serialization.string().optional(),
@@ -38,7 +38,7 @@ export const CreateEvaluatorLogRequest: core.serialization.Schema<
     user: core.serialization.string().optional(),
     createEvaluatorLogRequestEnvironment: core.serialization.property(
         "environment",
-        core.serialization.string().optional()
+        core.serialization.string().optional(),
     ),
     save: core.serialization.boolean().optional(),
     logId: core.serialization.property("log_id", core.serialization.string().optional()),
