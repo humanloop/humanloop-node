@@ -31,7 +31,7 @@ export const FlowResponse: core.serialization.ObjectSchema<serializers.FlowRespo
         versionLogsCount: core.serialization.property("version_logs_count", core.serialization.number()),
         evaluatorAggregates: core.serialization.property(
             "evaluator_aggregates",
-            core.serialization.list(EvaluatorAggregate).optional()
+            core.serialization.list(EvaluatorAggregate).optional(),
         ),
         evaluators: core.serialization
             .list(core.serialization.lazyObject(() => serializers.MonitoringEvaluatorResponse))

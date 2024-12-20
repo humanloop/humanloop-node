@@ -12,7 +12,7 @@ export const PaginatedDataUnionPromptResponseToolResponseDatasetResponseEvaluato
     Humanloop.PaginatedDataUnionPromptResponseToolResponseDatasetResponseEvaluatorResponseFlowResponse
 > = core.serialization.object({
     records: core.serialization.list(
-        PaginatedDataUnionPromptResponseToolResponseDatasetResponseEvaluatorResponseFlowResponseRecordsItem
+        PaginatedDataUnionPromptResponseToolResponseDatasetResponseEvaluatorResponseFlowResponseRecordsItem,
     ),
     page: core.serialization.number(),
     size: core.serialization.number(),

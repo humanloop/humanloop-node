@@ -40,7 +40,7 @@ export const EvaluatorResponse: core.serialization.ObjectSchema<
         .optional(),
     evaluatorAggregates: core.serialization.property(
         "evaluator_aggregates",
-        core.serialization.list(EvaluatorAggregate).optional()
+        core.serialization.list(EvaluatorAggregate).optional(),
     ),
     attributes: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
 });

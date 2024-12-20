@@ -15,7 +15,7 @@ export const DashboardConfiguration: core.serialization.ObjectSchema<
     timeRangeDays: core.serialization.property("time_range_days", core.serialization.number()),
     modelConfigIds: core.serialization.property(
         "model_config_ids",
-        core.serialization.list(core.serialization.string())
+        core.serialization.list(core.serialization.string()),
     ),
 });
 

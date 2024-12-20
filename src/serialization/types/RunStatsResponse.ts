@@ -18,7 +18,7 @@ export const RunStatsResponse: core.serialization.ObjectSchema<
     numLogs: core.serialization.property("num_logs", core.serialization.number()),
     evaluatorStats: core.serialization.property(
         "evaluator_stats",
-        core.serialization.list(RunStatsResponseEvaluatorStatsItem)
+        core.serialization.list(RunStatsResponseEvaluatorStatsItem),
     ),
     status: EvaluationStatus,
 });

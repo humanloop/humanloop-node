@@ -39,7 +39,7 @@ export const PromptResponse: core.serialization.ObjectSchema<serializers.PromptR
         tools: core.serialization.list(ToolFunction).optional(),
         linkedTools: core.serialization.property(
             "linked_tools",
-            core.serialization.list(LinkedToolResponse).optional()
+            core.serialization.list(LinkedToolResponse).optional(),
         ),
         attributes: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
         commitMessage: core.serialization.property("commit_message", core.serialization.string().optional()),
@@ -62,7 +62,7 @@ export const PromptResponse: core.serialization.ObjectSchema<serializers.PromptR
             .optional(),
         evaluatorAggregates: core.serialization.property(
             "evaluator_aggregates",
-            core.serialization.list(EvaluatorAggregate).optional()
+            core.serialization.list(EvaluatorAggregate).optional(),
         ),
     });
 

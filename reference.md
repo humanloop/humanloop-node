@@ -555,12 +555,6 @@ await client.prompts.upsert({
     provider: "openai",
     maxTokens: -1,
     temperature: 0.7,
-    topP: 1,
-    presencePenalty: 0,
-    frequencyPenalty: 0,
-    other: {},
-    tools: [],
-    linkedTools: [],
     commitMessage: "Initial commit",
 });
 ```

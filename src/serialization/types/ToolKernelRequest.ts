@@ -15,7 +15,7 @@ export const ToolKernelRequest: core.serialization.ObjectSchema<
     sourceCode: core.serialization.property("source_code", core.serialization.string().optional()),
     setupValues: core.serialization.property(
         "setup_values",
-        core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional()
+        core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
     ),
     attributes: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
 });

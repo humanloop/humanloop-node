@@ -17,7 +17,7 @@ export const SelectEvaluatorStatsResponse: core.serialization.ObjectSchema<
     numErrors: core.serialization.property("num_errors", core.serialization.number()),
     numJudgmentsPerOption: core.serialization.property(
         "num_judgments_per_option",
-        core.serialization.record(core.serialization.string(), core.serialization.number())
+        core.serialization.record(core.serialization.string(), core.serialization.number()),
     ),
 });
 

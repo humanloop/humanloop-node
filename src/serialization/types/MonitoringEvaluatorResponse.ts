@@ -13,7 +13,7 @@ export const MonitoringEvaluatorResponse: core.serialization.ObjectSchema<
 > = core.serialization.object({
     versionReference: core.serialization.property(
         "version_reference",
-        core.serialization.lazy(() => serializers.VersionReferenceResponse)
+        core.serialization.lazy(() => serializers.VersionReferenceResponse),
     ),
     version: core.serialization.lazyObject(() => serializers.EvaluatorResponse).optional(),
     state: MonitoringEvaluatorState,
