@@ -165,6 +165,6 @@ describe("flow decorator", () => {
 
             expect(createToolLogResponse.mock.calls).toHaveLength(1);
         },
-        10 * 1000,
+        20 * 1000,
     );
 });

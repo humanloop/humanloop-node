@@ -12,10 +12,10 @@ import {
     HUMANLOOP_FILE_KEY,
     HUMANLOOP_FILE_TYPE_KEY,
     HUMANLOOP_LOG_KEY,
+    HUMANLOOP_META_FUNCTION_NAME,
     HUMANLOOP_PARENT_SPAN_CTX_KEY,
     HUMANLOOP_PATH_KEY,
     HUMANLOOP_TRACE_FLOW_CTX_KEY,
-    HUMANLOOP_WRAPPED_FUNCTION_NAME,
 } from "../otel/constants";
 import { ToolCallableType } from "./types";
 
@@ -78,7 +78,7 @@ export function toolUtilityFactory<I, O>(
             // Add span attributes
             span.setAttribute(HUMANLOOP_PATH_KEY, path || func.name);
             span.setAttribute(HUMANLOOP_FILE_TYPE_KEY, "tool");
-            span = span.setAttribute(HUMANLOOP_WRAPPED_FUNCTION_NAME, func.name);
+            span = span.setAttribute(HUMANLOOP_META_FUNCTION_NAME, func.name);
 
             // @ts-ignore
             // Execute the wrapped function in the appropriate context
@@ -143,8 +143,9 @@ function validateArgumentsAgainstSchema(toolKernel: ToolKernelRequest, inputs?: 
         if (inputs === undefined) {
             return;
         }
+        console.log("BAI", parameters);
         throw new Error(
-            `Tool function ${toolKernel.function?.name} received inputs when the JSON schema defines none.`,
+            `Tool function ${toolKernel.function?.name} received inputs when the JSON schema defines none`,
         );
     }
 

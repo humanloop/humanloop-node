@@ -1,9 +1,11 @@
 import { Validator } from "jsonschema";
+import { add } from "lodash";
 
 import {
     HUMANLOOP_FILE_KEY,
     HUMANLOOP_FILE_TYPE_KEY,
     HUMANLOOP_LOG_KEY,
+    HUMANLOOP_META_FUNCTION_NAME,
     readFromOpenTelemetrySpan,
 } from "../../src/otel";
 import { toolUtilityFactory } from "../../src/utilities/tool";
@@ -57,9 +59,14 @@ describe("tool decorator", () => {
                     description: "Perform arithmetic operations on two numbers.",
                     strict: true,
                     parameters: {
-                        operation: "string",
-                        num1: "number",
-                        num2: "number",
+                        type: "object",
+                        required: ["operation", "num1", "num2"],
+                        additionalProperties: false,
+                        properties: {
+                            operation: { type: "string" },
+                            num1: { type: "number" },
+                            num2: { type: "number" },
+                        },
                     },
                 },
             },
@@ -83,9 +90,14 @@ describe("tool decorator", () => {
                     description: "Perform arithmetic operations on two numbers.",
                     strict: true,
                     parameters: {
-                        operation: "string",
-                        num1: "number",
-                        num2: "number",
+                        type: "object",
+                        required: ["operation", "num1", "num2"],
+                        additionalProperties: false,
+                        properties: {
+                            operation: { type: "string" },
+                            num1: { type: "number" },
+                            num2: { type: "number" },
+                        },
                     },
                 },
             },
@@ -103,12 +115,18 @@ describe("tool decorator", () => {
             name: "calculator",
             description: "Perform arithmetic operations on two numbers.",
             parameters: {
-                operation: "string",
-                num1: "number",
-                num2: "number",
+                type: "object",
+                required: ["operation", "num1", "num2"],
+                additionalProperties: false,
+                properties: {
+                    operation: { type: "string" },
+                    num1: { type: "number" },
+                    num2: { type: "number" },
+                },
             },
             strict: true,
         });
+        expect(span.attributes[HUMANLOOP_META_FUNCTION_NAME] === "calculator");
         // @ts-ignore
         new Validator().validate(log, calculatorDecorated.jsonSchema);
     });
@@ -144,8 +162,13 @@ describe("tool decorator", () => {
                     description: "Add two numbers.",
                     strict: true,
                     parameters: {
-                        a: "number",
-                        b: "number",
+                        type: "object",
+                        required: ["a", "b"],
+                        properties: {
+                            a: { type: "number" },
+                            b: { type: "number" },
+                        },
+                        additionalProperties: false,
                     },
                 },
             },

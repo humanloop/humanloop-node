@@ -128,6 +128,11 @@ describe("prompt decorator", () => {
                 { provider, model },
                 callLLMMessages() as Humanloop.ChatMessage[],
             );
+
+            // The HLProcessor contains waits for Instrumentor spans to enrich
+            // the parent HL Spans in an async manner
+            await new Promise((resolve) => setTimeout(resolve, 1000));
+
             const spans = exporter.getFinishedSpans();
             expect(spans.length).toBe(2);
             expect(isHumanloopSpan(spans[0])).toBeFalsy();
@@ -147,6 +152,10 @@ describe("prompt decorator", () => {
                 { provider, model },
                 callLLMMessages() as Humanloop.ChatMessage[],
             );
+
+            // The HLProcessor contains waits for Instrumentor spans to enrich
+            // the parent HL Spans in an async manner
+            await new Promise((resolve) => setTimeout(resolve, 1000));
 
             const spans = exporter.getFinishedSpans();
             expect(spans.length).toBe(2);
@@ -180,6 +189,10 @@ describe("prompt decorator", () => {
                 { provider, model },
                 callLLMMessages() as Humanloop.ChatMessage[],
             );
+
+            // The HLProcessor contains waits for Instrumentor spans to enrich
+            // the parent HL Spans in an async manner
+            await new Promise((resolve) => setTimeout(resolve, 1000));
 
             expect(exporter.getFinishedSpans().length).toBe(2);
 

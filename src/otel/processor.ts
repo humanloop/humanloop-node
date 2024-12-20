@@ -14,7 +14,7 @@ import {
     HUMANLOOP_FILE_KEY,
     HUMANLOOP_FILE_TYPE_KEY,
     HUMANLOOP_LOG_KEY,
-    HUMANLOOP_WRAPPED_FUNCTION_NAME,
+    HUMANLOOP_META_FUNCTION_NAME,
 } from "./constants";
 import {
     NestedDict,
@@ -44,7 +44,7 @@ export class HumanloopSpanProcessor implements SpanProcessor {
 
     async forceFlush(): Promise<void> {}
 
-    onStart(span: Span, parentContext: Context): void {
+    onStart(span: Span, _: Context): void {
         // Handle stream case: when Prompt instrumented function calls a provider with streaming: true
         // The instrumentor span will end only when the ChunksResponse is consumed, which can happen
         // after the span created by the Prompt utility finishes. To handle this, we register all instrumentor
@@ -61,22 +61,23 @@ export class HumanloopSpanProcessor implements SpanProcessor {
     async shutdown(): Promise<void> {}
 
     /**
-     * Handles spans at the end of their lifecycle.
-     * Enriches Humanloop spans and send both HL and
+     * Handles spans at the end of their lifecycle. Enriches Humanloop spans and send both HL and
      * non-HL spans to the exporter.
      */
     onEnd(span: ReadableSpan): void {
         if (isHumanloopSpan(span)) {
             new Promise<void>((resolve) => {
-                while (true) {
+                const checkChildrenSpans = () => {
                     const childrenSpans = this.children.get(span.spanContext().spanId);
                     if (
-                        (childrenSpans || [])?.every((childSpan) => childSpan.complete)
+                        (childrenSpans || []).every((childSpan) => childSpan.complete)
                     ) {
-                        break;
+                        resolve();
+                    } else {
+                        setTimeout(checkChildrenSpans, 100);
                     }
-                }
-                resolve();
+                };
+                checkChildrenSpans();
             }).then((_) => {
                 // All children/ instrumentor spans have arrived, we can process the
                 // Humanloop parent span owning them
@@ -126,13 +127,21 @@ export class HumanloopSpanProcessor implements SpanProcessor {
                         : childSpan,
                 ),
             );
-        }
 
-        this.spanExporter.export([span], (result: ExportResult) => {
-            if (result.code !== ExportResultCode.SUCCESS) {
-                console.error("Failed to export span:", result.error);
-            }
-        });
+            // Export the instrumentor span
+            this.spanExporter.export([span], (result: ExportResult) => {
+                if (result.code !== ExportResultCode.SUCCESS) {
+                    console.error("Failed to export span:", result.error);
+                }
+            });
+        } else {
+            // Unknown span, export as it is
+            this.spanExporter.export([span], (result: ExportResult) => {
+                if (result.code !== ExportResultCode.SUCCESS) {
+                    console.error("Failed to export span:", result.error);
+                }
+            });
+        }
     }
 
     /**
@@ -190,7 +199,7 @@ export class HumanloopSpanProcessor implements SpanProcessor {
             const prompt = (hlFile.prompt || {}) as unknown as PromptKernelRequest;
             if (!("model" in prompt) || !prompt.model) {
                 const functionName =
-                    promptSpan.attributes[HUMANLOOP_WRAPPED_FUNCTION_NAME];
+                    promptSpan.attributes[HUMANLOOP_META_FUNCTION_NAME];
                 throw Error(
                     `Error in ${functionName}: the LLM provider and model could not be inferred. Call one of the supported providers in your prompt function definition or define them in the promptKernel argument of the prompt() function wrapper.`,
                 );

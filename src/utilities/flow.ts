@@ -5,10 +5,10 @@ import { FlowKernelRequest } from "../api/types/FlowKernelRequest";
 import {
     HUMANLOOP_FILE_TYPE_KEY,
     HUMANLOOP_LOG_KEY,
+    HUMANLOOP_META_FUNCTION_NAME,
     HUMANLOOP_PARENT_SPAN_CTX_KEY,
     HUMANLOOP_PATH_KEY,
     HUMANLOOP_TRACE_FLOW_CTX_KEY,
-    HUMANLOOP_WRAPPED_FUNCTION_NAME,
     NestedDict,
     generateSpanId,
     jsonifyIfNotString,
@@ -67,7 +67,7 @@ export function flowUtilityFactory<I, M, O>(
             // Add span attributes
             span = span.setAttribute(HUMANLOOP_PATH_KEY, path || func.name);
             span = span.setAttribute(HUMANLOOP_FILE_TYPE_KEY, "flow");
-            span = span.setAttribute(HUMANLOOP_WRAPPED_FUNCTION_NAME, func.name);
+            span = span.setAttribute(HUMANLOOP_META_FUNCTION_NAME, func.name);
 
             if (version) {
                 writeToOpenTelemetrySpan(
