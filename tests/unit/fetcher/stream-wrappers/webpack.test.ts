@@ -6,6 +6,7 @@ describe("test env compatibility", () => {
             webpack(
                 {
                     mode: "production",
+                    target: "node",
                     entry: "./src/index.ts",
                     module: {
                         rules: [
@@ -18,6 +19,9 @@ describe("test env compatibility", () => {
                     },
                     resolve: {
                         extensions: [".tsx", ".ts", ".js"],
+                        fallback: {
+                            async_hooks: false,
+                        },
                     },
                 },
                 (err, stats) => {
