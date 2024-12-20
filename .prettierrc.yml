@@ -6,5 +6,6 @@ importOrderSortSpecifiers: true
 importOrderGroupNamespaceSpecifiers: true
 importOrder: ["<THIRD_PARTY_MODULES>", "^[./]"]
 trailingComma: "all"
-plugins:
-    - "@trivago/prettier-plugin-sort-imports"
+# TODO: This fails at release step, figure it out later
+# plugins:
+    # - "@trivago/prettier-plugin-sort-imports"
