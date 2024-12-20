@@ -72,7 +72,6 @@ export interface File extends Identifiers {
      * `output = callable(datapoint.inputs)`.
      * If messages are defined in your Dataset, then
      * `output = callable(datapoint.inputs, messages=datapoint.messages)`.
-     * It should return a single string output. If not, you must provide a custom_logger.
      */
     callable?:
         | ((inputs: any, messages?: any[]) => string | Promise<string>)

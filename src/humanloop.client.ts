@@ -26,6 +26,62 @@ class ExtendedEvaluations extends BaseEvaluations {
         this._client = client;
     }
 
+    /**
+     * Evaluate a File's performance.
+     *
+     * The utility takes a callable function that will be run over the dataset. The function's inputs and outputs are transformed into a Log of the evaluated File. The Log is the passed to the Evaluators to produce metrics.
+     *
+     * Running the file again with the same Dataset and Evaluators will create a new Run in the Evaluation. The new Run will be compared to the previous Runs, allowing you to iterate on your File.
+     *
+     * ```typescript
+     * async function trueOrFalse(query: string): Promise<boolean> {
+     *   const response = await openAIClient.chat.completions.create({
+     *     model: "gpt-4o-mini",
+     *     temperature: 0,
+     *     messages: [
+     *       { role: "system", content: "You are a helpful assistant. You must evaluate queries and decide if their sentiment is closer to boolean true or boolean false. Output only 'true' or 'false' and nothing else" },
+     *       { role: "user", content: query }
+     *     ]
+     *   });
+     *   return response.choices[0].message.content === 'true';
+     * }
+     *
+     * humanloop.evaluations.run({
+     *   type: "flow",
+     *   callable: trueOrFalse,
+     *   path: "Project/True or False"
+     * },
+     * {
+     *   path: "Project/Fuzzy Logic 101",
+     *   datapoints: [
+     *     { inputs: { query: "This is 100%" }, target: { output: true } },
+     *     { inputs: { query: "I don't think so" }, target: { output: false } },
+     *     { inputs: { query: "That doesn't go around here" }, target: { output: false } },
+     *     { inputs: { query: "Great work bot!" }, target: { output: true } },
+     *     { inputs: { query: "I agree" }, target: { output: true } }
+     *   ]
+     * },
+     * "Accuracy Evaluation",
+     * evaluators: [
+     *   {
+     *     callable: (log, datapoint) => log.output === datapoint.target.output,
+     *     path: "Project/Accuracy Evaluator"
+     *   }
+     * ]
+     * );
+     * ```
+     *
+     * @param file - The file to evaluate.
+     * @param file.type - The type of file being evaluated e.g. "flow".
+     * @param file.version - The version of the file being evaluated.
+     * @param file.callable - The callable to run over the dataset. Can also be a File-utility wrapped callable.
+     * @param dataset - The dataset used in evaluation. Can be an online dataset or local data can be provided as an array of datapoints.
+     * @param dataset.path - The path of the dataset to use in evaluation. If the Dataset is stored on Humanloop, you only need to provide the path.
+     * @param dataset.datapoints - The datapoints to map your function over to produce the outputs required by the evaluation. The datapoints will be uploaded to Humanloop and create a new version of the Dataset.
+     * @param name - The name of the evaluation.
+     * @param evaluators - List of evaluators to be. Can be ran on Humanloop if specified only by path, or locally if a callable is provided.
+     * @param workers - Number of parallel datapoints to process simultaneously.
+     */
     async run(
         file: File,
         dataset: Dataset,
@@ -111,7 +167,7 @@ export class HumanloopClient extends BaseHumanloopClient {
     }
 
     // Check if user has passed the LLM provider instrumentors
-    private _assertProviders(func: Function) {
+    private assertProviders(func: Function) {
         const noProviderInstrumented = [
             this.OpenAI,
             this.Anthropic,
@@ -202,7 +258,7 @@ export class HumanloopClient extends BaseHumanloopClient {
         path: string;
         version?: UtilityPromptKernel;
     }) {
-        this._assertProviders(callable);
+        this.assertProviders(callable);
         return promptUtilityFactory(this.opentelemetryTracer, callable, path, version);
     }
 
