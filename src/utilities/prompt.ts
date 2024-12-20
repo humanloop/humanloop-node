@@ -2,12 +2,14 @@ import { context, createContextKey } from "@opentelemetry/api";
 import { ReadableSpan, Tracer } from "@opentelemetry/sdk-trace-node";
 
 import { PromptKernelRequest } from "../api/types/PromptKernelRequest";
+import { Humanloop } from "../index";
 import {
     HUMANLOOP_FILE_TYPE_KEY,
     HUMANLOOP_LOG_KEY,
     HUMANLOOP_PARENT_SPAN_CTX_KEY,
     HUMANLOOP_PATH_KEY,
     HUMANLOOP_TRACE_FLOW_CTX_KEY,
+    HUMANLOOP_WRAPPED_FUNCTION_NAME,
     NestedDict,
     generateSpanId,
     jsonifyIfNotString,
@@ -16,9 +18,15 @@ import {
 import { InputsMessagesCallableType } from "./types";
 
 // Make model optional since it can be inferred by Instrumentors
-export type UtilityPromptKernel = Omit<PromptKernelRequest, "model"> & {
-    model?: string;
-};
+export type UtilityPromptKernel =
+    | (Omit<PromptKernelRequest, "model"> & {
+          model?: string;
+      })
+    | (Omit<PromptKernelRequest, "model" | "provider"> & {
+          // The user must specify both the provider and the model if they specify the model
+          model: string;
+          provider: Humanloop.ModelProviders;
+      });
 
 /**
  * Higher-order function for wrapping functions with OpenTelemetry spans
@@ -26,7 +34,7 @@ export type UtilityPromptKernel = Omit<PromptKernelRequest, "model"> & {
  *
  * @param func - The function to wrap
  * @param opentelemetryTracer - The OpenTelemetry tracer instance
- * @param promptKernel - Additional metadata for the span
+ * @param version - Additional metadata for the span
  * @param path - The span's path attribute
  * @returns Wrapped function with OpenTelemetry instrumentation
  */
@@ -34,7 +42,7 @@ export function promptUtilityFactory<I, M, O>(
     opentelemetryTracer: Tracer,
     func: InputsMessagesCallableType<I, M, O>,
     path: string,
-    promptKernel?: UtilityPromptKernel,
+    version?: UtilityPromptKernel,
 ): {
     (inputs: I, messages: M): O extends Promise<infer R> ? Promise<R> : Promise<O>;
     path: string;
@@ -43,8 +51,8 @@ export function promptUtilityFactory<I, M, O>(
     // @ts-ignore
     return async (inputs: I, messages: M) => {
         // Filter out undefined attributes
-        if (promptKernel?.attributes) {
-            promptKernel.attributes = Object.entries(promptKernel.attributes)
+        if (version?.attributes) {
+            version.attributes = Object.entries(version.attributes)
                 .filter(([_, value]) => value !== undefined)
                 .reduce((obj, [key, value]) => ({ ...obj, [key]: value }), {});
         }
@@ -79,12 +87,13 @@ export function promptUtilityFactory<I, M, O>(
             // Add span attributes
             span = span.setAttribute(HUMANLOOP_PATH_KEY, path || func.name);
             span = span.setAttribute(HUMANLOOP_FILE_TYPE_KEY, "prompt");
+            span = span.setAttribute(HUMANLOOP_WRAPPED_FUNCTION_NAME, func.name);
 
-            if (promptKernel) {
+            if (version) {
                 writeToOpenTelemetrySpan(
                     span as unknown as ReadableSpan,
                     {
-                        ...promptKernel,
+                        ...version,
                     } as unknown as NestedDict,
                     "humanloop.file.prompt",
                 );

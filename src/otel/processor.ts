@@ -14,6 +14,7 @@ import {
     HUMANLOOP_FILE_KEY,
     HUMANLOOP_FILE_TYPE_KEY,
     HUMANLOOP_LOG_KEY,
+    HUMANLOOP_WRAPPED_FUNCTION_NAME,
 } from "./constants";
 import {
     NestedDict,
@@ -23,12 +24,18 @@ import {
     writeToOpenTelemetrySpan,
 } from "./helpers";
 
+// Interface for waiting on child spans to complete
+interface CompletableSpan {
+    span: ReadableSpan;
+    complete: boolean;
+}
+
 /**
  * Enriches Humanloop spans with data from their child spans.
  */
 export class HumanloopSpanProcessor implements SpanProcessor {
     private spanExporter: SpanExporter;
-    private children: Map<string, ReadableSpan[]>;
+    private children: Map<string, CompletableSpan[]>;
 
     constructor(exporter: SpanExporter) {
         this.spanExporter = exporter;
@@ -37,26 +44,88 @@ export class HumanloopSpanProcessor implements SpanProcessor {
 
     async forceFlush(): Promise<void> {}
 
-    onStart(span: Span, parentContext: Context): void {}
+    onStart(span: Span, parentContext: Context): void {
+        // Handle stream case: when Prompt instrumented function calls a provider with streaming: true
+        // The instrumentor span will end only when the ChunksResponse is consumed, which can happen
+        // after the span created by the Prompt utility finishes. To handle this, we register all instrumentor
+        // spans belonging to a Humanloop span, and their parent will wait for them to complete in onEnd before
+        // exporting the Humanloop span.
+        if (span.parentSpanId !== undefined && this.isInstrumentorSpan(span)) {
+            this.children.set(span.parentSpanId, [
+                ...(this.children.get(span.parentSpanId) || []),
+                { span, complete: false },
+            ]);
+        }
+    }
 
     async shutdown(): Promise<void> {}
 
     /**
      * Handles spans at the end of their lifecycle.
-     * Enriches Humanloop spans or forwards non-Humanloop spans to the exporter.
+     * Enriches Humanloop spans and send both HL and
+     * non-HL spans to the exporter.
      */
     onEnd(span: ReadableSpan): void {
         if (isHumanloopSpan(span)) {
-            this.processSpanDispatch(
-                span,
-                this.children.get(span.spanContext().spanId) || [],
+            new Promise<void>((resolve) => {
+                while (true) {
+                    const childrenSpans = this.children.get(span.spanContext().spanId);
+                    if (
+                        (childrenSpans || [])?.every((childSpan) => childSpan.complete)
+                    ) {
+                        break;
+                    }
+                }
+                resolve();
+            }).then((_) => {
+                // All children/ instrumentor spans have arrived, we can process the
+                // Humanloop parent span owning them
+                this.processSpanDispatch(
+                    span,
+                    this.children.get(span.spanContext().spanId) || [],
+                );
+                // Release references
+                this.children.delete(span.spanContext().spanId);
+                // Export the Humanloop span
+                this.spanExporter.export([span], (result: ExportResult) => {
+                    if (result.code !== ExportResultCode.SUCCESS) {
+                        console.error("Failed to export span:", result.error);
+                    }
+                });
+            });
+        } else if (this.isInstrumentorSpan(span) && span.parentSpanId !== undefined) {
+            // If this is one of the children spans waited upon, update its completion status
+
+            // Type checks
+            const childrenSpans = this.children.get(span.parentSpanId);
+            if (
+                childrenSpans === undefined ||
+                !childrenSpans.some(
+                    (childSpan) =>
+                        childSpan.span.spanContext().spanId ===
+                        span.spanContext().spanId,
+                )
+            ) {
+                throw new Error(
+                    `Internal error: Expected instrumentor span ${span.parentSpanId} to be already present in the list`,
+                );
+            }
+
+            // Updating the child span status
+            this.children.set(
+                span.parentSpanId,
+                childrenSpans.map((childSpan) =>
+                    childSpan.span.spanContext().spanId === span.spanContext().spanId
+                        ? {
+                              // The child span will have extra information when it's marked
+                              // as finished and sent to Processors.onEnd
+                              span: span,
+                              //   Marked as completed
+                              complete: true,
+                          }
+                        : childSpan,
+                ),
             );
-            this.children.delete(span.spanContext().spanId); // Release references
-        } else if (span.parentSpanId && this.isInstrumentorSpan(span)) {
-            this.children.set(span.parentSpanId, [
-                ...(this.children.get(span.parentSpanId) || []),
-                span,
-            ]);
         }
 
         this.spanExporter.export([span], (result: ExportResult) => {
@@ -70,6 +139,7 @@ export class HumanloopSpanProcessor implements SpanProcessor {
      * Determines if a span is created by an instrumentor of interest.
      */
     private isInstrumentorSpan(span: ReadableSpan): boolean {
+        // Expand in the future with checks for non-Prompt Files
         return isLLMProviderCall(span);
     }
 
@@ -78,7 +148,7 @@ export class HumanloopSpanProcessor implements SpanProcessor {
      */
     private processSpanDispatch(
         span: ReadableSpan,
-        childrenSpans: ReadableSpan[],
+        childrenSpans: CompletableSpan[],
     ): void {
         const fileType = span.attributes[HUMANLOOP_FILE_TYPE_KEY];
 
@@ -93,7 +163,10 @@ export class HumanloopSpanProcessor implements SpanProcessor {
 
         switch (fileType) {
             case "prompt":
-                this.processPrompt(span, childrenSpans);
+                this.processPrompt(
+                    span,
+                    childrenSpans.map((span) => span.span),
+                );
                 break;
             case "tool":
             case "flow":
@@ -111,7 +184,18 @@ export class HumanloopSpanProcessor implements SpanProcessor {
         promptSpan: ReadableSpan,
         childrenSpans: ReadableSpan[],
     ): void {
-        if (childrenSpans.length === 0) return;
+        if (childrenSpans.length === 0) {
+            const hlFile =
+                readFromOpenTelemetrySpan(promptSpan, HUMANLOOP_FILE_KEY) || {};
+            const prompt = (hlFile.prompt || {}) as unknown as PromptKernelRequest;
+            if (!("model" in prompt) || !prompt.model) {
+                const functionName =
+                    promptSpan.attributes[HUMANLOOP_WRAPPED_FUNCTION_NAME];
+                throw Error(
+                    `Error in ${functionName}: the LLM provider and model could not be inferred. Call one of the supported providers in your prompt function definition or define them in the promptKernel argument of the prompt() function wrapper.`,
+                );
+            }
+        }
 
         for (const childSpan of childrenSpans) {
             if (isLLMProviderCall(childSpan)) {

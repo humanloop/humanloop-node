@@ -15,6 +15,7 @@ import {
     HUMANLOOP_PARENT_SPAN_CTX_KEY,
     HUMANLOOP_PATH_KEY,
     HUMANLOOP_TRACE_FLOW_CTX_KEY,
+    HUMANLOOP_WRAPPED_FUNCTION_NAME,
 } from "../otel/constants";
 import { ToolCallableType } from "./types";
 
@@ -25,28 +26,28 @@ import { ToolCallableType } from "./types";
  * @param func - The function to wrap
  * @param opentelemetryTracer - The OpenTelemetry tracer instance
  * @param path - Optional span path
- * @param toolKernel - Additional metadata for the function
+ * @param version - Additional metadata for the function
  * @returns Wrapped function with OpenTelemetry instrumentation
  */
 export function toolUtilityFactory<I, O>(
     opentelemetryTracer: Tracer,
     func: ToolCallableType<I, O>,
-    toolKernel: ToolKernelRequest,
+    version: ToolKernelRequest,
     path?: string,
 ): {
     (args?: I): O extends Promise<infer R> ? Promise<R> : Promise<O>;
     jsonSchema: Record<string, any>;
 } {
     // Attach JSON schema metadata to the function for external use
-    if (toolKernel) {
-        (func as any).jsonSchema = toolKernel.function || {};
+    if (version) {
+        (func as any).jsonSchema = version.function || {};
     }
 
     const wrappedFunction = async (
         inputs: I,
         // @ts-ignore
     ): O extends Promise<infer R> ? Promise<R> : Promise<O> => {
-        validateArgumentsAgainstSchema(toolKernel, inputs);
+        validateArgumentsAgainstSchema(version, inputs);
 
         const parentSpanContextKey = createContextKey(HUMANLOOP_PARENT_SPAN_CTX_KEY);
         const flowMetadataKey = createContextKey(HUMANLOOP_TRACE_FLOW_CTX_KEY);
@@ -77,6 +78,7 @@ export function toolUtilityFactory<I, O>(
             // Add span attributes
             span.setAttribute(HUMANLOOP_PATH_KEY, path || func.name);
             span.setAttribute(HUMANLOOP_FILE_TYPE_KEY, "tool");
+            span = span.setAttribute(HUMANLOOP_WRAPPED_FUNCTION_NAME, func.name);
 
             // @ts-ignore
             // Execute the wrapped function in the appropriate context
@@ -117,7 +119,7 @@ export function toolUtilityFactory<I, O>(
             writeToOpenTelemetrySpan(
                 span as unknown as ReadableSpan,
                 {
-                    ...toolKernel,
+                    ...version,
                 } as unknown as NestedDict,
                 `${HUMANLOOP_FILE_KEY}.tool`,
             );

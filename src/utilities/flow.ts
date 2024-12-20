@@ -8,6 +8,7 @@ import {
     HUMANLOOP_PARENT_SPAN_CTX_KEY,
     HUMANLOOP_PATH_KEY,
     HUMANLOOP_TRACE_FLOW_CTX_KEY,
+    HUMANLOOP_WRAPPED_FUNCTION_NAME,
     NestedDict,
     generateSpanId,
     jsonifyIfNotString,
@@ -19,7 +20,7 @@ export function flowUtilityFactory<I, M, O>(
     opentelemetryTracer: Tracer,
     func: InputsMessagesCallableType<I, M, O>,
     path: string,
-    flowKernel?: FlowKernelRequest,
+    version?: FlowKernelRequest,
 ): {
     (inputs: I, messages: M): O extends Promise<infer R> ? Promise<R> : Promise<O>;
     path: string;
@@ -27,9 +28,9 @@ export function flowUtilityFactory<I, M, O>(
 } {
     const wrappedFunction = async (inputs: I, messages: M) => {
         // Filter out undefined attributes
-        if (flowKernel?.attributes) {
-            flowKernel.attributes = Object.fromEntries(
-                Object.entries(flowKernel.attributes || {}).filter(
+        if (version?.attributes) {
+            version.attributes = Object.fromEntries(
+                Object.entries(version.attributes || {}).filter(
                     ([_, v]) => v !== undefined,
                 ),
             );
@@ -66,11 +67,12 @@ export function flowUtilityFactory<I, M, O>(
             // Add span attributes
             span = span.setAttribute(HUMANLOOP_PATH_KEY, path || func.name);
             span = span.setAttribute(HUMANLOOP_FILE_TYPE_KEY, "flow");
+            span = span.setAttribute(HUMANLOOP_WRAPPED_FUNCTION_NAME, func.name);
 
-            if (flowKernel) {
+            if (version) {
                 writeToOpenTelemetrySpan(
                     span as unknown as ReadableSpan,
-                    flowKernel as unknown as NestedDict,
+                    version as unknown as NestedDict,
                     "humanloop.file.flow",
                 );
             }
@@ -120,6 +122,6 @@ export function flowUtilityFactory<I, M, O>(
     // @ts-ignore
     return Object.assign(wrappedFunction, {
         path,
-        version: flowKernel || { attributes: {} },
+        version: version || { attributes: {} },
     });
 }
