@@ -1,6 +1,5 @@
 import {
     CodeEvaluatorRequest,
-    CreateEvaluatorLogRequest,
     CreateEvaluatorLogResponse,
     CreateFlowLogResponse,
     CreatePromptLogResponse,
@@ -11,17 +10,14 @@ import {
     EvaluatorsRequest,
     ExternalEvaluatorRequest,
     FlowKernelRequest,
-    FlowLogRequest,
     FlowRequest,
     FlowResponse,
     HumanEvaluatorRequest,
     LlmEvaluatorRequest,
     PromptKernelRequest,
-    PromptLogRequest,
     PromptRequest,
     PromptResponse,
     ToolKernelRequest,
-    ToolLogRequest,
     ToolRequest,
     ToolResponse,
     UpdateDatesetAction as UpdateDatasetAction,
@@ -50,11 +46,6 @@ type LogResponse =
     | CreatePromptLogResponse
     | CreateToolLogResponse
     | CreateEvaluatorLogResponse;
-type LogRequest =
-    | FlowLogRequest
-    | PromptLogRequest
-    | ToolLogRequest
-    | CreateEvaluatorLogRequest;
 
 interface Identifiers {
     id?: string;

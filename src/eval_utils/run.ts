@@ -56,10 +56,9 @@ type LogResponse =
 export function overloadLog<T extends Flows | Prompts>(client: T): T {
     const originalLog = client.log.bind(client);
 
-    // @ts-ignore
-    const _overloadedLog: T["log"] = async (
-        request: FlowLogRequest | PromptLogRequest,
-        options?: Flows.RequestOptions | Prompts.RequestOptions,
+    const _overloadedLog = async (
+        request: T extends Flows ? FlowLogRequest : PromptLogRequest,
+        options?: T extends Flows ? Flows.RequestOptions : Prompts.RequestOptions,
     ) => {
         let response: LogResponse | undefined;
         if (evaluationContext.isEvaluatedFile(request)) {
@@ -140,6 +139,8 @@ export function overloadLog<T extends Flows | Prompts>(client: T): T {
         return response;
     };
 
+    // @ts-ignore _overloadedLog is a polymorphic function and
+    // linting complains about typing
     client.log = _overloadedLog.bind(client);
 
     return client;
@@ -151,17 +152,17 @@ export async function runEval(
     dataset: Dataset,
     name?: string,
     evaluators: Evaluator[] = [],
-    workers: number = 8,
+    concurrency: number = 8,
 ): Promise<EvaluatorCheck[]> {
     // Get or create the file on Humanloop
     if (!file.path && !file.id) {
         throw new Error("You must provide a path or id in your `file`.");
     }
 
-    if (workers > 32) {
+    if (concurrency > 32) {
         console.log("Warning: Too many parallel workers, capping the number to 32.");
     }
-    workers = Math.min(workers, 32);
+    concurrency = Math.min(concurrency, 32);
 
     if (file.callable && "path" in file.callable) {
         if (file.path !== file.callable.path) {
@@ -464,7 +465,7 @@ export async function runEval(
             async (datapoint) => {
                 await processDatapoint(datapoint, runId);
             },
-            { concurrency: workers },
+            { concurrency: concurrency },
         );
         progressBar.stop();
     } else {

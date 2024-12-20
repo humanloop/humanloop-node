@@ -80,16 +80,16 @@ class ExtendedEvaluations extends BaseEvaluations {
      * @param dataset.datapoints - The datapoints to map your function over to produce the outputs required by the evaluation. The datapoints will be uploaded to Humanloop and create a new version of the Dataset.
      * @param name - The name of the evaluation.
      * @param evaluators - List of evaluators to be. Can be ran on Humanloop if specified only by path, or locally if a callable is provided.
-     * @param workers - Number of parallel datapoints to process simultaneously.
+     * @param concurrency - Number of datapoints to process in parallel.
      */
     async run(
         file: File,
         dataset: Dataset,
         name?: string,
         evaluators: Evaluator[] = [],
-        workers: number = 8,
+        concurrency: number = 8,
     ): Promise<EvaluatorCheck[]> {
-        return runEval(this._client, file, dataset, name, evaluators, workers);
+        return runEval(this._client, file, dataset, name, evaluators, concurrency);
     }
 }
 

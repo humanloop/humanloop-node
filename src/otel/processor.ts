@@ -94,7 +94,7 @@ export class HumanloopSpanProcessor implements SpanProcessor {
                     }
                 });
             });
-        } else if (this.isInstrumentorSpan(span) && span.parentSpanId !== undefined) {
+        } else if (span.parentSpanId !== undefined && this.isInstrumentorSpan(span)) {
             // If this is one of the children spans waited upon, update its completion status
 
             // Type checks
@@ -315,6 +315,11 @@ export class HumanloopSpanProcessor implements SpanProcessor {
         }[];
         // @ts-ignore
         hlLog.messages = messages;
+
+        // Edge case: Prompt used in streaming mode
+        if (!("output" in hlLog) || hlLog.output === "{}") {
+            hlLog.output = completions[0].content;
+        }
 
         // Write the enriched prompt log back to the span
         writeToOpenTelemetrySpan(promptSpan, hlLog, HUMANLOOP_LOG_KEY);
