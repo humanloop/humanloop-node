@@ -5,7 +5,7 @@ import {
     Span,
     SpanExporter,
     SpanProcessor,
-} from "@opentelemetry/sdk-trace-base";
+} from "@opentelemetry/sdk-trace-node";
 import { SpanAttributes as AiSemanticConventions } from "@traceloop/ai-semantic-conventions";
 
 import { ModelEndpoints, ModelProviders } from "../api";

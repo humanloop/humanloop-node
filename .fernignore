@@ -21,6 +21,7 @@ tests
 .prettierrc.yml
 babel.config.js
 jest.config.js
+.prettierignore
 
 # Package Scripts
 
