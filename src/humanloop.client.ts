@@ -93,7 +93,7 @@ class ExtendedEvaluations extends BaseEvaluations {
         dataset: Dataset;
         name?: string;
         evaluators: Evaluator[];
-        concurrency: number;
+        concurrency?: number;
     }): Promise<EvaluatorCheck[]> {
         return runEval(this._client, file, dataset, name, evaluators, concurrency);
     }
