@@ -82,13 +82,19 @@ class ExtendedEvaluations extends BaseEvaluations {
      * @param evaluators - List of evaluators to be. Can be ran on Humanloop if specified only by path, or locally if a callable is provided.
      * @param concurrency - Number of datapoints to process in parallel.
      */
-    async run(
-        file: File,
-        dataset: Dataset,
-        name?: string,
-        evaluators: Evaluator[] = [],
-        concurrency: number = 8,
-    ): Promise<EvaluatorCheck[]> {
+    async run({
+        file,
+        dataset,
+        name,
+        evaluators = [],
+        concurrency = 8,
+    }: {
+        file: File;
+        dataset: Dataset;
+        name?: string;
+        evaluators: Evaluator[];
+        concurrency: number;
+    }): Promise<EvaluatorCheck[]> {
         return runEval(this._client, file, dataset, name, evaluators, concurrency);
     }
 }
