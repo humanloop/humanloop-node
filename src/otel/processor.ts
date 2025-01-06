@@ -36,15 +36,37 @@ interface CompletableSpan {
 export class HumanloopSpanProcessor implements SpanProcessor {
     private spanExporter: SpanExporter;
     private children: Map<string, CompletableSpan[]>;
+    // List of all span IDs that are contained in a Flow trace
+    // They are passed to the Exporter as a span attribute
+    // so the Exporter knows when to complete a trace
+    private prerequisites: Map<string, string[]>;
 
     constructor(exporter: SpanExporter) {
         this.spanExporter = exporter;
         this.children = new Map();
+        this.prerequisites = new Map();
     }
 
     async forceFlush(): Promise<void> {}
 
     onStart(span: Span, _: Context): void {
+        const spanId = span.spanContext().spanId;
+        const parentSpanId = span.parentSpanId;
+        if (span.name === "humanloop.flow") {
+            this.prerequisites.set(spanId, []);
+        }
+        if (parentSpanId !== undefined && isHumanloopSpan(span)) {
+            for (const [traceHead, allTraceNodes] of this.prerequisites) {
+                if (
+                    parentSpanId === traceHead ||
+                    allTraceNodes.includes(parentSpanId)
+                ) {
+                    allTraceNodes.push(spanId);
+                    this.prerequisites.set(traceHead, allTraceNodes);
+                    break;
+                }
+            }
+        }
         // Handle stream case: when Prompt instrumented function calls a provider with streaming: true
         // The instrumentor span will end only when the ChunksResponse is consumed, which can happen
         // after the span created by the Prompt utility finishes. To handle this, we register all instrumentor
@@ -66,6 +88,7 @@ export class HumanloopSpanProcessor implements SpanProcessor {
      */
     onEnd(span: ReadableSpan): void {
         if (isHumanloopSpan(span)) {
+            // Wait for children to complete asynchronously
             new Promise<void>((resolve) => {
                 const checkChildrenSpans = () => {
                     const childrenSpans = this.children.get(span.spanContext().spanId);
@@ -79,15 +102,28 @@ export class HumanloopSpanProcessor implements SpanProcessor {
                 };
                 checkChildrenSpans();
             }).then((_) => {
-                // All children/ instrumentor spans have arrived, we can process the
+                // All instrumentor spans have arrived, we can process the
                 // Humanloop parent span owning them
+                if (span.name === "humanloop.flow") {
+                    // If the span if a Flow Log, add attribute with all span IDs it
+                    // needs to wait before completion
+                    writeToOpenTelemetrySpan(
+                        span,
+                        this.prerequisites.get(span.spanContext().spanId) || [],
+                        HUMANLOOP_LOG_KEY,
+                    );
+                    this.prerequisites.delete(span.spanContext().spanId);
+                }
+
                 this.processSpanDispatch(
                     span,
                     this.children.get(span.spanContext().spanId) || [],
                 );
+
                 // Release references
                 this.children.delete(span.spanContext().spanId);
-                // Export the Humanloop span
+
+                // Pass Humanloop span to Exporter
                 this.spanExporter.export([span], (result: ExportResult) => {
                     if (result.code !== ExportResultCode.SUCCESS) {
                         console.error("Failed to export span:", result.error);
@@ -182,7 +218,7 @@ export class HumanloopSpanProcessor implements SpanProcessor {
                 // Placeholder for processing other file types
                 break;
             default:
-                console.error("Unknown Humanloop File Span", span);
+                console.error("Unknown Humanloop File span", span);
         }
     }
 

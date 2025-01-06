@@ -10,7 +10,6 @@ import {
     HUMANLOOP_PATH_KEY,
     HUMANLOOP_TRACE_FLOW_CTX_KEY,
     NestedDict,
-    generateSpanId,
     jsonifyIfNotString,
     writeToOpenTelemetrySpan,
 } from "../otel";
@@ -39,30 +38,9 @@ export function flowUtilityFactory<I, M, O>(
         const parentSpanContextKey = createContextKey(HUMANLOOP_PARENT_SPAN_CTX_KEY);
         const flowMetadataKey = createContextKey(HUMANLOOP_TRACE_FLOW_CTX_KEY);
         // @ts-ignore
-        return opentelemetryTracer.startActiveSpan(generateSpanId(), async (span) => {
+        return opentelemetryTracer.startActiveSpan("humanloop.flow", async (span) => {
             const ctx = context.active();
             const spanId = span.spanContext().spanId;
-            const parentSpanId = ctx.getValue(parentSpanContextKey) as
-                | string
-                | undefined;
-            const parentFlowMetadata = ctx.getValue(flowMetadataKey) as {
-                traceId: string;
-                isFlowLog: boolean;
-                traceParentId: string;
-            } | null;
-            // Handle trace flow context
-            const flowMetadata =
-                parentSpanId && parentFlowMetadata
-                    ? {
-                          traceId: spanId,
-                          isFlowLog: true,
-                          traceParentId: parentSpanId,
-                      }
-                    : {
-                          traceId: spanId,
-                          traceParentId: null,
-                          isFlowLog: true,
-                      };
 
             // Add span attributes
             span = span.setAttribute(HUMANLOOP_PATH_KEY, path || func.name);
@@ -77,26 +55,15 @@ export function flowUtilityFactory<I, M, O>(
                 );
             }
 
-            const { output, error } = await context.with(
-                ctx
-                    .setValue(parentSpanContextKey, spanId)
-                    .setValue(flowMetadataKey, flowMetadata),
-                async () => {
-                    let output: O | null;
-                    let error: string | null = null;
-                    try {
-                        output = await func(inputs, messages);
-                    } catch (err: any) {
-                        console.error(`Error calling ${func.name}:`, err);
-                        output = null;
-                        error = err.message || String(err);
-                    }
-                    return {
-                        output,
-                        error,
-                    };
-                },
-            );
+            let output: O | null;
+            let error: string | null = null;
+            try {
+                output = await func(inputs, messages);
+            } catch (err: any) {
+                console.error(`Error calling ${func.name}:`, err);
+                output = null;
+                error = err.message || String(err);
+            }
 
             const outputStringified = jsonifyIfNotString(func, output);
 

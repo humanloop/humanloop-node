@@ -2,12 +2,7 @@ import { context, createContextKey } from "@opentelemetry/api";
 import { ReadableSpan, Tracer } from "@opentelemetry/sdk-trace-node";
 
 import { ToolKernelRequest } from "../api/types/ToolKernelRequest";
-import {
-    NestedDict,
-    generateSpanId,
-    jsonifyIfNotString,
-    writeToOpenTelemetrySpan,
-} from "../otel";
+import { NestedDict, jsonifyIfNotString, writeToOpenTelemetrySpan } from "../otel";
 import {
     HUMANLOOP_FILE_KEY,
     HUMANLOOP_FILE_TYPE_KEY,
@@ -53,60 +48,29 @@ export function toolUtilityFactory<I, O>(
         const flowMetadataKey = createContextKey(HUMANLOOP_TRACE_FLOW_CTX_KEY);
 
         // @ts-ignore
-        return opentelemetryTracer.startActiveSpan(generateSpanId(), async (span) => {
+        return opentelemetryTracer.startActiveSpan("humanloop.tool", async (span) => {
             const ctx = context.active();
             const spanId = span.spanContext().spanId;
-            const parentSpanId = ctx.getValue(parentSpanContextKey) as
-                | string
-                | undefined;
-            const parentFlowMetadata = ctx.getValue(flowMetadataKey) as {
-                traceId: string;
-                isFlowLog: boolean;
-                traceParentId: string;
-            } | null;
-
-            // Handle trace flow context
-            const flowMetadata =
-                parentSpanId && parentFlowMetadata
-                    ? {
-                          traceId: parentFlowMetadata.traceId,
-                          isFlowLog: false,
-                          traceParentId: parentSpanId,
-                      }
-                    : null;
 
             // Add span attributes
             span.setAttribute(HUMANLOOP_PATH_KEY, path || func.name);
             span.setAttribute(HUMANLOOP_FILE_TYPE_KEY, "tool");
             span = span.setAttribute(HUMANLOOP_META_FUNCTION_NAME, func.name);
 
-            // @ts-ignore
             // Execute the wrapped function in the appropriate context
-            const { output, error } = await context.with(
-                ctx
-                    .setValue(parentSpanContextKey, spanId)
-                    .setValue(flowMetadataKey, flowMetadata),
-                async () => {
-                    let output: O | null;
-                    let error: string | null = null;
-
-                    try {
-                        output = await func(inputs);
-                    } catch (err: any) {
-                        console.error(`Error calling ${func.name}:`, err);
-                        output = null;
-                        error = err.message || String(err);
-                    }
-
-                    return { output, error };
-                },
-            );
-
-            const outputStringified = jsonifyIfNotString(func, output);
+            let output: O | null;
+            let error: string | null = null;
+            try {
+                output = await func(inputs);
+            } catch (err: any) {
+                console.error(`Error calling ${func.name}:`, err);
+                output = null;
+                error = err.message || String(err);
+            }
 
             const toolLog = {
                 inputs: inputs,
-                output: outputStringified,
+                output: jsonifyIfNotString(func, output),
                 error,
             };
 

@@ -34,7 +34,7 @@ function _listToOtelFormat(lst: NestedList): NestedDict {
  */
 export function writeToOpenTelemetrySpan(
     span: ReadableSpan,
-    value: NestedDict | NestedList | AttributeValue,
+    value: NestedDict | NestedList | AttributeValue | any[],
     key: string,
 ): void {
     let toWriteCopy: NestedDict;
@@ -191,16 +191,7 @@ export function isLLMProviderCall(span: ReadableSpan): boolean {
  * @returns True if the span was created by the Humanloop SDK, false otherwise
  */
 export function isHumanloopSpan(span: ReadableSpan): boolean {
-    return span.attributes[HUMANLOOP_FILE_TYPE_KEY] !== undefined;
-}
-
-/**
- * Generates a unique span ID.
- *
- * @returns A UUID string
- */
-export function generateSpanId(): string {
-    return uuidv4();
+    return span.name.startsWith("humanloop.");
 }
 
 /**

@@ -11,7 +11,6 @@ import {
     HUMANLOOP_PATH_KEY,
     HUMANLOOP_TRACE_FLOW_CTX_KEY,
     NestedDict,
-    generateSpanId,
     jsonifyIfNotString,
     writeToOpenTelemetrySpan,
 } from "../otel";
@@ -61,28 +60,9 @@ export function promptUtilityFactory<I, M, O>(
         const flowMetadataKey = createContextKey(HUMANLOOP_TRACE_FLOW_CTX_KEY);
 
         // @ts-ignore
-        return opentelemetryTracer.startActiveSpan(generateSpanId(), async (span) => {
+        return opentelemetryTracer.startActiveSpan("humanloop.prompt", async (span) => {
             const ctx = context.active();
             const spanId = span.spanContext().spanId;
-            const parentSpanId = ctx.getValue(parentSpanContextKey) as
-                | string
-                | undefined;
-            const parentFlowMetadata = ctx.getValue(flowMetadataKey) as {
-                traceId: string;
-                isFlowLog: boolean;
-                traceParentId: string;
-            } | null;
-
-            // Handle trace flow context
-
-            const flowMetadata =
-                parentSpanId && parentFlowMetadata
-                    ? {
-                          traceId: parentFlowMetadata.traceId,
-                          isFlowLog: false,
-                          traceParentId: parentSpanId,
-                      }
-                    : null;
 
             // Add span attributes
             span = span.setAttribute(HUMANLOOP_PATH_KEY, path || func.name);
@@ -100,34 +80,19 @@ export function promptUtilityFactory<I, M, O>(
             }
 
             // Execute the wrapped function in a child context
-            const { output, error } = await context.with(
-                ctx
-                    .setValue(parentSpanContextKey, spanId)
-                    .setValue(flowMetadataKey, flowMetadata),
-                async () => {
-                    let output: O | null;
-                    let error: string | null = null;
-
-                    try {
-                        output = await func(inputs, messages);
-                    } catch (err: any) {
-                        console.error(`Error calling ${func.name}:`, err);
-                        // @ts-ignore
-                        output = null;
-                        error = err.message || String(err);
-                    }
-
-                    return {
-                        output,
-                        error,
-                    };
-                },
-            );
-
-            const outputStringified = jsonifyIfNotString(func, output);
+            let output: O | null;
+            let error: string | null = null;
+            try {
+                output = await func(inputs, messages);
+            } catch (err: any) {
+                console.error(`Error calling ${func.name}:`, err);
+                // @ts-ignore
+                output = null;
+                error = err.message || String(err);
+            }
 
             const promptLog = {
-                output: outputStringified,
+                output: jsonifyIfNotString(func, output),
                 error,
                 inputs: inputs,
                 messages: messages,
@@ -141,7 +106,6 @@ export function promptUtilityFactory<I, M, O>(
             );
 
             span.end();
-
             return output;
         });
     };
