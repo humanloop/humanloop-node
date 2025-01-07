@@ -31,6 +31,8 @@ export class HumanloopSpanExporter implements SpanExporter {
     private shutdownFlag: boolean;
     private readonly uploadPromises: Promise<void>[];
     private readonly exportedSpans: ReadableSpan[];
+    // List of spans that must be uploaded before completing the Flow log
+    // This maps [flow log span ID] -> [set of child span IDs]
     private readonly prerequisites: Map<string, Set<string>>;
 
     constructor(client: HumanloopClient) {
@@ -72,7 +74,20 @@ export class HumanloopSpanExporter implements SpanExporter {
         await this.shutdown();
     }
 
-    private completeFlowLog(spanId: string) {
+    /**
+     * Mark a span as uploaded to the Humanloop.
+     *
+     * A Log might be contained inside a Flow trace, which must be marked as complete
+     * when all its children are uploaded. Each Flow Log span contains a
+     * 'humanloop.flow.prerequisites' attribute, which is a list of all spans that must
+     * be uploaded before the Flow Log is marked as complete.
+     *
+     * This method finds the trace the Span belongs to and removes the Span from the list.
+     * Once all prerequisites are uploaded, the method marks the Flow Log as complete.
+     *
+     * @param spanId - The ID of the span that has been uploaded.
+     */
+    private notifySpanUploaded(spanId: string) {
         for (const [flowLogSpanId, flowChildrenSpanIds] of this.prerequisites) {
             if (flowChildrenSpanIds.has(spanId)) {
                 flowChildrenSpanIds.delete(spanId);
@@ -146,7 +161,7 @@ export class HumanloopSpanExporter implements SpanExporter {
         } catch (error) {
             console.error(`Error exporting prompt: ${error}`);
         }
-        this.completeFlowLog(span.spanContext().spanId);
+        this.notifySpanUploaded(span.spanContext().spanId);
     }
 
     private async exportTool(span: ReadableSpan): Promise<void> {
@@ -175,7 +190,7 @@ export class HumanloopSpanExporter implements SpanExporter {
         } catch (error) {
             console.error(`Error exporting tool: ${error}`);
         }
-        this.completeFlowLog(span.spanContext().spanId);
+        this.notifySpanUploaded(span.spanContext().spanId);
     }
 
     private async exportFlow(span: ReadableSpan): Promise<void> {
@@ -218,6 +233,6 @@ export class HumanloopSpanExporter implements SpanExporter {
         } catch (error) {
             console.error("Error exporting flow: ", error, span.spanContext().spanId);
         }
-        this.completeFlowLog(span.spanContext().spanId);
+        this.notifySpanUploaded(span.spanContext().spanId);
     }
 }

@@ -1,9 +1,8 @@
 import { AttributeValue, SpanKind } from "@opentelemetry/api";
 import { ReadableSpan } from "@opentelemetry/sdk-trace-base";
-import { v4 as uuidv4 } from "uuid";
 
 // Constants for Humanloop attributes
-import { HUMANLOOP_FILE_TYPE_KEY } from "./constants";
+import { HUMANLOOP_SPAN_PREFIX } from "./constants";
 
 export type NestedDict = { [key: string]: NestedDict | AttributeValue };
 export type NestedList = Array<NestedDict | AttributeValue>;
@@ -191,7 +190,7 @@ export function isLLMProviderCall(span: ReadableSpan): boolean {
  * @returns True if the span was created by the Humanloop SDK, false otherwise
  */
 export function isHumanloopSpan(span: ReadableSpan): boolean {
-    return span.name.startsWith("humanloop.");
+    return span.name.startsWith(HUMANLOOP_SPAN_PREFIX);
 }
 
 /**

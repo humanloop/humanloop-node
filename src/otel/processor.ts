@@ -13,6 +13,7 @@ import { PromptKernelRequest } from "../api/types/PromptKernelRequest";
 import {
     HUMANLOOP_FILE_KEY,
     HUMANLOOP_FILE_TYPE_KEY,
+    HUMANLOOP_FLOW_SPAN_NAME,
     HUMANLOOP_LOG_KEY,
     HUMANLOOP_META_FUNCTION_NAME,
 } from "./constants";
@@ -52,7 +53,7 @@ export class HumanloopSpanProcessor implements SpanProcessor {
     onStart(span: Span, _: Context): void {
         const spanId = span.spanContext().spanId;
         const parentSpanId = span.parentSpanId;
-        if (span.name === "humanloop.flow") {
+        if (span.name === HUMANLOOP_FLOW_SPAN_NAME) {
             this.prerequisites.set(spanId, []);
         }
         if (parentSpanId !== undefined && isHumanloopSpan(span)) {
@@ -104,7 +105,7 @@ export class HumanloopSpanProcessor implements SpanProcessor {
             }).then((_) => {
                 // All instrumentor spans have arrived, we can process the
                 // Humanloop parent span owning them
-                if (span.name === "humanloop.flow") {
+                if (span.name === HUMANLOOP_FLOW_SPAN_NAME) {
                     // If the span if a Flow Log, add attribute with all span IDs it
                     // needs to wait before completion
                     writeToOpenTelemetrySpan(
