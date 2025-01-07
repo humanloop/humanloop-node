@@ -87,7 +87,7 @@ export class HumanloopSpanExporter implements SpanExporter {
      *
      * @param spanId - The ID of the span that has been uploaded.
      */
-    private notifySpanUploaded(spanId: string) {
+    private markSpanCompleted(spanId: string) {
         for (const [flowLogSpanId, flowChildrenSpanIds] of this.prerequisites) {
             if (flowChildrenSpanIds.has(spanId)) {
                 flowChildrenSpanIds.delete(spanId);
@@ -161,7 +161,7 @@ export class HumanloopSpanExporter implements SpanExporter {
         } catch (error) {
             console.error(`Error exporting prompt: ${error}`);
         }
-        this.notifySpanUploaded(span.spanContext().spanId);
+        this.markSpanCompleted(span.spanContext().spanId);
     }
 
     private async exportTool(span: ReadableSpan): Promise<void> {
@@ -190,7 +190,7 @@ export class HumanloopSpanExporter implements SpanExporter {
         } catch (error) {
             console.error(`Error exporting tool: ${error}`);
         }
-        this.notifySpanUploaded(span.spanContext().spanId);
+        this.markSpanCompleted(span.spanContext().spanId);
     }
 
     private async exportFlow(span: ReadableSpan): Promise<void> {
@@ -233,6 +233,6 @@ export class HumanloopSpanExporter implements SpanExporter {
         } catch (error) {
             console.error("Error exporting flow: ", error, span.spanContext().spanId);
         }
-        this.notifySpanUploaded(span.spanContext().spanId);
+        this.markSpanCompleted(span.spanContext().spanId);
     }
 }
