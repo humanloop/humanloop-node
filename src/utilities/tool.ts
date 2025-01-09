@@ -1,21 +1,14 @@
-import { context, createContextKey } from "@opentelemetry/api";
 import { ReadableSpan, Tracer } from "@opentelemetry/sdk-trace-node";
 
 import { ToolKernelRequest } from "../api/types/ToolKernelRequest";
-import {
-    NestedDict,
-    generateSpanId,
-    jsonifyIfNotString,
-    writeToOpenTelemetrySpan,
-} from "../otel";
+import { NestedDict, jsonifyIfNotString, writeToOpenTelemetrySpan } from "../otel";
 import {
     HUMANLOOP_FILE_KEY,
     HUMANLOOP_FILE_TYPE_KEY,
     HUMANLOOP_LOG_KEY,
     HUMANLOOP_META_FUNCTION_NAME,
-    HUMANLOOP_PARENT_SPAN_CTX_KEY,
     HUMANLOOP_PATH_KEY,
-    HUMANLOOP_TRACE_FLOW_CTX_KEY,
+    HUMANLOOP_TOOL_SPAN_NAME,
 } from "../otel/constants";
 import { ToolCallableType } from "./types";
 
@@ -49,84 +42,50 @@ export function toolUtilityFactory<I, O>(
     ): O extends Promise<infer R> ? Promise<R> : Promise<O> => {
         validateArgumentsAgainstSchema(version, inputs);
 
-        const parentSpanContextKey = createContextKey(HUMANLOOP_PARENT_SPAN_CTX_KEY);
-        const flowMetadataKey = createContextKey(HUMANLOOP_TRACE_FLOW_CTX_KEY);
-
         // @ts-ignore
-        return opentelemetryTracer.startActiveSpan(generateSpanId(), async (span) => {
-            const ctx = context.active();
-            const spanId = span.spanContext().spanId;
-            const parentSpanId = ctx.getValue(parentSpanContextKey) as
-                | string
-                | undefined;
-            const parentFlowMetadata = ctx.getValue(flowMetadataKey) as {
-                traceId: string;
-                isFlowLog: boolean;
-                traceParentId: string;
-            } | null;
+        return opentelemetryTracer.startActiveSpan(
+            HUMANLOOP_TOOL_SPAN_NAME,
+            async (span) => {
+                // Add span attributes
+                span.setAttribute(HUMANLOOP_PATH_KEY, path || func.name);
+                span.setAttribute(HUMANLOOP_FILE_TYPE_KEY, "tool");
+                span = span.setAttribute(HUMANLOOP_META_FUNCTION_NAME, func.name);
 
-            // Handle trace flow context
-            const flowMetadata =
-                parentSpanId && parentFlowMetadata
-                    ? {
-                          traceId: parentFlowMetadata.traceId,
-                          isFlowLog: false,
-                          traceParentId: parentSpanId,
-                      }
-                    : null;
+                // Execute the wrapped function in the appropriate context
+                let output: O | null;
+                let error: string | null = null;
+                try {
+                    output = await func(inputs);
+                } catch (err: any) {
+                    console.error(`Error calling ${func.name}:`, err);
+                    output = null;
+                    error = err.message || String(err);
+                }
 
-            // Add span attributes
-            span.setAttribute(HUMANLOOP_PATH_KEY, path || func.name);
-            span.setAttribute(HUMANLOOP_FILE_TYPE_KEY, "tool");
-            span = span.setAttribute(HUMANLOOP_META_FUNCTION_NAME, func.name);
+                const toolLog = {
+                    inputs: inputs,
+                    output: jsonifyIfNotString(func, output),
+                    error,
+                };
 
-            // @ts-ignore
-            // Execute the wrapped function in the appropriate context
-            const { output, error } = await context.with(
-                ctx
-                    .setValue(parentSpanContextKey, spanId)
-                    .setValue(flowMetadataKey, flowMetadata),
-                async () => {
-                    let output: O | null;
-                    let error: string | null = null;
+                writeToOpenTelemetrySpan(
+                    span as unknown as ReadableSpan,
+                    toolLog as unknown as NestedDict,
+                    HUMANLOOP_LOG_KEY,
+                );
 
-                    try {
-                        output = await func(inputs);
-                    } catch (err: any) {
-                        console.error(`Error calling ${func.name}:`, err);
-                        output = null;
-                        error = err.message || String(err);
-                    }
+                writeToOpenTelemetrySpan(
+                    span as unknown as ReadableSpan,
+                    {
+                        ...version,
+                    } as unknown as NestedDict,
+                    `${HUMANLOOP_FILE_KEY}.tool`,
+                );
 
-                    return { output, error };
-                },
-            );
-
-            const outputStringified = jsonifyIfNotString(func, output);
-
-            const toolLog = {
-                inputs: inputs,
-                output: outputStringified,
-                error,
-            };
-
-            writeToOpenTelemetrySpan(
-                span as unknown as ReadableSpan,
-                toolLog as unknown as NestedDict,
-                HUMANLOOP_LOG_KEY,
-            );
-
-            writeToOpenTelemetrySpan(
-                span as unknown as ReadableSpan,
-                {
-                    ...version,
-                } as unknown as NestedDict,
-                `${HUMANLOOP_FILE_KEY}.tool`,
-            );
-
-            span.end();
-            return output;
-        });
+                span.end();
+                return output;
+            },
+        );
     };
 
     // @ts-ignore Adding jsonSchema property to utility-wrapped function

@@ -1,4 +1,3 @@
-import { context, createContextKey } from "@opentelemetry/api";
 import { ReadableSpan, Tracer } from "@opentelemetry/sdk-trace-node";
 
 import { PromptKernelRequest } from "../api/types/PromptKernelRequest";
@@ -7,11 +6,9 @@ import {
     HUMANLOOP_FILE_TYPE_KEY,
     HUMANLOOP_LOG_KEY,
     HUMANLOOP_META_FUNCTION_NAME,
-    HUMANLOOP_PARENT_SPAN_CTX_KEY,
     HUMANLOOP_PATH_KEY,
-    HUMANLOOP_TRACE_FLOW_CTX_KEY,
+    HUMANLOOP_PROMPT_SPAN_NAME,
     NestedDict,
-    generateSpanId,
     jsonifyIfNotString,
     writeToOpenTelemetrySpan,
 } from "../otel";
@@ -57,92 +54,53 @@ export function promptUtilityFactory<I, M, O>(
                 .reduce((obj, [key, value]) => ({ ...obj, [key]: value }), {});
         }
 
-        const parentSpanContextKey = createContextKey(HUMANLOOP_PARENT_SPAN_CTX_KEY);
-        const flowMetadataKey = createContextKey(HUMANLOOP_TRACE_FLOW_CTX_KEY);
-
         // @ts-ignore
-        return opentelemetryTracer.startActiveSpan(generateSpanId(), async (span) => {
-            const ctx = context.active();
-            const spanId = span.spanContext().spanId;
-            const parentSpanId = ctx.getValue(parentSpanContextKey) as
-                | string
-                | undefined;
-            const parentFlowMetadata = ctx.getValue(flowMetadataKey) as {
-                traceId: string;
-                isFlowLog: boolean;
-                traceParentId: string;
-            } | null;
+        return opentelemetryTracer.startActiveSpan(
+            HUMANLOOP_PROMPT_SPAN_NAME,
+            async (span) => {
+                // Add span attributes
+                span = span.setAttribute(HUMANLOOP_PATH_KEY, path || func.name);
+                span = span.setAttribute(HUMANLOOP_FILE_TYPE_KEY, "prompt");
+                span = span.setAttribute(HUMANLOOP_META_FUNCTION_NAME, func.name);
 
-            // Handle trace flow context
+                if (version) {
+                    writeToOpenTelemetrySpan(
+                        span as unknown as ReadableSpan,
+                        {
+                            ...version,
+                        } as unknown as NestedDict,
+                        "humanloop.file.prompt",
+                    );
+                }
 
-            const flowMetadata =
-                parentSpanId && parentFlowMetadata
-                    ? {
-                          traceId: parentFlowMetadata.traceId,
-                          isFlowLog: false,
-                          traceParentId: parentSpanId,
-                      }
-                    : null;
+                // Execute the wrapped function in a child context
+                let output: O | null;
+                let error: string | null = null;
+                try {
+                    output = await func(inputs, messages);
+                } catch (err: any) {
+                    console.error(`Error calling ${func.name}:`, err);
+                    output = null;
+                    error = err.message || String(err);
+                }
 
-            // Add span attributes
-            span = span.setAttribute(HUMANLOOP_PATH_KEY, path || func.name);
-            span = span.setAttribute(HUMANLOOP_FILE_TYPE_KEY, "prompt");
-            span = span.setAttribute(HUMANLOOP_META_FUNCTION_NAME, func.name);
+                const promptLog = {
+                    output: jsonifyIfNotString(func, output),
+                    error,
+                    inputs: inputs,
+                    messages: messages,
+                };
 
-            if (version) {
                 writeToOpenTelemetrySpan(
                     span as unknown as ReadableSpan,
-                    {
-                        ...version,
-                    } as unknown as NestedDict,
-                    "humanloop.file.prompt",
+                    // @ts-ignore
+                    promptLog,
+                    HUMANLOOP_LOG_KEY,
                 );
-            }
 
-            // Execute the wrapped function in a child context
-            const { output, error } = await context.with(
-                ctx
-                    .setValue(parentSpanContextKey, spanId)
-                    .setValue(flowMetadataKey, flowMetadata),
-                async () => {
-                    let output: O | null;
-                    let error: string | null = null;
-
-                    try {
-                        output = await func(inputs, messages);
-                    } catch (err: any) {
-                        console.error(`Error calling ${func.name}:`, err);
-                        // @ts-ignore
-                        output = null;
-                        error = err.message || String(err);
-                    }
-
-                    return {
-                        output,
-                        error,
-                    };
-                },
-            );
-
-            const outputStringified = jsonifyIfNotString(func, output);
-
-            const promptLog = {
-                output: outputStringified,
-                error,
-                inputs: inputs,
-                messages: messages,
-            };
-
-            writeToOpenTelemetrySpan(
-                span as unknown as ReadableSpan,
-                // @ts-ignore
-                promptLog,
-                HUMANLOOP_LOG_KEY,
-            );
-
-            span.end();
-
-            return output;
-        });
+                span.end();
+                return output;
+            },
+        );
     };
 }

@@ -6,6 +6,7 @@ import { HumanloopClient } from "../humanloop.client";
 import {
     HUMANLOOP_FILE_KEY,
     HUMANLOOP_FILE_TYPE_KEY,
+    HUMANLOOP_FLOW_PREREQUISITES_KEY,
     HUMANLOOP_LOG_KEY,
     HUMANLOOP_PATH_KEY,
 } from "./constants";
@@ -30,6 +31,9 @@ export class HumanloopSpanExporter implements SpanExporter {
     private shutdownFlag: boolean;
     private readonly uploadPromises: Promise<void>[];
     private readonly exportedSpans: ReadableSpan[];
+    // List of spans that must be uploaded before completing the Flow log
+    // This maps [flow log span ID] -> [set of child span IDs]
+    private readonly prerequisites: Map<string, Set<string>>;
 
     constructor(client: HumanloopClient) {
         this.client = client;
@@ -37,6 +41,7 @@ export class HumanloopSpanExporter implements SpanExporter {
         this.shutdownFlag = false;
         this.uploadPromises = [];
         this.exportedSpans = [];
+        this.prerequisites = new Map();
     }
 
     export(spans: ReadableSpan[]): ExportResult {
@@ -67,6 +72,32 @@ export class HumanloopSpanExporter implements SpanExporter {
 
     async forceFlush(): Promise<void> {
         await this.shutdown();
+    }
+
+    /**
+     * Mark a span as uploaded to the Humanloop.
+     *
+     * A Log might be contained inside a Flow trace, which must be marked as complete
+     * when all its children are uploaded. Each Flow Log span contains a
+     * 'humanloop.flow.prerequisites' attribute, which is a list of all spans that must
+     * be uploaded before the Flow Log is marked as complete.
+     *
+     * This method finds the trace the Span belongs to and removes the Span from the list.
+     * Once all prerequisites are uploaded, the method marks the Flow Log as complete.
+     *
+     * @param spanId - The ID of the span that has been uploaded.
+     */
+    private markSpanCompleted(spanId: string) {
+        for (const [flowLogSpanId, flowChildrenSpanIds] of this.prerequisites) {
+            if (flowChildrenSpanIds.has(spanId)) {
+                flowChildrenSpanIds.delete(spanId);
+                if (flowChildrenSpanIds.size === 0) {
+                    const flowLogId = this.spanIdToUploadedLogId.get(flowLogSpanId)!;
+                    this.client.flows.updateLog(flowLogId, { traceStatus: "complete" });
+                }
+                break;
+            }
+        }
     }
 
     private async exportSpanDispatch(span: ReadableSpan): Promise<void> {
@@ -130,6 +161,7 @@ export class HumanloopSpanExporter implements SpanExporter {
         } catch (error) {
             console.error(`Error exporting prompt: ${error}`);
         }
+        this.markSpanCompleted(span.spanContext().spanId);
     }
 
     private async exportTool(span: ReadableSpan): Promise<void> {
@@ -158,6 +190,7 @@ export class HumanloopSpanExporter implements SpanExporter {
         } catch (error) {
             console.error(`Error exporting tool: ${error}`);
         }
+        this.markSpanCompleted(span.spanContext().spanId);
     }
 
     private async exportFlow(span: ReadableSpan): Promise<void> {
@@ -168,6 +201,18 @@ export class HumanloopSpanExporter implements SpanExporter {
         logObject.startTime = hrTimeToDate(span.startTime);
         logObject.endTime = hrTimeToDate(span.endTime);
         logObject.createdAt = hrTimeToDate(span.endTime);
+        // Spans that must be uploaded before the Flow Span is completed
+        let prerequisites: string[] | undefined = undefined;
+        try {
+            prerequisites = readFromOpenTelemetrySpan(
+                span,
+                HUMANLOOP_FLOW_PREREQUISITES_KEY,
+            ) as unknown as string[];
+        } catch (error) {
+            prerequisites = [];
+        }
+
+        this.prerequisites.set(span.spanContext().spanId, new Set(prerequisites));
 
         const spanParentId = span.parentSpanId;
         const traceParentId = spanParentId
@@ -188,5 +233,6 @@ export class HumanloopSpanExporter implements SpanExporter {
         } catch (error) {
             console.error("Error exporting flow: ", error, span.spanContext().spanId);
         }
+        this.markSpanCompleted(span.spanContext().spanId);
     }
 }
