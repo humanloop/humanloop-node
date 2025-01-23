@@ -20,6 +20,12 @@ export interface FlowResponse {
     commitMessage?: string;
     /** Name of the Flow. */
     name: string;
+    /** Description of the Flow. */
+    description?: string;
+    /** Long description of the file. */
+    readme?: string;
+    /** List of tags associated with the file. */
+    tags?: string[];
     /** Unique identifier for the specific Flow Version. If no query params provided, the default deployed Flow Version is returned. */
     versionId: string;
     type?: "flow";

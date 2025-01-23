@@ -11,8 +11,14 @@ export interface DirectoryWithParentsAndChildrenResponse {
     parentId?: string;
     /** Name of the directory. */
     name: string;
+    /** Description of the directory. */
+    description?: string;
     /** Path to the directory, relative to the root directory. Includes name, e.g. `path/to/directory`. */
     path: string;
+    /** Long description of the directory. */
+    readme?: string;
+    /** List of tags associated with the directory. */
+    tags: string[];
     createdAt: Date;
     updatedAt: Date;
     /** List of subdirectories in the directory. */

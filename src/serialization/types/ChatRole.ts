@@ -7,8 +7,8 @@ import * as Humanloop from "../../api/index";
 import * as core from "../../core";
 
 export const ChatRole: core.serialization.Schema<serializers.ChatRole.Raw, Humanloop.ChatRole> =
-    core.serialization.enum_(["user", "assistant", "system", "tool"]);
+    core.serialization.enum_(["user", "assistant", "system", "tool", "developer"]);
 
 export declare namespace ChatRole {
-    type Raw = "user" | "assistant" | "system" | "tool";
+    type Raw = "user" | "assistant" | "system" | "tool" | "developer";
 }

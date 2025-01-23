@@ -12,14 +12,14 @@ export const CreateDatapointRequest: core.serialization.ObjectSchema<
     serializers.CreateDatapointRequest.Raw,
     Humanloop.CreateDatapointRequest
 > = core.serialization.object({
-    inputs: core.serialization.record(core.serialization.string(), core.serialization.string()).optional(),
+    inputs: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
     messages: core.serialization.list(ChatMessage).optional(),
     target: core.serialization.record(core.serialization.string(), CreateDatapointRequestTargetValue).optional(),
 });
 
 export declare namespace CreateDatapointRequest {
     interface Raw {
-        inputs?: Record<string, string> | null;
+        inputs?: Record<string, unknown> | null;
         messages?: ChatMessage.Raw[] | null;
         target?: Record<string, CreateDatapointRequestTargetValue.Raw> | null;
     }

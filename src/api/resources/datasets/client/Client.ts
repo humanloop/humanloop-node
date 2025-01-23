@@ -100,8 +100,8 @@ export class Datasets {
                 headers: {
                     "X-Fern-Language": "JavaScript",
                     "X-Fern-SDK-Name": "humanloop",
-                    "X-Fern-SDK-Version": "0.8.9-beta6",
-                    "User-Agent": "humanloop/0.8.9-beta6",
+                    "X-Fern-SDK-Version": "0.8.10-beta7",
+                    "User-Agent": "humanloop/0.8.10-beta7",
                     "X-Fern-Runtime": core.RUNTIME.type,
                     "X-Fern-Runtime-Version": core.RUNTIME.version,
                     ...(await this._getCustomAuthorizationHeaders()),
@@ -176,7 +176,7 @@ export class Datasets {
      * the request. You can also create a new version by adding or removing Datapoints from an existing version
      * by specifying `action` as `add` or `remove` respectively. In this case, you may specify
      * the `version_id` or `environment` query parameters to identify the existing version to base
-     * the new version on. If neither is provided, the default deployed version will be used.
+     * the new version on. If neither is provided, the latest created version will be used.
      *
      * If you provide a commit message, then the new version will be committed;
      * otherwise it will be uncommitted. If you try to commit an already committed version,
@@ -263,8 +263,8 @@ export class Datasets {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.9-beta6",
-                "User-Agent": "humanloop/0.8.9-beta6",
+                "X-Fern-SDK-Version": "0.8.10-beta7",
+                "User-Agent": "humanloop/0.8.10-beta7",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -373,8 +373,8 @@ export class Datasets {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.9-beta6",
-                "User-Agent": "humanloop/0.8.9-beta6",
+                "X-Fern-SDK-Version": "0.8.10-beta7",
+                "User-Agent": "humanloop/0.8.10-beta7",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -452,8 +452,8 @@ export class Datasets {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.9-beta6",
-                "User-Agent": "humanloop/0.8.9-beta6",
+                "X-Fern-SDK-Version": "0.8.10-beta7",
+                "User-Agent": "humanloop/0.8.10-beta7",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -529,8 +529,8 @@ export class Datasets {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.9-beta6",
-                "User-Agent": "humanloop/0.8.9-beta6",
+                "X-Fern-SDK-Version": "0.8.10-beta7",
+                "User-Agent": "humanloop/0.8.10-beta7",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -632,8 +632,8 @@ export class Datasets {
                 headers: {
                     "X-Fern-Language": "JavaScript",
                     "X-Fern-SDK-Name": "humanloop",
-                    "X-Fern-SDK-Version": "0.8.9-beta6",
-                    "User-Agent": "humanloop/0.8.9-beta6",
+                    "X-Fern-SDK-Version": "0.8.10-beta7",
+                    "User-Agent": "humanloop/0.8.10-beta7",
                     "X-Fern-Runtime": core.RUNTIME.type,
                     "X-Fern-Runtime-Version": core.RUNTIME.version,
                     ...(await this._getCustomAuthorizationHeaders()),
@@ -737,8 +737,8 @@ export class Datasets {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.9-beta6",
-                "User-Agent": "humanloop/0.8.9-beta6",
+                "X-Fern-SDK-Version": "0.8.10-beta7",
+                "User-Agent": "humanloop/0.8.10-beta7",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -827,8 +827,8 @@ export class Datasets {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.9-beta6",
-                "User-Agent": "humanloop/0.8.9-beta6",
+                "X-Fern-SDK-Version": "0.8.10-beta7",
+                "User-Agent": "humanloop/0.8.10-beta7",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -911,8 +911,8 @@ export class Datasets {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.9-beta6",
-                "User-Agent": "humanloop/0.8.9-beta6",
+                "X-Fern-SDK-Version": "0.8.10-beta7",
+                "User-Agent": "humanloop/0.8.10-beta7",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1012,8 +1012,8 @@ export class Datasets {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.9-beta6",
-                "User-Agent": "humanloop/0.8.9-beta6",
+                "X-Fern-SDK-Version": "0.8.10-beta7",
+                "User-Agent": "humanloop/0.8.10-beta7",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1107,8 +1107,8 @@ export class Datasets {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.9-beta6",
-                "User-Agent": "humanloop/0.8.9-beta6",
+                "X-Fern-SDK-Version": "0.8.10-beta7",
+                "User-Agent": "humanloop/0.8.10-beta7",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1193,8 +1193,8 @@ export class Datasets {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.9-beta6",
-                "User-Agent": "humanloop/0.8.9-beta6",
+                "X-Fern-SDK-Version": "0.8.10-beta7",
+                "User-Agent": "humanloop/0.8.10-beta7",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1268,8 +1268,8 @@ export class Datasets {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.9-beta6",
-                "User-Agent": "humanloop/0.8.9-beta6",
+                "X-Fern-SDK-Version": "0.8.10-beta7",
+                "User-Agent": "humanloop/0.8.10-beta7",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),

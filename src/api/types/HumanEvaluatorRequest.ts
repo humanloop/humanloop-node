@@ -11,13 +11,13 @@ export interface HumanEvaluatorRequest {
     returnType: Humanloop.HumanEvaluatorRequestReturnType;
     /** Additional fields to describe the Evaluator. Helpful to separate Evaluator versions from each other with details on how they were created or used. */
     attributes?: Record<string, unknown>;
-    evaluatorType: "human";
-    /** Instructions for the Human annotating the . */
-    instructions?: string;
-    /** The options that the Human annotator can choose from. */
+    /** The options that can be applied as judgments. */
     options?: Humanloop.EvaluatorJudgmentOptionResponse[];
-    /** Limits on the judgment that can be applied. Only for Evaluators with `return_type` of `'number'`. */
+    /** Limits on the judgment that can be applied. Only for Evaluators with `return_type` of 'number'. */
     numberLimits?: Humanloop.EvaluatorJudgmentNumberLimit;
-    /** The valence of the number judgment. Only for Evaluators with `return_type` of `'number'`. If 'positive', a higher number is better. If 'negative', a lower number is better. */
+    /** The valence of the number judgment. Only for Evaluators with `return_type` of 'number'. If 'positive', a higher number is better. If 'negative', a lower number is better. */
     numberValence?: Humanloop.Valence;
+    evaluatorType: "human";
+    /** Instructions and guidelines for applying judgments. */
+    instructions?: string;
 }

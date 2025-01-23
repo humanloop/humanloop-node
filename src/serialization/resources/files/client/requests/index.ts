@@ -1,0 +1,1 @@
+export { BodyRetrieveByPathFilesRetrieveByPathPost } from "./BodyRetrieveByPathFilesRetrieveByPathPost";

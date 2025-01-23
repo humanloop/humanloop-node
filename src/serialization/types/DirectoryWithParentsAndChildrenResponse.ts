@@ -15,7 +15,10 @@ export const DirectoryWithParentsAndChildrenResponse: core.serialization.ObjectS
     id: core.serialization.string(),
     parentId: core.serialization.property("parent_id", core.serialization.string().optional()),
     name: core.serialization.string(),
+    description: core.serialization.string().optional(),
     path: core.serialization.string(),
+    readme: core.serialization.string().optional(),
+    tags: core.serialization.list(core.serialization.string()),
     createdAt: core.serialization.property("created_at", core.serialization.date()),
     updatedAt: core.serialization.property("updated_at", core.serialization.date()),
     subdirectories: core.serialization.list(DirectoryResponse),
@@ -28,7 +31,10 @@ export declare namespace DirectoryWithParentsAndChildrenResponse {
         id: string;
         parent_id?: string | null;
         name: string;
+        description?: string | null;
         path: string;
+        readme?: string | null;
+        tags: string[];
         created_at: string;
         updated_at: string;
         subdirectories: DirectoryResponse.Raw[];

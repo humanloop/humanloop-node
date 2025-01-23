@@ -61,6 +61,8 @@ export interface CreateEvaluatorLogRequest {
     save?: boolean;
     /** This will identify a Log. If you don't provide a Log ID, Humanloop will generate one for you. */
     logId?: string;
+    /** The message returned by the LLM. Only populated for LLM Evaluator Logs. */
+    outputMessage?: Humanloop.ChatMessage;
     /** Evaluator assessment of the Log. */
     judgment?: Humanloop.CreateEvaluatorLogRequestJudgment;
     /** Whether the Log has been manually marked as completed by a user. */

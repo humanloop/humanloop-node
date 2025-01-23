@@ -31,6 +31,12 @@ export interface ToolResponse {
     commitMessage?: string;
     /** Name of the Tool, which is used as a unique identifier. */
     name: string;
+    /** Description of the Tool. */
+    description?: string;
+    /** Long description of the file. */
+    readme?: string;
+    /** List of tags associated with the file. */
+    tags?: string[];
     /** Unique identifier for the specific Tool Version. If no query params provided, the default deployed Tool Version is returned. */
     versionId: string;
     type?: "tool";

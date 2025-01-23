@@ -19,6 +19,12 @@ export interface EvaluatorResponse {
     spec: Humanloop.EvaluatorResponseSpec;
     /** Name of the Evaluator, which is used as a unique identifier. */
     name: string;
+    /** Description of the Evaluator. */
+    description?: string;
+    /** Long description of the file. */
+    readme?: string;
+    /** List of tags associated with the file. */
+    tags?: string[];
     /** Unique identifier for the specific Evaluator Version. If no query params provided, the default deployed Evaluator Version is returned. */
     versionId: string;
     type?: "evaluator";

@@ -33,6 +33,10 @@ export interface ListLogsGetRequest {
      */
     versionStatus?: Humanloop.VersionStatus;
     /**
+     * If provided, returns Logs whose IDs contain any of the specified values as substrings.
+     */
+    id?: string | string[];
+    /**
      * If provided, only Logs that contain the provided string in its inputs and output will be returned.
      */
     search?: string;

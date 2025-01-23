@@ -6,78 +6,7 @@ import * as Humanloop from "../../../../index";
 
 /**
  * @example
- *     {
- *         versionId: "string",
- *         environment: "string",
- *         path: "string",
- *         id: "string",
- *         messages: [{
- *                 content: "string",
- *                 name: "string",
- *                 toolCallId: "string",
- *                 role: "user",
- *                 toolCalls: [{
- *                         id: "string",
- *                         type: "function",
- *                         function: {
- *                             name: "string",
- *                             arguments: undefined
- *                         }
- *                     }]
- *             }],
- *         toolChoice: "none",
- *         prompt: {
- *             model: "string",
- *             endpoint: undefined,
- *             template: undefined,
- *             provider: undefined,
- *             maxTokens: undefined,
- *             temperature: undefined,
- *             topP: undefined,
- *             stop: undefined,
- *             presencePenalty: undefined,
- *             frequencyPenalty: undefined,
- *             other: undefined,
- *             seed: undefined,
- *             responseFormat: undefined,
- *             tools: undefined,
- *             linkedTools: undefined,
- *             attributes: undefined
- *         },
- *         inputs: {
- *             "string": {
- *                 "key": "value"
- *             }
- *         },
- *         source: "string",
- *         metadata: {
- *             "string": {
- *                 "key": "value"
- *             }
- *         },
- *         startTime: "2024-01-15T09:30:00Z",
- *         endTime: "2024-01-15T09:30:00Z",
- *         sourceDatapointId: "string",
- *         traceParentId: "string",
- *         user: "string",
- *         promptsCallStreamRequestEnvironment: "string",
- *         save: true,
- *         logId: "string",
- *         providerApiKeys: {
- *             openai: "string",
- *             ai21: "string",
- *             mock: "string",
- *             anthropic: "string",
- *             bedrock: "string",
- *             cohere: "string",
- *             openaiAzure: "string",
- *             openaiAzureEndpoint: "string"
- *         },
- *         numSamples: 1,
- *         returnInputs: true,
- *         logprobs: 1,
- *         suffix: "string"
- *     }
+ *     {}
  */
 export interface PromptsCallStreamRequest {
     /**

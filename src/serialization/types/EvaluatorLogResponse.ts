@@ -5,6 +5,7 @@
 import * as serializers from "../index";
 import * as Humanloop from "../../api/index";
 import * as core from "../../core";
+import { ChatMessage } from "./ChatMessage";
 import { EvaluatorLogResponseJudgment } from "./EvaluatorLogResponseJudgment";
 
 export const EvaluatorLogResponse: core.serialization.ObjectSchema<
@@ -37,6 +38,7 @@ export const EvaluatorLogResponse: core.serialization.ObjectSchema<
     environment: core.serialization.string().optional(),
     save: core.serialization.boolean().optional(),
     logId: core.serialization.property("log_id", core.serialization.string().optional()),
+    outputMessage: core.serialization.property("output_message", ChatMessage.optional()),
     judgment: EvaluatorLogResponseJudgment.optional(),
     markedCompleted: core.serialization.property("marked_completed", core.serialization.boolean().optional()),
     id: core.serialization.string(),
@@ -76,6 +78,7 @@ export declare namespace EvaluatorLogResponse {
         environment?: string | null;
         save?: boolean | null;
         log_id?: string | null;
+        output_message?: ChatMessage.Raw | null;
         judgment?: EvaluatorLogResponseJudgment.Raw | null;
         marked_completed?: boolean | null;
         id: string;

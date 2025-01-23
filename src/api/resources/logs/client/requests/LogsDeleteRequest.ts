@@ -4,9 +4,7 @@
 
 /**
  * @example
- *     {
- *         id: "string"
- *     }
+ *     {}
  */
 export interface LogsDeleteRequest {
     /**

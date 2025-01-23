@@ -6,7 +6,7 @@ import * as Humanloop from "../index";
 
 export interface DatapointResponse {
     /** The inputs to the prompt template. */
-    inputs?: Record<string, string>;
+    inputs?: Record<string, unknown>;
     /** List of chat messages to provide to the model. */
     messages?: Humanloop.ChatMessage[];
     /** Object with criteria necessary to evaluate generations with this Datapoint. This is passed in as an argument to Evaluators when used in an Evaluation. */

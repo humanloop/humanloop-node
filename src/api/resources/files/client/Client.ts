@@ -32,19 +32,19 @@ export class Files {
     /**
      * Get a paginated list of files.
      *
-     * @param {Humanloop.FilesListRequest} request
+     * @param {Humanloop.ListFilesFilesGetRequest} request
      * @param {Files.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Humanloop.UnprocessableEntityError}
      *
      * @example
-     *     await client.files.list()
+     *     await client.files.listFiles()
      */
-    public async list(
-        request: Humanloop.FilesListRequest = {},
+    public async listFiles(
+        request: Humanloop.ListFilesFilesGetRequest = {},
         requestOptions?: Files.RequestOptions,
     ): Promise<Humanloop.PaginatedDataUnionPromptResponseToolResponseDatasetResponseEvaluatorResponseFlowResponse> {
-        const { page, size, name, type: type_, environment, sortBy, order } = request;
+        const { page, size, name, template, type: type_, environment, sortBy, order } = request;
         const _queryParams: Record<string, string | string[] | object | object[]> = {};
         if (page != null) {
             _queryParams["page"] = page.toString();
@@ -56,6 +56,10 @@ export class Files {
 
         if (name != null) {
             _queryParams["name"] = name;
+        }
+
+        if (template != null) {
+            _queryParams["template"] = template.toString();
         }
 
         if (type_ != null) {
@@ -87,8 +91,8 @@ export class Files {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.9-beta6",
-                "User-Agent": "humanloop/0.8.9-beta6",
+                "X-Fern-SDK-Version": "0.8.10-beta7",
+                "User-Agent": "humanloop/0.8.10-beta7",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -111,6 +115,99 @@ export class Files {
                     breadcrumbsPrefix: ["response"],
                 },
             );
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 422:
+                    throw new Humanloop.UnprocessableEntityError(
+                        serializers.HttpValidationError.parseOrThrow(_response.error.body, {
+                            unrecognizedObjectKeys: "passthrough",
+                            allowUnrecognizedUnionMembers: true,
+                            allowUnrecognizedEnumValues: true,
+                            skipValidation: true,
+                            breadcrumbsPrefix: ["response"],
+                        }),
+                    );
+                default:
+                    throw new errors.HumanloopError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                    });
+            }
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.HumanloopError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
+                });
+            case "timeout":
+                throw new errors.HumanloopTimeoutError();
+            case "unknown":
+                throw new errors.HumanloopError({
+                    message: _response.error.errorMessage,
+                });
+        }
+    }
+
+    /**
+     * Retrieve a File by path.
+     *
+     * @param {Humanloop.BodyRetrieveByPathFilesRetrieveByPathPost} request
+     * @param {Files.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Humanloop.UnprocessableEntityError}
+     *
+     * @example
+     *     await client.files.retrieveByPath({
+     *         path: "path"
+     *     })
+     */
+    public async retrieveByPath(
+        request: Humanloop.BodyRetrieveByPathFilesRetrieveByPathPost,
+        requestOptions?: Files.RequestOptions,
+    ): Promise<Humanloop.RetrieveByPathFilesRetrieveByPathPostResponse> {
+        const { environment, ..._body } = request;
+        const _queryParams: Record<string, string | string[] | object | object[]> = {};
+        if (environment != null) {
+            _queryParams["environment"] = environment;
+        }
+
+        const _response = await (this._options.fetcher ?? core.fetcher)({
+            url: urlJoin(
+                (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
+                "files/retrieve-by-path",
+            ),
+            method: "POST",
+            headers: {
+                "X-Fern-Language": "JavaScript",
+                "X-Fern-SDK-Name": "humanloop",
+                "X-Fern-SDK-Version": "0.8.10-beta7",
+                "User-Agent": "humanloop/0.8.10-beta7",
+                "X-Fern-Runtime": core.RUNTIME.type,
+                "X-Fern-Runtime-Version": core.RUNTIME.version,
+                ...(await this._getCustomAuthorizationHeaders()),
+            },
+            contentType: "application/json",
+            queryParameters: _queryParams,
+            requestType: "json",
+            body: serializers.BodyRetrieveByPathFilesRetrieveByPathPost.jsonOrThrow(_body, {
+                unrecognizedObjectKeys: "strip",
+            }),
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return serializers.RetrieveByPathFilesRetrieveByPathPostResponse.parseOrThrow(_response.body, {
+                unrecognizedObjectKeys: "passthrough",
+                allowUnrecognizedUnionMembers: true,
+                allowUnrecognizedEnumValues: true,
+                skipValidation: true,
+                breadcrumbsPrefix: ["response"],
+            });
         }
 
         if (_response.error.reason === "status-code") {

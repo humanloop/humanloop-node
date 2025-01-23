@@ -19,6 +19,12 @@ export interface DatasetResponse {
     directoryId?: string;
     /** Name of the Dataset, which is used as a unique identifier. */
     name: string;
+    /** Description of the Dataset. */
+    description?: string;
+    /** Long description of the file. */
+    readme?: string;
+    /** List of tags associated with the file. */
+    tags?: string[];
     /** Unique identifier for the specific Dataset Version. If no query params provided, the default deployed Dataset Version is returned. Starts with `dsv_`. */
     versionId: string;
     type?: "dataset";

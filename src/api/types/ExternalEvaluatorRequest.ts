@@ -11,5 +11,11 @@ export interface ExternalEvaluatorRequest {
     returnType: Humanloop.EvaluatorReturnTypeEnum;
     /** Additional fields to describe the Evaluator. Helpful to separate Evaluator versions from each other with details on how they were created or used. */
     attributes?: Record<string, unknown>;
+    /** The options that can be applied as judgments. Only for Evaluators with `return_type` of 'boolean', 'select' or 'multi_select'. */
+    options?: Humanloop.EvaluatorJudgmentOptionResponse[];
+    /** Limits on the judgment that can be applied. Only for Evaluators with `return_type` of 'number'. */
+    numberLimits?: Humanloop.EvaluatorJudgmentNumberLimit;
+    /** The valence of the number judgment. Only for Evaluators with `return_type` of 'number'. If 'positive', a higher number is better. If 'negative', a lower number is better. */
+    numberValence?: Humanloop.Valence;
     evaluatorType: "external";
 }

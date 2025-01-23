@@ -58,6 +58,12 @@ export interface PromptResponse {
     attributes?: Record<string, unknown>;
     /** Message describing the changes made. */
     commitMessage?: string;
+    /** Description of the Prompt. */
+    description?: string;
+    /** List of tags associated with the file. */
+    tags?: string[];
+    /** Long description of the file. */
+    readme?: string;
     /** Name of the Prompt. */
     name: string;
     /** Unique identifier for the specific Prompt Version. If no query params provided, the default deployed Prompt Version is returned. */

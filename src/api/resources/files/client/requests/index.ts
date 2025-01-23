@@ -1,1 +1,2 @@
-export { type FilesListRequest } from "./FilesListRequest";
+export { type ListFilesFilesGetRequest } from "./ListFilesFilesGetRequest";
+export { type BodyRetrieveByPathFilesRetrieveByPathPost } from "./BodyRetrieveByPathFilesRetrieveByPathPost";

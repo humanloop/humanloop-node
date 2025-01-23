@@ -225,82 +225,7 @@ in the case where you are storing or deriving your Prompt details in code.
 <dd>
 
 ```typescript
-await client.prompts.callStream({
-    versionId: "string",
-    environment: "string",
-    path: "string",
-    id: "string",
-    messages: [
-        {
-            content: "string",
-            name: "string",
-            toolCallId: "string",
-            role: "user",
-            toolCalls: [
-                {
-                    id: "string",
-                    type: "function",
-                    function: {
-                        name: "string",
-                        arguments: undefined,
-                    },
-                },
-            ],
-        },
-    ],
-    toolChoice: "none",
-    prompt: {
-        model: "string",
-        endpoint: undefined,
-        template: undefined,
-        provider: undefined,
-        maxTokens: undefined,
-        temperature: undefined,
-        topP: undefined,
-        stop: undefined,
-        presencePenalty: undefined,
-        frequencyPenalty: undefined,
-        other: undefined,
-        seed: undefined,
-        responseFormat: undefined,
-        tools: undefined,
-        linkedTools: undefined,
-        attributes: undefined,
-    },
-    inputs: {
-        string: {
-            key: "value",
-        },
-    },
-    source: "string",
-    metadata: {
-        string: {
-            key: "value",
-        },
-    },
-    startTime: "2024-01-15T09:30:00Z",
-    endTime: "2024-01-15T09:30:00Z",
-    sourceDatapointId: "string",
-    traceParentId: "string",
-    user: "string",
-    promptsCallStreamRequestEnvironment: "string",
-    save: true,
-    logId: "string",
-    providerApiKeys: {
-        openai: "string",
-        ai21: "string",
-        mock: "string",
-        anthropic: "string",
-        bedrock: "string",
-        cohere: "string",
-        openaiAzure: "string",
-        openaiAzureEndpoint: "string",
-    },
-    numSamples: 1,
-    returnInputs: true,
-    logprobs: 1,
-    suffix: "string",
-});
+await client.prompts.callStream({});
 ```
 
 </dd>
@@ -2486,7 +2411,7 @@ By default, the new Dataset version will be set to the list of Datapoints provid
 the request. You can also create a new version by adding or removing Datapoints from an existing version
 by specifying `action` as `add` or `remove` respectively. In this case, you may specify
 the `version_id` or `environment` query parameters to identify the existing version to base
-the new version on. If neither is provided, the default deployed version will be used.
+the new version on. If neither is provided, the latest created version will be used.
 
 If you provide a commit message, then the new version will be committed;
 otherwise it will be uncommitted. If you try to commit an already committed version,
@@ -5716,7 +5641,7 @@ await client.directories.update("id");
 
 ## Files
 
-<details><summary><code>client.files.<a href="/src/api/resources/files/client/Client.ts">list</a>({ ...params }) -> Humanloop.PaginatedDataUnionPromptResponseToolResponseDatasetResponseEvaluatorResponseFlowResponse</code></summary>
+<details><summary><code>client.files.<a href="/src/api/resources/files/client/Client.ts">listFiles</a>({ ...params }) -> Humanloop.PaginatedDataUnionPromptResponseToolResponseDatasetResponseEvaluatorResponseFlowResponse</code></summary>
 <dl>
 <dd>
 
@@ -5744,7 +5669,7 @@ Get a paginated list of files.
 <dd>
 
 ```typescript
-await client.files.list();
+await client.files.listFiles();
 ```
 
 </dd>
@@ -5760,7 +5685,72 @@ await client.files.list();
 <dl>
 <dd>
 
-**request:** `Humanloop.FilesListRequest`
+**request:** `Humanloop.ListFilesFilesGetRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Files.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.files.<a href="/src/api/resources/files/client/Client.ts">retrieveByPath</a>({ ...params }) -> Humanloop.RetrieveByPathFilesRetrieveByPathPostResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve a File by path.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.files.retrieveByPath({
+    path: "path",
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.BodyRetrieveByPathFilesRetrieveByPathPost`
 
 </dd>
 </dl>
@@ -6899,9 +6889,7 @@ Delete Logs with the given IDs.
 <dd>
 
 ```typescript
-await client.logs.delete({
-    id: "string",
-});
+await client.logs.delete();
 ```
 
 </dd>

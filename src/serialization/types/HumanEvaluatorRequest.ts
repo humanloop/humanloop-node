@@ -18,11 +18,11 @@ export const HumanEvaluatorRequest: core.serialization.ObjectSchema<
     argumentsType: core.serialization.property("arguments_type", EvaluatorArgumentsType),
     returnType: core.serialization.property("return_type", HumanEvaluatorRequestReturnType),
     attributes: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
-    evaluatorType: core.serialization.property("evaluator_type", core.serialization.stringLiteral("human")),
-    instructions: core.serialization.string().optional(),
     options: core.serialization.list(EvaluatorJudgmentOptionResponse).optional(),
     numberLimits: core.serialization.property("number_limits", EvaluatorJudgmentNumberLimit.optional()),
     numberValence: core.serialization.property("number_valence", Valence.optional()),
+    evaluatorType: core.serialization.property("evaluator_type", core.serialization.stringLiteral("human")),
+    instructions: core.serialization.string().optional(),
 });
 
 export declare namespace HumanEvaluatorRequest {
@@ -30,10 +30,10 @@ export declare namespace HumanEvaluatorRequest {
         arguments_type: EvaluatorArgumentsType.Raw;
         return_type: HumanEvaluatorRequestReturnType.Raw;
         attributes?: Record<string, unknown> | null;
-        evaluator_type: "human";
-        instructions?: string | null;
         options?: EvaluatorJudgmentOptionResponse.Raw[] | null;
         number_limits?: EvaluatorJudgmentNumberLimit.Raw | null;
         number_valence?: Valence.Raw | null;
+        evaluator_type: "human";
+        instructions?: string | null;
     }
 }
