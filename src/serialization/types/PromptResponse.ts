@@ -43,9 +43,6 @@ export const PromptResponse: core.serialization.ObjectSchema<serializers.PromptR
         ),
         attributes: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
         commitMessage: core.serialization.property("commit_message", core.serialization.string().optional()),
-        description: core.serialization.string().optional(),
-        tags: core.serialization.list(core.serialization.string()).optional(),
-        readme: core.serialization.string().optional(),
         name: core.serialization.string(),
         versionId: core.serialization.property("version_id", core.serialization.string()),
         type: core.serialization.stringLiteral("prompt").optional(),
@@ -91,9 +88,6 @@ export declare namespace PromptResponse {
         linked_tools?: LinkedToolResponse.Raw[] | null;
         attributes?: Record<string, unknown> | null;
         commit_message?: string | null;
-        description?: string | null;
-        tags?: string[] | null;
-        readme?: string | null;
         name: string;
         version_id: string;
         type?: "prompt" | null;

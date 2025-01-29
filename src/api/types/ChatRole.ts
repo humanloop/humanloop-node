@@ -5,12 +5,11 @@
 /**
  * An enumeration.
  */
-export type ChatRole = "user" | "assistant" | "system" | "tool" | "developer";
+export type ChatRole = "user" | "assistant" | "system" | "tool";
 
 export const ChatRole = {
     User: "user",
     Assistant: "assistant",
     System: "system",
     Tool: "tool",
-    Developer: "developer",
 } as const;

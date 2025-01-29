@@ -5,7 +5,6 @@
 import * as serializers from "../../../../index";
 import * as Humanloop from "../../../../../api/index";
 import * as core from "../../../../../core";
-import { ChatMessage } from "../../../../types/ChatMessage";
 import { CreateEvaluatorLogRequestJudgment } from "../../types/CreateEvaluatorLogRequestJudgment";
 import { CreateEvaluatorLogRequestSpec } from "../../types/CreateEvaluatorLogRequestSpec";
 
@@ -43,7 +42,6 @@ export const CreateEvaluatorLogRequest: core.serialization.Schema<
     ),
     save: core.serialization.boolean().optional(),
     logId: core.serialization.property("log_id", core.serialization.string().optional()),
-    outputMessage: core.serialization.property("output_message", ChatMessage.optional()),
     judgment: CreateEvaluatorLogRequestJudgment.optional(),
     markedCompleted: core.serialization.property("marked_completed", core.serialization.boolean().optional()),
     spec: CreateEvaluatorLogRequestSpec.optional(),
@@ -72,7 +70,6 @@ export declare namespace CreateEvaluatorLogRequest {
         environment?: string | null;
         save?: boolean | null;
         log_id?: string | null;
-        output_message?: ChatMessage.Raw | null;
         judgment?: CreateEvaluatorLogRequestJudgment.Raw | null;
         marked_completed?: boolean | null;
         spec?: CreateEvaluatorLogRequestSpec.Raw | null;
