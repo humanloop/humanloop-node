@@ -67,7 +67,6 @@ export class Logs {
                 size,
                 versionId,
                 versionStatus,
-                id,
                 search,
                 metadataSearch,
                 startDate,
@@ -89,13 +88,6 @@ export class Logs {
             }
             if (versionStatus != null) {
                 _queryParams["version_status"] = versionStatus;
-            }
-            if (id != null) {
-                if (Array.isArray(id)) {
-                    _queryParams["id"] = id.map((item) => item);
-                } else {
-                    _queryParams["id"] = id;
-                }
             }
             if (search != null) {
                 _queryParams["search"] = search;
@@ -131,8 +123,8 @@ export class Logs {
                 headers: {
                     "X-Fern-Language": "JavaScript",
                     "X-Fern-SDK-Name": "humanloop",
-                    "X-Fern-SDK-Version": "0.8.10",
-                    "User-Agent": "humanloop/0.8.10",
+                    "X-Fern-SDK-Version": "0.8.11",
+                    "User-Agent": "humanloop/0.8.11",
                     "X-Fern-Runtime": core.RUNTIME.type,
                     "X-Fern-Runtime-Version": core.RUNTIME.version,
                     ...(await this._getCustomAuthorizationHeaders()),
@@ -232,8 +224,8 @@ export class Logs {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.10",
-                "User-Agent": "humanloop/0.8.10",
+                "X-Fern-SDK-Version": "0.8.11",
+                "User-Agent": "humanloop/0.8.11",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -305,8 +297,8 @@ export class Logs {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.10",
-                "User-Agent": "humanloop/0.8.10",
+                "X-Fern-SDK-Version": "0.8.11",
+                "User-Agent": "humanloop/0.8.11",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),

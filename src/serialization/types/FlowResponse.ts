@@ -18,9 +18,6 @@ export const FlowResponse: core.serialization.ObjectSchema<serializers.FlowRespo
         attributes: core.serialization.record(core.serialization.string(), core.serialization.unknown()),
         commitMessage: core.serialization.property("commit_message", core.serialization.string().optional()),
         name: core.serialization.string(),
-        description: core.serialization.string().optional(),
-        readme: core.serialization.string().optional(),
-        tags: core.serialization.list(core.serialization.string()).optional(),
         versionId: core.serialization.property("version_id", core.serialization.string()),
         type: core.serialization.stringLiteral("flow").optional(),
         environments: core.serialization.list(EnvironmentResponse).optional(),
@@ -49,9 +46,6 @@ export declare namespace FlowResponse {
         attributes: Record<string, unknown>;
         commit_message?: string | null;
         name: string;
-        description?: string | null;
-        readme?: string | null;
-        tags?: string[] | null;
         version_id: string;
         type?: "flow" | null;
         environments?: EnvironmentResponse.Raw[] | null;
