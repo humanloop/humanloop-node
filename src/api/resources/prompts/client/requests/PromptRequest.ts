@@ -66,10 +66,4 @@ export interface PromptRequest {
     attributes?: Record<string, unknown>;
     /** Message describing the changes made. */
     commitMessage?: string;
-    /** Description of the Prompt. */
-    description?: string;
-    /** List of tags associated with this prompt. */
-    tags?: string[];
-    /** Long description of the Prompt. */
-    readme?: string;
 }

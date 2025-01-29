@@ -18,9 +18,6 @@ export const DatasetResponse: core.serialization.ObjectSchema<
     id: core.serialization.string(),
     directoryId: core.serialization.property("directory_id", core.serialization.string().optional()),
     name: core.serialization.string(),
-    description: core.serialization.string().optional(),
-    readme: core.serialization.string().optional(),
-    tags: core.serialization.list(core.serialization.string()).optional(),
     versionId: core.serialization.property("version_id", core.serialization.string()),
     type: core.serialization.stringLiteral("dataset").optional(),
     environments: core.serialization.list(EnvironmentResponse).optional(),
@@ -43,9 +40,6 @@ export declare namespace DatasetResponse {
         id: string;
         directory_id?: string | null;
         name: string;
-        description?: string | null;
-        readme?: string | null;
-        tags?: string[] | null;
         version_id: string;
         type?: "dataset" | null;
         environments?: EnvironmentResponse.Raw[] | null;
