@@ -1,8 +1,5 @@
 import { ChatMessage, PromptRequestTemplate } from "api";
 
-/**
- * Custom error type for missing prompt variables.
- */
 export class PromptVariablesNotFoundError extends Error {
     public missingVariables: string[];
 
@@ -114,8 +111,6 @@ export function populateChatTemplate(
         }
 
         // Deep copy the content so we don't mutate the original object.
-        // (Depending on your environment, you might prefer a structured clone
-        // or a third-party solution for deep copying.)
         let messageContent = JSON.parse(JSON.stringify(message.content));
 
         if (typeof messageContent === "string") {
@@ -144,7 +139,7 @@ export function populateChatTemplate(
 /**
  * Populates a string-based prompt or chat-based prompt with the given inputs.
  * For string prompts, all occurrences of {{var}} are replaced using populatePromptTemplate.
- * For chat prompts (array of ChatMessageParams), each message is handled by populateChatTemplate.
+ * For chat prompts (array of ChatMessage), each message is handled by populateChatTemplate.
  */
 export function populateTemplate<T extends PromptRequestTemplate>(
     template: T,
@@ -157,6 +152,5 @@ export function populateTemplate<T extends PromptRequestTemplate>(
         // Chat-based prompt
         return populateChatTemplate(template, inputs) as T;
     }
-    // If you have other template forms, handle them here.
     return template;
 }
