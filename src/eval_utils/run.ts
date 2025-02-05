@@ -10,7 +10,6 @@
 import cliProgress from "cli-progress";
 import { Humanloop, HumanloopClient } from "index";
 import _ from "lodash";
-import pMap from "p-map";
 
 import {
     BooleanEvaluatorStatsResponse,
@@ -484,6 +483,10 @@ export async function runEval(
         );
         const totalDatapoints = hlDataset.datapoints!.length;
         progressBar.start(totalDatapoints, 0);
+
+        // p-map is esm only since v5. Since we're targeting cjs, we need to
+        // import it dynamically, so it works for both cjs and esm consumers on node < 22.
+        const { default: pMap } = await import("p-map");
         await pMap(
             hlDataset.datapoints!,
             async (datapoint) => {
