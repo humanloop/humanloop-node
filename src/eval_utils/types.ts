@@ -90,8 +90,10 @@ export interface Evaluator extends Identifiers {
     returnType?: EvaluatorReturnTypeEnum;
     /**The threshold to check the Evaluator against. If the aggregate value of the Evaluator is below this threshold, the check will fail.*/
     threshold?: number;
-    callable: Function;
-    argsType: EvaluatorArgumentsType;
+    /**The function to run on the logs to produce the judgment - only required for local Evaluators.*/
+    callable?: Function;
+    /**The type of arguments the Evaluator expects - only required for local Evaluators.*/
+    argsType?: EvaluatorArgumentsType;
 }
 
 export interface TargetFreeEvaluator extends Evaluator {
