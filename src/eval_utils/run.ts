@@ -204,7 +204,8 @@ export async function runEval(
         }
     }
 
-    const { callable, version, ...rest } = file;
+    let { callable, version, ...rest } = file;
+    version = version || {};
     let hlFile: FileResponse;
     switch (type) {
         case "flow": {
