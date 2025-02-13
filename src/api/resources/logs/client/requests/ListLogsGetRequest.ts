@@ -64,4 +64,8 @@ export interface ListLogsGetRequest {
      * If provided, limit the response to a random subset of logs from the filtered results. (This will be an approximate sample, not a strict limit.)
      */
     sample?: number;
+    /**
+     * If true, populate `trace_children` for the retrieved Logs. Only applicable when retrieving Flow Logs.
+     */
+    includeTraceChildren?: boolean;
 }

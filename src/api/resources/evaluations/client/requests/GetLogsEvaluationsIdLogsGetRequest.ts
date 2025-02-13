@@ -15,4 +15,8 @@ export interface GetLogsEvaluationsIdLogsGetRequest {
      * Page size for pagination. Number of Logs to fetch.
      */
     size?: number;
+    /**
+     * Filter by Run IDs. Only Logs for the specified Runs will be returned.
+     */
+    runId?: string | string[];
 }

@@ -17,6 +17,7 @@ export const ModelProviders: core.serialization.Schema<serializers.ModelProvider
         "replicate",
         "google",
         "groq",
+        "deepseek",
     ]);
 
 export declare namespace ModelProviders {
@@ -29,5 +30,6 @@ export declare namespace ModelProviders {
         | "cohere"
         | "replicate"
         | "google"
-        | "groq";
+        | "groq"
+        | "deepseek";
 }

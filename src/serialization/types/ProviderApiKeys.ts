@@ -14,6 +14,7 @@ export const ProviderApiKeys: core.serialization.ObjectSchema<
     ai21: core.serialization.string().optional(),
     mock: core.serialization.string().optional(),
     anthropic: core.serialization.string().optional(),
+    deepseek: core.serialization.string().optional(),
     bedrock: core.serialization.string().optional(),
     cohere: core.serialization.string().optional(),
     openaiAzure: core.serialization.property("openai_azure", core.serialization.string().optional()),
@@ -26,6 +27,7 @@ export declare namespace ProviderApiKeys {
         ai21?: string | null;
         mock?: string | null;
         anthropic?: string | null;
+        deepseek?: string | null;
         bedrock?: string | null;
         cohere?: string | null;
         openai_azure?: string | null;

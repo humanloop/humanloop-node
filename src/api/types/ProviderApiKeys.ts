@@ -7,6 +7,7 @@ export interface ProviderApiKeys {
     ai21?: string;
     mock?: string;
     anthropic?: string;
+    deepseek?: string;
     bedrock?: string;
     cohere?: string;
     openaiAzure?: string;

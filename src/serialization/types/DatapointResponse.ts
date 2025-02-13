@@ -12,7 +12,7 @@ export const DatapointResponse: core.serialization.ObjectSchema<
     serializers.DatapointResponse.Raw,
     Humanloop.DatapointResponse
 > = core.serialization.object({
-    inputs: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
+    inputs: core.serialization.record(core.serialization.string(), core.serialization.string()).optional(),
     messages: core.serialization.list(ChatMessage).optional(),
     target: core.serialization.record(core.serialization.string(), DatapointResponseTargetValue).optional(),
     id: core.serialization.string(),
@@ -20,7 +20,7 @@ export const DatapointResponse: core.serialization.ObjectSchema<
 
 export declare namespace DatapointResponse {
     interface Raw {
-        inputs?: Record<string, unknown> | null;
+        inputs?: Record<string, string> | null;
         messages?: ChatMessage.Raw[] | null;
         target?: Record<string, DatapointResponseTargetValue.Raw> | null;
         id: string;

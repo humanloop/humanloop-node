@@ -14,7 +14,8 @@ export type ModelProviders =
     | "cohere"
     | "replicate"
     | "google"
-    | "groq";
+    | "groq"
+    | "deepseek";
 
 export const ModelProviders = {
     Openai: "openai",
@@ -26,4 +27,5 @@ export const ModelProviders = {
     Replicate: "replicate",
     Google: "google",
     Groq: "groq",
+    Deepseek: "deepseek",
 } as const;
