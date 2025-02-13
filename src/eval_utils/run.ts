@@ -212,7 +212,7 @@ export async function runEval(
             try {
                 // Be more lenient with Flow versions as they are arbitrary json
                 if (version && !version.attributes) {
-                    version.attributes = version as Record<string, unknown>;
+                    version.attributes = { ...version } as Record<string, unknown>;
                 }
                 const updatedData = { ...rest, ...version } as FlowRequest;
                 hlFile = await client.flows.upsert(updatedData);

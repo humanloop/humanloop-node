@@ -1,6 +1,6 @@
 {
     "name": "humanloop",
-    "version": "0.8.11",
+    "version": "0.8.12-beta1",
     "private": false,
     "repository": "https://github.com/humanloop/humanloop-node",
     "main": "./index.js",
