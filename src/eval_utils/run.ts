@@ -285,7 +285,9 @@ export async function runEval(
     // Upsert the local Evaluators; other Evaluators are just referenced by `path` or `id`
     let localEvaluators: [EvaluatorResponse, Function][] = [];
     if (evaluators) {
-        const evaluatorsWithCallable = evaluators.filter((e) => e.callable !== null);
+        const evaluatorsWithCallable = evaluators.filter(
+            (e) => e.callable !== undefined,
+        );
 
         if (evaluatorsWithCallable.length > 0 && function_ == null) {
             throw new Error(
