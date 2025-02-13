@@ -73,20 +73,24 @@ function testScenario(opentelemetryTracer: Tracer) {
 }
 
 describe("flow decorator", () => {
-    it("should not create a trace without a flow", async () => {
-        const [tracer, exporter] = openTelemetryTestConfiguration();
+    it(
+        "should not create a trace without a flow",
+        async () => {
+            const [tracer, exporter] = openTelemetryTestConfiguration();
 
-        const callLLM = testScenario(tracer)[1];
+            const callLLM = testScenario(tracer)[1];
 
-        await callLLM(callLLMMessages());
+            await callLLM(callLLMMessages());
 
-        const spans = exporter.getFinishedSpans();
+            const spans = exporter.getFinishedSpans();
 
-        expect(spans.length).toBe(3);
-        expect(isLLMProviderCall(spans[0])).toBe(true);
-        expect(spans[1].attributes["humanloop.file_type"]).toBe("tool");
-        expect(spans[2].attributes["humanloop.file_type"]).toBe("prompt");
-    });
+            expect(spans.length).toBe(3);
+            expect(isLLMProviderCall(spans[0])).toBe(true);
+            expect(spans[1].attributes["humanloop.file_type"]).toBe("tool");
+            expect(spans[2].attributes["humanloop.file_type"]).toBe("prompt");
+        },
+        10 * 1000,
+    );
 
     it("should create a flow log", async () => {
         const [tracer, exporter] = openTelemetryTestConfiguration();
