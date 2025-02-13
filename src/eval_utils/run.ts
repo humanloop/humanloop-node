@@ -460,6 +460,7 @@ export async function runEval(
             const errorMessage = e instanceof Error ? e.message : String(e);
             await logFunc({
                 inputs: { ...datapoint.inputs },
+                messages: datapoint.messages,
                 error: errorMessage,
                 sourceDatapointId: datapoint.id,
                 startTime: start_time,
