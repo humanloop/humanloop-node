@@ -32,19 +32,19 @@ export class Files {
     /**
      * Get a paginated list of files.
      *
-     * @param {Humanloop.ListFilesFilesGetRequest} request
+     * @param {Humanloop.FilesListRequest} request
      * @param {Files.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Humanloop.UnprocessableEntityError}
      *
      * @example
-     *     await client.files.listFiles()
+     *     await client.files.list()
      */
-    public async listFiles(
-        request: Humanloop.ListFilesFilesGetRequest = {},
+    public async list(
+        request: Humanloop.FilesListRequest = {},
         requestOptions?: Files.RequestOptions,
     ): Promise<Humanloop.PaginatedDataUnionPromptResponseToolResponseDatasetResponseEvaluatorResponseFlowResponse> {
-        const { page, size, name, template, type: type_, environment, sortBy, order } = request;
+        const { page, size, name, type: type_, environment, sortBy, order } = request;
         const _queryParams: Record<string, string | string[] | object | object[]> = {};
         if (page != null) {
             _queryParams["page"] = page.toString();
@@ -56,10 +56,6 @@ export class Files {
 
         if (name != null) {
             _queryParams["name"] = name;
-        }
-
-        if (template != null) {
-            _queryParams["template"] = template.toString();
         }
 
         if (type_ != null) {

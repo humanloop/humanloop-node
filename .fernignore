@@ -4,6 +4,7 @@
 
 src/otel
 src/eval_utils
+src/prompt_utils.ts
 src/utilities
 src/index.ts
 src/humanloop.client.ts
