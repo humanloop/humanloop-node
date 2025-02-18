@@ -46,6 +46,21 @@ const GREEN = "\x1b[92m";
 const RED = "\x1b[91m";
 const RESET = "\x1b[0m";
 
+async function pMap<T, O>(
+    iterable: Array<T>,
+    mapper: (obj: T) => Promise<O>,
+    { concurrency }: { concurrency: number },
+): Promise<Array<O>> {
+    const result: Array<O> = [];
+    result: for (let i = 0; i < iterable.length; i += concurrency) {
+        const chunk = iterable.slice(i, i + concurrency);
+        const promises = chunk.map(mapper);
+        const awaitedChunk = await Promise.all(promises);
+        result.push(...awaitedChunk);
+    }
+    return result;
+}
+
 type LogResponse =
     | CreateFlowLogResponse
     | CreatePromptLogResponse
@@ -488,9 +503,6 @@ export async function runEval(
         const totalDatapoints = hlDataset.datapoints!.length;
         progressBar.start(totalDatapoints, 0);
 
-        // p-map is esm only since v5. Since we're targeting cjs, we need to
-        // import it dynamically, so it works for both cjs and esm consumers on node < 22.
-        const { default: pMap } = await import("p-map");
         await pMap(
             hlDataset.datapoints!,
             async (datapoint) => {

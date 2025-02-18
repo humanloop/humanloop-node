@@ -443,12 +443,12 @@ export class HumanloopClient extends BaseHumanloopClient {
      * @param {FlowKernelRequest} [params.flowKernel] - Versioning information for the Flow.
      * @returns An async function that wraps around the provided `callable`, adding Tool instrumentation.
      */
-    public flow<I, M, O>({
+    public flow<T extends (args?: object) => any>({
         callable,
         path,
         version,
     }: {
-        callable: InputsMessagesCallableType<I, M, O>;
+        callable: T;
         path: string;
         version?: FlowKernelRequest;
     }) {
