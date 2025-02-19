@@ -46,17 +46,57 @@ const GREEN = "\x1b[92m";
 const RED = "\x1b[91m";
 const RESET = "\x1b[0m";
 
+/**
+ * Maps over an array of items with a concurrency limit, applying an asynchronous mapper function to each item.
+ *
+ * @template T - The type of the items in the input array.
+ * @template O - The type of the items in the output array.
+ *
+ * @param {T[]} iterable - The array of items to be mapped.
+ * @param {(item: T) => Promise<O>} mapper - The asynchronous function to apply to each item.
+ * @param {{ concurrency: number }} options - Options for the mapping operation.
+ * @param {number} options.concurrency - The maximum number of promises to resolve concurrently.
+ *
+ * @returns {Promise<O[]>} A promise that resolves to an array of mapped items.
+ *
+ * @throws {TypeError} If the first argument is not an array.
+ * @throws {TypeError} If the second argument is not a function.
+ * @throws {TypeError} If the concurrency option is not a positive number.
+ *
+ * @description
+ * The `pMap` function processes the input array in chunks, where the size of each chunk is determined by the `concurrency` option.
+ * This controls how many promises are resolved at a time, which can help avoid issues such as rate limit errors when making server requests.
+ */
 async function pMap<T, O>(
-    iterable: Array<T>,
-    mapper: (obj: T) => Promise<O>,
-    { concurrency }: { concurrency: number },
-): Promise<Array<O>> {
-    const result: Array<O> = [];
-    result: for (let i = 0; i < iterable.length; i += concurrency) {
+    iterable: T[],
+    mapper: (item: T) => Promise<O>,
+    options: { concurrency: number },
+): Promise<O[]> {
+    const { concurrency } = options;
+
+    if (!Array.isArray(iterable)) {
+        throw new TypeError("Expected the first argument to be an array");
+    }
+
+    if (typeof mapper !== "function") {
+        throw new TypeError("Expected the second argument to be a function");
+    }
+
+    if (typeof concurrency !== "number" || concurrency <= 0) {
+        throw new TypeError("Expected the concurrency option to be a positive number");
+    }
+
+    const result: O[] = [];
+    for (let i = 0; i < iterable.length; i += concurrency) {
         const chunk = iterable.slice(i, i + concurrency);
-        const promises = chunk.map(mapper);
-        const awaitedChunk = await Promise.all(promises);
-        result.push(...awaitedChunk);
+        try {
+            const chunkResults = await Promise.all(chunk.map(mapper));
+            result.push(...chunkResults);
+        } catch (error) {
+            // Handle individual chunk errors if necessary
+            // For now, rethrow to reject the entire pMap promise
+            throw error;
+        }
     }
     return result;
 }
