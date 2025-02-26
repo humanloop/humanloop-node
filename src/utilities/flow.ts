@@ -1,90 +1,143 @@
+import * as contextApi from "@opentelemetry/api";
 import { ReadableSpan, Tracer } from "@opentelemetry/sdk-trace-node";
+import { ChatMessage, FlowLogRequest } from "api";
+import { object } from "core/schemas";
+import { getTraceId, setTraceId } from "eval_utils";
 
+import * as BaseHumanloopClient from "../Client";
 import { FlowKernelRequest } from "../api/types/FlowKernelRequest";
 import {
     HUMANLOOP_FILE_TYPE_KEY,
     HUMANLOOP_FLOW_SPAN_NAME,
     HUMANLOOP_LOG_KEY,
-    HUMANLOOP_META_FUNCTION_NAME,
     HUMANLOOP_PATH_KEY,
-    NestedDict,
     jsonifyIfNotString,
     writeToOpenTelemetrySpan,
 } from "../otel";
-import { InputsMessagesCallableType } from "./types";
 
-export function flowUtilityFactory<I, M, O>(
+export function flowUtilityFactory<I, O>(
+    client: BaseHumanloopClient.HumanloopClient,
     opentelemetryTracer: Tracer,
-    func: InputsMessagesCallableType<I, M, O>,
-    path: string,
-    version?: FlowKernelRequest,
-): {
-    (inputs: I, messages: M): O extends Promise<infer R> ? Promise<R> : Promise<O>;
-    path: string;
-    version: FlowKernelRequest;
-} {
-    const wrappedFunction = async (inputs: I, messages: M) => {
-        // Filter out undefined attributes
-        if (version?.attributes) {
-            version.attributes = Object.fromEntries(
-                Object.entries(version.attributes || {}).filter(
-                    ([_, v]) => v !== undefined,
-                ),
-            );
+    callable: (
+        args: I extends Record<string, unknown> & {
+            messages?: ChatMessage[];
         }
+            ? I
+            : never,
+    ) => O,
+    path: string,
+    attributes?: Record<string, unknown>,
+): (args: I) => Promise<O | undefined> & {
+    file: {
+        type: string;
+        version: { attributes?: Record<string, unknown> };
+        callable: (args: I) => Promise<O | undefined>;
+    };
+} {
+    attributes = attributes || {};
+    const fileType = "flow";
 
-        // @ts-ignore
+    const wrappedFunction = async (
+        inputs: I extends Record<string, unknown> & {
+            messages?: ChatMessage[];
+        }
+            ? I
+            : never,
+    ) => {
         return opentelemetryTracer.startActiveSpan(
             HUMANLOOP_FLOW_SPAN_NAME,
             async (span) => {
-                // Add span attributes
-                span = span.setAttribute(HUMANLOOP_PATH_KEY, path || func.name);
-                span = span.setAttribute(HUMANLOOP_FILE_TYPE_KEY, "flow");
-                span = span.setAttribute(HUMANLOOP_META_FUNCTION_NAME, func.name);
+                span = span.setAttribute(HUMANLOOP_PATH_KEY, path);
+                const traceId = getTraceId();
 
-                if (version) {
-                    writeToOpenTelemetrySpan(
-                        span as unknown as ReadableSpan,
-                        version as unknown as NestedDict,
-                        "humanloop.file.flow",
-                    );
+                let logMessages: ChatMessage[] | undefined = undefined;
+                let logInputs = { ...inputs } as Record<string, unknown>;
+                // @ts-ignore
+                if (inputs && "messages" in inputs) {
+                    logMessages = inputs.messages as ChatMessage[];
+                    delete logInputs.messages;
                 }
 
-                let output: O | null;
-                let error: string | null = null;
-                try {
-                    output = await func(inputs, messages);
-                } catch (err: any) {
-                    console.error(`Error calling ${func.name}:`, err);
-                    output = null;
-                    error = err.message || String(err);
-                }
-
-                const outputStringified = jsonifyIfNotString(func, output);
-
-                const flowLog = {
-                    output: outputStringified,
-                    inputs: inputs,
-                    messages: messages,
-                    error,
+                const flowLogRequest: FlowLogRequest = {
+                    messages: logMessages,
+                    inputs: logInputs,
+                    traceParentId: traceId,
                 };
 
-                writeToOpenTelemetrySpan(
-                    span as unknown as ReadableSpan,
-                    // @ts-ignore
-                    flowLog,
-                    HUMANLOOP_LOG_KEY,
-                );
+                const flowLogResponse = await client.flows.log({
+                    path,
+                    flow: {
+                        attributes,
+                    },
+                    logStatus: "incomplete",
+                    ...flowLogRequest,
+                });
 
-                span.end();
-                return output;
+                return await contextApi.context.with(
+                    setTraceId(flowLogResponse.id),
+                    async () => {
+                        span = span.setAttribute(HUMANLOOP_PATH_KEY, path);
+                        span = span.setAttribute(HUMANLOOP_FILE_TYPE_KEY, fileType);
+
+                        let logOutput: string | undefined;
+                        let outputMessage: ChatMessage | undefined;
+                        let logError: string | undefined;
+                        let funcOutput: O;
+                        try {
+                            funcOutput = await callable(inputs);
+                            if (
+                                funcOutput instanceof object &&
+                                Object.keys(funcOutput).length == 2 &&
+                                "role" in (funcOutput as object) &&
+                                "content" in (funcOutput as object)
+                            ) {
+                                outputMessage = funcOutput as unknown as ChatMessage;
+                                logOutput = undefined;
+                            } else {
+                                logOutput = jsonifyIfNotString(callable, funcOutput);
+                                outputMessage = undefined;
+                            }
+                            logError = undefined;
+                        } catch (err: any) {
+                            console.error(`Error calling ${callable.name}:`, err);
+                            logOutput = undefined;
+                            logMessages = undefined;
+                            logError = err.message || String(err);
+                            funcOutput = undefined as unknown as O;
+                        }
+
+                        const flowLog = {
+                            output: logOutput,
+                            outputMessage: outputMessage,
+                            inputs: logInputs,
+                            messages: logMessages,
+                            error: logError,
+                            id: flowLogResponse.id,
+                            log_status: "complete",
+                        };
+
+                        writeToOpenTelemetrySpan(
+                            span as unknown as ReadableSpan,
+                            // @ts-ignore
+                            flowLog,
+                            HUMANLOOP_LOG_KEY,
+                        );
+
+                        span.end();
+                        return funcOutput;
+                    },
+                );
             },
         );
     };
 
     // @ts-ignore
     return Object.assign(wrappedFunction, {
-        path,
-        version: version || { attributes: {} },
+        file: {
+            type: fileType,
+            version: { attributes },
+            callable: wrappedFunction,
+            path: path,
+        },
     });
 }

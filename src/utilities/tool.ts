@@ -1,16 +1,17 @@
 import { ReadableSpan, Tracer } from "@opentelemetry/sdk-trace-node";
+import { ToolLogRequest } from "api";
+import { getTraceId } from "eval_utils/context";
 
 import { ToolKernelRequest } from "../api/types/ToolKernelRequest";
+import { File as EvalRunFile } from "../eval_utils/types";
 import { NestedDict, jsonifyIfNotString, writeToOpenTelemetrySpan } from "../otel";
 import {
     HUMANLOOP_FILE_KEY,
     HUMANLOOP_FILE_TYPE_KEY,
     HUMANLOOP_LOG_KEY,
-    HUMANLOOP_META_FUNCTION_NAME,
     HUMANLOOP_PATH_KEY,
     HUMANLOOP_TOOL_SPAN_NAME,
 } from "../otel/constants";
-import { ToolCallableType } from "./types";
 
 /**
  * Higher-order function for wrapping a function with OpenTelemetry instrumentation.
@@ -24,22 +25,16 @@ import { ToolCallableType } from "./types";
  */
 export function toolUtilityFactory<I, O>(
     opentelemetryTracer: Tracer,
-    func: ToolCallableType<I, O>,
+    callable: (inputs: I) => O,
     version: ToolKernelRequest,
-    path?: string,
-): {
-    (args?: I): O extends Promise<infer R> ? Promise<R> : Promise<O>;
-    jsonSchema: Record<string, any>;
+    path: string,
+): (inputs: I) => O & {
+    jsonSchema: Record<string, unknown>;
+    file: EvalRunFile;
 } {
-    // Attach JSON schema metadata to the function for external use
-    if (version) {
-        (func as any).jsonSchema = version.function || {};
-    }
+    const fileType = "tool";
 
-    const wrappedFunction = async (
-        inputs: I,
-        // @ts-ignore
-    ): O extends Promise<infer R> ? Promise<R> : Promise<O> => {
+    const wrappedFunction = async (inputs: I) => {
         validateArgumentsAgainstSchema(version, inputs);
 
         // @ts-ignore
@@ -47,50 +42,59 @@ export function toolUtilityFactory<I, O>(
             HUMANLOOP_TOOL_SPAN_NAME,
             async (span) => {
                 // Add span attributes
-                span.setAttribute(HUMANLOOP_PATH_KEY, path || func.name);
-                span.setAttribute(HUMANLOOP_FILE_TYPE_KEY, "tool");
-                span = span.setAttribute(HUMANLOOP_META_FUNCTION_NAME, func.name);
+                writeToOpenTelemetrySpan(
+                    span as unknown as ReadableSpan,
+                    {
+                        ...version,
+                    } as unknown as NestedDict,
+                    HUMANLOOP_FILE_KEY,
+                );
+                span = span.setAttribute(HUMANLOOP_FILE_TYPE_KEY, fileType);
+                span = span.setAttribute(HUMANLOOP_PATH_KEY, path);
 
-                // Execute the wrapped function in the appropriate context
-                let output: O | null;
-                let error: string | null = null;
+                let logInputs = { ...inputs } as Record<string, unknown>;
+                let logError: string | undefined;
+                let logOutput: string | undefined;
+
+                let funcOutput: O | undefined;
                 try {
-                    output = await func(inputs);
+                    funcOutput = await callable(inputs);
+                    logOutput = jsonifyIfNotString(callable, funcOutput);
+                    logError = undefined;
                 } catch (err: any) {
-                    console.error(`Error calling ${func.name}:`, err);
-                    output = null;
-                    error = err.message || String(err);
+                    console.error(`Error calling ${callable.name}:`, err);
+                    funcOutput = undefined;
+                    logOutput = undefined;
+                    logError = err.message || String(err);
                 }
 
                 const toolLog = {
-                    inputs: inputs,
-                    output: jsonifyIfNotString(func, output),
-                    error,
+                    inputs: logInputs,
+                    output: logOutput,
+                    error: logError,
+                    trace_parent_id: getTraceId(),
                 };
-
                 writeToOpenTelemetrySpan(
                     span as unknown as ReadableSpan,
                     toolLog as unknown as NestedDict,
                     HUMANLOOP_LOG_KEY,
                 );
 
-                writeToOpenTelemetrySpan(
-                    span as unknown as ReadableSpan,
-                    {
-                        ...version,
-                    } as unknown as NestedDict,
-                    `${HUMANLOOP_FILE_KEY}.tool`,
-                );
-
                 span.end();
-                return output;
+                return funcOutput;
             },
         );
     };
 
     // @ts-ignore Adding jsonSchema property to utility-wrapped function
     return Object.assign(wrappedFunction, {
-        jsonSchema: (func as any).jsonSchema,
+        jsonSchema: version.function || {},
+        file: {
+            type: fileType,
+            version: version,
+            callable: wrappedFunction,
+            path: path,
+        },
     });
 }
 
@@ -102,7 +106,6 @@ function validateArgumentsAgainstSchema(toolKernel: ToolKernelRequest, inputs?: 
         if (inputs === undefined) {
             return;
         }
-        console.log("BAI", parameters);
         throw new Error(
             `Tool function ${toolKernel.function?.name} received inputs when the JSON schema defines none`,
         );

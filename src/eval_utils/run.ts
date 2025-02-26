@@ -7,16 +7,13 @@
  * Functions in this module should be accessed via the Humanloop client. They should
  * not be called directly.
  */
+import * as contextApi from "@opentelemetry/api";
 import cliProgress from "cli-progress";
 import { Humanloop, HumanloopClient } from "index";
 import _ from "lodash";
 
 import {
     BooleanEvaluatorStatsResponse,
-    CreateEvaluatorLogResponse,
-    CreateFlowLogResponse,
-    CreatePromptLogResponse,
-    CreateToolLogResponse,
     DatapointResponse,
     EvaluationResponse,
     EvaluationStats,
@@ -33,10 +30,8 @@ import {
     ToolLogRequest,
     ToolRequest,
 } from "../api";
-import { Flows } from "../api/resources/flows/client/Client";
-import { Prompts } from "../api/resources/prompts/client/Client";
 import { jsonifyIfNotString } from "../otel/helpers";
-import { evaluationContext } from "./context";
+import { setEvaluationContext } from "./context";
 import { Dataset, Evaluator, EvaluatorCheck, File, FileResponse } from "./types";
 
 // ANSI escape codes for logging colors
@@ -101,103 +96,36 @@ async function pMap<T, O>(
     return result;
 }
 
-type LogResponse =
-    | CreateFlowLogResponse
-    | CreatePromptLogResponse
-    | CreateToolLogResponse
-    | CreateEvaluatorLogResponse;
+function callableIsHumanloopUtility(file: File): boolean {
+    return file.callable !== undefined && "file" in file.callable;
+}
 
-export function overloadLog<T extends Flows | Prompts>(client: T): T {
-    const originalLog = client.log.bind(client);
-
-    const _overloadedLog = async (
-        request: T extends Flows ? FlowLogRequest : PromptLogRequest,
-        options?: T extends Flows ? Flows.RequestOptions : Prompts.RequestOptions,
-    ) => {
-        let response: LogResponse | undefined;
-        if (evaluationContext.isEvaluatedFile(request)) {
-            const state = evaluationContext.getState();
-            if (state === undefined) {
-                throw Error(
-                    "Internal Error: EvaluationContext state used without being called set before.",
+function fileOrFileInsideHlUtility(file: File): File {
+    if (callableIsHumanloopUtility(file)) {
+        // When the decorator inside `file` is a decorated function,
+        // we need to validate that the other parameters of `file`
+        // match the attributes of the decorator
+        const decoratedFnName = file.callable!.name;
+        // @ts-ignore
+        const innerFile: File = file.callable!.file;
+        for (const argument of ["version", "path", "type", "id"]) {
+            if (file[argument as keyof File]) {
+                console.warn(
+                    `Argument \`file.${argument}\` will be ignored: callable \`${decoratedFnName}\` is managed by the @${innerFile.type} decorator.`,
                 );
             }
-
-            const { runId, sourceDatapointId, uploadCallback } =
-                evaluationContext.getDatapoint({
-                    inputs: request.inputs,
-                    messages: request.messages,
-                });
-
-            if (request.runId === undefined) {
-                request = {
-                    ...request,
-                    runId,
-                };
-            }
-            if (request.sourceDatapointId === undefined) {
-                request = {
-                    ...request,
-                    sourceDatapointId: sourceDatapointId,
-                };
-            }
-            if (client instanceof Flows) {
-                request = {
-                    ...request,
-                    traceStatus: "complete",
-                };
-            }
-
-            if ("flow" in request) {
-                if (!_.isEqual(state.evaluatedVersion, request.flow)) {
-                    response = await originalLog(
-                        {
-                            ...request,
-                            // @ts-ignore Log under the version expected by evaluation, not
-                            // one determined by decorators. Otherwise the log will be found
-                            // in the File's Log but not appear in the Evaluation, which can
-                            // lead to confusion
-                            flow: state?.evaluatedVersion,
-                            output: undefined,
-                            error: `The version of the evaluated Flow must match the version of the callable. Expected: ${JSON.stringify(state!.evaluatedVersion)}, got: ${JSON.stringify(request.flow)}`,
-                        },
-                        options,
-                    );
-                }
-            }
-
-            if ("prompt" in request) {
-                if (!_.isEqual(state.evaluatedVersion, request.prompt)) {
-                    response = await originalLog({
-                        ...request,
-                        // @ts-ignore Log under the version expected by evaluation, not
-                        // one determined by decorators. Otherwise the evaluation will stale
-                        prompt: state?.evaluatedVersion,
-                        output: undefined,
-                        error: `The version of the evaluated Prompt must match the version of the callable. Expected: ${JSON.stringify(state!.evaluatedVersion)}, got: ${JSON.stringify(request.prompt)}`,
-                    });
-                }
-            }
-
-            if (response === undefined) {
-                // Version validation passed, make a normal request
-                response = await originalLog(request, options);
-            }
-
-            uploadCallback(response.id);
-        } else {
-            // @ts-ignore
-            response = await originalLog(request, options);
         }
 
-        return response;
-    };
-
-    // @ts-ignore _overloadedLog is a polymorphic function and
-    // linting complains about typing
-    client.log = _overloadedLog.bind(client);
-
-    return client;
+        // Use the file manifest in the decorated function
+        return { ...innerFile };
+    } else {
+        // Simple function
+        // Raise error if one of path or id not provided
+        if (!file.path && !file.id) {
+            throw new Error("You must provide a path or id in your `file`.");
+        }
+        return file;
+    }
 }
 
 export async function runEval(
@@ -208,60 +136,41 @@ export async function runEval(
     evaluators: Evaluator[] = [],
     concurrency: number = 8,
 ): Promise<EvaluatorCheck[]> {
-    // Get or create the file on Humanloop
-    if (!file.path && !file.id) {
-        throw new Error("You must provide a path or id in your `file`.");
-    }
-
     if (concurrency > 32) {
         console.log("Warning: Too many parallel workers, capping the number to 32.");
     }
     concurrency = Math.min(concurrency, 32);
 
-    if (file.callable && "path" in file.callable) {
-        if (file.path !== file.callable.path) {
-            throw new Error(
-                `The path of the evaluated \`file\` must match the path of your decorated \`callable\`. Expected path: ${file.path}, got: ${file.callable.path}`,
-            );
-        }
-    }
+    const file_ = fileOrFileInsideHlUtility(file);
 
-    if (file.callable && "version" in file.callable) {
-        if (!_.isEqual(file.version, file.callable.version)) {
-            throw new Error(
-                `The version of the evaluated \`file\` must match the version of your decorated \`callable\`. Expected version: ${JSON.stringify(file.version)}, got: ${JSON.stringify(file.callable.version)}`,
-            );
-        }
-    }
-
-    let type: FileType;
-    if (file.type) {
-        type = file.type;
+    let type_: FileType;
+    if (file_.type) {
+        type_ = file_.type;
         console.info(
-            `${CYAN}Evaluating your ${type} function corresponding to ${file.path} on Humanloop${RESET}\n\n`,
+            `${CYAN}Evaluating your ${type_} function corresponding to ${file_.path} on Humanloop${RESET}\n\n`,
         );
     } else {
-        type = "flow";
+        type_ = "flow";
         console.warn("No file type specified, defaulting to flow.");
     }
 
-    const function_ = file.callable;
+    const function_ = file_.callable;
     if (!function_) {
-        if (type === "flow") {
+        if (type_ === "flow") {
             throw new Error(
                 "You must provide a callable for your Flow file to run a local eval.",
             );
         } else {
             console.info(
-                `No callable provided for your ${type} file - will attempt to generate logs on Humanloop.`,
+                `No callable provided for your ${type_} file - will attempt to generate logs on Humanloop.`,
             );
         }
     }
 
-    let { callable, version, ...rest } = file;
+    let { callable, version, ...rest } = file_;
     version = version || {};
     let hlFile: FileResponse;
-    switch (type) {
+    switch (type_) {
         case "flow": {
             try {
                 // Be more lenient with Flow versions as they are arbitrary json
@@ -319,7 +228,7 @@ export async function runEval(
             break;
         }
         default:
-            throw new Error(`Unsupported File type: ${type}`);
+            throw new Error(`Unsupported File type: ${type_}`);
     }
 
     // Upsert the dataset
@@ -346,7 +255,7 @@ export async function runEval(
 
         if (evaluatorsWithCallable.length > 0 && function_ == null) {
             throw new Error(
-                `Local Evaluators are only supported when generating Logs locally using your ${type}'s 'callable'. Please provide a 'callable' for your file in order to run Evaluators locally.`,
+                `Local Evaluators are only supported when generating Logs locally using your ${type_}'s 'callable'. Please provide a 'callable' for your file in order to run Evaluators locally.`,
             );
         }
 
@@ -420,6 +329,7 @@ export async function runEval(
                 fileId: hlFile.id,
                 size: 50,
             });
+            console.log("EVALS", evals);
             for await (const e of evals) {
                 if (e.name === name) {
                     evaluation = e;
@@ -452,84 +362,83 @@ export async function runEval(
         cliProgress.Presets.shades_classic,
     );
 
-    // Set the Evaluation context
-    evaluationContext.setState({
-        fileId: hlFile.id,
-        path: hlFile.path,
-        uploadCallback: async (logId: string, datapoint: DatapointResponse) => {
-            await runLocalEvaluators(client, logId, datapoint, localEvaluators);
-            progressBar.increment();
-        },
-        evaluatedVersion: file.version,
-    });
-
     async function processDatapoint(
         datapoint: DatapointResponse,
         runId: string,
     ): Promise<void> {
-        const start_time = new Date();
+        function uploadCallback(logId: string) {
+            return async (datapoint: DatapointResponse) => {
+                await runLocalEvaluators(client, logId, datapoint, localEvaluators);
+                progressBar.increment();
+            };
+        }
+
         const logFunc = getLogFunction(
             client,
-            type,
+            type_,
             hlFile.id,
             hlFile.versionId,
             runId,
         );
 
-        try {
-            evaluationContext.addDatapoint(datapoint, runId);
-            let output: string;
-            if (datapoint.inputs === undefined) {
-                throw new Error(`Datapoint 'inputs' attribute is undefined.`);
-            }
-            output = await function_!(
-                // @ts-ignore
-                datapoint.inputs,
-                datapoint.messages,
-            );
-
-            output = jsonifyIfNotString(function_!, output);
-
-            if (
-                evaluationContext.peekDatapoint({
-                    inputs: datapoint.inputs,
-                    messages: datapoint.messages,
-                })
-            ) {
-                // function_ is a simple callable, so we create the log here
-                // if function_ was a utility wrapped function, the utility
-                // would have created the log in otel.HumanloopSpanExporter
-
-                // The log function will take care of the sourceDatapointId and runId from the context
-                // See overloadLog in this module for more details
-                await logFunc({
-                    inputs: { ...datapoint.inputs },
-                    messages: datapoint.messages,
-                    output: output,
-                    startTime: start_time,
-                    endTime: new Date(),
-                });
-            }
-        } catch (e) {
-            const errorMessage = e instanceof Error ? e.message : String(e);
-            await logFunc({
-                inputs: { ...datapoint.inputs },
-                messages: datapoint.messages,
-                error: errorMessage,
-                sourceDatapointId: datapoint.id,
-                startTime: start_time,
-                endTime: new Date(),
-            });
-            // console.log(e);
-            console.warn(
-                `\nYour ${type}'s callable failed for Datapoint: ${datapoint.id}.\nError: ${errorMessage}`,
-            );
+        if (datapoint.inputs === undefined) {
+            throw new Error(`Datapoint 'inputs' attribute is undefined.`);
         }
+        contextApi.context.with(
+            setEvaluationContext({
+                sourceDatapointId: datapoint.id,
+                runId,
+                callback: uploadCallback,
+                fileId: hlFile.id,
+                path: hlFile.path,
+            }),
+            async () => {
+                const startTime = new Date();
+                let funcInputs: Record<string, unknown> & {
+                    messages?: Humanloop.ChatMessage[];
+                } = {
+                    ...datapoint.inputs,
+                };
+                if ("messages" in datapoint) {
+                    funcInputs = {
+                        ...funcInputs,
+                        messages: datapoint.messages,
+                    };
+                }
+                try {
+                    const funcOutput = await function_!(funcInputs);
+                    const logOutput = jsonifyIfNotString(function_!, funcOutput);
+                    if (!callableIsHumanloopUtility(file_)) {
+                        // callable is a plain function, so we create the log here
+                        await logFunc({
+                            inputs: { ...datapoint.inputs },
+                            messages: datapoint.messages,
+                            output: logOutput,
+                            startTime: startTime,
+                            endTime: new Date(),
+                        });
+                    }
+                } catch (e) {
+                    const errorMessage = e instanceof Error ? e.message : String(e);
+                    await logFunc({
+                        inputs: { ...datapoint.inputs },
+                        messages: datapoint.messages,
+                        error: errorMessage,
+                        sourceDatapointId: datapoint.id,
+                        startTime: startTime,
+                        endTime: new Date(),
+                    });
+                    console.warn(
+                        `\nYour ${type_}'s callable failed for Datapoint: ${datapoint.id}.\nError: ${errorMessage}`,
+                    );
+                }
+            },
+        );
     }
 
     console.log(`\n${CYAN}Navigate to your Evaluation:${RESET}\n${evaluation.url}\n`);
     console.log(
-        `${CYAN}${type.charAt(0).toUpperCase() + type.slice(1)} Version ID: ${
+        `${CYAN}${type_.charAt(0).toUpperCase() + type_.slice(1)} Version ID: ${
             hlFile.versionId
         }${RESET}`,
     );
