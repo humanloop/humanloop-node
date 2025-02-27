@@ -48,6 +48,7 @@ export declare namespace Datasets {
  * query parameters to identify the existing version to base the new version on. If neither is provided, the version
  * deployed to the default Environment will be used.
  *
+ *
  */
 export class Datasets {
     constructor(protected readonly _options: Datasets.Options) {}

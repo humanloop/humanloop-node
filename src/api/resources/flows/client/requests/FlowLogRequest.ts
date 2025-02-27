@@ -27,7 +27,7 @@ import * as Humanloop from "../../../../index";
  *             "question": "Patient with a history of diabetes and hypertension presents with chest pain and shortness of breath."
  *         },
  *         output: "The patient is likely experiencing a myocardial infarction. Immediate medical attention is required.",
- *         logStatus: "incomplete",
+ *         traceStatus: "incomplete",
  *         startTime: "2024-07-08T22:40:35",
  *         endTime: "2024-07-08T22:40:39"
  *     }
@@ -75,8 +75,6 @@ export interface FlowLogRequest {
     source?: string;
     /** Any additional metadata to record. */
     metadata?: Record<string, unknown>;
-    /** Status of the Trace. When a Log is updated from `incomplete` to `complete`, it becomes available to Monitoring Evaluators. Flow Logs cannot have an unspecified status: they must start as `incomplete` to allow children to be added. Provide `complete` if you don't intend to add children to the trace. */
-    logStatus?: Humanloop.LogStatus;
     /** Unique identifier for the Datapoint that this Log is derived from. This can be used by Humanloop to associate Logs to Evaluations. If provided, Humanloop will automatically associate this Log to Evaluations that require a Log for this Datapoint-Version pair. */
     sourceDatapointId?: string;
     /** The ID of the parent Log to nest this Log under in a Trace. */
@@ -91,4 +89,6 @@ export interface FlowLogRequest {
     logId?: string;
     /** Flow used to generate the Trace. */
     flow?: Humanloop.FlowKernelRequest;
+    /** Status of the Trace. When a Trace is marked as `complete`, no more Logs can be added to it. Monitoring Evaluators will only run on `complete` Traces. If you do not intend to add more Logs to the Trace after creation, set this to `complete`. */
+    traceStatus?: Humanloop.TraceStatus;
 }

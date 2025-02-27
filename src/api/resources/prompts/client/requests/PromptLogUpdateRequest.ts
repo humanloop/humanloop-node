@@ -57,6 +57,4 @@ export interface PromptLogUpdateRequest {
     startTime?: Date;
     /** When the logged event ended. */
     endTime?: Date;
-    /** Status of a Log. Set to `incomplete` if you intend to update the Log and want the File's monitoring Evaluators to wait until you mark it as `complete`. If not provided, observability will pick up the Log as soon as possible; switching from specified to unspecified is undefined behavior. */
-    logStatus?: Humanloop.LogStatus;
 }

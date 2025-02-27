@@ -2,7 +2,7 @@
 
 ## Prompts
 
-<details><summary><code>client.prompts.<a href="/src/api/resources/prompts/client/Client.ts">log</a>({ ...params }) -> unknown</code></summary>
+<details><summary><code>client.prompts.<a href="/src/api/resources/prompts/client/Client.ts">log</a>({ ...params }) -> Humanloop.CreatePromptLogResponse</code></summary>
 <dl>
 <dd>
 
@@ -59,7 +59,6 @@ await client.prompts.log({
         person: "Trump",
     },
     createdAt: "2024-07-19T00:29:35.178992",
-    error: undefined,
     providerLatency: 6.5931549072265625,
     outputMessage: {
         content:
@@ -709,6 +708,84 @@ await client.prompts.move("pr_30gco7dx6JDq4200GVOHa", {
 <dd>
 
 **request:** `Humanloop.UpdatePromptRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Prompts.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.prompts.<a href="/src/api/resources/prompts/client/Client.ts">populateTemplate</a>(id, { ...params }) -> Humanloop.PromptResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve the Prompt with the given ID, including the populated template.
+
+By default, the deployed version of the Prompt is returned. Use the query parameters
+`version_id` or `environment` to target a specific version of the Prompt.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.prompts.populateTemplate("id", {
+    body: {
+        key: "value",
+    },
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Unique identifier for Prompt.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.PopulateTemplatePromptsIdPopulatePostRequest`
 
 </dd>
 </dl>
@@ -4277,6 +4354,9 @@ Log to a Flow.
 You can use query parameters `version_id`, or `environment`, to target
 an existing version of the Flow. Otherwise, the default deployed version will be chosen.
 
+If you create the Flow Log with a `trace_status` of `incomplete`, you should later update it to `complete`
+in order to trigger Evaluators.
+
 </dd>
 </dl>
 </dd>
@@ -4313,7 +4393,7 @@ await client.flows.log({
             "Patient with a history of diabetes and hypertension presents with chest pain and shortness of breath.",
     },
     output: "The patient is likely experiencing a myocardial infarction. Immediate medical attention is required.",
-    logStatus: "incomplete",
+    traceStatus: "incomplete",
     startTime: "2024-07-08T22:40:35",
     endTime: "2024-07-08T22:40:39",
 });
@@ -4333,6 +4413,89 @@ await client.flows.log({
 <dd>
 
 **request:** `Humanloop.FlowLogRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Flows.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.flows.<a href="/src/api/resources/flows/client/Client.ts">updateLog</a>(logId, { ...params }) -> Humanloop.FlowLogResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Update the status, inputs, output of a Flow Log.
+
+Marking a Flow Log as complete will trigger any monitoring Evaluators to run.
+Inputs and output (or error) must be provided in order to mark it as complete.
+
+The end_time log attribute will be set to match the time the log is marked as complete.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.flows.updateLog("medqa_experiment_0001", {
+    inputs: {
+        question:
+            "Patient with a history of diabetes and normal tension presents with chest pain and shortness of breath.",
+    },
+    output: "The patient is likely experiencing a myocardial infarction. Immediate medical attention is required.",
+    traceStatus: "complete",
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**logId:** `string` — Unique identifier of the Flow Log.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.UpdateTraceRequest`
 
 </dd>
 </dl>
@@ -4692,90 +4855,6 @@ await client.flows.upsert({
 <dd>
 
 **request:** `Humanloop.FlowRequest`
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `Flows.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.flows.<a href="/src/api/resources/flows/client/Client.ts">updateLog</a>(logId, { ...params }) -> Humanloop.FlowLogResponse</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Update the status, inputs, output of a Flow Log.
-
-Marking a Flow Log as complete will trigger any monitoring Evaluators to run.
-Inputs and output (or error) must be provided in order to mark it as complete.
-
-The end_time log attribute will be set to match the time the log is marked as complete.
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.flows.updateLog("medqa_experiment_0001", {
-    inputs: {
-        question:
-            "Patient with a history of diabetes and normal tension presents with chest pain and shortness of breath.",
-    },
-    output: "The patient is likely experiencing a myocardial infarction. Immediate medical attention is required.",
-    logStatus: "complete",
-    error: undefined,
-});
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**logId:** `string` — Unique identifier of the Flow Log.
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request:** `Humanloop.UpdateTraceRequest`
 
 </dd>
 </dl>

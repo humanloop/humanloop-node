@@ -37,6 +37,7 @@ export declare namespace Logs {
  * ...
  *
  *
+ *
  */
 export class Logs {
     constructor(protected readonly _options: Logs.Options) {}

@@ -35,6 +35,9 @@ export class Flows {
      * You can use query parameters `version_id`, or `environment`, to target
      * an existing version of the Flow. Otherwise, the default deployed version will be chosen.
      *
+     * If you create the Flow Log with a `trace_status` of `incomplete`, you should later update it to `complete`
+     * in order to trigger Evaluators.
+     *
      * @param {Humanloop.FlowLogRequest} request
      * @param {Flows.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -62,7 +65,7 @@ export class Flows {
      *             "question": "Patient with a history of diabetes and hypertension presents with chest pain and shortness of breath."
      *         },
      *         output: "The patient is likely experiencing a myocardial infarction. Immediate medical attention is required.",
-     *         logStatus: "incomplete",
+     *         traceStatus: "incomplete",
      *         startTime: "2024-07-08T22:40:35",
      *         endTime: "2024-07-08T22:40:39"
      *     })
@@ -106,6 +109,101 @@ export class Flows {
         });
         if (_response.ok) {
             return serializers.CreateFlowLogResponse.parseOrThrow(_response.body, {
+                unrecognizedObjectKeys: "passthrough",
+                allowUnrecognizedUnionMembers: true,
+                allowUnrecognizedEnumValues: true,
+                skipValidation: true,
+                breadcrumbsPrefix: ["response"],
+            });
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 422:
+                    throw new Humanloop.UnprocessableEntityError(
+                        serializers.HttpValidationError.parseOrThrow(_response.error.body, {
+                            unrecognizedObjectKeys: "passthrough",
+                            allowUnrecognizedUnionMembers: true,
+                            allowUnrecognizedEnumValues: true,
+                            skipValidation: true,
+                            breadcrumbsPrefix: ["response"],
+                        }),
+                    );
+                default:
+                    throw new errors.HumanloopError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                    });
+            }
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.HumanloopError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
+                });
+            case "timeout":
+                throw new errors.HumanloopTimeoutError();
+            case "unknown":
+                throw new errors.HumanloopError({
+                    message: _response.error.errorMessage,
+                });
+        }
+    }
+
+    /**
+     * Update the status, inputs, output of a Flow Log.
+     *
+     * Marking a Flow Log as complete will trigger any monitoring Evaluators to run.
+     * Inputs and output (or error) must be provided in order to mark it as complete.
+     *
+     * The end_time log attribute will be set to match the time the log is marked as complete.
+     *
+     * @param {string} logId - Unique identifier of the Flow Log.
+     * @param {Humanloop.UpdateTraceRequest} request
+     * @param {Flows.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Humanloop.UnprocessableEntityError}
+     *
+     * @example
+     *     await client.flows.updateLog("medqa_experiment_0001", {
+     *         inputs: {
+     *             "question": "Patient with a history of diabetes and normal tension presents with chest pain and shortness of breath."
+     *         },
+     *         output: "The patient is likely experiencing a myocardial infarction. Immediate medical attention is required.",
+     *         traceStatus: "complete"
+     *     })
+     */
+    public async updateLog(
+        logId: string,
+        request: Humanloop.UpdateTraceRequest,
+        requestOptions?: Flows.RequestOptions,
+    ): Promise<Humanloop.FlowLogResponse> {
+        const _response = await (this._options.fetcher ?? core.fetcher)({
+            url: urlJoin(
+                (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
+                `flows/logs/${encodeURIComponent(logId)}`,
+            ),
+            method: "PATCH",
+            headers: {
+                "X-Fern-Language": "JavaScript",
+                "X-Fern-SDK-Name": "humanloop",
+                "X-Fern-SDK-Version": "0.8.16",
+                "User-Agent": "humanloop/0.8.16",
+                "X-Fern-Runtime": core.RUNTIME.type,
+                "X-Fern-Runtime-Version": core.RUNTIME.version,
+                ...(await this._getCustomAuthorizationHeaders()),
+            },
+            contentType: "application/json",
+            requestType: "json",
+            body: serializers.UpdateTraceRequest.jsonOrThrow(request, { unrecognizedObjectKeys: "strip" }),
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return serializers.FlowLogResponse.parseOrThrow(_response.body, {
                 unrecognizedObjectKeys: "passthrough",
                 allowUnrecognizedUnionMembers: true,
                 allowUnrecognizedEnumValues: true,
@@ -578,102 +676,6 @@ export class Flows {
         });
         if (_response.ok) {
             return serializers.FlowResponse.parseOrThrow(_response.body, {
-                unrecognizedObjectKeys: "passthrough",
-                allowUnrecognizedUnionMembers: true,
-                allowUnrecognizedEnumValues: true,
-                skipValidation: true,
-                breadcrumbsPrefix: ["response"],
-            });
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 422:
-                    throw new Humanloop.UnprocessableEntityError(
-                        serializers.HttpValidationError.parseOrThrow(_response.error.body, {
-                            unrecognizedObjectKeys: "passthrough",
-                            allowUnrecognizedUnionMembers: true,
-                            allowUnrecognizedEnumValues: true,
-                            skipValidation: true,
-                            breadcrumbsPrefix: ["response"],
-                        }),
-                    );
-                default:
-                    throw new errors.HumanloopError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                    });
-            }
-        }
-
-        switch (_response.error.reason) {
-            case "non-json":
-                throw new errors.HumanloopError({
-                    statusCode: _response.error.statusCode,
-                    body: _response.error.rawBody,
-                });
-            case "timeout":
-                throw new errors.HumanloopTimeoutError();
-            case "unknown":
-                throw new errors.HumanloopError({
-                    message: _response.error.errorMessage,
-                });
-        }
-    }
-
-    /**
-     * Update the status, inputs, output of a Flow Log.
-     *
-     * Marking a Flow Log as complete will trigger any monitoring Evaluators to run.
-     * Inputs and output (or error) must be provided in order to mark it as complete.
-     *
-     * The end_time log attribute will be set to match the time the log is marked as complete.
-     *
-     * @param {string} logId - Unique identifier of the Flow Log.
-     * @param {Humanloop.UpdateTraceRequest} request
-     * @param {Flows.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @throws {@link Humanloop.UnprocessableEntityError}
-     *
-     * @example
-     *     await client.flows.updateLog("medqa_experiment_0001", {
-     *         inputs: {
-     *             "question": "Patient with a history of diabetes and normal tension presents with chest pain and shortness of breath."
-     *         },
-     *         output: "The patient is likely experiencing a myocardial infarction. Immediate medical attention is required.",
-     *         logStatus: "complete",
-     *         error: undefined
-     *     })
-     */
-    public async updateLog(
-        logId: string,
-        request: Humanloop.UpdateTraceRequest = {},
-        requestOptions?: Flows.RequestOptions,
-    ): Promise<Humanloop.FlowLogResponse> {
-        const _response = await (this._options.fetcher ?? core.fetcher)({
-            url: urlJoin(
-                (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
-                `flows/logs/${encodeURIComponent(logId)}`,
-            ),
-            method: "PATCH",
-            headers: {
-                "X-Fern-Language": "JavaScript",
-                "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.16",
-                "User-Agent": "humanloop/0.8.16",
-                "X-Fern-Runtime": core.RUNTIME.type,
-                "X-Fern-Runtime-Version": core.RUNTIME.version,
-                ...(await this._getCustomAuthorizationHeaders()),
-            },
-            contentType: "application/json",
-            requestType: "json",
-            body: serializers.UpdateTraceRequest.jsonOrThrow(request, { unrecognizedObjectKeys: "strip" }),
-            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-            maxRetries: requestOptions?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-        });
-        if (_response.ok) {
-            return serializers.FlowLogResponse.parseOrThrow(_response.body, {
                 unrecognizedObjectKeys: "passthrough",
                 allowUnrecognizedUnionMembers: true,
                 allowUnrecognizedEnumValues: true,

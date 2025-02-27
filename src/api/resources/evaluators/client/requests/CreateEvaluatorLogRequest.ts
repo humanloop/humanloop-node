@@ -47,8 +47,6 @@ export interface CreateEvaluatorLogRequest {
     source?: string;
     /** Any additional metadata to record. */
     metadata?: Record<string, unknown>;
-    /** Status of a Log. Set to `incomplete` if you intend to update the Log and want the File's monitoring Evaluators to wait until you mark it as `complete`. If not provided, observability will pick up the Log as soon as possible; switching from specified to unspecified is undefined behavior. */
-    logStatus?: Humanloop.LogStatus;
     /** Identifier of the evaluated Log. The newly created Log will have this one set as parent. */
     parentId: string;
     /** Unique identifier for the Datapoint that this Log is derived from. This can be used by Humanloop to associate Logs to Evaluations. If provided, Humanloop will automatically associate this Log to Evaluations that require a Log for this Datapoint-Version pair. */

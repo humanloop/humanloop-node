@@ -7,6 +7,7 @@ import * as Humanloop from "../../api/index";
 import * as core from "../../core";
 import { ModelEndpoints } from "./ModelEndpoints";
 import { PromptResponseTemplate } from "./PromptResponseTemplate";
+import { TemplateLanguage } from "./TemplateLanguage";
 import { ModelProviders } from "./ModelProviders";
 import { PromptResponseStop } from "./PromptResponseStop";
 import { ResponseFormat } from "./ResponseFormat";
@@ -27,6 +28,7 @@ export const PromptResponse: core.serialization.ObjectSchema<serializers.PromptR
         model: core.serialization.string(),
         endpoint: ModelEndpoints.optional(),
         template: PromptResponseTemplate.optional(),
+        templateLanguage: core.serialization.property("template_language", TemplateLanguage.optional()),
         provider: ModelProviders.optional(),
         maxTokens: core.serialization.property("max_tokens", core.serialization.number().optional()),
         temperature: core.serialization.number().optional(),
@@ -79,6 +81,7 @@ export declare namespace PromptResponse {
         model: string;
         endpoint?: ModelEndpoints.Raw | null;
         template?: PromptResponseTemplate.Raw | null;
+        template_language?: TemplateLanguage.Raw | null;
         provider?: ModelProviders.Raw | null;
         max_tokens?: number | null;
         temperature?: number | null;

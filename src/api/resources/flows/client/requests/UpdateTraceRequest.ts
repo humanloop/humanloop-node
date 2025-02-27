@@ -11,8 +11,7 @@ import * as Humanloop from "../../../../index";
  *             "question": "Patient with a history of diabetes and normal tension presents with chest pain and shortness of breath."
  *         },
  *         output: "The patient is likely experiencing a myocardial infarction. Immediate medical attention is required.",
- *         logStatus: "complete",
- *         error: undefined
+ *         traceStatus: "complete"
  *     }
  */
 export interface UpdateTraceRequest {
@@ -26,6 +25,6 @@ export interface UpdateTraceRequest {
     output?: string;
     /** The error message of the Flow Log. Provide None to unset existing `error` value. Provide either this, `output_message` or `output`. */
     error?: string;
-    /** Status of the Trace. When a Log is updated from `incomplete` to `complete`, it becomes available to Monitoring Evaluators. */
-    logStatus?: Humanloop.LogStatus;
+    /** Status of the Trace. When a Trace is marked as `complete`, no more Logs can be added to it. Monitoring Evaluators will only run on completed Traces. */
+    traceStatus: Humanloop.TraceStatus;
 }

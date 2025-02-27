@@ -18,6 +18,8 @@ export interface PromptKernelRequest {
      * Input variables should be specified with double curly bracket syntax: `{{input_name}}`.
      */
     template?: Humanloop.PromptKernelRequestTemplate;
+    /** The template language to use for rendering the template. */
+    templateLanguage?: Humanloop.TemplateLanguage;
     /** The company providing the underlying model service. */
     provider?: Humanloop.ModelProviders;
     /** The maximum number of tokens to generate. Provide max_tokens=-1 to dynamically calculate the maximum number of tokens to generate given the length of the prompt */

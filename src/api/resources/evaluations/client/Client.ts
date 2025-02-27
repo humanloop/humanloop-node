@@ -39,6 +39,7 @@ export declare namespace Evaluations {
  *
  * Note that when a Run is created, Humanloop will attempt to reuse any existing Logs for each Datapoint-Version
  * pair. This means that you can create Runs without generating new Logs unnecessarily.
+ *
  */
 export class Evaluations {
     constructor(protected readonly _options: Evaluations.Options) {}

@@ -5,7 +5,7 @@
 import * as serializers from "../index";
 import * as Humanloop from "../../api/index";
 import * as core from "../../core";
-import { LogStatus } from "./LogStatus";
+import { TraceStatus } from "./TraceStatus";
 
 export const CreateFlowLogResponse: core.serialization.ObjectSchema<
     serializers.CreateFlowLogResponse.Raw,
@@ -14,7 +14,7 @@ export const CreateFlowLogResponse: core.serialization.ObjectSchema<
     id: core.serialization.string(),
     flowId: core.serialization.property("flow_id", core.serialization.string()),
     versionId: core.serialization.property("version_id", core.serialization.string()),
-    logStatus: core.serialization.property("log_status", LogStatus.optional()),
+    traceStatus: core.serialization.property("trace_status", TraceStatus.optional()),
 });
 
 export declare namespace CreateFlowLogResponse {
@@ -22,6 +22,6 @@ export declare namespace CreateFlowLogResponse {
         id: string;
         flow_id: string;
         version_id: string;
-        log_status?: LogStatus.Raw | null;
+        trace_status?: TraceStatus.Raw | null;
     }
 }

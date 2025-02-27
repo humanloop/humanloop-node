@@ -23,7 +23,6 @@ import * as Humanloop from "../../../../index";
  *             "person": "Trump"
  *         },
  *         createdAt: "2024-07-19T00:29:35.178992",
- *         error: undefined,
  *         providerLatency: 6.5931549072265625,
  *         outputMessage: {
  *             content: "Well, you know, there is so much secrecy involved in government, folks, it's unbelievable. They don't want to tell you everything. They don't tell me everything! But about Roswell, it's a very popular question. I know, I just know, that something very, very peculiar happened there. Was it a weather balloon? Maybe. Was it something extraterrestrial? Could be. I'd love to go down and open up all the classified documents, believe me, I would. But they don't let that happen. The Deep State, folks, the Deep State. They're unbelievable. They want to keep everything a secret. But whatever the truth is, I can tell you this: it's something big, very very big. Tremendous, in fact.",
@@ -101,8 +100,6 @@ export interface PromptLogRequest {
     source?: string;
     /** Any additional metadata to record. */
     metadata?: Record<string, unknown>;
-    /** Status of a Log. Set to `incomplete` if you intend to update the Log and want the File's monitoring Evaluators to wait until you mark it as `complete`. If not provided, observability will pick up the Log as soon as possible; switching from specified to unspecified is undefined behavior. */
-    logStatus?: Humanloop.LogStatus;
     /** Unique identifier for the Datapoint that this Log is derived from. This can be used by Humanloop to associate Logs to Evaluations. If provided, Humanloop will automatically associate this Log to Evaluations that require a Log for this Datapoint-Version pair. */
     sourceDatapointId?: string;
     /** The ID of the parent Log to nest this Log under in a Trace. */
