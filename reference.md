@@ -2,7 +2,7 @@
 
 ## Prompts
 
-<details><summary><code>client.prompts.<a href="/src/api/resources/prompts/client/Client.ts">log</a>({ ...params }) -> Humanloop.CreatePromptLogResponse</code></summary>
+<details><summary><code>client.prompts.<a href="/src/api/resources/prompts/client/Client.ts">log</a>({ ...params }) -> unknown</code></summary>
 <dl>
 <dd>
 
@@ -59,6 +59,7 @@ await client.prompts.log({
         person: "Trump",
     },
     createdAt: "2024-07-19T00:29:35.178992",
+    error: undefined,
     providerLatency: 6.5931549072265625,
     outputMessage: {
         content:
@@ -4312,7 +4313,7 @@ await client.flows.log({
             "Patient with a history of diabetes and hypertension presents with chest pain and shortness of breath.",
     },
     output: "The patient is likely experiencing a myocardial infarction. Immediate medical attention is required.",
-    traceStatus: "incomplete",
+    logStatus: "incomplete",
     startTime: "2024-07-08T22:40:35",
     endTime: "2024-07-08T22:40:39",
 });
@@ -4748,7 +4749,8 @@ await client.flows.updateLog("medqa_experiment_0001", {
             "Patient with a history of diabetes and normal tension presents with chest pain and shortness of breath.",
     },
     output: "The patient is likely experiencing a myocardial infarction. Immediate medical attention is required.",
-    traceStatus: "complete",
+    logStatus: "complete",
+    error: undefined,
 });
 ```
 

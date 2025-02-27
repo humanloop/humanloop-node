@@ -18,6 +18,7 @@ export interface NumericEvaluatorStatsResponse {
     /** The total number of errored Evaluators for this Evaluator Version. */
     numErrors: number;
     mean?: number;
+    sum?: number;
     std?: number;
     percentiles: Record<string, number>;
 }

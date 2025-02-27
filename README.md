@@ -44,6 +44,7 @@ await client.prompts.log({
         person: "Trump",
     },
     createdAt: "2024-07-19T00:29:35.178992",
+    error: undefined,
     providerLatency: 6.5931549072265625,
     outputMessage: {
         content:

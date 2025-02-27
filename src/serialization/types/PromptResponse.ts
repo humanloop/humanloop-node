@@ -10,6 +10,7 @@ import { PromptResponseTemplate } from "./PromptResponseTemplate";
 import { ModelProviders } from "./ModelProviders";
 import { PromptResponseStop } from "./PromptResponseStop";
 import { ResponseFormat } from "./ResponseFormat";
+import { ReasoningEffort } from "./ReasoningEffort";
 import { ToolFunction } from "./ToolFunction";
 import { LinkedToolResponse } from "./LinkedToolResponse";
 import { EnvironmentResponse } from "./EnvironmentResponse";
@@ -36,6 +37,7 @@ export const PromptResponse: core.serialization.ObjectSchema<serializers.PromptR
         other: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
         seed: core.serialization.number().optional(),
         responseFormat: core.serialization.property("response_format", ResponseFormat.optional()),
+        reasoningEffort: core.serialization.property("reasoning_effort", ReasoningEffort.optional()),
         tools: core.serialization.list(ToolFunction).optional(),
         linkedTools: core.serialization.property(
             "linked_tools",
@@ -87,6 +89,7 @@ export declare namespace PromptResponse {
         other?: Record<string, unknown> | null;
         seed?: number | null;
         response_format?: ResponseFormat.Raw | null;
+        reasoning_effort?: ReasoningEffort.Raw | null;
         tools?: ToolFunction.Raw[] | null;
         linked_tools?: LinkedToolResponse.Raw[] | null;
         attributes?: Record<string, unknown> | null;

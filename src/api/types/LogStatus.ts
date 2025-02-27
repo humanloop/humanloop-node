@@ -5,9 +5,9 @@
 /**
  * An enumeration.
  */
-export type TraceStatus = "complete" | "incomplete";
+export type LogStatus = "complete" | "incomplete";
 
-export const TraceStatus = {
+export const LogStatus = {
     Complete: "complete",
     Incomplete: "incomplete",
 } as const;

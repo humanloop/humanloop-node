@@ -5,23 +5,28 @@
 import * as serializers from "../../../../index";
 import * as Humanloop from "../../../../../api/index";
 import * as core from "../../../../../core";
-import { TraceStatus } from "../../../../types/TraceStatus";
+import { ChatMessage } from "../../../../types/ChatMessage";
+import { LogStatus } from "../../../../types/LogStatus";
 
 export const UpdateTraceRequest: core.serialization.Schema<
     serializers.UpdateTraceRequest.Raw,
     Humanloop.UpdateTraceRequest
 > = core.serialization.object({
+    messages: core.serialization.list(ChatMessage).optional(),
+    outputMessage: core.serialization.property("output_message", ChatMessage.optional()),
     inputs: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
     output: core.serialization.string().optional(),
     error: core.serialization.string().optional(),
-    traceStatus: core.serialization.property("trace_status", TraceStatus),
+    logStatus: core.serialization.property("log_status", LogStatus.optional()),
 });
 
 export declare namespace UpdateTraceRequest {
     interface Raw {
+        messages?: ChatMessage.Raw[] | null;
+        output_message?: ChatMessage.Raw | null;
         inputs?: Record<string, unknown> | null;
         output?: string | null;
         error?: string | null;
-        trace_status: TraceStatus.Raw;
+        log_status?: LogStatus.Raw | null;
     }
 }

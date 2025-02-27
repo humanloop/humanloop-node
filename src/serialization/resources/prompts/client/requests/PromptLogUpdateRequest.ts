@@ -7,6 +7,7 @@ import * as Humanloop from "../../../../../api/index";
 import * as core from "../../../../../core";
 import { ChatMessage } from "../../../../types/ChatMessage";
 import { PromptLogUpdateRequestToolChoice } from "../../types/PromptLogUpdateRequestToolChoice";
+import { LogStatus } from "../../../../types/LogStatus";
 
 export const PromptLogUpdateRequest: core.serialization.Schema<
     serializers.PromptLogUpdateRequest.Raw,
@@ -14,6 +15,7 @@ export const PromptLogUpdateRequest: core.serialization.Schema<
 > = core.serialization.object({
     outputMessage: core.serialization.property("output_message", ChatMessage.optional()),
     promptTokens: core.serialization.property("prompt_tokens", core.serialization.number().optional()),
+    reasoningTokens: core.serialization.property("reasoning_tokens", core.serialization.number().optional()),
     outputTokens: core.serialization.property("output_tokens", core.serialization.number().optional()),
     promptCost: core.serialization.property("prompt_cost", core.serialization.number().optional()),
     outputCost: core.serialization.property("output_cost", core.serialization.number().optional()),
@@ -38,12 +40,14 @@ export const PromptLogUpdateRequest: core.serialization.Schema<
     metadata: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
     startTime: core.serialization.property("start_time", core.serialization.date().optional()),
     endTime: core.serialization.property("end_time", core.serialization.date().optional()),
+    logStatus: core.serialization.property("log_status", LogStatus.optional()),
 });
 
 export declare namespace PromptLogUpdateRequest {
     interface Raw {
         output_message?: ChatMessage.Raw | null;
         prompt_tokens?: number | null;
+        reasoning_tokens?: number | null;
         output_tokens?: number | null;
         prompt_cost?: number | null;
         output_cost?: number | null;
@@ -62,5 +66,6 @@ export declare namespace PromptLogUpdateRequest {
         metadata?: Record<string, unknown> | null;
         start_time?: string | null;
         end_time?: string | null;
+        log_status?: LogStatus.Raw | null;
     }
 }

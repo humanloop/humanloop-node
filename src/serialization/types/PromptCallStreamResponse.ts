@@ -18,6 +18,7 @@ export const PromptCallStreamResponse: core.serialization.ObjectSchema<
     stdout: core.serialization.string().optional(),
     outputMessage: core.serialization.property("output_message", ChatMessage.optional()),
     promptTokens: core.serialization.property("prompt_tokens", core.serialization.number().optional()),
+    reasoningTokens: core.serialization.property("reasoning_tokens", core.serialization.number().optional()),
     outputTokens: core.serialization.property("output_tokens", core.serialization.number().optional()),
     promptCost: core.serialization.property("prompt_cost", core.serialization.number().optional()),
     outputCost: core.serialization.property("output_cost", core.serialization.number().optional()),
@@ -37,6 +38,7 @@ export declare namespace PromptCallStreamResponse {
         stdout?: string | null;
         output_message?: ChatMessage.Raw | null;
         prompt_tokens?: number | null;
+        reasoning_tokens?: number | null;
         output_tokens?: number | null;
         prompt_cost?: number | null;
         output_cost?: number | null;

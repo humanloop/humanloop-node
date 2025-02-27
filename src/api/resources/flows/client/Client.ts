@@ -62,7 +62,7 @@ export class Flows {
      *             "question": "Patient with a history of diabetes and hypertension presents with chest pain and shortness of breath."
      *         },
      *         output: "The patient is likely experiencing a myocardial infarction. Immediate medical attention is required.",
-     *         traceStatus: "incomplete",
+     *         logStatus: "incomplete",
      *         startTime: "2024-07-08T22:40:35",
      *         endTime: "2024-07-08T22:40:39"
      *     })
@@ -90,8 +90,8 @@ export class Flows {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.14b1",
-                "User-Agent": "humanloop/0.8.14b1",
+                "X-Fern-SDK-Version": "0.8.16",
+                "User-Agent": "humanloop/0.8.16",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -188,8 +188,8 @@ export class Flows {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.14b1",
-                "User-Agent": "humanloop/0.8.14b1",
+                "X-Fern-SDK-Version": "0.8.16",
+                "User-Agent": "humanloop/0.8.16",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -267,8 +267,8 @@ export class Flows {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.14b1",
-                "User-Agent": "humanloop/0.8.14b1",
+                "X-Fern-SDK-Version": "0.8.16",
+                "User-Agent": "humanloop/0.8.16",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -346,8 +346,8 @@ export class Flows {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.14b1",
-                "User-Agent": "humanloop/0.8.14b1",
+                "X-Fern-SDK-Version": "0.8.16",
+                "User-Agent": "humanloop/0.8.16",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -451,8 +451,8 @@ export class Flows {
                 headers: {
                     "X-Fern-Language": "JavaScript",
                     "X-Fern-SDK-Name": "humanloop",
-                    "X-Fern-SDK-Version": "0.8.14b1",
-                    "User-Agent": "humanloop/0.8.14b1",
+                    "X-Fern-SDK-Version": "0.8.16",
+                    "User-Agent": "humanloop/0.8.16",
                     "X-Fern-Runtime": core.RUNTIME.type,
                     "X-Fern-Runtime-Version": core.RUNTIME.version,
                     ...(await this._getCustomAuthorizationHeaders()),
@@ -563,8 +563,8 @@ export class Flows {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.14b1",
-                "User-Agent": "humanloop/0.8.14b1",
+                "X-Fern-SDK-Version": "0.8.16",
+                "User-Agent": "humanloop/0.8.16",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -641,12 +641,13 @@ export class Flows {
      *             "question": "Patient with a history of diabetes and normal tension presents with chest pain and shortness of breath."
      *         },
      *         output: "The patient is likely experiencing a myocardial infarction. Immediate medical attention is required.",
-     *         traceStatus: "complete"
+     *         logStatus: "complete",
+     *         error: undefined
      *     })
      */
     public async updateLog(
         logId: string,
-        request: Humanloop.UpdateTraceRequest,
+        request: Humanloop.UpdateTraceRequest = {},
         requestOptions?: Flows.RequestOptions,
     ): Promise<Humanloop.FlowLogResponse> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
@@ -658,8 +659,8 @@ export class Flows {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.14b1",
-                "User-Agent": "humanloop/0.8.14b1",
+                "X-Fern-SDK-Version": "0.8.16",
+                "User-Agent": "humanloop/0.8.16",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -754,8 +755,8 @@ export class Flows {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.14b1",
-                "User-Agent": "humanloop/0.8.14b1",
+                "X-Fern-SDK-Version": "0.8.16",
+                "User-Agent": "humanloop/0.8.16",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -844,8 +845,8 @@ export class Flows {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.14b1",
-                "User-Agent": "humanloop/0.8.14b1",
+                "X-Fern-SDK-Version": "0.8.16",
+                "User-Agent": "humanloop/0.8.16",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -928,8 +929,8 @@ export class Flows {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.14b1",
-                "User-Agent": "humanloop/0.8.14b1",
+                "X-Fern-SDK-Version": "0.8.16",
+                "User-Agent": "humanloop/0.8.16",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1015,8 +1016,8 @@ export class Flows {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.14b1",
-                "User-Agent": "humanloop/0.8.14b1",
+                "X-Fern-SDK-Version": "0.8.16",
+                "User-Agent": "humanloop/0.8.16",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1102,8 +1103,8 @@ export class Flows {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.14b1",
-                "User-Agent": "humanloop/0.8.14b1",
+                "X-Fern-SDK-Version": "0.8.16",
+                "User-Agent": "humanloop/0.8.16",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1177,8 +1178,8 @@ export class Flows {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.14b1",
-                "User-Agent": "humanloop/0.8.14b1",
+                "X-Fern-SDK-Version": "0.8.16",
+                "User-Agent": "humanloop/0.8.16",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1267,8 +1268,8 @@ export class Flows {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.14b1",
-                "User-Agent": "humanloop/0.8.14b1",
+                "X-Fern-SDK-Version": "0.8.16",
+                "User-Agent": "humanloop/0.8.16",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
