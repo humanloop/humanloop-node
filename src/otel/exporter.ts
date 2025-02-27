@@ -1,8 +1,8 @@
 import { ExportResult, ExportResultCode } from "@opentelemetry/core";
 import { ReadableSpan, SpanExporter } from "@opentelemetry/sdk-trace-base";
 import { log } from "console";
-import { getEvaluationContext } from "eval_utils";
 
+import { getEvaluationContext } from "../eval_utils";
 import { HumanloopClient } from "../humanloop.client";
 import {
     HUMANLOOP_FILE_TYPE_KEY,

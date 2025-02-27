@@ -1,9 +1,10 @@
 import * as contextApi from "@opentelemetry/api";
+
 import {
     HUMANLOOP_CONTEXT_EVALUATION,
     HUMANLOOP_CONTEXT_PROMPT,
     HUMANLOOP_CONTEXT_TRACE_ID,
-} from "otel/constants";
+} from "../otel/constants";
 
 export function getTraceId(): string | undefined {
     const key = contextApi.createContextKey(HUMANLOOP_CONTEXT_TRACE_ID);

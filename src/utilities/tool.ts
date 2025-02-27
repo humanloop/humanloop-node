@@ -1,7 +1,7 @@
 import { ReadableSpan, Tracer } from "@opentelemetry/sdk-trace-node";
-import { getTraceId } from "eval_utils/context";
 
 import { ToolKernelRequest } from "../api/types/ToolKernelRequest";
+import { getTraceId } from "../eval_utils/context";
 import { File as EvalRunFile } from "../eval_utils/types";
 import { NestedDict, jsonifyIfNotString, writeToOpenTelemetrySpan } from "../otel";
 import {

@@ -5,8 +5,8 @@ import {
     SpanExporter,
     SpanProcessor,
 } from "@opentelemetry/sdk-trace-node";
-import { getPromptContext, getTraceId } from "eval_utils/context";
 
+import { getPromptContext, getTraceId } from "../eval_utils/context";
 import {
     HUMANLOOP_FILE_KEY,
     HUMANLOOP_FILE_TYPE_KEY,

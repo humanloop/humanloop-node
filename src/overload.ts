@@ -8,7 +8,8 @@ import {
 import { Flows } from "api/resources/flows/client/Client";
 import { Prompts } from "api/resources/prompts/client/Client";
 import { Tools } from "api/resources/tools/client/Client";
-import { getTraceId } from "eval_utils";
+
+import { getTraceId } from "./eval_utils";
 
 export function overloadLog<T extends Flows | Prompts | Tools>(client: T): T {
     const originalLog = client.log.bind(client);

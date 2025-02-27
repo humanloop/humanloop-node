@@ -1,11 +1,9 @@
 import * as contextApi from "@opentelemetry/api";
 import { ReadableSpan, Tracer } from "@opentelemetry/sdk-trace-node";
 import { ChatMessage, FlowLogRequest } from "api";
-import { object } from "core/schemas";
-import { getTraceId, setTraceId } from "eval_utils";
 
 import * as BaseHumanloopClient from "../Client";
-import { FlowKernelRequest } from "../api/types/FlowKernelRequest";
+import { getTraceId, setTraceId } from "../eval_utils";
 import {
     HUMANLOOP_FILE_TYPE_KEY,
     HUMANLOOP_FLOW_SPAN_NAME,
@@ -86,7 +84,7 @@ export function flowUtilityFactory<I, O>(
                         try {
                             funcOutput = await callable(inputs);
                             if (
-                                funcOutput instanceof object &&
+                                funcOutput instanceof Object &&
                                 Object.keys(funcOutput).length == 2 &&
                                 "role" in (funcOutput as object) &&
                                 "content" in (funcOutput as object)

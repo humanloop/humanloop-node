@@ -1,5 +1,6 @@
 import * as contextApi from "@opentelemetry/api";
-import { setPromptContext } from "eval_utils";
+
+import { setPromptContext } from "../eval_utils";
 
 export function promptDecoratorFactory<I, O>(
     path: string,

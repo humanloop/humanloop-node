@@ -244,7 +244,7 @@ export function getObjectUtils<Raw, Parsed>(schema: BaseObjectSchema<Raw, Parsed
                 parse: (raw, opts) => {
                     return validateAndTransformExtendedObject({
                         extensionKeys: extension._getRawProperties(),
-                        value: raw,
+                        value: raw as object,
                         transformBase: (rawBase) => schema.parse(rawBase, opts),
                         transformExtension: (rawExtension) => extension.parse(rawExtension, opts),
                     });
@@ -252,7 +252,7 @@ export function getObjectUtils<Raw, Parsed>(schema: BaseObjectSchema<Raw, Parsed
                 json: (parsed, opts) => {
                     return validateAndTransformExtendedObject({
                         extensionKeys: extension._getParsedProperties(),
-                        value: parsed,
+                        value: parsed as object,
                         transformBase: (parsedBase) => schema.json(parsedBase, opts),
                         transformExtension: (parsedExtension) => extension.json(parsedExtension, opts),
                     });
@@ -277,7 +277,7 @@ function validateAndTransformExtendedObject<PreTransformedExtension, Transformed
     transformExtension,
 }: {
     extensionKeys: (keyof PreTransformedExtension)[];
-    value: unknown;
+    value: object;
     transformBase: (value: unknown) => MaybeValid<TransformedBase>;
     transformExtension: (value: unknown) => MaybeValid<TransformedExtension>;
 }): MaybeValid<TransformedBase & TransformedExtension> {
