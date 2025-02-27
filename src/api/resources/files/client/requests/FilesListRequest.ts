@@ -8,7 +8,7 @@ import * as Humanloop from "../../../../index";
  * @example
  *     {}
  */
-export interface ListFilesFilesGetRequest {
+export interface FilesListRequest {
     /**
      * Page offset for pagination.
      */
@@ -21,10 +21,6 @@ export interface ListFilesFilesGetRequest {
      * Case-insensitive filter for file name.
      */
     name?: string;
-    /**
-     * Filter to include only template files.
-     */
-    template?: boolean;
     /**
      * List of file types to filter for.
      */

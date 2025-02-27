@@ -22,9 +22,6 @@ export const EvaluatorResponse: core.serialization.ObjectSchema<
     commitMessage: core.serialization.property("commit_message", core.serialization.string().optional()),
     spec: EvaluatorResponseSpec,
     name: core.serialization.string(),
-    description: core.serialization.string().optional(),
-    readme: core.serialization.string().optional(),
-    tags: core.serialization.list(core.serialization.string()).optional(),
     versionId: core.serialization.property("version_id", core.serialization.string()),
     type: core.serialization.stringLiteral("evaluator").optional(),
     environments: core.serialization.list(EnvironmentResponse).optional(),
@@ -56,9 +53,6 @@ export declare namespace EvaluatorResponse {
         commit_message?: string | null;
         spec: EvaluatorResponseSpec.Raw;
         name: string;
-        description?: string | null;
-        readme?: string | null;
-        tags?: string[] | null;
         version_id: string;
         type?: "evaluator" | null;
         environments?: EnvironmentResponse.Raw[] | null;

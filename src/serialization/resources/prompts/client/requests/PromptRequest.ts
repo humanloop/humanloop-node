@@ -40,9 +40,6 @@ export const PromptRequest: core.serialization.Schema<serializers.PromptRequest.
         ),
         attributes: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
         commitMessage: core.serialization.property("commit_message", core.serialization.string().optional()),
-        description: core.serialization.string().optional(),
-        tags: core.serialization.list(core.serialization.string()).optional(),
-        readme: core.serialization.string().optional(),
     });
 
 export declare namespace PromptRequest {
@@ -68,8 +65,5 @@ export declare namespace PromptRequest {
         linked_tools?: string[] | null;
         attributes?: Record<string, unknown> | null;
         commit_message?: string | null;
-        description?: string | null;
-        tags?: string[] | null;
-        readme?: string | null;
     }
 }

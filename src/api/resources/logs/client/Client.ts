@@ -67,7 +67,6 @@ export class Logs {
                 size,
                 versionId,
                 versionStatus,
-                id,
                 search,
                 metadataSearch,
                 startDate,
@@ -90,13 +89,6 @@ export class Logs {
             }
             if (versionStatus != null) {
                 _queryParams["version_status"] = versionStatus;
-            }
-            if (id != null) {
-                if (Array.isArray(id)) {
-                    _queryParams["id"] = id.map((item) => item);
-                } else {
-                    _queryParams["id"] = id;
-                }
             }
             if (search != null) {
                 _queryParams["search"] = search;
