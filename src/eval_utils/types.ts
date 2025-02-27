@@ -1,8 +1,9 @@
+import { CreatePromptLogResponse } from "api/types/CreatePromptLogResponse";
+
 import {
     CodeEvaluatorRequest,
     CreateEvaluatorLogResponse,
     CreateFlowLogResponse,
-    CreatePromptLogResponse,
     CreateToolLogResponse,
     CreateDatapointRequest as DatapointRequest,
     EvaluatorResponse,
