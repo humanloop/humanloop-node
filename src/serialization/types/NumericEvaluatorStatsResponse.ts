@@ -16,6 +16,7 @@ export const NumericEvaluatorStatsResponse: core.serialization.ObjectSchema<
     numNulls: core.serialization.property("num_nulls", core.serialization.number()),
     numErrors: core.serialization.property("num_errors", core.serialization.number()),
     mean: core.serialization.number().optional(),
+    sum: core.serialization.number().optional(),
     std: core.serialization.number().optional(),
     percentiles: core.serialization.record(core.serialization.string(), core.serialization.number()),
 });
@@ -28,6 +29,7 @@ export declare namespace NumericEvaluatorStatsResponse {
         num_nulls: number;
         num_errors: number;
         mean?: number | null;
+        sum?: number | null;
         std?: number | null;
         percentiles: Record<string, number>;
     }

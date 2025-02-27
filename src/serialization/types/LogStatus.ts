@@ -6,9 +6,9 @@ import * as serializers from "../index";
 import * as Humanloop from "../../api/index";
 import * as core from "../../core";
 
-export const TraceStatus: core.serialization.Schema<serializers.TraceStatus.Raw, Humanloop.TraceStatus> =
+export const LogStatus: core.serialization.Schema<serializers.LogStatus.Raw, Humanloop.LogStatus> =
     core.serialization.enum_(["complete", "incomplete"]);
 
-export declare namespace TraceStatus {
+export declare namespace LogStatus {
     type Raw = "complete" | "incomplete";
 }

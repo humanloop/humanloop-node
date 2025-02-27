@@ -50,6 +50,8 @@ export interface PromptResponse {
     seed?: number;
     /** The format of the response. Only `{"type": "json_object"}` is currently supported for chat. */
     responseFormat?: Humanloop.ResponseFormat;
+    /** Give model guidance on how many reasoning tokens it should generate before creating a response to the prompt. This is only supported for OpenAI reasoning (o1, o3-mini) models. */
+    reasoningEffort?: Humanloop.ReasoningEffort;
     /** The tool specification that the model can choose to call if Tool calling is supported. */
     tools?: Humanloop.ToolFunction[];
     /** The tools linked to your prompt that the model can call. */

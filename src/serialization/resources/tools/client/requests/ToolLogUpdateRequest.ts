@@ -5,6 +5,7 @@
 import * as serializers from "../../../../index";
 import * as Humanloop from "../../../../../api/index";
 import * as core from "../../../../../core";
+import { LogStatus } from "../../../../types/LogStatus";
 
 export const ToolLogUpdateRequest: core.serialization.Schema<
     serializers.ToolLogUpdateRequest.Raw,
@@ -28,6 +29,7 @@ export const ToolLogUpdateRequest: core.serialization.Schema<
     metadata: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
     startTime: core.serialization.property("start_time", core.serialization.date().optional()),
     endTime: core.serialization.property("end_time", core.serialization.date().optional()),
+    logStatus: core.serialization.property("log_status", LogStatus.optional()),
 });
 
 export declare namespace ToolLogUpdateRequest {
@@ -44,5 +46,6 @@ export declare namespace ToolLogUpdateRequest {
         metadata?: Record<string, unknown> | null;
         start_time?: string | null;
         end_time?: string | null;
+        log_status?: LogStatus.Raw | null;
     }
 }

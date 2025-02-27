@@ -8,6 +8,7 @@ import * as core from "../../../../../core";
 import { ChatMessage } from "../../../../types/ChatMessage";
 import { PromptLogRequestToolChoice } from "../../types/PromptLogRequestToolChoice";
 import { PromptKernelRequest } from "../../../../types/PromptKernelRequest";
+import { LogStatus } from "../../../../types/LogStatus";
 
 export const PromptLogRequest: core.serialization.Schema<
     serializers.PromptLogRequest.Raw,
@@ -18,6 +19,7 @@ export const PromptLogRequest: core.serialization.Schema<
     id: core.serialization.string().optional(),
     outputMessage: core.serialization.property("output_message", ChatMessage.optional()),
     promptTokens: core.serialization.property("prompt_tokens", core.serialization.number().optional()),
+    reasoningTokens: core.serialization.property("reasoning_tokens", core.serialization.number().optional()),
     outputTokens: core.serialization.property("output_tokens", core.serialization.number().optional()),
     promptCost: core.serialization.property("prompt_cost", core.serialization.number().optional()),
     outputCost: core.serialization.property("output_cost", core.serialization.number().optional()),
@@ -43,6 +45,7 @@ export const PromptLogRequest: core.serialization.Schema<
     inputs: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
     source: core.serialization.string().optional(),
     metadata: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
+    logStatus: core.serialization.property("log_status", LogStatus.optional()),
     sourceDatapointId: core.serialization.property("source_datapoint_id", core.serialization.string().optional()),
     traceParentId: core.serialization.property("trace_parent_id", core.serialization.string().optional()),
     user: core.serialization.string().optional(),
@@ -58,6 +61,7 @@ export declare namespace PromptLogRequest {
         id?: string | null;
         output_message?: ChatMessage.Raw | null;
         prompt_tokens?: number | null;
+        reasoning_tokens?: number | null;
         output_tokens?: number | null;
         prompt_cost?: number | null;
         output_cost?: number | null;
@@ -77,6 +81,7 @@ export declare namespace PromptLogRequest {
         inputs?: Record<string, unknown> | null;
         source?: string | null;
         metadata?: Record<string, unknown> | null;
+        log_status?: LogStatus.Raw | null;
         source_datapoint_id?: string | null;
         trace_parent_id?: string | null;
         user?: string | null;

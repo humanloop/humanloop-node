@@ -10,6 +10,7 @@ import { PromptKernelRequestTemplate } from "./PromptKernelRequestTemplate";
 import { ModelProviders } from "./ModelProviders";
 import { PromptKernelRequestStop } from "./PromptKernelRequestStop";
 import { ResponseFormat } from "./ResponseFormat";
+import { ReasoningEffort } from "./ReasoningEffort";
 import { ToolFunction } from "./ToolFunction";
 
 export const PromptKernelRequest: core.serialization.ObjectSchema<
@@ -29,6 +30,7 @@ export const PromptKernelRequest: core.serialization.ObjectSchema<
     other: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
     seed: core.serialization.number().optional(),
     responseFormat: core.serialization.property("response_format", ResponseFormat.optional()),
+    reasoningEffort: core.serialization.property("reasoning_effort", ReasoningEffort.optional()),
     tools: core.serialization.list(ToolFunction).optional(),
     linkedTools: core.serialization.property(
         "linked_tools",
@@ -52,6 +54,7 @@ export declare namespace PromptKernelRequest {
         other?: Record<string, unknown> | null;
         seed?: number | null;
         response_format?: ResponseFormat.Raw | null;
+        reasoning_effort?: ReasoningEffort.Raw | null;
         tools?: ToolFunction.Raw[] | null;
         linked_tools?: string[] | null;
         attributes?: Record<string, unknown> | null;

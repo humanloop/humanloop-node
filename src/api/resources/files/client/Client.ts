@@ -91,8 +91,8 @@ export class Files {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.14b1",
-                "User-Agent": "humanloop/0.8.14b1",
+                "X-Fern-SDK-Version": "0.8.16",
+                "User-Agent": "humanloop/0.8.16",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -184,8 +184,8 @@ export class Files {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.14b1",
-                "User-Agent": "humanloop/0.8.14b1",
+                "X-Fern-SDK-Version": "0.8.16",
+                "User-Agent": "humanloop/0.8.16",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
