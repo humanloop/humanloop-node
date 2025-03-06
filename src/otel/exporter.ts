@@ -93,7 +93,7 @@ export class HumanloopSpanExporter implements SpanExporter {
                 flowChildrenSpanIds.delete(spanId);
                 if (flowChildrenSpanIds.size === 0) {
                     const flowLogId = this.spanIdToUploadedLogId.get(flowLogSpanId)!;
-                    this.client.flows.updateLog(flowLogId, { traceStatus: "complete" });
+                    this.client.flows.updateLog(flowLogId, { logStatus: "complete" });
                 }
                 break;
             }
