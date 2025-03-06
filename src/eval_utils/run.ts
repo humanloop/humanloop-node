@@ -144,7 +144,7 @@ export function overloadLog<T extends Flows | Prompts>(client: T): T {
             if (client instanceof Flows) {
                 request = {
                     ...request,
-                    traceStatus: "complete",
+                    logStatus: "complete",
                 };
             }
 
@@ -640,7 +640,7 @@ function getLogFunction(
             return async (args: FlowLogRequest) =>
                 await client.flows.log({
                     ...logRequest,
-                    traceStatus: "complete",
+                    logStatus: "complete",
                     ...args,
                 });
         case "prompt":
