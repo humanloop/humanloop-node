@@ -15,23 +15,31 @@ import _ from "lodash";
 import {
     BooleanEvaluatorStatsResponse,
     DatapointResponse,
+    DatasetResponse,
     EvaluationResponse,
     EvaluationStats,
     EvaluatorResponse,
     EvaluatorsRequest,
     ExternalEvaluatorRequest,
     FileType,
+    FlowKernelRequest,
     FlowLogRequest,
     FlowRequest,
+    LogResponse,
     NumericEvaluatorStatsResponse,
     PromptLogRequest,
     PromptRequest,
     RunStatsResponse,
+    ToolKernelRequest,
     ToolLogRequest,
     ToolRequest,
 } from "../api";
 import { jsonifyIfNotString } from "../otel/helpers";
-import { setEvaluationContext } from "./context";
+import {
+    EvaluationContext,
+    getEvaluationContext,
+    setEvaluationContext,
+} from "./context";
 import { Dataset, Evaluator, EvaluatorCheck, File, FileResponse } from "./types";
 
 // ANSI escape codes for logging colors
@@ -97,35 +105,83 @@ async function pMap<T, O>(
 }
 
 function callableIsHumanloopUtility(file: File): boolean {
-    return file.callable !== undefined && "file" in file.callable;
+    return file.callable !== undefined && "decorator" in file.callable;
 }
 
-function fileOrFileInsideHlUtility(file: File): File {
+function checkIfCallableIsHLDecorator(file: File): File {
     if (callableIsHumanloopUtility(file)) {
-        // When the decorator inside `file` is a decorated function,
-        // we need to validate that the other parameters of `file`
-        // match the attributes of the decorator
-        const decoratedFnName = file.callable!.name;
         // @ts-ignore
-        const innerFile: File = file.callable!.file;
-        for (const argument of ["version", "path", "type", "id"]) {
-            if (file[argument as keyof File]) {
+        const decorator = file.callable!.decorator as
+            | {
+                  type: "flow";
+                  path: string;
+                  version: FlowKernelRequest;
+              }
+            | {
+                  type: "prompt";
+                  path: string;
+              }
+            | {
+                  type: "tool";
+                  path: string;
+                  version: ToolKernelRequest;
+              };
+        const path = decorator.path;
+        const fileType = decorator.type;
+
+        if (fileType === "prompt" && file.version === undefined) {
+            throw new Error(
+                "You must pass a `file.version` argument when `file.callable` is wrapped in th Prompt decorator",
+            );
+        }
+
+        if (path !== file.path) {
+            throw new Error(
+                `Callable passed to Evaluation is wrapped in Humanloop ${fileType} decorator and manages File ${path}. ` +
+                    `Passed argument \`file.path\` does not match: ${file.path}.`,
+            );
+        }
+
+        for (const argument of ["type", "id"]) {
+            if (argument in file) {
                 console.warn(
-                    `Argument \`file.${argument}\` will be ignored: callable \`${decoratedFnName}\` is managed by the @${innerFile.type} decorator.`,
+                    `Callable passed to Evaluation is wrapped in Humanloop ${fileType} decorator and manages File ${path}. ` +
+                        `Ignoring argument \`file.${argument}\`.`,
                 );
             }
         }
 
-        // Use the file manifest in the decorated function
-        return { ...innerFile };
+        // If the callable is a Prompt decorator, we ask the user to pass file.version
+        if (decorator.type !== "prompt") {
+            for (const argument of ["version"]) {
+                if (argument in file) {
+                    console.warn(
+                        `Callable passed to Evaluation is wrapped in Humanloop ${fileType} decorator and manages File ${path}. ` +
+                            `Ignoring argument \`file.${argument}\`.`,
+                    );
+                }
+            }
+        }
+
+        return {
+            path: decorator.path,
+            type: decorator.type,
+            callable: file.callable!,
+            version: decorator.type === "prompt" ? file.version : decorator.version,
+        };
     } else {
         // Simple function
         // Raise error if one of path or id not provided
         if (!file.path && !file.id) {
-            throw new Error("You must provide a path or id in your `file`.");
+            throw new Error("You must provide a `file.path` or `file.id` argument.");
         }
         return file;
     }
+}
+
+function capitalizeFirstLetter(input: string): string {
+    if (!input) return input;
+    return input.charAt(0).toUpperCase() + input.slice(1);
 }
 
 export async function runEval(
@@ -141,28 +197,41 @@ export async function runEval(
     }
     concurrency = Math.min(concurrency, 32);
 
-    const file_ = fileOrFileInsideHlUtility(file);
+    const file_ = checkIfCallableIsHLDecorator(file);
 
     let type_: FileType;
+    let type_specified_: boolean;
     if (file_.type) {
+        type_specified_ = true;
         type_ = file_.type;
         console.info(
-            `${CYAN}Evaluating your ${type_} function corresponding to ${file_.path} on Humanloop${RESET}\n\n`,
+            `${CYAN}Evaluating your ${capitalizeFirstLetter(type_)} File corresponding to ${file_.path} on Humanloop.${RESET}\n`,
         );
     } else {
+        type_specified_ = false;
         type_ = "flow";
-        console.warn("No file type specified, defaulting to flow.");
+        console.warn(`${CYAN}No file type specified, defaulting to flow.${RESET}\n`);
     }
 
     const function_ = file_.callable;
     if (!function_) {
-        if (type_ === "flow") {
-            throw new Error(
-                "You must provide a callable for your Flow file to run a local eval.",
+        if (!type_specified_) {
+            console.error(
+                `${RED}Assuming the evaluated File is a Flow because \`file.type\` was not provided. ` +
+                    "Please provide a `file.callable` argument or specify `file.type` if you intend " +
+                    `to evaluate a File on the Humanloop runtime.\nYou passed the \`file\` as: ${JSON.stringify(file_, null, 2)}.${RESET}\n`,
             );
+            return [];
+        }
+        if (type_ === "flow") {
+            console.error(
+                `${RED}Flows cannot be evaluated on the Humanloop platform. Pass ` +
+                    `\`file.callable\` to run a local eval.${RESET}\n`,
+            );
+            return [];
         } else {
             console.info(
-                `No callable provided for your ${type_} file - will attempt to generate logs on Humanloop.`,
+                `${CYAN}No callable provided for your ${capitalizeFirstLetter(type_)} file - will attempt to generate logs on Humanloop.${RESET}\n`,
             );
         }
     }
@@ -170,6 +239,8 @@ export async function runEval(
     let { callable, version, ...rest } = file_;
     version = version || {};
     let hlFile: FileResponse;
+    // Check if File exists on Humanloop and is of the correct type
+    const path = file_.path;
     switch (type_) {
         case "flow": {
             try {
@@ -180,9 +251,11 @@ export async function runEval(
                 const updatedData = { ...rest, ...version } as FlowRequest;
                 hlFile = await client.flows.upsert(updatedData);
             } catch (e) {
-                throw new Error(
-                    `Error upserting the Flow associated with callable ${callable?.name}: ${e}`,
+                console.error(
+                    `${RED}Error upserting the evaluated Flow. Check the \`file.version\` argument. ` +
+                        `Is there an existing File of different type at path ${path}?${RESET}`,
                 );
+                return [];
             }
             break;
         }
@@ -193,9 +266,11 @@ export async function runEval(
                     ...version,
                 } as PromptRequest);
             } catch (e) {
-                throw new Error(
-                    `Error upserting the Prompt associated with callable ${callable?.name}: ${e}`,
+                console.error(
+                    `${RED}Error upserting the evaluated Prompt. Check the \`file.version\` argument. ` +
+                        `Is there an existing File of different type at path ${path}?${RESET}`,
                 );
+                return [];
             }
             break;
         }
@@ -206,9 +281,11 @@ export async function runEval(
                     ...version,
                 } as ToolRequest);
             } catch (e) {
-                throw new Error(
-                    `Error upserting the Tool associated with callable ${callable?.name}: ${e}`,
+                console.error(
+                    `${RED}Error upserting the evaluated Tool. Check the \`file.version\` argument. ` +
+                        `Is there an existing File of different type at path ${path}?${RESET}`,
                 );
+                return [];
             }
             break;
         }
@@ -221,30 +298,77 @@ export async function runEval(
                     ...version,
                 } as EvaluatorsRequest);
             } catch (e) {
-                throw new Error(
-                    `Error upserting the Evaluator associated with callable ${callable?.name}: ${e}`,
+                console.error(
+                    `${RED}Error upserting the evaluated Evaluator. Check the \`file.version\` argument. ` +
+                        `Is there an existing File of different type at path ${path}?${RESET}`,
                 );
+                return [];
             }
             break;
         }
         default:
-            throw new Error(`Unsupported File type: ${type_}`);
+            console.error(`${RED}Unsupported File type: ${type_}.${RESET}`);
+            return [];
     }
 
+    let hlDataset: DatasetResponse | undefined;
     // Upsert the dataset
-    if (dataset.action === undefined) {
-        dataset.action = "set";
+    if (!("path" in dataset)) {
+        console.error(
+            `${RED}You must provide a path in your \`dataset\` argument.${RESET}`,
+        );
+        return [];
     }
-    if (dataset.datapoints === undefined) {
-        //  Use `upsert` to get existing dataset ID if no datapoints provided, given we can't `get` on path.
-        dataset.datapoints = [];
-        dataset.action = "set";
+    // User references an online dataset
+    if (!("datapoints" in dataset)) {
+        // User references an online dataset
+        const path_ = dataset.path!;
+        const name = path_.includes("/") ? path_.split("/").pop() : path_;
+        // We can't get dataset by path, so we query all datasets and filter by name
+        const files = await client.files.listFiles({
+            type: "dataset",
+            name: name,
+        });
+        const matchingDatasets = files.records.filter((file) => file.path === path_);
+        if (matchingDatasets.length === 0) {
+            console.error(
+                `${RED}Dataset with path ${path_} not found. ` +
+                    `If you meant to provide a local dataset, ` +
+                    `pass them in \`dataset.datapoints\` arguments directly.${RESET}`,
+            );
+            return [];
+        }
+        if (matchingDatasets.length > 1) {
+            console.error(
+                `${RED}Multiple datasets match the provided path. ` +
+                    `Have you provided the full path to the Dataset?${RESET}`,
+            );
+            return [];
+        }
+        const datasetId = matchingDatasets[0].id;
+        hlDataset = (await client.datasets.get(datasetId, {
+            includeDatapoints: true,
+        })) as DatasetResponse;
+    } else {
+        if (dataset.action === undefined) {
+            dataset.action = "set";
+        }
+        if (!dataset.datapoints) {
+            console.error(
+                `${RED}Argument \`dataset.datapoints\` should have type DatapointRequest[] objects.${RESET}`,
+            );
+            return [];
+        }
+        hlDataset = await client.datasets.upsert({
+            ...dataset,
+            // Doing a type cast to satisfy the type checker
+            datapoints: dataset.datapoints!,
+        });
+        hlDataset = await client.datasets.get(hlDataset.id, {
+            versionId: hlDataset.versionId,
+            includeDatapoints: true,
+        });
     }
-    let hlDataset = await client.datasets.upsert(dataset);
-    hlDataset = await client.datasets.get(hlDataset.id, {
-        versionId: hlDataset.versionId,
-        includeDatapoints: true,
-    });
 
     // Upsert the local Evaluators; other Evaluators are just referenced by `path` or `id`
     let localEvaluators: [EvaluatorResponse, Function][] = [];
@@ -254,9 +378,11 @@ export async function runEval(
         );
 
         if (evaluatorsWithCallable.length > 0 && function_ == null) {
-            throw new Error(
-                `Local Evaluators are only supported when generating Logs locally using your ${type_}'s 'callable'. Please provide a 'callable' for your file in order to run Evaluators locally.`,
+            console.error(
+                `${RED}Local Evaluators are only supported when generating Logs locally using your ${capitalizeFirstLetter(type_)}'s 'callable'. ` +
+                    `Please provide a \`file.callable\` for your File in order to run Evaluators locally.${RESET}`,
             );
+            return [];
         }
 
         const upsertEvaluatorsPromises = evaluatorsWithCallable.map(
@@ -329,7 +455,6 @@ export async function runEval(
                 fileId: hlFile.id,
                 size: 50,
             });
-            console.log("EVALS", evals);
             for await (const e of evals) {
                 if (e.name === name) {
                     evaluation = e;
@@ -338,7 +463,9 @@ export async function runEval(
             }
         }
         if (!evaluation) {
-            throw new Error(`Evaluation with name ${name} not found.`);
+            throw new Error(
+                `Internal Error: Evaluation with name ${name} not found, but creating it has failed.`,
+            );
         }
     }
 
@@ -366,11 +493,9 @@ export async function runEval(
         datapoint: DatapointResponse,
         runId: string,
     ): Promise<void> {
-        function uploadCallback(logId: string) {
-            return async (datapoint: DatapointResponse) => {
-                await runLocalEvaluators(client, logId, datapoint, localEvaluators);
-                progressBar.increment();
-            };
+        async function uploadCallback(logId: string) {
+            await runLocalEvaluators(client, logId, datapoint, localEvaluators);
+            progressBar.increment();
         }
 
         const logFunc = getLogFunction(
@@ -385,13 +510,15 @@ export async function runEval(
             throw new Error(`Datapoint 'inputs' attribute is undefined.`);
         }
         contextApi.context.with(
-            setEvaluationContext({
-                sourceDatapointId: datapoint.id,
-                runId,
-                callback: uploadCallback,
-                fileId: hlFile.id,
-                path: hlFile.path,
-            }),
+            setEvaluationContext(
+                new EvaluationContext({
+                    sourceDatapointId: datapoint.id,
+                    runId,
+                    callback: uploadCallback,
+                    fileId: hlFile.id,
+                    path: hlFile.path,
+                }),
+            ),
             async () => {
                 const startTime = new Date();
                 let funcInputs: Record<string, unknown> & {
@@ -406,17 +533,31 @@ export async function runEval(
                     };
                 }
                 try {
+                    const evaluationContext = getEvaluationContext();
                     const funcOutput = await function_!(funcInputs);
                     const logOutput = jsonifyIfNotString(function_!, funcOutput);
                     if (!callableIsHumanloopUtility(file_)) {
                         // callable is a plain function, so we create the log here
-                        await logFunc({
+                        const log = (await logFunc({
                             inputs: { ...datapoint.inputs },
                             messages: datapoint.messages,
                             output: logOutput,
+                            sourceDatapointId: datapoint.id,
+                            runId: runId,
                             startTime: startTime,
                             endTime: new Date(),
-                        });
+                        })) as LogResponse;
+                        evaluationContext!.logging_counter += 1;
+                        await uploadCallback(log.id);
+                    } else {
+                        if (evaluationContext!.logging_counter === 0) {
+                            throw new Error(
+                                `Passed callable did not produce Logs against File ${
+                                    hlFile.path
+                                }. Are you logging against it or make any LLM provider calls inside the 
+                                Prompt-decorated function?`,
+                            );
+                        }
                     }
                 } catch (e) {
                     const errorMessage = e instanceof Error ? e.message : String(e);
@@ -425,6 +566,7 @@ export async function runEval(
                         messages: datapoint.messages,
                         error: errorMessage,
                         sourceDatapointId: datapoint.id,
+                        runId: runId,
                         startTime: startTime,
                         endTime: new Date(),
                     });
@@ -471,9 +613,14 @@ export async function runEval(
     let stats;
     do {
         stats = await client.evaluations.getStats(evaluation.id);
-        console.log(`\r${stats.progress}`);
+        if (stats?.progress) {
+            const newLines = stats.progress.split("\n").length - 1;
+            process.stdout.write(`\r${stats.progress}`);
+            // Move the cursor up by the number of new lines
+            process.stdout.moveCursor(0, -newLines);
+        }
         if (stats.status !== "completed") {
-            await new Promise((resolve) => setTimeout(resolve, 5000));
+            await new Promise((resolve) => setTimeout(resolve, 500));
         }
     } while (stats.status !== "completed");
     console.log(stats.report);
@@ -547,20 +694,23 @@ function getLogFunction(
     switch (type) {
         case "flow":
             return async (args: FlowLogRequest) =>
-                await client.flows.log({
+                // @ts-ignore Using the original method instead of the overloaded one
+                await client.flows._log({
                     ...logRequest,
                     logStatus: "complete",
                     ...args,
                 });
         case "prompt":
             return async (args: PromptLogRequest) =>
-                await client.prompts.log({ ...logRequest, ...args });
+                // @ts-ignore Using the original method instead of the overloaded one
+                await client.prompts._log({ ...logRequest, ...args });
         // case "evaluator":
         //     return (args: CreateEvaluatorLogRequest) =>
-        //         client.evaluators.log({ ...logRequest, ...args });
+        //         client.evaluators._log({ ...logRequest, ...args });
         case "tool":
             return async (args: ToolLogRequest) =>
-                await client.tools.log({ ...logRequest, ...args });
+                // @ts-ignore Using the original method instead of the overloaded one
+                await client.tools._log({ ...logRequest, ...args });
         default:
             throw new Error(`Unsupported File version: ${type}`);
     }
@@ -584,7 +734,8 @@ async function runLocalEvaluators(
                 judgment = await evalFunction(log);
             }
 
-            await client.evaluators.log({
+            // @ts-ignore Using the original method instead of the overloaded one
+            await client.evaluators._log({
                 path: evaluator.path,
                 versionId: evaluator.versionId,
                 parentId: logId,
@@ -593,7 +744,8 @@ async function runLocalEvaluators(
                 endTime: new Date(),
             });
         } catch (e) {
-            await client.evaluators.log({
+            // @ts-ignore Using the original method instead of the overloaded one
+            await client.evaluators._log({
                 path: evaluator.path,
                 versionId: evaluator.versionId,
                 parentId: logId,

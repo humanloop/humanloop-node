@@ -13,3 +13,4 @@ export const HUMANLOOP_TOOL_SPAN_NAME = `${HUMANLOOP_SPAN_PREFIX}tool`;
 export const HUMANLOOP_CONTEXT_TRACE_ID = "humanloop.context.flow.trace_id";
 export const HUMANLOOP_CONTEXT_EVALUATION = "humanloop.context.evaluation";
 export const HUMANLOOP_CONTEXT_PROMPT = "humanloop.context.prompt";
+export const HUMANLOOP_CONTEXT_DECORATOR = "humanloop.context.decorator";

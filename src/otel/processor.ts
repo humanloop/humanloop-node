@@ -6,7 +6,11 @@ import {
     SpanProcessor,
 } from "@opentelemetry/sdk-trace-node";
 
-import { getPromptContext, getTraceId } from "../eval_utils/context";
+import {
+    getDecoratorContext,
+    getPromptContext,
+    getTraceId,
+} from "../eval_utils/context";
 import {
     HUMANLOOP_FILE_KEY,
     HUMANLOOP_FILE_TYPE_KEY,
@@ -33,8 +37,8 @@ export class HumanloopSpanProcessor implements SpanProcessor {
                     span.setAttribute(`${HUMANLOOP_FILE_KEY}.template`, template);
                 }
             } else {
-                // TODO: handle
-                throw new Error("Provider call outside @prompt");
+                // Spied LLM provider call outside of a @prompt decorated function
+                // Will be discarded in onEnd
             }
             const traceId = getTraceId();
             if (traceId !== undefined) {
@@ -47,6 +51,14 @@ export class HumanloopSpanProcessor implements SpanProcessor {
     }
 
     onEnd(span: ReadableSpan): void {
+        if (isLLMProviderCall(span)) {
+            const promptContext = getDecoratorContext();
+            if (promptContext === undefined || promptContext.type !== "prompt") {
+                // Discard spans spied by the instrumentors if not made in
+                // the context of a @prompt decorated function
+                return;
+            }
+        }
         this.spanExporter.export([span], () => {});
     }
 

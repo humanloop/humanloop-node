@@ -65,20 +65,12 @@ export interface File extends Identifiers {
      * If messages are defined in your Dataset, then
      * `output = callable(datapoint.inputs, messages=datapoint.messages)`.
      */
-    callable?:
-        | ((inputs: any, messages?: any[]) => string | Promise<string>)
-        // Decorated callables carry metadata about path and version
-        // Which should match the ones provided in the File
-        | {
-              (inputs: any, messages?: any[]): string | Promise<string>;
-              version: Version;
-              path: string;
-          };
+    callable?: (inputs: { [key: string]: any } | never) => string | Promise<string>;
 }
 
 export interface Dataset extends Identifiers {
     /** The datapoints to map your function over to produce the outputs required by the evaluation. */
-    datapoints: DatapointRequest[];
+    datapoints?: DatapointRequest[];
     /**
      * How to update the Dataset given the provided Datapoints;
      * `set` replaces the existing Datapoints and `add` appends to the existing Datapoints.

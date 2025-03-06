@@ -9,7 +9,13 @@ import {
     HUMANLOOP_LOG_KEY,
     HUMANLOOP_PATH_KEY,
 } from "./constants";
-import { readFromOpenTelemetrySpan, writeToOpenTelemetrySpan } from "./helpers";
+import {
+    isLLMProviderCall,
+    readFromOpenTelemetrySpan,
+    writeToOpenTelemetrySpan,
+} from "./helpers";
+import { Span as ProtoBufferSpan } from "./proto/trace";
+import { TracesData } from "./proto/trace";
 
 export class HumanloopSpanExporter implements SpanExporter {
     private readonly client: HumanloopClient;
@@ -52,12 +58,10 @@ export class HumanloopSpanExporter implements SpanExporter {
         await this.shutdown();
     }
 
-    private hrTimeToISODate(hrTime: [number, number]): string {
-        // Convert high resolution time to ISO date
+    private hrTimeToNanoseconds(hrTime: [number, number]): number {
+        // Convert high resolution time to nanoseconds
         const [seconds, nanoseconds] = hrTime;
-        const totalMilliseconds = seconds * 1e3 + nanoseconds / 1e6;
-        const date = new Date(totalMilliseconds);
-        return date.toISOString();
+        return seconds * 1e9 + nanoseconds;
     }
 
     private async exportSpanDispatch(span: ReadableSpan): Promise<void> {
@@ -81,12 +85,28 @@ export class HumanloopSpanExporter implements SpanExporter {
 
         writeToOpenTelemetrySpan(span, logArgs, HUMANLOOP_LOG_KEY);
 
-        const response = await fetch("http://0.0.0.0:80/v5/import/otel", {
+        const payload: TracesData = {
+            resourceSpans: [
+                {
+                    scopeSpans: [
+                        {
+                            scope: {
+                                name: isLLMProviderCall(span)
+                                    ? "humanloop.sdk.provider"
+                                    : "humanloop.sdk.decorator",
+                            },
+                            spans: [this.spanToProto(span)],
+                        },
+                    ],
+                },
+            ],
+        };
+        const response = await fetch("http://0.0.0.0:80/v5/import/otel/v1/traces", {
             method: "POST",
             headers: {
                 "X-API-KEY": "hl_sk_66c1dcc77e0499cb08cd785a9469dbf3cb733296cb6a7989",
             },
-            body: this.spanToJson(span),
+            body: JSON.stringify(payload),
         });
         if (response.status != 200) {
             // TODO: Handle error
@@ -95,21 +115,65 @@ export class HumanloopSpanExporter implements SpanExporter {
                 evaluationContext !== undefined &&
                 evaluationContext.path === filePath
             ) {
+                if (evaluationContext.logging_counter > 0) {
+                    console.warn(
+                        `Evaluated callable should only log once against file ${filePath}. ` +
+                            `Will not add additional logs to Evaluation. ` +
+                            `Do you have multiple logging statements in the body of the function?`,
+                    );
+                }
                 const responseBody = await response.json();
                 const logId = responseBody["log_id"];
-                evaluationContext.callback(logId);
+                evaluationContext.logging_counter += 1;
+                await evaluationContext.callback(logId);
             }
         }
         // console.log("RECV", await response.json());
     }
 
-    private spanToJson(span: ReadableSpan) {
-        return JSON.stringify({
-            attributes: span.attributes,
-            start_time: this.hrTimeToISODate(span.startTime),
-            end_time: this.hrTimeToISODate(span.endTime),
+    private spanToProto(span: ReadableSpan): ProtoBufferSpan {
+        return {
+            traceId: span.spanContext().traceId,
+            spanId: span.spanContext().spanId,
+            traceState:
+                span.spanContext().traceState !== undefined
+                    ? span.spanContext().traceState!.serialize()
+                    : "",
             name: span.name,
-        });
+            kind: span.kind,
+            startTimeUnixNano: this.hrTimeToNanoseconds(span.startTime),
+            endTimeUnixNano: this.hrTimeToNanoseconds(span.endTime),
+            attributes: Object.entries(span.attributes)
+                .filter(([_, value]) => value !== undefined)
+                .map(([key, value]) => ({
+                    key,
+                    value: {
+                        // We filtered out undefined values, so we can safely cast to string
+                        stringValue: value!.toString(),
+                    },
+                })),
+            droppedAttributesCount: span.droppedAttributesCount,
+            events: [],
+            links: span.links.map((link) => ({
+                traceId: link.context.traceId,
+                spanId: link.context.spanId,
+                traceState: link.context.traceState!.serialize(),
+                attributes:
+                    link.attributes !== undefined
+                        ? Object.entries(link.attributes)
+                              .filter(([_, value]) => value !== undefined)
+                              .map(([key, value]) => ({
+                                  key,
+                                  value: {
+                                      stringValue: value!.toString(),
+                                  },
+                              }))
+                        : [],
+                droppedAttributesCount: link.droppedAttributesCount || 0,
+            })),
+            droppedEventsCount: span.droppedEventsCount,
+            droppedLinksCount: span.droppedLinksCount,
+        };
     }
 
     public getExportedSpans(): ReadableSpan[] {

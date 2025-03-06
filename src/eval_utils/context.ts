@@ -1,6 +1,8 @@
 import * as contextApi from "@opentelemetry/api";
+import { FileType } from "api";
 
 import {
+    HUMANLOOP_CONTEXT_DECORATOR,
     HUMANLOOP_CONTEXT_EVALUATION,
     HUMANLOOP_CONTEXT_PROMPT,
     HUMANLOOP_CONTEXT_TRACE_ID,
@@ -34,13 +36,54 @@ export function getPromptContext(): PromptContext | undefined {
         | undefined;
 }
 
-export type EvaluationContext = {
-    sourceDatapointId: string;
-    runId: string;
-    callback: (log_id: string) => void;
-    fileId: string;
-    path: string;
+export type DecoratorContext = {
+    filePath: string;
+    type: FileType;
 };
+
+export function setDecoratorContext(
+    decoratorContext: DecoratorContext,
+): contextApi.Context {
+    const key = contextApi.createContextKey(HUMANLOOP_CONTEXT_DECORATOR);
+    return contextApi.context.active().setValue(key, decoratorContext);
+}
+
+export function getDecoratorContext(): DecoratorContext | undefined {
+    const key = contextApi.createContextKey(HUMANLOOP_CONTEXT_DECORATOR);
+    return (contextApi.context.active().getValue(key) || undefined) as
+        | DecoratorContext
+        | undefined;
+}
+
+export class EvaluationContext {
+    public sourceDatapointId: string;
+    public runId: string;
+    public callback: (log_id: string) => Promise<void>;
+    public fileId: string;
+    public path: string;
+    public logging_counter: number;
+
+    constructor({
+        sourceDatapointId,
+        runId,
+        callback,
+        fileId,
+        path,
+    }: {
+        sourceDatapointId: string;
+        runId: string;
+        callback: (log_id: string) => Promise<void>;
+        fileId: string;
+        path: string;
+    }) {
+        this.sourceDatapointId = sourceDatapointId;
+        this.runId = runId;
+        this.callback = callback;
+        this.fileId = fileId;
+        this.path = path;
+        this.logging_counter = 0;
+    }
+}
 
 export function setEvaluationContext(
     evaluationContext: EvaluationContext,

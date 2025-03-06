@@ -2,6 +2,7 @@ import { NodeTracerProvider, Tracer } from "@opentelemetry/sdk-trace-node";
 import { AnthropicInstrumentation } from "@traceloop/instrumentation-anthropic";
 import { CohereInstrumentation } from "@traceloop/instrumentation-cohere";
 import { OpenAIInstrumentation } from "@traceloop/instrumentation-openai";
+import { Evaluators } from "api/resources/evaluators/client/Client";
 
 import { HumanloopClient as BaseHumanloopClient } from "./Client";
 import { ChatMessage } from "./api";
@@ -105,6 +106,7 @@ export class HumanloopClient extends BaseHumanloopClient {
     protected readonly _prompts_overloaded: Prompts;
     protected readonly _flows_overloaded: Flows;
     protected readonly _tools_overloaded: Tools;
+    protected readonly _evaluators_overloaded: Evaluators;
 
     protected readonly OpenAI?: any;
     protected readonly Anthropic?: any;
@@ -137,6 +139,8 @@ export class HumanloopClient extends BaseHumanloopClient {
         this._tools_overloaded = overloadLog(super.tools);
 
         this._flows_overloaded = overloadLog(super.flows);
+
+        this._evaluators_overloaded = overloadLog(super.evaluators);
 
         this._evaluations = new ExtendedEvaluations(_options, this);
 
@@ -288,5 +292,9 @@ export class HumanloopClient extends BaseHumanloopClient {
 
     public get tools(): Tools {
         return this._tools_overloaded;
+    }
+
+    public get evaluators(): Evaluators {
+        return this._evaluators_overloaded;
     }
 }
