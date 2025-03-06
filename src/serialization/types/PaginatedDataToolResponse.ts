@@ -17,7 +17,7 @@ export const PaginatedDataToolResponse: core.serialization.ObjectSchema<
 });
 
 export declare namespace PaginatedDataToolResponse {
-    interface Raw {
+    export interface Raw {
         records: serializers.ToolResponse.Raw[];
         page: number;
         size: number;

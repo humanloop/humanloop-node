@@ -15,5 +15,5 @@ export const PromptRequestStop: core.serialization.Schema<
 ]);
 
 export declare namespace PromptRequestStop {
-    type Raw = string | string[];
+    export type Raw = string | string[];
 }

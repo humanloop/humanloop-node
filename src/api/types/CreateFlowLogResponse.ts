@@ -14,6 +14,6 @@ export interface CreateFlowLogResponse {
     flowId: string;
     /** Unique identifier for the Flow Version. */
     versionId: string;
-    /** Status of the Trace. When a Trace is marked as `complete`, no more Logs can be added to it. Monitoring Evaluators will only run on `complete` Traces. */
-    traceStatus?: Humanloop.TraceStatus;
+    /** Status of the Flow Log. When a Flow Log is marked as `complete`, no more Logs can be added to it. Monitoring Evaluators will only run on `complete` Flow Logs. */
+    logStatus?: Humanloop.LogStatus;
 }

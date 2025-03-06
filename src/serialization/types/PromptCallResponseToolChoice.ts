@@ -18,5 +18,5 @@ export const PromptCallResponseToolChoice: core.serialization.Schema<
 ]);
 
 export declare namespace PromptCallResponseToolChoice {
-    type Raw = "none" | "auto" | "required" | ToolChoice.Raw;
+    export type Raw = "none" | "auto" | "required" | ToolChoice.Raw;
 }

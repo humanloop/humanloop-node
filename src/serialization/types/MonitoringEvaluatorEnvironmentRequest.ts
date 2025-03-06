@@ -15,7 +15,7 @@ export const MonitoringEvaluatorEnvironmentRequest: core.serialization.ObjectSch
 });
 
 export declare namespace MonitoringEvaluatorEnvironmentRequest {
-    interface Raw {
+    export interface Raw {
         evaluator_id: string;
         environment_id: string;
     }

@@ -10,5 +10,5 @@ export const ChatRole: core.serialization.Schema<serializers.ChatRole.Raw, Human
     core.serialization.enum_(["user", "assistant", "system", "tool", "developer"]);
 
 export declare namespace ChatRole {
-    type Raw = "user" | "assistant" | "system" | "tool" | "developer";
+    export type Raw = "user" | "assistant" | "system" | "tool" | "developer";
 }

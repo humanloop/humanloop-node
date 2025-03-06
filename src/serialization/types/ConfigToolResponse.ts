@@ -12,5 +12,5 @@ export const ConfigToolResponse: core.serialization.Schema<
 > = core.serialization.unknown();
 
 export declare namespace ConfigToolResponse {
-    type Raw = unknown;
+    export type Raw = unknown;
 }

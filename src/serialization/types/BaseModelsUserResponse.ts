@@ -12,5 +12,5 @@ export const BaseModelsUserResponse: core.serialization.Schema<
 > = core.serialization.unknown();
 
 export declare namespace BaseModelsUserResponse {
-    type Raw = unknown;
+    export type Raw = unknown;
 }

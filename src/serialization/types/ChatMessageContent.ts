@@ -16,5 +16,5 @@ export const ChatMessageContent: core.serialization.Schema<
 ]);
 
 export declare namespace ChatMessageContent {
-    type Raw = string | ChatMessageContentItem.Raw[];
+    export type Raw = string | ChatMessageContentItem.Raw[];
 }

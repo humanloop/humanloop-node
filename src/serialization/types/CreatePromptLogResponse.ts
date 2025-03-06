@@ -17,7 +17,7 @@ export const CreatePromptLogResponse: core.serialization.ObjectSchema<
 });
 
 export declare namespace CreatePromptLogResponse {
-    interface Raw {
+    export interface Raw {
         id: string;
         prompt_id: string;
         version_id: string;

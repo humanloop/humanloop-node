@@ -6,7 +6,6 @@
  * An enumeration.
  */
 export type TimeUnit = "day" | "week" | "month";
-
 export const TimeUnit = {
     Day: "day",
     Week: "week",

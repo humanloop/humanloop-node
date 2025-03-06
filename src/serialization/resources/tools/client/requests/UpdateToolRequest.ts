@@ -15,7 +15,7 @@ export const UpdateToolRequest: core.serialization.Schema<
 });
 
 export declare namespace UpdateToolRequest {
-    interface Raw {
+    export interface Raw {
         path?: string | null;
         name?: string | null;
     }

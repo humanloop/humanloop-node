@@ -12,7 +12,7 @@ export const InputResponse: core.serialization.ObjectSchema<serializers.InputRes
     });
 
 export declare namespace InputResponse {
-    interface Raw {
+    export interface Raw {
         name: string;
     }
 }

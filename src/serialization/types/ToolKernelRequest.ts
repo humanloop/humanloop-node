@@ -21,7 +21,7 @@ export const ToolKernelRequest: core.serialization.ObjectSchema<
 });
 
 export declare namespace ToolKernelRequest {
-    interface Raw {
+    export interface Raw {
         function?: ToolFunction.Raw | null;
         source_code?: string | null;
         setup_values?: Record<string, unknown> | null;

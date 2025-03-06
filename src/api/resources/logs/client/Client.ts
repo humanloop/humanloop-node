@@ -5,24 +5,28 @@
 import * as environments from "../../../../environments";
 import * as core from "../../../../core";
 import * as Humanloop from "../../../index";
-import urlJoin from "url-join";
 import * as serializers from "../../../../serialization/index";
+import urlJoin from "url-join";
 import * as errors from "../../../../errors/index";
 
 export declare namespace Logs {
-    interface Options {
+    export interface Options {
         environment?: core.Supplier<environments.HumanloopEnvironment | string>;
-        apiKey: core.Supplier<string>;
+        /** Specify a custom URL to connect the client to. */
+        baseUrl?: core.Supplier<string>;
+        apiKey?: core.Supplier<string>;
         fetcher?: core.FetchFunction;
     }
 
-    interface RequestOptions {
+    export interface RequestOptions {
         /** The maximum time to wait for a response in seconds. */
         timeoutInSeconds?: number;
         /** The number of times to retry the request. Defaults to 2. */
         maxRetries?: number;
         /** A hook to abort the request. */
         abortSignal?: AbortSignal;
+        /** Additional headers to include in the request. */
+        headers?: Record<string, string>;
     }
 }
 
@@ -37,10 +41,9 @@ export declare namespace Logs {
  * ...
  *
  *
- *
  */
 export class Logs {
-    constructor(protected readonly _options: Logs.Options) {}
+    constructor(protected readonly _options: Logs.Options = {}) {}
 
     /**
      * List all Logs for the given filter criteria.
@@ -77,7 +80,7 @@ export class Logs {
                 sample,
                 includeTraceChildren,
             } = request;
-            const _queryParams: Record<string, string | string[] | object | object[]> = {};
+            const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
             _queryParams["file_id"] = fileId;
             if (page != null) {
                 _queryParams["page"] = page.toString();
@@ -89,7 +92,9 @@ export class Logs {
                 _queryParams["version_id"] = versionId;
             }
             if (versionStatus != null) {
-                _queryParams["version_status"] = versionStatus;
+                _queryParams["version_status"] = serializers.VersionStatus.jsonOrThrow(versionStatus, {
+                    unrecognizedObjectKeys: "strip",
+                });
             }
             if (id != null) {
                 if (Array.isArray(id)) {
@@ -128,7 +133,9 @@ export class Logs {
             }
             const _response = await (this._options.fetcher ?? core.fetcher)({
                 url: urlJoin(
-                    (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
+                    (await core.Supplier.get(this._options.baseUrl)) ??
+                        (await core.Supplier.get(this._options.environment)) ??
+                        environments.HumanloopEnvironment.Default,
                     "logs",
                 ),
                 method: "GET",
@@ -140,6 +147,7 @@ export class Logs {
                     "X-Fern-Runtime": core.RUNTIME.type,
                     "X-Fern-Runtime-Version": core.RUNTIME.version,
                     ...(await this._getCustomAuthorizationHeaders()),
+                    ...requestOptions?.headers,
                 },
                 contentType: "application/json",
                 queryParameters: _queryParams,
@@ -183,7 +191,7 @@ export class Logs {
                         body: _response.error.rawBody,
                     });
                 case "timeout":
-                    throw new errors.HumanloopTimeoutError();
+                    throw new errors.HumanloopTimeoutError("Timeout exceeded when calling GET /logs.");
                 case "unknown":
                     throw new errors.HumanloopError({
                         message: _response.error.errorMessage,
@@ -211,14 +219,16 @@ export class Logs {
      * @throws {@link Humanloop.UnprocessableEntityError}
      *
      * @example
-     *     await client.logs.delete()
+     *     await client.logs.delete({
+     *         id: "prv_Wu6zx1lAWJRqOyL8nWuZk"
+     *     })
      */
     public async delete(
         request: Humanloop.LogsDeleteRequest = {},
         requestOptions?: Logs.RequestOptions,
     ): Promise<void> {
         const { id } = request;
-        const _queryParams: Record<string, string | string[] | object | object[]> = {};
+        const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
         if (id != null) {
             if (Array.isArray(id)) {
                 _queryParams["id"] = id.map((item) => item);
@@ -229,7 +239,9 @@ export class Logs {
 
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
-                (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.HumanloopEnvironment.Default,
                 "logs",
             ),
             method: "DELETE",
@@ -241,6 +253,7 @@ export class Logs {
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
+                ...requestOptions?.headers,
             },
             contentType: "application/json",
             queryParameters: _queryParams,
@@ -280,7 +293,7 @@ export class Logs {
                     body: _response.error.rawBody,
                 });
             case "timeout":
-                throw new errors.HumanloopTimeoutError();
+                throw new errors.HumanloopTimeoutError("Timeout exceeded when calling DELETE /logs.");
             case "unknown":
                 throw new errors.HumanloopError({
                     message: _response.error.errorMessage,
@@ -302,7 +315,9 @@ export class Logs {
     public async get(id: string, requestOptions?: Logs.RequestOptions): Promise<Humanloop.LogResponse> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
-                (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.HumanloopEnvironment.Default,
                 `logs/${encodeURIComponent(id)}`,
             ),
             method: "GET",
@@ -314,6 +329,7 @@ export class Logs {
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
+                ...requestOptions?.headers,
             },
             contentType: "application/json",
             requestType: "json",
@@ -358,7 +374,7 @@ export class Logs {
                     body: _response.error.rawBody,
                 });
             case "timeout":
-                throw new errors.HumanloopTimeoutError();
+                throw new errors.HumanloopTimeoutError("Timeout exceeded when calling GET /logs/{id}.");
             case "unknown":
                 throw new errors.HumanloopError({
                     message: _response.error.errorMessage,

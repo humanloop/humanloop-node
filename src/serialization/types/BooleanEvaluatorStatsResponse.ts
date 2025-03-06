@@ -20,7 +20,7 @@ export const BooleanEvaluatorStatsResponse: core.serialization.ObjectSchema<
 });
 
 export declare namespace BooleanEvaluatorStatsResponse {
-    interface Raw {
+    export interface Raw {
         evaluator_version_id: string;
         total_logs: number;
         num_judgments: number;

@@ -10,5 +10,5 @@ export const DatasetsRequest: core.serialization.Schema<serializers.DatasetsRequ
     core.serialization.unknown();
 
 export declare namespace DatasetsRequest {
-    type Raw = unknown;
+    export type Raw = unknown;
 }

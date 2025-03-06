@@ -10,24 +10,28 @@ import urlJoin from "url-join";
 import * as errors from "../../../../errors/index";
 
 export declare namespace Tools {
-    interface Options {
+    export interface Options {
         environment?: core.Supplier<environments.HumanloopEnvironment | string>;
-        apiKey: core.Supplier<string>;
+        /** Specify a custom URL to connect the client to. */
+        baseUrl?: core.Supplier<string>;
+        apiKey?: core.Supplier<string>;
         fetcher?: core.FetchFunction;
     }
 
-    interface RequestOptions {
+    export interface RequestOptions {
         /** The maximum time to wait for a response in seconds. */
         timeoutInSeconds?: number;
         /** The number of times to retry the request. Defaults to 2. */
         maxRetries?: number;
         /** A hook to abort the request. */
         abortSignal?: AbortSignal;
+        /** Additional headers to include in the request. */
+        headers?: Record<string, string>;
     }
 }
 
 export class Tools {
-    constructor(protected readonly _options: Tools.Options) {}
+    constructor(protected readonly _options: Tools.Options = {}) {}
 
     /**
      * Log to a Tool.
@@ -81,7 +85,7 @@ export class Tools {
         requestOptions?: Tools.RequestOptions,
     ): Promise<Humanloop.CreateToolLogResponse> {
         const { versionId, environment, ..._body } = request;
-        const _queryParams: Record<string, string | string[] | object | object[]> = {};
+        const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
         if (versionId != null) {
             _queryParams["version_id"] = versionId;
         }
@@ -92,7 +96,9 @@ export class Tools {
 
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
-                (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.HumanloopEnvironment.Default,
                 "tools/log",
             ),
             method: "POST",
@@ -104,6 +110,7 @@ export class Tools {
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
+                ...requestOptions?.headers,
             },
             contentType: "application/json",
             queryParameters: _queryParams,
@@ -150,7 +157,7 @@ export class Tools {
                     body: _response.error.rawBody,
                 });
             case "timeout":
-                throw new errors.HumanloopTimeoutError();
+                throw new errors.HumanloopTimeoutError("Timeout exceeded when calling POST /tools/log.");
             case "unknown":
                 throw new errors.HumanloopError({
                     message: _response.error.errorMessage,
@@ -181,7 +188,9 @@ export class Tools {
     ): Promise<Humanloop.LogResponse> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
-                (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.HumanloopEnvironment.Default,
                 `tools/${encodeURIComponent(id)}/log/${encodeURIComponent(logId)}`,
             ),
             method: "PATCH",
@@ -193,6 +202,7 @@ export class Tools {
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
+                ...requestOptions?.headers,
             },
             contentType: "application/json",
             requestType: "json",
@@ -238,7 +248,7 @@ export class Tools {
                     body: _response.error.rawBody,
                 });
             case "timeout":
-                throw new errors.HumanloopTimeoutError();
+                throw new errors.HumanloopTimeoutError("Timeout exceeded when calling PATCH /tools/{id}/log/{log_id}.");
             case "unknown":
                 throw new errors.HumanloopError({
                     message: _response.error.errorMessage,
@@ -265,7 +275,7 @@ export class Tools {
     ): Promise<core.Page<Humanloop.ToolResponse>> {
         const list = async (request: Humanloop.ListToolsGetRequest): Promise<Humanloop.PaginatedDataToolResponse> => {
             const { page, size, name, userFilter, sortBy, order } = request;
-            const _queryParams: Record<string, string | string[] | object | object[]> = {};
+            const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
             if (page != null) {
                 _queryParams["page"] = page.toString();
             }
@@ -279,14 +289,18 @@ export class Tools {
                 _queryParams["user_filter"] = userFilter;
             }
             if (sortBy != null) {
-                _queryParams["sort_by"] = sortBy;
+                _queryParams["sort_by"] = serializers.ProjectSortBy.jsonOrThrow(sortBy, {
+                    unrecognizedObjectKeys: "strip",
+                });
             }
             if (order != null) {
-                _queryParams["order"] = order;
+                _queryParams["order"] = serializers.SortOrder.jsonOrThrow(order, { unrecognizedObjectKeys: "strip" });
             }
             const _response = await (this._options.fetcher ?? core.fetcher)({
                 url: urlJoin(
-                    (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
+                    (await core.Supplier.get(this._options.baseUrl)) ??
+                        (await core.Supplier.get(this._options.environment)) ??
+                        environments.HumanloopEnvironment.Default,
                     "tools",
                 ),
                 method: "GET",
@@ -298,6 +312,7 @@ export class Tools {
                     "X-Fern-Runtime": core.RUNTIME.type,
                     "X-Fern-Runtime-Version": core.RUNTIME.version,
                     ...(await this._getCustomAuthorizationHeaders()),
+                    ...requestOptions?.headers,
                 },
                 contentType: "application/json",
                 queryParameters: _queryParams,
@@ -341,7 +356,7 @@ export class Tools {
                         body: _response.error.rawBody,
                     });
                 case "timeout":
-                    throw new errors.HumanloopTimeoutError();
+                    throw new errors.HumanloopTimeoutError("Timeout exceeded when calling GET /tools.");
                 case "unknown":
                     throw new errors.HumanloopError({
                         message: _response.error.errorMessage,
@@ -405,7 +420,9 @@ export class Tools {
     ): Promise<Humanloop.ToolResponse> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
-                (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.HumanloopEnvironment.Default,
                 "tools",
             ),
             method: "POST",
@@ -417,6 +434,7 @@ export class Tools {
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
+                ...requestOptions?.headers,
             },
             contentType: "application/json",
             requestType: "json",
@@ -462,7 +480,7 @@ export class Tools {
                     body: _response.error.rawBody,
                 });
             case "timeout":
-                throw new errors.HumanloopTimeoutError();
+                throw new errors.HumanloopTimeoutError("Timeout exceeded when calling POST /tools.");
             case "unknown":
                 throw new errors.HumanloopError({
                     message: _response.error.errorMessage,
@@ -491,7 +509,7 @@ export class Tools {
         requestOptions?: Tools.RequestOptions,
     ): Promise<Humanloop.ToolResponse> {
         const { versionId, environment } = request;
-        const _queryParams: Record<string, string | string[] | object | object[]> = {};
+        const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
         if (versionId != null) {
             _queryParams["version_id"] = versionId;
         }
@@ -502,7 +520,9 @@ export class Tools {
 
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
-                (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.HumanloopEnvironment.Default,
                 `tools/${encodeURIComponent(id)}`,
             ),
             method: "GET",
@@ -514,6 +534,7 @@ export class Tools {
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
+                ...requestOptions?.headers,
             },
             contentType: "application/json",
             queryParameters: _queryParams,
@@ -559,7 +580,7 @@ export class Tools {
                     body: _response.error.rawBody,
                 });
             case "timeout":
-                throw new errors.HumanloopTimeoutError();
+                throw new errors.HumanloopTimeoutError("Timeout exceeded when calling GET /tools/{id}.");
             case "unknown":
                 throw new errors.HumanloopError({
                     message: _response.error.errorMessage,
@@ -581,7 +602,9 @@ export class Tools {
     public async delete(id: string, requestOptions?: Tools.RequestOptions): Promise<void> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
-                (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.HumanloopEnvironment.Default,
                 `tools/${encodeURIComponent(id)}`,
             ),
             method: "DELETE",
@@ -593,6 +616,7 @@ export class Tools {
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
+                ...requestOptions?.headers,
             },
             contentType: "application/json",
             requestType: "json",
@@ -631,7 +655,7 @@ export class Tools {
                     body: _response.error.rawBody,
                 });
             case "timeout":
-                throw new errors.HumanloopTimeoutError();
+                throw new errors.HumanloopTimeoutError("Timeout exceeded when calling DELETE /tools/{id}.");
             case "unknown":
                 throw new errors.HumanloopError({
                     message: _response.error.errorMessage,
@@ -660,7 +684,9 @@ export class Tools {
     ): Promise<Humanloop.ToolResponse> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
-                (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.HumanloopEnvironment.Default,
                 `tools/${encodeURIComponent(id)}`,
             ),
             method: "PATCH",
@@ -672,6 +698,7 @@ export class Tools {
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
+                ...requestOptions?.headers,
             },
             contentType: "application/json",
             requestType: "json",
@@ -717,7 +744,7 @@ export class Tools {
                     body: _response.error.rawBody,
                 });
             case "timeout":
-                throw new errors.HumanloopTimeoutError();
+                throw new errors.HumanloopTimeoutError("Timeout exceeded when calling PATCH /tools/{id}.");
             case "unknown":
                 throw new errors.HumanloopError({
                     message: _response.error.errorMessage,
@@ -745,9 +772,9 @@ export class Tools {
         requestOptions?: Tools.RequestOptions,
     ): Promise<Humanloop.ListTools> {
         const { status, evaluatorAggregates } = request;
-        const _queryParams: Record<string, string | string[] | object | object[]> = {};
+        const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
         if (status != null) {
-            _queryParams["status"] = status;
+            _queryParams["status"] = serializers.VersionStatus.jsonOrThrow(status, { unrecognizedObjectKeys: "strip" });
         }
 
         if (evaluatorAggregates != null) {
@@ -756,7 +783,9 @@ export class Tools {
 
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
-                (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.HumanloopEnvironment.Default,
                 `tools/${encodeURIComponent(id)}/versions`,
             ),
             method: "GET",
@@ -768,6 +797,7 @@ export class Tools {
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
+                ...requestOptions?.headers,
             },
             contentType: "application/json",
             queryParameters: _queryParams,
@@ -813,7 +843,7 @@ export class Tools {
                     body: _response.error.rawBody,
                 });
             case "timeout":
-                throw new errors.HumanloopTimeoutError();
+                throw new errors.HumanloopTimeoutError("Timeout exceeded when calling GET /tools/{id}/versions.");
             case "unknown":
                 throw new errors.HumanloopError({
                     message: _response.error.errorMessage,
@@ -846,7 +876,9 @@ export class Tools {
     ): Promise<Humanloop.ToolResponse> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
-                (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.HumanloopEnvironment.Default,
                 `tools/${encodeURIComponent(id)}/versions/${encodeURIComponent(versionId)}/commit`,
             ),
             method: "POST",
@@ -858,6 +890,7 @@ export class Tools {
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
+                ...requestOptions?.headers,
             },
             contentType: "application/json",
             requestType: "json",
@@ -903,7 +936,9 @@ export class Tools {
                     body: _response.error.rawBody,
                 });
             case "timeout":
-                throw new errors.HumanloopTimeoutError();
+                throw new errors.HumanloopTimeoutError(
+                    "Timeout exceeded when calling POST /tools/{id}/versions/{version_id}/commit.",
+                );
             case "unknown":
                 throw new errors.HumanloopError({
                     message: _response.error.errorMessage,
@@ -930,7 +965,9 @@ export class Tools {
     ): Promise<void> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
-                (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.HumanloopEnvironment.Default,
                 `tools/${encodeURIComponent(id)}/versions/${encodeURIComponent(versionId)}`,
             ),
             method: "DELETE",
@@ -942,6 +979,7 @@ export class Tools {
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
+                ...requestOptions?.headers,
             },
             contentType: "application/json",
             requestType: "json",
@@ -980,7 +1018,9 @@ export class Tools {
                     body: _response.error.rawBody,
                 });
             case "timeout":
-                throw new errors.HumanloopTimeoutError();
+                throw new errors.HumanloopTimeoutError(
+                    "Timeout exceeded when calling DELETE /tools/{id}/versions/{version_id}.",
+                );
             case "unknown":
                 throw new errors.HumanloopError({
                     message: _response.error.errorMessage,
@@ -1013,11 +1053,13 @@ export class Tools {
         requestOptions?: Tools.RequestOptions,
     ): Promise<Humanloop.ToolResponse> {
         const { versionId } = request;
-        const _queryParams: Record<string, string | string[] | object | object[]> = {};
+        const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
         _queryParams["version_id"] = versionId;
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
-                (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.HumanloopEnvironment.Default,
                 `tools/${encodeURIComponent(id)}/environments/${encodeURIComponent(environmentId)}`,
             ),
             method: "POST",
@@ -1029,6 +1071,7 @@ export class Tools {
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
+                ...requestOptions?.headers,
             },
             contentType: "application/json",
             queryParameters: _queryParams,
@@ -1074,7 +1117,9 @@ export class Tools {
                     body: _response.error.rawBody,
                 });
             case "timeout":
-                throw new errors.HumanloopTimeoutError();
+                throw new errors.HumanloopTimeoutError(
+                    "Timeout exceeded when calling POST /tools/{id}/environments/{environment_id}.",
+                );
             case "unknown":
                 throw new errors.HumanloopError({
                     message: _response.error.errorMessage,
@@ -1104,7 +1149,9 @@ export class Tools {
     ): Promise<void> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
-                (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.HumanloopEnvironment.Default,
                 `tools/${encodeURIComponent(id)}/environments/${encodeURIComponent(environmentId)}`,
             ),
             method: "DELETE",
@@ -1116,6 +1163,7 @@ export class Tools {
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
+                ...requestOptions?.headers,
             },
             contentType: "application/json",
             requestType: "json",
@@ -1154,7 +1202,9 @@ export class Tools {
                     body: _response.error.rawBody,
                 });
             case "timeout":
-                throw new errors.HumanloopTimeoutError();
+                throw new errors.HumanloopTimeoutError(
+                    "Timeout exceeded when calling DELETE /tools/{id}/environments/{environment_id}.",
+                );
             case "unknown":
                 throw new errors.HumanloopError({
                     message: _response.error.errorMessage,
@@ -1179,7 +1229,9 @@ export class Tools {
     ): Promise<Humanloop.FileEnvironmentResponse[]> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
-                (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.HumanloopEnvironment.Default,
                 `tools/${encodeURIComponent(id)}/environments`,
             ),
             method: "GET",
@@ -1191,6 +1243,7 @@ export class Tools {
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
+                ...requestOptions?.headers,
             },
             contentType: "application/json",
             requestType: "json",
@@ -1235,7 +1288,7 @@ export class Tools {
                     body: _response.error.rawBody,
                 });
             case "timeout":
-                throw new errors.HumanloopTimeoutError();
+                throw new errors.HumanloopTimeoutError("Timeout exceeded when calling GET /tools/{id}/environments.");
             case "unknown":
                 throw new errors.HumanloopError({
                     message: _response.error.errorMessage,
@@ -1269,7 +1322,9 @@ export class Tools {
     ): Promise<Humanloop.ToolResponse> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
-                (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.HumanloopEnvironment.Default,
                 `tools/${encodeURIComponent(id)}/evaluators`,
             ),
             method: "POST",
@@ -1281,6 +1336,7 @@ export class Tools {
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
+                ...requestOptions?.headers,
             },
             contentType: "application/json",
             requestType: "json",
@@ -1328,7 +1384,7 @@ export class Tools {
                     body: _response.error.rawBody,
                 });
             case "timeout":
-                throw new errors.HumanloopTimeoutError();
+                throw new errors.HumanloopTimeoutError("Timeout exceeded when calling POST /tools/{id}/evaluators.");
             case "unknown":
                 throw new errors.HumanloopError({
                     message: _response.error.errorMessage,

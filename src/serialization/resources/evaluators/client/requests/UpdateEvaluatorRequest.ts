@@ -15,7 +15,7 @@ export const UpdateEvaluatorRequest: core.serialization.Schema<
 });
 
 export declare namespace UpdateEvaluatorRequest {
-    interface Raw {
+    export interface Raw {
         path?: string | null;
         name?: string | null;
     }

@@ -13,7 +13,7 @@ export const FileId: core.serialization.ObjectSchema<serializers.FileId.Raw, Hum
     });
 
 export declare namespace FileId {
-    interface Raw {
+    export interface Raw {
         environment?: string | null;
         id: string;
     }

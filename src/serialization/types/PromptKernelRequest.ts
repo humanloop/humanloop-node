@@ -42,7 +42,7 @@ export const PromptKernelRequest: core.serialization.ObjectSchema<
 });
 
 export declare namespace PromptKernelRequest {
-    interface Raw {
+    export interface Raw {
         model: string;
         endpoint?: ModelEndpoints.Raw | null;
         template?: PromptKernelRequestTemplate.Raw | null;

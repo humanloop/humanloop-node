@@ -21,7 +21,7 @@ export const RunStatsResponseEvaluatorStatsItem: core.serialization.Schema<
 ]);
 
 export declare namespace RunStatsResponseEvaluatorStatsItem {
-    type Raw =
+    export type Raw =
         | NumericEvaluatorStatsResponse.Raw
         | BooleanEvaluatorStatsResponse.Raw
         | SelectEvaluatorStatsResponse.Raw

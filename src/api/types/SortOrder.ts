@@ -6,7 +6,6 @@
  * An enumeration.
  */
 export type SortOrder = "asc" | "desc";
-
 export const SortOrder = {
     Asc: "asc",
     Desc: "desc",

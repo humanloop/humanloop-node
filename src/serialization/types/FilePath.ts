@@ -13,7 +13,7 @@ export const FilePath: core.serialization.ObjectSchema<serializers.FilePath.Raw,
     });
 
 export declare namespace FilePath {
-    interface Raw {
+    export interface Raw {
         environment?: string | null;
         path: string;
     }

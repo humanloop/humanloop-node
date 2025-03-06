@@ -74,7 +74,7 @@ export const PromptResponse: core.serialization.ObjectSchema<serializers.PromptR
     });
 
 export declare namespace PromptResponse {
-    interface Raw {
+    export interface Raw {
         path: string;
         id: string;
         directory_id?: string | null;

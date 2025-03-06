@@ -6,7 +6,6 @@
  * Template engine to use for rendering templates.
  */
 export type TemplateLanguage = "default" | "jinja";
-
 export const TemplateLanguage = {
     Default: "default",
     Jinja: "jinja",

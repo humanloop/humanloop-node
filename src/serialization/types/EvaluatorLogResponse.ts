@@ -5,6 +5,7 @@
 import * as serializers from "../index";
 import * as Humanloop from "../../api/index";
 import * as core from "../../core";
+import { LogStatus } from "./LogStatus";
 import { ChatMessage } from "./ChatMessage";
 import { EvaluatorLogResponseJudgment } from "./EvaluatorLogResponseJudgment";
 
@@ -30,6 +31,7 @@ export const EvaluatorLogResponse: core.serialization.ObjectSchema<
     inputs: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
     source: core.serialization.string().optional(),
     metadata: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
+    logStatus: core.serialization.property("log_status", LogStatus.optional()),
     parentId: core.serialization.property("parent_id", core.serialization.string().optional()),
     sourceDatapointId: core.serialization.property("source_datapoint_id", core.serialization.string().optional()),
     traceParentId: core.serialization.property("trace_parent_id", core.serialization.string().optional()),
@@ -57,7 +59,7 @@ export const EvaluatorLogResponse: core.serialization.ObjectSchema<
 });
 
 export declare namespace EvaluatorLogResponse {
-    interface Raw {
+    export interface Raw {
         start_time?: string | null;
         end_time?: string | null;
         output?: string | null;
@@ -70,6 +72,7 @@ export declare namespace EvaluatorLogResponse {
         inputs?: Record<string, unknown> | null;
         source?: string | null;
         metadata?: Record<string, unknown> | null;
+        log_status?: LogStatus.Raw | null;
         parent_id?: string | null;
         source_datapoint_id?: string | null;
         trace_parent_id?: string | null;

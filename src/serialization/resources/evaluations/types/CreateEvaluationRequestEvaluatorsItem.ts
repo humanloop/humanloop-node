@@ -15,5 +15,5 @@ export const CreateEvaluationRequestEvaluatorsItem: core.serialization.Schema<
 > = core.serialization.undiscriminatedUnion([EvaluatorVersionId, EvaluatorFileId, EvaluatorFilePath]);
 
 export declare namespace CreateEvaluationRequestEvaluatorsItem {
-    type Raw = EvaluatorVersionId.Raw | EvaluatorFileId.Raw | EvaluatorFilePath.Raw;
+    export type Raw = EvaluatorVersionId.Raw | EvaluatorFileId.Raw | EvaluatorFilePath.Raw;
 }

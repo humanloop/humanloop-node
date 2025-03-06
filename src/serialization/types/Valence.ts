@@ -13,5 +13,5 @@ export const Valence: core.serialization.Schema<serializers.Valence.Raw, Humanlo
 ]);
 
 export declare namespace Valence {
-    type Raw = "positive" | "negative" | "neutral";
+    export type Raw = "positive" | "negative" | "neutral";
 }

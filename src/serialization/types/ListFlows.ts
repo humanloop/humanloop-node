@@ -12,7 +12,7 @@ export const ListFlows: core.serialization.ObjectSchema<serializers.ListFlows.Ra
     });
 
 export declare namespace ListFlows {
-    interface Raw {
+    export interface Raw {
         records: serializers.FlowResponse.Raw[];
     }
 }

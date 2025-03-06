@@ -21,7 +21,7 @@ export const DatasetRequest: core.serialization.Schema<
 });
 
 export declare namespace DatasetRequest {
-    interface Raw {
+    export interface Raw {
         path?: string | null;
         id?: string | null;
         datapoints: CreateDatapointRequest.Raw[];

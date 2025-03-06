@@ -6,7 +6,6 @@
  * An enumeration.
  */
 export type ChatRole = "user" | "assistant" | "system" | "tool" | "developer";
-
 export const ChatRole = {
     User: "user",
     Assistant: "assistant",

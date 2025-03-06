@@ -14,7 +14,7 @@ export const MonitoringEvaluatorVersionRequest: core.serialization.ObjectSchema<
 });
 
 export declare namespace MonitoringEvaluatorVersionRequest {
-    interface Raw {
+    export interface Raw {
         evaluator_version_id: string;
     }
 }

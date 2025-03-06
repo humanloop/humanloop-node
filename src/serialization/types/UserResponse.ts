@@ -10,5 +10,5 @@ export const UserResponse: core.serialization.Schema<serializers.UserResponse.Ra
     core.serialization.unknown();
 
 export declare namespace UserResponse {
-    type Raw = unknown;
+    export type Raw = unknown;
 }

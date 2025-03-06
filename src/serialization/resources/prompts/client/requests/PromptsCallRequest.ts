@@ -8,6 +8,7 @@ import * as core from "../../../../../core";
 import { ChatMessage } from "../../../../types/ChatMessage";
 import { PromptsCallRequestToolChoice } from "../../types/PromptsCallRequestToolChoice";
 import { PromptKernelRequest } from "../../../../types/PromptKernelRequest";
+import { LogStatus } from "../../../../types/LogStatus";
 import { ProviderApiKeys } from "../../../../types/ProviderApiKeys";
 
 export const PromptsCallRequest: core.serialization.Schema<
@@ -24,6 +25,7 @@ export const PromptsCallRequest: core.serialization.Schema<
     metadata: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
     startTime: core.serialization.property("start_time", core.serialization.date().optional()),
     endTime: core.serialization.property("end_time", core.serialization.date().optional()),
+    logStatus: core.serialization.property("log_status", LogStatus.optional()),
     sourceDatapointId: core.serialization.property("source_datapoint_id", core.serialization.string().optional()),
     traceParentId: core.serialization.property("trace_parent_id", core.serialization.string().optional()),
     user: core.serialization.string().optional(),
@@ -38,7 +40,7 @@ export const PromptsCallRequest: core.serialization.Schema<
 });
 
 export declare namespace PromptsCallRequest {
-    interface Raw {
+    export interface Raw {
         path?: string | null;
         id?: string | null;
         messages?: ChatMessage.Raw[] | null;
@@ -49,6 +51,7 @@ export declare namespace PromptsCallRequest {
         metadata?: Record<string, unknown> | null;
         start_time?: string | null;
         end_time?: string | null;
+        log_status?: LogStatus.Raw | null;
         source_datapoint_id?: string | null;
         trace_parent_id?: string | null;
         user?: string | null;

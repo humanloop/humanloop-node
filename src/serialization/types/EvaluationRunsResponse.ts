@@ -15,7 +15,7 @@ export const EvaluationRunsResponse: core.serialization.ObjectSchema<
 });
 
 export declare namespace EvaluationRunsResponse {
-    interface Raw {
+    export interface Raw {
         runs: EvaluationRunResponse.Raw[];
     }
 }

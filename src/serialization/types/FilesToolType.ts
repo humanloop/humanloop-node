@@ -10,5 +10,5 @@ export const FilesToolType: core.serialization.Schema<serializers.FilesToolType.
     core.serialization.enum_(["pinecone_search", "google", "mock", "snippet", "json_schema", "get_api_call"]);
 
 export declare namespace FilesToolType {
-    type Raw = "pinecone_search" | "google" | "mock" | "snippet" | "json_schema" | "get_api_call";
+    export type Raw = "pinecone_search" | "google" | "mock" | "snippet" | "json_schema" | "get_api_call";
 }

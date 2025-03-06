@@ -16,7 +16,7 @@ export const EvaluatorJudgmentOptionResponse: core.serialization.ObjectSchema<
 });
 
 export declare namespace EvaluatorJudgmentOptionResponse {
-    interface Raw {
+    export interface Raw {
         name: string;
         valence?: Valence.Raw | null;
     }

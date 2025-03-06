@@ -46,7 +46,7 @@ export const PromptRequest: core.serialization.Schema<serializers.PromptRequest.
     });
 
 export declare namespace PromptRequest {
-    interface Raw {
+    export interface Raw {
         path?: string | null;
         id?: string | null;
         model: string;

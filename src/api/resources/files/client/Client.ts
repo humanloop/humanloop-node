@@ -5,29 +5,33 @@
 import * as environments from "../../../../environments";
 import * as core from "../../../../core";
 import * as Humanloop from "../../../index";
-import urlJoin from "url-join";
 import * as serializers from "../../../../serialization/index";
+import urlJoin from "url-join";
 import * as errors from "../../../../errors/index";
 
 export declare namespace Files {
-    interface Options {
+    export interface Options {
         environment?: core.Supplier<environments.HumanloopEnvironment | string>;
-        apiKey: core.Supplier<string>;
+        /** Specify a custom URL to connect the client to. */
+        baseUrl?: core.Supplier<string>;
+        apiKey?: core.Supplier<string>;
         fetcher?: core.FetchFunction;
     }
 
-    interface RequestOptions {
+    export interface RequestOptions {
         /** The maximum time to wait for a response in seconds. */
         timeoutInSeconds?: number;
         /** The number of times to retry the request. Defaults to 2. */
         maxRetries?: number;
         /** A hook to abort the request. */
         abortSignal?: AbortSignal;
+        /** Additional headers to include in the request. */
+        headers?: Record<string, string>;
     }
 }
 
 export class Files {
-    constructor(protected readonly _options: Files.Options) {}
+    constructor(protected readonly _options: Files.Options = {}) {}
 
     /**
      * Get a paginated list of files.
@@ -45,7 +49,7 @@ export class Files {
         requestOptions?: Files.RequestOptions,
     ): Promise<Humanloop.PaginatedDataUnionPromptResponseToolResponseDatasetResponseEvaluatorResponseFlowResponse> {
         const { page, size, name, template, type: type_, environment, sortBy, order } = request;
-        const _queryParams: Record<string, string | string[] | object | object[]> = {};
+        const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
         if (page != null) {
             _queryParams["page"] = page.toString();
         }
@@ -64,9 +68,11 @@ export class Files {
 
         if (type_ != null) {
             if (Array.isArray(type_)) {
-                _queryParams["type"] = type_.map((item) => item);
+                _queryParams["type"] = type_.map((item) =>
+                    serializers.FileType.jsonOrThrow(item, { unrecognizedObjectKeys: "strip" }),
+                );
             } else {
-                _queryParams["type"] = type_;
+                _queryParams["type"] = serializers.FileType.jsonOrThrow(type_, { unrecognizedObjectKeys: "strip" });
             }
         }
 
@@ -75,16 +81,20 @@ export class Files {
         }
 
         if (sortBy != null) {
-            _queryParams["sort_by"] = sortBy;
+            _queryParams["sort_by"] = serializers.ProjectSortBy.jsonOrThrow(sortBy, {
+                unrecognizedObjectKeys: "strip",
+            });
         }
 
         if (order != null) {
-            _queryParams["order"] = order;
+            _queryParams["order"] = serializers.SortOrder.jsonOrThrow(order, { unrecognizedObjectKeys: "strip" });
         }
 
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
-                (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.HumanloopEnvironment.Default,
                 "files",
             ),
             method: "GET",
@@ -96,6 +106,7 @@ export class Files {
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
+                ...requestOptions?.headers,
             },
             contentType: "application/json",
             queryParameters: _queryParams,
@@ -144,7 +155,7 @@ export class Files {
                     body: _response.error.rawBody,
                 });
             case "timeout":
-                throw new errors.HumanloopTimeoutError();
+                throw new errors.HumanloopTimeoutError("Timeout exceeded when calling GET /files.");
             case "unknown":
                 throw new errors.HumanloopError({
                     message: _response.error.errorMessage,
@@ -170,14 +181,16 @@ export class Files {
         requestOptions?: Files.RequestOptions,
     ): Promise<Humanloop.RetrieveByPathFilesRetrieveByPathPostResponse> {
         const { environment, ..._body } = request;
-        const _queryParams: Record<string, string | string[] | object | object[]> = {};
+        const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
         if (environment != null) {
             _queryParams["environment"] = environment;
         }
 
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
-                (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.HumanloopEnvironment.Default,
                 "files/retrieve-by-path",
             ),
             method: "POST",
@@ -189,6 +202,7 @@ export class Files {
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
+                ...requestOptions?.headers,
             },
             contentType: "application/json",
             queryParameters: _queryParams,
@@ -237,7 +251,7 @@ export class Files {
                     body: _response.error.rawBody,
                 });
             case "timeout":
-                throw new errors.HumanloopTimeoutError();
+                throw new errors.HumanloopTimeoutError("Timeout exceeded when calling POST /files/retrieve-by-path.");
             case "unknown":
                 throw new errors.HumanloopError({
                     message: _response.error.errorMessage,

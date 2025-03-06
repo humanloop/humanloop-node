@@ -17,7 +17,7 @@ export const CreateRunRequest: core.serialization.Schema<serializers.CreateRunRe
     });
 
 export declare namespace CreateRunRequest {
-    interface Raw {
+    export interface Raw {
         dataset?: CreateRunRequestDataset.Raw | null;
         version?: CreateRunRequestVersion.Raw | null;
         orchestrated?: boolean | null;

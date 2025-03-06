@@ -5,26 +5,30 @@
 import * as environments from "../../../../environments";
 import * as core from "../../../../core";
 import * as Humanloop from "../../../index";
-import urlJoin from "url-join";
 import * as serializers from "../../../../serialization/index";
+import urlJoin from "url-join";
 import * as errors from "../../../../errors/index";
 import * as fs from "fs";
 import { Blob } from "buffer";
 
 export declare namespace Datasets {
-    interface Options {
+    export interface Options {
         environment?: core.Supplier<environments.HumanloopEnvironment | string>;
-        apiKey: core.Supplier<string>;
+        /** Specify a custom URL to connect the client to. */
+        baseUrl?: core.Supplier<string>;
+        apiKey?: core.Supplier<string>;
         fetcher?: core.FetchFunction;
     }
 
-    interface RequestOptions {
+    export interface RequestOptions {
         /** The maximum time to wait for a response in seconds. */
         timeoutInSeconds?: number;
         /** The number of times to retry the request. Defaults to 2. */
         maxRetries?: number;
         /** A hook to abort the request. */
         abortSignal?: AbortSignal;
+        /** Additional headers to include in the request. */
+        headers?: Record<string, string>;
     }
 }
 
@@ -48,10 +52,9 @@ export declare namespace Datasets {
  * query parameters to identify the existing version to base the new version on. If neither is provided, the version
  * deployed to the default Environment will be used.
  *
- *
  */
 export class Datasets {
-    constructor(protected readonly _options: Datasets.Options) {}
+    constructor(protected readonly _options: Datasets.Options = {}) {}
 
     /**
      * List all Datasets.
@@ -72,7 +75,7 @@ export class Datasets {
     ): Promise<core.Page<Humanloop.DatasetResponse>> {
         const list = async (request: Humanloop.ListDatasetsGetRequest): Promise<Humanloop.PaginatedDatasetResponse> => {
             const { page, size, name, userFilter, sortBy, order } = request;
-            const _queryParams: Record<string, string | string[] | object | object[]> = {};
+            const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
             if (page != null) {
                 _queryParams["page"] = page.toString();
             }
@@ -86,14 +89,18 @@ export class Datasets {
                 _queryParams["user_filter"] = userFilter;
             }
             if (sortBy != null) {
-                _queryParams["sort_by"] = sortBy;
+                _queryParams["sort_by"] = serializers.ProjectSortBy.jsonOrThrow(sortBy, {
+                    unrecognizedObjectKeys: "strip",
+                });
             }
             if (order != null) {
-                _queryParams["order"] = order;
+                _queryParams["order"] = serializers.SortOrder.jsonOrThrow(order, { unrecognizedObjectKeys: "strip" });
             }
             const _response = await (this._options.fetcher ?? core.fetcher)({
                 url: urlJoin(
-                    (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
+                    (await core.Supplier.get(this._options.baseUrl)) ??
+                        (await core.Supplier.get(this._options.environment)) ??
+                        environments.HumanloopEnvironment.Default,
                     "datasets",
                 ),
                 method: "GET",
@@ -105,6 +112,7 @@ export class Datasets {
                     "X-Fern-Runtime": core.RUNTIME.type,
                     "X-Fern-Runtime-Version": core.RUNTIME.version,
                     ...(await this._getCustomAuthorizationHeaders()),
+                    ...requestOptions?.headers,
                 },
                 contentType: "application/json",
                 queryParameters: _queryParams,
@@ -148,7 +156,7 @@ export class Datasets {
                         body: _response.error.rawBody,
                     });
                 case "timeout":
-                    throw new errors.HumanloopTimeoutError();
+                    throw new errors.HumanloopTimeoutError("Timeout exceeded when calling GET /datasets.");
                 case "unknown":
                     throw new errors.HumanloopError({
                         message: _response.error.errorMessage,
@@ -241,7 +249,7 @@ export class Datasets {
         requestOptions?: Datasets.RequestOptions,
     ): Promise<Humanloop.DatasetResponse> {
         const { versionId, environment, includeDatapoints, ..._body } = request;
-        const _queryParams: Record<string, string | string[] | object | object[]> = {};
+        const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
         if (versionId != null) {
             _queryParams["version_id"] = versionId;
         }
@@ -256,7 +264,9 @@ export class Datasets {
 
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
-                (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.HumanloopEnvironment.Default,
                 "datasets",
             ),
             method: "POST",
@@ -268,6 +278,7 @@ export class Datasets {
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
+                ...requestOptions?.headers,
             },
             contentType: "application/json",
             queryParameters: _queryParams,
@@ -314,7 +325,7 @@ export class Datasets {
                     body: _response.error.rawBody,
                 });
             case "timeout":
-                throw new errors.HumanloopTimeoutError();
+                throw new errors.HumanloopTimeoutError("Timeout exceeded when calling POST /datasets.");
             case "unknown":
                 throw new errors.HumanloopError({
                     message: _response.error.errorMessage,
@@ -351,7 +362,7 @@ export class Datasets {
         requestOptions?: Datasets.RequestOptions,
     ): Promise<Humanloop.DatasetResponse> {
         const { versionId, environment, includeDatapoints } = request;
-        const _queryParams: Record<string, string | string[] | object | object[]> = {};
+        const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
         if (versionId != null) {
             _queryParams["version_id"] = versionId;
         }
@@ -366,7 +377,9 @@ export class Datasets {
 
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
-                (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.HumanloopEnvironment.Default,
                 `datasets/${encodeURIComponent(id)}`,
             ),
             method: "GET",
@@ -378,6 +391,7 @@ export class Datasets {
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
+                ...requestOptions?.headers,
             },
             contentType: "application/json",
             queryParameters: _queryParams,
@@ -423,7 +437,7 @@ export class Datasets {
                     body: _response.error.rawBody,
                 });
             case "timeout":
-                throw new errors.HumanloopTimeoutError();
+                throw new errors.HumanloopTimeoutError("Timeout exceeded when calling GET /datasets/{id}.");
             case "unknown":
                 throw new errors.HumanloopError({
                     message: _response.error.errorMessage,
@@ -445,7 +459,9 @@ export class Datasets {
     public async delete(id: string, requestOptions?: Datasets.RequestOptions): Promise<void> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
-                (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.HumanloopEnvironment.Default,
                 `datasets/${encodeURIComponent(id)}`,
             ),
             method: "DELETE",
@@ -457,6 +473,7 @@ export class Datasets {
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
+                ...requestOptions?.headers,
             },
             contentType: "application/json",
             requestType: "json",
@@ -495,7 +512,7 @@ export class Datasets {
                     body: _response.error.rawBody,
                 });
             case "timeout":
-                throw new errors.HumanloopTimeoutError();
+                throw new errors.HumanloopTimeoutError("Timeout exceeded when calling DELETE /datasets/{id}.");
             case "unknown":
                 throw new errors.HumanloopError({
                     message: _response.error.errorMessage,
@@ -522,7 +539,9 @@ export class Datasets {
     ): Promise<Humanloop.DatasetResponse> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
-                (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.HumanloopEnvironment.Default,
                 `datasets/${encodeURIComponent(id)}`,
             ),
             method: "PATCH",
@@ -534,6 +553,7 @@ export class Datasets {
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
+                ...requestOptions?.headers,
             },
             contentType: "application/json",
             requestType: "json",
@@ -579,7 +599,7 @@ export class Datasets {
                     body: _response.error.rawBody,
                 });
             case "timeout":
-                throw new errors.HumanloopTimeoutError();
+                throw new errors.HumanloopTimeoutError("Timeout exceeded when calling PATCH /datasets/{id}.");
             case "unknown":
                 throw new errors.HumanloopError({
                     message: _response.error.errorMessage,
@@ -610,7 +630,7 @@ export class Datasets {
             request: Humanloop.ListDatapointsDatasetsIdDatapointsGetRequest,
         ): Promise<Humanloop.PaginatedDatapointResponse> => {
             const { versionId, environment, page, size } = request;
-            const _queryParams: Record<string, string | string[] | object | object[]> = {};
+            const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
             if (versionId != null) {
                 _queryParams["version_id"] = versionId;
             }
@@ -625,7 +645,9 @@ export class Datasets {
             }
             const _response = await (this._options.fetcher ?? core.fetcher)({
                 url: urlJoin(
-                    (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
+                    (await core.Supplier.get(this._options.baseUrl)) ??
+                        (await core.Supplier.get(this._options.environment)) ??
+                        environments.HumanloopEnvironment.Default,
                     `datasets/${encodeURIComponent(id)}/datapoints`,
                 ),
                 method: "GET",
@@ -637,6 +659,7 @@ export class Datasets {
                     "X-Fern-Runtime": core.RUNTIME.type,
                     "X-Fern-Runtime-Version": core.RUNTIME.version,
                     ...(await this._getCustomAuthorizationHeaders()),
+                    ...requestOptions?.headers,
                 },
                 contentType: "application/json",
                 queryParameters: _queryParams,
@@ -680,7 +703,9 @@ export class Datasets {
                         body: _response.error.rawBody,
                     });
                 case "timeout":
-                    throw new errors.HumanloopTimeoutError();
+                    throw new errors.HumanloopTimeoutError(
+                        "Timeout exceeded when calling GET /datasets/{id}/datapoints.",
+                    );
                 case "unknown":
                     throw new errors.HumanloopError({
                         message: _response.error.errorMessage,
@@ -719,9 +744,9 @@ export class Datasets {
         requestOptions?: Datasets.RequestOptions,
     ): Promise<Humanloop.ListDatasets> {
         const { status, includeDatapoints } = request;
-        const _queryParams: Record<string, string | string[] | object | object[]> = {};
+        const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
         if (status != null) {
-            _queryParams["status"] = status;
+            _queryParams["status"] = serializers.VersionStatus.jsonOrThrow(status, { unrecognizedObjectKeys: "strip" });
         }
 
         if (includeDatapoints != null) {
@@ -730,7 +755,9 @@ export class Datasets {
 
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
-                (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.HumanloopEnvironment.Default,
                 `datasets/${encodeURIComponent(id)}/versions`,
             ),
             method: "GET",
@@ -742,6 +769,7 @@ export class Datasets {
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
+                ...requestOptions?.headers,
             },
             contentType: "application/json",
             queryParameters: _queryParams,
@@ -787,7 +815,7 @@ export class Datasets {
                     body: _response.error.rawBody,
                 });
             case "timeout":
-                throw new errors.HumanloopTimeoutError();
+                throw new errors.HumanloopTimeoutError("Timeout exceeded when calling GET /datasets/{id}/versions.");
             case "unknown":
                 throw new errors.HumanloopError({
                     message: _response.error.errorMessage,
@@ -820,7 +848,9 @@ export class Datasets {
     ): Promise<Humanloop.DatasetResponse> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
-                (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.HumanloopEnvironment.Default,
                 `datasets/${encodeURIComponent(id)}/versions/${encodeURIComponent(versionId)}/commit`,
             ),
             method: "POST",
@@ -832,6 +862,7 @@ export class Datasets {
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
+                ...requestOptions?.headers,
             },
             contentType: "application/json",
             requestType: "json",
@@ -877,7 +908,9 @@ export class Datasets {
                     body: _response.error.rawBody,
                 });
             case "timeout":
-                throw new errors.HumanloopTimeoutError();
+                throw new errors.HumanloopTimeoutError(
+                    "Timeout exceeded when calling POST /datasets/{id}/versions/{version_id}/commit.",
+                );
             case "unknown":
                 throw new errors.HumanloopError({
                     message: _response.error.errorMessage,
@@ -904,7 +937,9 @@ export class Datasets {
     ): Promise<void> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
-                (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.HumanloopEnvironment.Default,
                 `datasets/${encodeURIComponent(id)}/versions/${encodeURIComponent(versionId)}`,
             ),
             method: "DELETE",
@@ -916,6 +951,7 @@ export class Datasets {
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
+                ...requestOptions?.headers,
             },
             contentType: "application/json",
             requestType: "json",
@@ -954,7 +990,9 @@ export class Datasets {
                     body: _response.error.rawBody,
                 });
             case "timeout":
-                throw new errors.HumanloopTimeoutError();
+                throw new errors.HumanloopTimeoutError(
+                    "Timeout exceeded when calling DELETE /datasets/{id}/versions/{version_id}.",
+                );
             case "unknown":
                 throw new errors.HumanloopError({
                     message: _response.error.errorMessage,
@@ -990,7 +1028,7 @@ export class Datasets {
         request: Humanloop.BodyUploadCsvDatasetsIdDatapointsCsvPost,
         requestOptions?: Datasets.RequestOptions,
     ): Promise<Humanloop.DatasetResponse> {
-        const _queryParams: Record<string, string | string[] | object | object[]> = {};
+        const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
         if (request.versionId != null) {
             _queryParams["version_id"] = request.versionId;
         }
@@ -1001,11 +1039,13 @@ export class Datasets {
 
         const _request = await core.newFormData();
         await _request.appendFile("file", file);
-        await _request.append("commit_message", request.commitMessage);
+        _request.append("commit_message", request.commitMessage);
         const _maybeEncodedRequest = await _request.getRequest();
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
-                (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.HumanloopEnvironment.Default,
                 `datasets/${encodeURIComponent(id)}/datapoints/csv`,
             ),
             method: "POST",
@@ -1018,6 +1058,7 @@ export class Datasets {
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
                 ..._maybeEncodedRequest.headers,
+                ...requestOptions?.headers,
             },
             queryParameters: _queryParams,
             requestType: "file",
@@ -1064,7 +1105,9 @@ export class Datasets {
                     body: _response.error.rawBody,
                 });
             case "timeout":
-                throw new errors.HumanloopTimeoutError();
+                throw new errors.HumanloopTimeoutError(
+                    "Timeout exceeded when calling POST /datasets/{id}/datapoints/csv.",
+                );
             case "unknown":
                 throw new errors.HumanloopError({
                     message: _response.error.errorMessage,
@@ -1096,11 +1139,13 @@ export class Datasets {
         requestOptions?: Datasets.RequestOptions,
     ): Promise<Humanloop.DatasetResponse> {
         const { versionId } = request;
-        const _queryParams: Record<string, string | string[] | object | object[]> = {};
+        const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
         _queryParams["version_id"] = versionId;
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
-                (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.HumanloopEnvironment.Default,
                 `datasets/${encodeURIComponent(id)}/environments/${encodeURIComponent(environmentId)}`,
             ),
             method: "POST",
@@ -1112,6 +1157,7 @@ export class Datasets {
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
+                ...requestOptions?.headers,
             },
             contentType: "application/json",
             queryParameters: _queryParams,
@@ -1157,7 +1203,9 @@ export class Datasets {
                     body: _response.error.rawBody,
                 });
             case "timeout":
-                throw new errors.HumanloopTimeoutError();
+                throw new errors.HumanloopTimeoutError(
+                    "Timeout exceeded when calling POST /datasets/{id}/environments/{environment_id}.",
+                );
             case "unknown":
                 throw new errors.HumanloopError({
                     message: _response.error.errorMessage,
@@ -1186,7 +1234,9 @@ export class Datasets {
     ): Promise<void> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
-                (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.HumanloopEnvironment.Default,
                 `datasets/${encodeURIComponent(id)}/environments/${encodeURIComponent(environmentId)}`,
             ),
             method: "DELETE",
@@ -1198,6 +1248,7 @@ export class Datasets {
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
+                ...requestOptions?.headers,
             },
             contentType: "application/json",
             requestType: "json",
@@ -1236,7 +1287,9 @@ export class Datasets {
                     body: _response.error.rawBody,
                 });
             case "timeout":
-                throw new errors.HumanloopTimeoutError();
+                throw new errors.HumanloopTimeoutError(
+                    "Timeout exceeded when calling DELETE /datasets/{id}/environments/{environment_id}.",
+                );
             case "unknown":
                 throw new errors.HumanloopError({
                     message: _response.error.errorMessage,
@@ -1261,7 +1314,9 @@ export class Datasets {
     ): Promise<Humanloop.FileEnvironmentResponse[]> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
-                (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.HumanloopEnvironment.Default,
                 `datasets/${encodeURIComponent(id)}/environments`,
             ),
             method: "GET",
@@ -1273,6 +1328,7 @@ export class Datasets {
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
+                ...requestOptions?.headers,
             },
             contentType: "application/json",
             requestType: "json",
@@ -1317,7 +1373,9 @@ export class Datasets {
                     body: _response.error.rawBody,
                 });
             case "timeout":
-                throw new errors.HumanloopTimeoutError();
+                throw new errors.HumanloopTimeoutError(
+                    "Timeout exceeded when calling GET /datasets/{id}/environments.",
+                );
             case "unknown":
                 throw new errors.HumanloopError({
                     message: _response.error.errorMessage,

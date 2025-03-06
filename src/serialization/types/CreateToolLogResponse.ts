@@ -17,7 +17,7 @@ export const CreateToolLogResponse: core.serialization.ObjectSchema<
 });
 
 export declare namespace CreateToolLogResponse {
-    interface Raw {
+    export interface Raw {
         id: string;
         tool_id: string;
         version_id: string;

@@ -15,7 +15,7 @@ export const ToolChoice: core.serialization.ObjectSchema<serializers.ToolChoice.
     });
 
 export declare namespace ToolChoice {
-    interface Raw {
+    export interface Raw {
         type: ChatToolType.Raw;
         function: FunctionToolChoice.Raw;
     }

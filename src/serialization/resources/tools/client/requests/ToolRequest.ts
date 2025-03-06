@@ -24,7 +24,7 @@ export const ToolRequest: core.serialization.Schema<serializers.ToolRequest.Raw,
     });
 
 export declare namespace ToolRequest {
-    interface Raw {
+    export interface Raw {
         path?: string | null;
         id?: string | null;
         function?: ToolFunction.Raw | null;

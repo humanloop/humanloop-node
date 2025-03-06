@@ -10,19 +10,23 @@ import * as serializers from "../../../../serialization/index";
 import * as errors from "../../../../errors/index";
 
 export declare namespace Evaluations {
-    interface Options {
+    export interface Options {
         environment?: core.Supplier<environments.HumanloopEnvironment | string>;
-        apiKey: core.Supplier<string>;
+        /** Specify a custom URL to connect the client to. */
+        baseUrl?: core.Supplier<string>;
+        apiKey?: core.Supplier<string>;
         fetcher?: core.FetchFunction;
     }
 
-    interface RequestOptions {
+    export interface RequestOptions {
         /** The maximum time to wait for a response in seconds. */
         timeoutInSeconds?: number;
         /** The number of times to retry the request. Defaults to 2. */
         maxRetries?: number;
         /** A hook to abort the request. */
         abortSignal?: AbortSignal;
+        /** Additional headers to include in the request. */
+        headers?: Record<string, string>;
     }
 }
 
@@ -39,10 +43,9 @@ export declare namespace Evaluations {
  *
  * Note that when a Run is created, Humanloop will attempt to reuse any existing Logs for each Datapoint-Version
  * pair. This means that you can create Runs without generating new Logs unnecessarily.
- *
  */
 export class Evaluations {
-    constructor(protected readonly _options: Evaluations.Options) {}
+    constructor(protected readonly _options: Evaluations.Options = {}) {}
 
     /**
      * Retrieve a list of Evaluations for the specified File.
@@ -66,7 +69,7 @@ export class Evaluations {
             request: Humanloop.ListEvaluationsGetRequest,
         ): Promise<Humanloop.PaginatedEvaluationResponse> => {
             const { fileId, page, size } = request;
-            const _queryParams: Record<string, string | string[] | object | object[]> = {};
+            const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
             _queryParams["file_id"] = fileId;
             if (page != null) {
                 _queryParams["page"] = page.toString();
@@ -76,7 +79,9 @@ export class Evaluations {
             }
             const _response = await (this._options.fetcher ?? core.fetcher)({
                 url: urlJoin(
-                    (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
+                    (await core.Supplier.get(this._options.baseUrl)) ??
+                        (await core.Supplier.get(this._options.environment)) ??
+                        environments.HumanloopEnvironment.Default,
                     "evaluations",
                 ),
                 method: "GET",
@@ -88,6 +93,7 @@ export class Evaluations {
                     "X-Fern-Runtime": core.RUNTIME.type,
                     "X-Fern-Runtime-Version": core.RUNTIME.version,
                     ...(await this._getCustomAuthorizationHeaders()),
+                    ...requestOptions?.headers,
                 },
                 contentType: "application/json",
                 queryParameters: _queryParams,
@@ -131,7 +137,7 @@ export class Evaluations {
                         body: _response.error.rawBody,
                     });
                 case "timeout":
-                    throw new errors.HumanloopTimeoutError();
+                    throw new errors.HumanloopTimeoutError("Timeout exceeded when calling GET /evaluations.");
                 case "unknown":
                     throw new errors.HumanloopError({
                         message: _response.error.errorMessage,
@@ -175,7 +181,9 @@ export class Evaluations {
     ): Promise<Humanloop.EvaluationResponse> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
-                (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.HumanloopEnvironment.Default,
                 "evaluations",
             ),
             method: "POST",
@@ -187,6 +195,7 @@ export class Evaluations {
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
+                ...requestOptions?.headers,
             },
             contentType: "application/json",
             requestType: "json",
@@ -232,7 +241,7 @@ export class Evaluations {
                     body: _response.error.rawBody,
                 });
             case "timeout":
-                throw new errors.HumanloopTimeoutError();
+                throw new errors.HumanloopTimeoutError("Timeout exceeded when calling POST /evaluations.");
             case "unknown":
                 throw new errors.HumanloopError({
                     message: _response.error.errorMessage,
@@ -265,7 +274,9 @@ export class Evaluations {
     ): Promise<Humanloop.EvaluationResponse> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
-                (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.HumanloopEnvironment.Default,
                 `evaluations/${encodeURIComponent(id)}/evaluators`,
             ),
             method: "POST",
@@ -277,6 +288,7 @@ export class Evaluations {
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
+                ...requestOptions?.headers,
             },
             contentType: "application/json",
             requestType: "json",
@@ -322,7 +334,9 @@ export class Evaluations {
                     body: _response.error.rawBody,
                 });
             case "timeout":
-                throw new errors.HumanloopTimeoutError();
+                throw new errors.HumanloopTimeoutError(
+                    "Timeout exceeded when calling POST /evaluations/{id}/evaluators.",
+                );
             case "unknown":
                 throw new errors.HumanloopError({
                     message: _response.error.errorMessage,
@@ -351,7 +365,9 @@ export class Evaluations {
     ): Promise<Humanloop.EvaluationResponse> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
-                (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.HumanloopEnvironment.Default,
                 `evaluations/${encodeURIComponent(id)}/evaluators/${encodeURIComponent(evaluatorVersionId)}`,
             ),
             method: "DELETE",
@@ -363,6 +379,7 @@ export class Evaluations {
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
+                ...requestOptions?.headers,
             },
             contentType: "application/json",
             requestType: "json",
@@ -407,7 +424,9 @@ export class Evaluations {
                     body: _response.error.rawBody,
                 });
             case "timeout":
-                throw new errors.HumanloopTimeoutError();
+                throw new errors.HumanloopTimeoutError(
+                    "Timeout exceeded when calling DELETE /evaluations/{id}/evaluators/{evaluator_version_id}.",
+                );
             case "unknown":
                 throw new errors.HumanloopError({
                     message: _response.error.errorMessage,
@@ -435,7 +454,9 @@ export class Evaluations {
     public async get(id: string, requestOptions?: Evaluations.RequestOptions): Promise<Humanloop.EvaluationResponse> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
-                (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.HumanloopEnvironment.Default,
                 `evaluations/${encodeURIComponent(id)}`,
             ),
             method: "GET",
@@ -447,6 +468,7 @@ export class Evaluations {
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
+                ...requestOptions?.headers,
             },
             contentType: "application/json",
             requestType: "json",
@@ -491,7 +513,7 @@ export class Evaluations {
                     body: _response.error.rawBody,
                 });
             case "timeout":
-                throw new errors.HumanloopTimeoutError();
+                throw new errors.HumanloopTimeoutError("Timeout exceeded when calling GET /evaluations/{id}.");
             case "unknown":
                 throw new errors.HumanloopError({
                     message: _response.error.errorMessage,
@@ -515,7 +537,9 @@ export class Evaluations {
     public async delete(id: string, requestOptions?: Evaluations.RequestOptions): Promise<void> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
-                (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.HumanloopEnvironment.Default,
                 `evaluations/${encodeURIComponent(id)}`,
             ),
             method: "DELETE",
@@ -527,6 +551,7 @@ export class Evaluations {
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
+                ...requestOptions?.headers,
             },
             contentType: "application/json",
             requestType: "json",
@@ -565,7 +590,7 @@ export class Evaluations {
                     body: _response.error.rawBody,
                 });
             case "timeout":
-                throw new errors.HumanloopTimeoutError();
+                throw new errors.HumanloopTimeoutError("Timeout exceeded when calling DELETE /evaluations/{id}.");
             case "unknown":
                 throw new errors.HumanloopError({
                     message: _response.error.errorMessage,
@@ -590,7 +615,9 @@ export class Evaluations {
     ): Promise<Humanloop.EvaluationRunsResponse> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
-                (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.HumanloopEnvironment.Default,
                 `evaluations/${encodeURIComponent(id)}/runs`,
             ),
             method: "GET",
@@ -602,6 +629,7 @@ export class Evaluations {
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
+                ...requestOptions?.headers,
             },
             contentType: "application/json",
             requestType: "json",
@@ -646,7 +674,7 @@ export class Evaluations {
                     body: _response.error.rawBody,
                 });
             case "timeout":
-                throw new errors.HumanloopTimeoutError();
+                throw new errors.HumanloopTimeoutError("Timeout exceeded when calling GET /evaluations/{id}/runs.");
             case "unknown":
                 throw new errors.HumanloopError({
                     message: _response.error.errorMessage,
@@ -686,7 +714,9 @@ export class Evaluations {
     ): Promise<Humanloop.EvaluationRunResponse> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
-                (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.HumanloopEnvironment.Default,
                 `evaluations/${encodeURIComponent(id)}/runs`,
             ),
             method: "POST",
@@ -698,6 +728,7 @@ export class Evaluations {
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
+                ...requestOptions?.headers,
             },
             contentType: "application/json",
             requestType: "json",
@@ -743,7 +774,7 @@ export class Evaluations {
                     body: _response.error.rawBody,
                 });
             case "timeout":
-                throw new errors.HumanloopTimeoutError();
+                throw new errors.HumanloopTimeoutError("Timeout exceeded when calling POST /evaluations/{id}/runs.");
             case "unknown":
                 throw new errors.HumanloopError({
                     message: _response.error.errorMessage,
@@ -773,7 +804,9 @@ export class Evaluations {
     ): Promise<unknown> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
-                (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.HumanloopEnvironment.Default,
                 `evaluations/${encodeURIComponent(id)}/runs/${encodeURIComponent(runId)}`,
             ),
             method: "POST",
@@ -785,6 +818,7 @@ export class Evaluations {
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
+                ...requestOptions?.headers,
             },
             contentType: "application/json",
             requestType: "json",
@@ -823,7 +857,9 @@ export class Evaluations {
                     body: _response.error.rawBody,
                 });
             case "timeout":
-                throw new errors.HumanloopTimeoutError();
+                throw new errors.HumanloopTimeoutError(
+                    "Timeout exceeded when calling POST /evaluations/{id}/runs/{run_id}.",
+                );
             case "unknown":
                 throw new errors.HumanloopError({
                     message: _response.error.errorMessage,
@@ -849,7 +885,9 @@ export class Evaluations {
     public async removeRun(id: string, runId: string, requestOptions?: Evaluations.RequestOptions): Promise<void> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
-                (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.HumanloopEnvironment.Default,
                 `evaluations/${encodeURIComponent(id)}/runs/${encodeURIComponent(runId)}`,
             ),
             method: "DELETE",
@@ -861,6 +899,7 @@ export class Evaluations {
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
+                ...requestOptions?.headers,
             },
             contentType: "application/json",
             requestType: "json",
@@ -899,7 +938,9 @@ export class Evaluations {
                     body: _response.error.rawBody,
                 });
             case "timeout":
-                throw new errors.HumanloopTimeoutError();
+                throw new errors.HumanloopTimeoutError(
+                    "Timeout exceeded when calling DELETE /evaluations/{id}/runs/{run_id}.",
+                );
             case "unknown":
                 throw new errors.HumanloopError({
                     message: _response.error.errorMessage,
@@ -931,7 +972,9 @@ export class Evaluations {
     ): Promise<Humanloop.EvaluationRunResponse> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
-                (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.HumanloopEnvironment.Default,
                 `evaluations/${encodeURIComponent(id)}/runs/${encodeURIComponent(runId)}`,
             ),
             method: "PATCH",
@@ -943,6 +986,7 @@ export class Evaluations {
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
+                ...requestOptions?.headers,
             },
             contentType: "application/json",
             requestType: "json",
@@ -988,7 +1032,9 @@ export class Evaluations {
                     body: _response.error.rawBody,
                 });
             case "timeout":
-                throw new errors.HumanloopTimeoutError();
+                throw new errors.HumanloopTimeoutError(
+                    "Timeout exceeded when calling PATCH /evaluations/{id}/runs/{run_id}.",
+                );
             case "unknown":
                 throw new errors.HumanloopError({
                     message: _response.error.errorMessage,
@@ -1019,7 +1065,9 @@ export class Evaluations {
     ): Promise<Humanloop.EvaluationRunResponse> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
-                (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.HumanloopEnvironment.Default,
                 `evaluations/${encodeURIComponent(id)}/runs/${encodeURIComponent(runId)}/logs`,
             ),
             method: "POST",
@@ -1031,6 +1079,7 @@ export class Evaluations {
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
+                ...requestOptions?.headers,
             },
             contentType: "application/json",
             requestType: "json",
@@ -1076,7 +1125,9 @@ export class Evaluations {
                     body: _response.error.rawBody,
                 });
             case "timeout":
-                throw new errors.HumanloopTimeoutError();
+                throw new errors.HumanloopTimeoutError(
+                    "Timeout exceeded when calling POST /evaluations/{id}/runs/{run_id}/logs.",
+                );
             case "unknown":
                 throw new errors.HumanloopError({
                     message: _response.error.errorMessage,
@@ -1101,7 +1152,9 @@ export class Evaluations {
     public async getStats(id: string, requestOptions?: Evaluations.RequestOptions): Promise<Humanloop.EvaluationStats> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
-                (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.HumanloopEnvironment.Default,
                 `evaluations/${encodeURIComponent(id)}/stats`,
             ),
             method: "GET",
@@ -1113,6 +1166,7 @@ export class Evaluations {
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
+                ...requestOptions?.headers,
             },
             contentType: "application/json",
             requestType: "json",
@@ -1157,7 +1211,7 @@ export class Evaluations {
                     body: _response.error.rawBody,
                 });
             case "timeout":
-                throw new errors.HumanloopTimeoutError();
+                throw new errors.HumanloopTimeoutError("Timeout exceeded when calling GET /evaluations/{id}/stats.");
             case "unknown":
                 throw new errors.HumanloopError({
                     message: _response.error.errorMessage,
@@ -1185,7 +1239,7 @@ export class Evaluations {
         requestOptions?: Evaluations.RequestOptions,
     ): Promise<Humanloop.PaginatedDataEvaluationLogResponse> {
         const { page, size, runId } = request;
-        const _queryParams: Record<string, string | string[] | object | object[]> = {};
+        const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
         if (page != null) {
             _queryParams["page"] = page.toString();
         }
@@ -1204,7 +1258,9 @@ export class Evaluations {
 
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
-                (await core.Supplier.get(this._options.environment)) ?? environments.HumanloopEnvironment.Default,
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.HumanloopEnvironment.Default,
                 `evaluations/${encodeURIComponent(id)}/logs`,
             ),
             method: "GET",
@@ -1216,6 +1272,7 @@ export class Evaluations {
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
+                ...requestOptions?.headers,
             },
             contentType: "application/json",
             queryParameters: _queryParams,
@@ -1261,7 +1318,7 @@ export class Evaluations {
                     body: _response.error.rawBody,
                 });
             case "timeout":
-                throw new errors.HumanloopTimeoutError();
+                throw new errors.HumanloopTimeoutError("Timeout exceeded when calling GET /evaluations/{id}/logs.");
             case "unknown":
                 throw new errors.HumanloopError({
                     message: _response.error.errorMessage,

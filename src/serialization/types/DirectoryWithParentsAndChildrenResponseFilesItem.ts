@@ -19,7 +19,7 @@ export const DirectoryWithParentsAndChildrenResponseFilesItem: core.serializatio
 ]);
 
 export declare namespace DirectoryWithParentsAndChildrenResponseFilesItem {
-    type Raw =
+    export type Raw =
         | serializers.PromptResponse.Raw
         | serializers.ToolResponse.Raw
         | serializers.EvaluatorResponse.Raw

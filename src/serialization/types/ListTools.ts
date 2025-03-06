@@ -12,7 +12,7 @@ export const ListTools: core.serialization.ObjectSchema<serializers.ListTools.Ra
     });
 
 export declare namespace ListTools {
-    interface Raw {
+    export interface Raw {
         records: serializers.ToolResponse.Raw[];
     }
 }

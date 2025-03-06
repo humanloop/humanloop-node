@@ -14,7 +14,7 @@ export const AddLogsToRunRequest: core.serialization.Schema<
 });
 
 export declare namespace AddLogsToRunRequest {
-    interface Raw {
+    export interface Raw {
         log_ids: string[];
     }
 }

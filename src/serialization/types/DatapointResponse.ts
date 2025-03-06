@@ -19,7 +19,7 @@ export const DatapointResponse: core.serialization.ObjectSchema<
 });
 
 export declare namespace DatapointResponse {
-    interface Raw {
+    export interface Raw {
         inputs?: Record<string, string> | null;
         messages?: ChatMessage.Raw[] | null;
         target?: Record<string, DatapointResponseTargetValue.Raw> | null;

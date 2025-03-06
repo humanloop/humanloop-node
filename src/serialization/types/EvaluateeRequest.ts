@@ -19,7 +19,7 @@ export const EvaluateeRequest: core.serialization.ObjectSchema<
 });
 
 export declare namespace EvaluateeRequest {
-    interface Raw {
+    export interface Raw {
         version_id?: string | null;
         path?: string | null;
         file_id?: string | null;

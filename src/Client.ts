@@ -15,74 +15,70 @@ import { Evaluations } from "./api/resources/evaluations/client/Client";
 import { Logs } from "./api/resources/logs/client/Client";
 
 export declare namespace HumanloopClient {
-    interface Options {
+    export interface Options {
         environment?: core.Supplier<environments.HumanloopEnvironment | string>;
-        apiKey: core.Supplier<string>;
+        /** Specify a custom URL to connect the client to. */
+        baseUrl?: core.Supplier<string>;
+        apiKey?: core.Supplier<string>;
         fetcher?: core.FetchFunction;
     }
 
-    interface RequestOptions {
+    export interface RequestOptions {
         /** The maximum time to wait for a response in seconds. */
         timeoutInSeconds?: number;
         /** The number of times to retry the request. Defaults to 2. */
         maxRetries?: number;
         /** A hook to abort the request. */
         abortSignal?: AbortSignal;
+        /** Additional headers to include in the request. */
+        headers?: Record<string, string>;
     }
 }
 
 export class HumanloopClient {
-    constructor(protected readonly _options: HumanloopClient.Options) {}
-
     protected _prompts: Prompts | undefined;
+    protected _tools: Tools | undefined;
+    protected _datasets: Datasets | undefined;
+    protected _evaluators: Evaluators | undefined;
+    protected _flows: Flows | undefined;
+    protected _directories: Directories | undefined;
+    protected _files: Files | undefined;
+    protected _evaluations: Evaluations | undefined;
+    protected _logs: Logs | undefined;
+
+    constructor(protected readonly _options: HumanloopClient.Options = {}) {}
 
     public get prompts(): Prompts {
         return (this._prompts ??= new Prompts(this._options));
     }
 
-    protected _tools: Tools | undefined;
-
     public get tools(): Tools {
         return (this._tools ??= new Tools(this._options));
     }
-
-    protected _datasets: Datasets | undefined;
 
     public get datasets(): Datasets {
         return (this._datasets ??= new Datasets(this._options));
     }
 
-    protected _evaluators: Evaluators | undefined;
-
     public get evaluators(): Evaluators {
         return (this._evaluators ??= new Evaluators(this._options));
     }
-
-    protected _flows: Flows | undefined;
 
     public get flows(): Flows {
         return (this._flows ??= new Flows(this._options));
     }
 
-    protected _directories: Directories | undefined;
-
     public get directories(): Directories {
         return (this._directories ??= new Directories(this._options));
     }
-
-    protected _files: Files | undefined;
 
     public get files(): Files {
         return (this._files ??= new Files(this._options));
     }
 
-    protected _evaluations: Evaluations | undefined;
-
     public get evaluations(): Evaluations {
         return (this._evaluations ??= new Evaluations(this._options));
     }
-
-    protected _logs: Logs | undefined;
 
     public get logs(): Logs {
         return (this._logs ??= new Logs(this._options));

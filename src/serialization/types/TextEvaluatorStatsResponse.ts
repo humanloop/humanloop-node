@@ -18,7 +18,7 @@ export const TextEvaluatorStatsResponse: core.serialization.ObjectSchema<
 });
 
 export declare namespace TextEvaluatorStatsResponse {
-    interface Raw {
+    export interface Raw {
         evaluator_version_id: string;
         total_logs: number;
         num_judgments: number;

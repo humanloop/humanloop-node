@@ -18,7 +18,7 @@ export const PaginatedDatapointResponse: core.serialization.ObjectSchema<
 });
 
 export declare namespace PaginatedDatapointResponse {
-    interface Raw {
+    export interface Raw {
         records: DatapointResponse.Raw[];
         page: number;
         size: number;

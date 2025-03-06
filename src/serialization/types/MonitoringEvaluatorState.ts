@@ -12,5 +12,5 @@ export const MonitoringEvaluatorState: core.serialization.Schema<
 > = core.serialization.enum_(["active", "inactive"]);
 
 export declare namespace MonitoringEvaluatorState {
-    type Raw = "active" | "inactive";
+    export type Raw = "active" | "inactive";
 }

@@ -1,4 +1,4 @@
 export { FlowLogRequest } from "./FlowLogRequest";
-export { UpdateTraceRequest } from "./UpdateTraceRequest";
+export { UpdateFlowLogRequest } from "./UpdateFlowLogRequest";
 export { UpdateFlowRequest } from "./UpdateFlowRequest";
 export { FlowRequest } from "./FlowRequest";

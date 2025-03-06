@@ -19,7 +19,7 @@ export const PaginatedDataUnionPromptResponseToolResponseDatasetResponseEvaluato
 ]);
 
 export declare namespace PaginatedDataUnionPromptResponseToolResponseDatasetResponseEvaluatorResponseFlowResponseRecordsItem {
-    type Raw =
+    export type Raw =
         | serializers.PromptResponse.Raw
         | serializers.ToolResponse.Raw
         | DatasetResponse.Raw

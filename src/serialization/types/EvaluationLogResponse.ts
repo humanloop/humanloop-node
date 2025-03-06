@@ -21,7 +21,7 @@ export const EvaluationLogResponse: core.serialization.ObjectSchema<
 });
 
 export declare namespace EvaluationLogResponse {
-    interface Raw {
+    export interface Raw {
         run_id: string;
         datapoint?: DatapointResponse.Raw | null;
         log: serializers.LogResponse.Raw;

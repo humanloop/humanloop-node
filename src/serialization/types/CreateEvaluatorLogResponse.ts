@@ -17,7 +17,7 @@ export const CreateEvaluatorLogResponse: core.serialization.ObjectSchema<
 });
 
 export declare namespace CreateEvaluatorLogResponse {
-    interface Raw {
+    export interface Raw {
         id: string;
         parent_id: string;
         session_id?: string | null;

@@ -27,7 +27,7 @@ export const DirectoryWithParentsAndChildrenResponse: core.serialization.ObjectS
 });
 
 export declare namespace DirectoryWithParentsAndChildrenResponse {
-    interface Raw {
+    export interface Raw {
         id: string;
         parent_id?: string | null;
         name: string;

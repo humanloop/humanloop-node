@@ -6,7 +6,6 @@
  * An enumeration.
  */
 export type VersionStatus = "uncommitted" | "committed" | "deleted";
-
 export const VersionStatus = {
     Uncommitted: "uncommitted",
     Committed: "committed",

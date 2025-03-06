@@ -10,5 +10,5 @@ export const TimeUnit: core.serialization.Schema<serializers.TimeUnit.Raw, Human
     core.serialization.enum_(["day", "week", "month"]);
 
 export declare namespace TimeUnit {
-    type Raw = "day" | "week" | "month";
+    export type Raw = "day" | "week" | "month";
 }

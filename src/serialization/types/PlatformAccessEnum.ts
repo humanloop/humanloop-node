@@ -12,5 +12,5 @@ export const PlatformAccessEnum: core.serialization.Schema<
 > = core.serialization.enum_(["superadmin", "supportadmin", "user"]);
 
 export declare namespace PlatformAccessEnum {
-    type Raw = "superadmin" | "supportadmin" | "user";
+    export type Raw = "superadmin" | "supportadmin" | "user";
 }

@@ -55,7 +55,7 @@ export const ToolResponse: core.serialization.ObjectSchema<serializers.ToolRespo
     });
 
 export declare namespace ToolResponse {
-    interface Raw {
+    export interface Raw {
         path: string;
         id: string;
         directory_id?: string | null;

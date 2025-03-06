@@ -15,7 +15,7 @@ export const VersionIdResponse: core.serialization.ObjectSchema<
 });
 
 export declare namespace VersionIdResponse {
-    interface Raw {
+    export interface Raw {
         version: serializers.VersionIdResponseVersion.Raw;
         type: "version";
     }

@@ -10,5 +10,5 @@ export const ProjectSortBy: core.serialization.Schema<serializers.ProjectSortBy.
     core.serialization.enum_(["created_at", "updated_at", "name"]);
 
 export declare namespace ProjectSortBy {
-    type Raw = "created_at" | "updated_at" | "name";
+    export type Raw = "created_at" | "updated_at" | "name";
 }

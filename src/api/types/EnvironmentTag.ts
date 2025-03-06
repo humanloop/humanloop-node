@@ -6,7 +6,6 @@
  * An enumeration.
  */
 export type EnvironmentTag = "default" | "other";
-
 export const EnvironmentTag = {
     Default: "default",
     Other: "other",

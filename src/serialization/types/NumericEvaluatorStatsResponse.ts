@@ -22,7 +22,7 @@ export const NumericEvaluatorStatsResponse: core.serialization.ObjectSchema<
 });
 
 export declare namespace NumericEvaluatorStatsResponse {
-    interface Raw {
+    export interface Raw {
         evaluator_version_id: string;
         total_logs: number;
         num_judgments: number;

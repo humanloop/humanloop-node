@@ -14,5 +14,5 @@ export const EvaluatorActivationDeactivationRequestActivateItem: core.serializat
 > = core.serialization.undiscriminatedUnion([MonitoringEvaluatorVersionRequest, MonitoringEvaluatorEnvironmentRequest]);
 
 export declare namespace EvaluatorActivationDeactivationRequestActivateItem {
-    type Raw = MonitoringEvaluatorVersionRequest.Raw | MonitoringEvaluatorEnvironmentRequest.Raw;
+    export type Raw = MonitoringEvaluatorVersionRequest.Raw | MonitoringEvaluatorEnvironmentRequest.Raw;
 }

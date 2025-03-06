@@ -17,5 +17,5 @@ export const CreateEvaluatorLogRequestJudgment: core.serialization.Schema<
 ]);
 
 export declare namespace CreateEvaluatorLogRequestJudgment {
-    type Raw = boolean | string | string[] | number;
+    export type Raw = boolean | string | string[] | number;
 }

@@ -13,7 +13,7 @@ export const FileRequest: core.serialization.ObjectSchema<serializers.FileReques
     });
 
 export declare namespace FileRequest {
-    interface Raw {
+    export interface Raw {
         id?: string | null;
         path?: string | null;
     }

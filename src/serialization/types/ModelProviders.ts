@@ -21,7 +21,7 @@ export const ModelProviders: core.serialization.Schema<serializers.ModelProvider
     ]);
 
 export declare namespace ModelProviders {
-    type Raw =
+    export type Raw =
         | "openai"
         | "openai_azure"
         | "mock"

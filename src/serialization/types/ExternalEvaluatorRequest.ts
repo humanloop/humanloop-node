@@ -25,7 +25,7 @@ export const ExternalEvaluatorRequest: core.serialization.ObjectSchema<
 });
 
 export declare namespace ExternalEvaluatorRequest {
-    interface Raw {
+    export interface Raw {
         arguments_type: EvaluatorArgumentsType.Raw;
         return_type: EvaluatorReturnTypeEnum.Raw;
         attributes?: Record<string, unknown> | null;

@@ -12,5 +12,5 @@ export const PaginatedPromptLogResponse: core.serialization.Schema<
 > = core.serialization.unknown();
 
 export declare namespace PaginatedPromptLogResponse {
-    type Raw = unknown;
+    export type Raw = unknown;
 }

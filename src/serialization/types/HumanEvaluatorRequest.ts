@@ -26,7 +26,7 @@ export const HumanEvaluatorRequest: core.serialization.ObjectSchema<
 });
 
 export declare namespace HumanEvaluatorRequest {
-    interface Raw {
+    export interface Raw {
         arguments_type: EvaluatorArgumentsType.Raw;
         return_type: HumanEvaluatorRequestReturnType.Raw;
         attributes?: Record<string, unknown> | null;

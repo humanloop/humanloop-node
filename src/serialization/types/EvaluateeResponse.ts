@@ -19,7 +19,7 @@ export const EvaluateeResponse: core.serialization.ObjectSchema<
 });
 
 export declare namespace EvaluateeResponse {
-    interface Raw {
+    export interface Raw {
         version?: RunVersionResponse.Raw | null;
         batch_id?: string | null;
         orchestrated: boolean;

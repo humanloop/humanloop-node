@@ -12,5 +12,5 @@ export const UpdateEvaluationStatusRequest: core.serialization.Schema<
 > = core.serialization.unknown();
 
 export declare namespace UpdateEvaluationStatusRequest {
-    type Raw = unknown;
+    export type Raw = unknown;
 }

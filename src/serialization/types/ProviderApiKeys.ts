@@ -22,7 +22,7 @@ export const ProviderApiKeys: core.serialization.ObjectSchema<
 });
 
 export declare namespace ProviderApiKeys {
-    interface Raw {
+    export interface Raw {
         openai?: string | null;
         ai21?: string | null;
         mock?: string | null;

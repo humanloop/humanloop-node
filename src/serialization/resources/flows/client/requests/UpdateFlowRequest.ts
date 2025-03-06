@@ -16,7 +16,7 @@ export const UpdateFlowRequest: core.serialization.Schema<
 });
 
 export declare namespace UpdateFlowRequest {
-    interface Raw {
+    export interface Raw {
         path?: string | null;
         name?: string | null;
         directory_id?: string | null;

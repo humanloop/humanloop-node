@@ -21,7 +21,7 @@ export const EvaluatorRequestSpec: core.serialization.Schema<
 ]);
 
 export declare namespace EvaluatorRequestSpec {
-    type Raw =
+    export type Raw =
         | LlmEvaluatorRequest.Raw
         | CodeEvaluatorRequest.Raw
         | HumanEvaluatorRequest.Raw

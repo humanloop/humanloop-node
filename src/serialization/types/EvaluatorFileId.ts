@@ -16,7 +16,7 @@ export const EvaluatorFileId: core.serialization.ObjectSchema<
 });
 
 export declare namespace EvaluatorFileId {
-    interface Raw {
+    export interface Raw {
         environment?: string | null;
         id: string;
         orchestrated?: boolean | null;

@@ -6,7 +6,6 @@
  * Enum representing the possible return types of an evaluator.
  */
 export type EvaluatorReturnTypeEnum = "boolean" | "number" | "select" | "multi_select" | "text";
-
 export const EvaluatorReturnTypeEnum = {
     Boolean: "boolean",
     Number: "number",

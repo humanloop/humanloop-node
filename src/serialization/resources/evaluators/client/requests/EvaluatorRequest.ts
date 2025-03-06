@@ -16,7 +16,7 @@ export const EvaluatorRequest: core.serialization.Schema<serializers.EvaluatorRe
     });
 
 export declare namespace EvaluatorRequest {
-    interface Raw {
+    export interface Raw {
         path?: string | null;
         id?: string | null;
         commit_message?: string | null;

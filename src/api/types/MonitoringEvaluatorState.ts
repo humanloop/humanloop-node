@@ -6,7 +6,6 @@
  * State of an evaluator connected to a file
  */
 export type MonitoringEvaluatorState = "active" | "inactive";
-
 export const MonitoringEvaluatorState = {
     Active: "active",
     Inactive: "inactive",

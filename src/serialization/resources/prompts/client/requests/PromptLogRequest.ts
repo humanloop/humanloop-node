@@ -8,6 +8,7 @@ import * as core from "../../../../../core";
 import { ChatMessage } from "../../../../types/ChatMessage";
 import { PromptLogRequestToolChoice } from "../../types/PromptLogRequestToolChoice";
 import { PromptKernelRequest } from "../../../../types/PromptKernelRequest";
+import { LogStatus } from "../../../../types/LogStatus";
 
 export const PromptLogRequest: core.serialization.Schema<
     serializers.PromptLogRequest.Raw,
@@ -44,6 +45,7 @@ export const PromptLogRequest: core.serialization.Schema<
     inputs: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
     source: core.serialization.string().optional(),
     metadata: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
+    logStatus: core.serialization.property("log_status", LogStatus.optional()),
     sourceDatapointId: core.serialization.property("source_datapoint_id", core.serialization.string().optional()),
     traceParentId: core.serialization.property("trace_parent_id", core.serialization.string().optional()),
     user: core.serialization.string().optional(),
@@ -53,7 +55,7 @@ export const PromptLogRequest: core.serialization.Schema<
 });
 
 export declare namespace PromptLogRequest {
-    interface Raw {
+    export interface Raw {
         run_id?: string | null;
         path?: string | null;
         id?: string | null;
@@ -79,6 +81,7 @@ export declare namespace PromptLogRequest {
         inputs?: Record<string, unknown> | null;
         source?: string | null;
         metadata?: Record<string, unknown> | null;
+        log_status?: LogStatus.Raw | null;
         source_datapoint_id?: string | null;
         trace_parent_id?: string | null;
         user?: string | null;

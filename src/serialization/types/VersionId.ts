@@ -12,7 +12,7 @@ export const VersionId: core.serialization.ObjectSchema<serializers.VersionId.Ra
     });
 
 export declare namespace VersionId {
-    interface Raw {
+    export interface Raw {
         version_id: string;
     }
 }

@@ -14,7 +14,7 @@ export const FunctionToolChoice: core.serialization.ObjectSchema<
 });
 
 export declare namespace FunctionToolChoice {
-    interface Raw {
+    export interface Raw {
         name: string;
     }
 }

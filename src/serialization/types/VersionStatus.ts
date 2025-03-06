@@ -10,5 +10,5 @@ export const VersionStatus: core.serialization.Schema<serializers.VersionStatus.
     core.serialization.enum_(["uncommitted", "committed", "deleted"]);
 
 export declare namespace VersionStatus {
-    type Raw = "uncommitted" | "committed" | "deleted";
+    export type Raw = "uncommitted" | "committed" | "deleted";
 }

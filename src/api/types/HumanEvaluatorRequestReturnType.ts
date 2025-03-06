@@ -6,7 +6,6 @@
  * The type of the return value of the Evaluator.
  */
 export type HumanEvaluatorRequestReturnType = "select" | "multi_select" | "text" | "number" | "boolean";
-
 export const HumanEvaluatorRequestReturnType = {
     Select: "select",
     MultiSelect: "multi_select",

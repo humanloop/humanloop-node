@@ -22,7 +22,7 @@ export const MonitoringEvaluatorResponse: core.serialization.ObjectSchema<
 });
 
 export declare namespace MonitoringEvaluatorResponse {
-    interface Raw {
+    export interface Raw {
         version_reference: serializers.VersionReferenceResponse.Raw;
         version?: serializers.EvaluatorResponse.Raw | null;
         state: MonitoringEvaluatorState.Raw;

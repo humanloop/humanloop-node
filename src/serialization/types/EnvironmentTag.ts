@@ -10,5 +10,5 @@ export const EnvironmentTag: core.serialization.Schema<serializers.EnvironmentTa
     core.serialization.enum_(["default", "other"]);
 
 export declare namespace EnvironmentTag {
-    type Raw = "default" | "other";
+    export type Raw = "default" | "other";
 }

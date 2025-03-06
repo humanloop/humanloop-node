@@ -30,7 +30,7 @@ export const PromptCallStreamResponse: core.serialization.ObjectSchema<
 });
 
 export declare namespace PromptCallStreamResponse {
-    interface Raw {
+    export interface Raw {
         output?: string | null;
         created_at?: string | null;
         error?: string | null;

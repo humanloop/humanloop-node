@@ -12,5 +12,5 @@ export const UpdateDatesetAction: core.serialization.Schema<
 > = core.serialization.enum_(["set", "add", "remove"]);
 
 export declare namespace UpdateDatesetAction {
-    type Raw = "set" | "add" | "remove";
+    export type Raw = "set" | "add" | "remove";
 }

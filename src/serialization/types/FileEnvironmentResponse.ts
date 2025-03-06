@@ -20,7 +20,7 @@ export const FileEnvironmentResponse: core.serialization.ObjectSchema<
 });
 
 export declare namespace FileEnvironmentResponse {
-    interface Raw {
+    export interface Raw {
         id: string;
         created_at: string;
         name: string;

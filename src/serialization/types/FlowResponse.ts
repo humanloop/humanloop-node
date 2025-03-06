@@ -42,7 +42,7 @@ export const FlowResponse: core.serialization.ObjectSchema<serializers.FlowRespo
     });
 
 export declare namespace FlowResponse {
-    interface Raw {
+    export interface Raw {
         path: string;
         id: string;
         directory_id?: string | null;

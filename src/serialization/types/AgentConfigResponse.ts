@@ -12,5 +12,5 @@ export const AgentConfigResponse: core.serialization.ObjectSchema<
 > = core.serialization.object({});
 
 export declare namespace AgentConfigResponse {
-    interface Raw {}
+    export interface Raw {}
 }

@@ -15,5 +15,5 @@ export const VersionReferenceResponse: core.serialization.Schema<
 ]);
 
 export declare namespace VersionReferenceResponse {
-    type Raw = serializers.VersionDeploymentResponse.Raw | serializers.VersionIdResponse.Raw;
+    export type Raw = serializers.VersionDeploymentResponse.Raw | serializers.VersionIdResponse.Raw;
 }

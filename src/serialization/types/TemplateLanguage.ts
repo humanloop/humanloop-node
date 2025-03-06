@@ -10,5 +10,5 @@ export const TemplateLanguage: core.serialization.Schema<serializers.TemplateLan
     core.serialization.enum_(["default", "jinja"]);
 
 export declare namespace TemplateLanguage {
-    type Raw = "default" | "jinja";
+    export type Raw = "default" | "jinja";
 }

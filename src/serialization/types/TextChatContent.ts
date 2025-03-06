@@ -15,7 +15,7 @@ export const TextChatContent: core.serialization.ObjectSchema<
 });
 
 export declare namespace TextChatContent {
-    interface Raw {
+    export interface Raw {
         type: "text";
         text: string;
     }

@@ -59,6 +59,7 @@ await client.prompts.log({
         person: "Trump",
     },
     createdAt: "2024-07-19T00:29:35.178992",
+    error: undefined,
     providerLatency: 6.5931549072265625,
     outputMessage: {
         content:
@@ -225,7 +226,10 @@ in the case where you are storing or deriving your Prompt details in code.
 <dd>
 
 ```typescript
-await client.prompts.callStream({});
+const response = await client.prompts.callStream({});
+for await (const item of response) {
+    console.log(item);
+}
 ```
 
 </dd>
@@ -396,9 +400,20 @@ Get a list of all Prompts.
 <dd>
 
 ```typescript
-await client.prompts.list({
+const response = await client.prompts.list({
     size: 1,
 });
+for await (const item of response) {
+    console.log(item);
+}
+
+// Or you can manually iterate page-by-page
+const page = await client.prompts.list({
+    size: 1,
+});
+while (page.hasNextPage()) {
+    page = page.getNextPage();
+}
 ```
 
 </dd>
@@ -1539,9 +1554,20 @@ Get a list of all Tools.
 <dd>
 
 ```typescript
-await client.tools.list({
+const response = await client.tools.list({
     size: 1,
 });
+for await (const item of response) {
+    console.log(item);
+}
+
+// Or you can manually iterate page-by-page
+const page = await client.tools.list({
+    size: 1,
+});
+while (page.hasNextPage()) {
+    page = page.getNextPage();
+}
 ```
 
 </dd>
@@ -2432,9 +2458,20 @@ List all Datasets.
 <dd>
 
 ```typescript
-await client.datasets.list({
+const response = await client.datasets.list({
     size: 1,
 });
+for await (const item of response) {
+    console.log(item);
+}
+
+// Or you can manually iterate page-by-page
+const page = await client.datasets.list({
+    size: 1,
+});
+while (page.hasNextPage()) {
+    page = page.getNextPage();
+}
 ```
 
 </dd>
@@ -2814,9 +2851,20 @@ List all Datapoints for the Dataset with the given ID.
 <dd>
 
 ```typescript
-await client.datasets.listDatapoints("ds_b0baF1ca7652", {
+const response = await client.datasets.listDatapoints("ds_b0baF1ca7652", {
     size: 1,
 });
+for await (const item of response) {
+    console.log(item);
+}
+
+// Or you can manually iterate page-by-page
+const page = await client.datasets.listDatapoints("ds_b0baF1ca7652", {
+    size: 1,
+});
+while (page.hasNextPage()) {
+    page = page.getNextPage();
+}
 ```
 
 </dd>
@@ -3490,9 +3538,20 @@ Get a list of all Evaluators.
 <dd>
 
 ```typescript
-await client.evaluators.list({
+const response = await client.evaluators.list({
     size: 1,
 });
+for await (const item of response) {
+    console.log(item);
+}
+
+// Or you can manually iterate page-by-page
+const page = await client.evaluators.list({
+    size: 1,
+});
+while (page.hasNextPage()) {
+    page = page.getNextPage();
+}
 ```
 
 </dd>
@@ -4354,7 +4413,7 @@ Log to a Flow.
 You can use query parameters `version_id`, or `environment`, to target
 an existing version of the Flow. Otherwise, the default deployed version will be chosen.
 
-If you create the Flow Log with a `trace_status` of `incomplete`, you should later update it to `complete`
+If you create the Flow Log with a `log_status` of `incomplete`, you should later update it to `complete`
 in order to trigger Evaluators.
 
 </dd>
@@ -4372,7 +4431,6 @@ in order to trigger Evaluators.
 
 ```typescript
 await client.flows.log({
-    logId: "medqa_experiment_0001",
     id: "fl_6o701g4jmcanPVHxdqD0O",
     flow: {
         attributes: {
@@ -4393,7 +4451,7 @@ await client.flows.log({
             "Patient with a history of diabetes and hypertension presents with chest pain and shortness of breath.",
     },
     output: "The patient is likely experiencing a myocardial infarction. Immediate medical attention is required.",
-    traceStatus: "incomplete",
+    logStatus: "incomplete",
     startTime: "2024-07-08T22:40:35",
     endTime: "2024-07-08T22:40:39",
 });
@@ -4470,7 +4528,8 @@ await client.flows.updateLog("medqa_experiment_0001", {
             "Patient with a history of diabetes and normal tension presents with chest pain and shortness of breath.",
     },
     output: "The patient is likely experiencing a myocardial infarction. Immediate medical attention is required.",
-    traceStatus: "complete",
+    logStatus: "complete",
+    error: undefined,
 });
 ```
 
@@ -4495,7 +4554,7 @@ await client.flows.updateLog("medqa_experiment_0001", {
 <dl>
 <dd>
 
-**request:** `Humanloop.UpdateTraceRequest`
+**request:** `Humanloop.UpdateFlowLogRequest`
 
 </dd>
 </dl>
@@ -4752,9 +4811,20 @@ Get a list of Flows.
 <dd>
 
 ```typescript
-await client.flows.list({
+const response = await client.flows.list({
     size: 1,
 });
+for await (const item of response) {
+    console.log(item);
+}
+
+// Or you can manually iterate page-by-page
+const page = await client.flows.list({
+    size: 1,
+});
+while (page.hasNextPage()) {
+    page = page.getNextPage();
+}
 ```
 
 </dd>
@@ -5880,10 +5950,22 @@ Retrieve a list of Evaluations for the specified File.
 <dd>
 
 ```typescript
-await client.evaluations.list({
+const response = await client.evaluations.list({
     fileId: "pr_30gco7dx6JDq4200GVOHa",
     size: 1,
 });
+for await (const item of response) {
+    console.log(item);
+}
+
+// Or you can manually iterate page-by-page
+const page = await client.evaluations.list({
+    fileId: "pr_30gco7dx6JDq4200GVOHa",
+    size: 1,
+});
+while (page.hasNextPage()) {
+    page = page.getNextPage();
+}
 ```
 
 </dd>
@@ -6904,10 +6986,22 @@ List all Logs for the given filter criteria.
 <dd>
 
 ```typescript
-await client.logs.list({
+const response = await client.logs.list({
     fileId: "file_123abc",
     size: 1,
 });
+for await (const item of response) {
+    console.log(item);
+}
+
+// Or you can manually iterate page-by-page
+const page = await client.logs.list({
+    fileId: "file_123abc",
+    size: 1,
+});
+while (page.hasNextPage()) {
+    page = page.getNextPage();
+}
 ```
 
 </dd>
@@ -6970,7 +7064,9 @@ Delete Logs with the given IDs.
 <dd>
 
 ```typescript
-await client.logs.delete();
+await client.logs.delete({
+    id: "prv_Wu6zx1lAWJRqOyL8nWuZk",
+});
 ```
 
 </dd>

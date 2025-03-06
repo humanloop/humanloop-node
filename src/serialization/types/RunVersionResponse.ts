@@ -17,7 +17,7 @@ export const RunVersionResponse: core.serialization.Schema<
 ]);
 
 export declare namespace RunVersionResponse {
-    type Raw =
+    export type Raw =
         | serializers.PromptResponse.Raw
         | serializers.ToolResponse.Raw
         | serializers.EvaluatorResponse.Raw

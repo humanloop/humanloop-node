@@ -19,7 +19,7 @@ export const FileEnvironmentResponseFile: core.serialization.Schema<
 ]);
 
 export declare namespace FileEnvironmentResponseFile {
-    type Raw =
+    export type Raw =
         | serializers.PromptResponse.Raw
         | serializers.ToolResponse.Raw
         | DatasetResponse.Raw

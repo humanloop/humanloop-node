@@ -6,7 +6,6 @@
  * Enum representing the possible argument types of an evaluator.
  */
 export type EvaluatorArgumentsType = "target_free" | "target_required";
-
 export const EvaluatorArgumentsType = {
     TargetFree: "target_free",
     TargetRequired: "target_required",

@@ -12,5 +12,5 @@ export const ResponseFormatType: core.serialization.Schema<
 > = core.serialization.enum_(["json_object", "json_schema"]);
 
 export declare namespace ResponseFormatType {
-    type Raw = "json_object" | "json_schema";
+    export type Raw = "json_object" | "json_schema";
 }

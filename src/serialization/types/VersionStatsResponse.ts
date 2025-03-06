@@ -21,7 +21,7 @@ export const VersionStatsResponse: core.serialization.ObjectSchema<
 });
 
 export declare namespace VersionStatsResponse {
-    interface Raw {
+    export interface Raw {
         version_id: string;
         batch_id?: string | null;
         num_logs: number;

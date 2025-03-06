@@ -36,6 +36,8 @@ export interface FlowLogResponse {
     source?: string;
     /** Any additional metadata to record. */
     metadata?: Record<string, unknown>;
+    /** Status of a Log. Set to `incomplete` if you intend to update and eventually complete the Log and want the File's monitoring Evaluators to wait until you mark it as `complete`. If log_status is not provided, observability will pick up the Log as soon as possible. Updating this from specified to unspecified is undefined behavior. */
+    logStatus?: Humanloop.LogStatus;
     /** Unique identifier for the Datapoint that this Log is derived from. This can be used by Humanloop to associate Logs to Evaluations. If provided, Humanloop will automatically associate this Log to Evaluations that require a Log for this Datapoint-Version pair. */
     sourceDatapointId?: string;
     /** The ID of the parent Log to nest this Log under in a Trace. */
@@ -62,6 +64,4 @@ export interface FlowLogResponse {
     traceChildren?: Humanloop.LogResponse[];
     /** Flow used to generate the Log. */
     flow: Humanloop.FlowResponse;
-    /** Status of the Trace. When a Trace is marked as `complete`, no more Logs can be added to it. Monitoring Evaluators will only run on completed Traces. */
-    traceStatus?: Humanloop.TraceStatus;
 }

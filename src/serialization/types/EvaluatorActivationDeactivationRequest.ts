@@ -17,7 +17,7 @@ export const EvaluatorActivationDeactivationRequest: core.serialization.ObjectSc
 });
 
 export declare namespace EvaluatorActivationDeactivationRequest {
-    interface Raw {
+    export interface Raw {
         activate?: EvaluatorActivationDeactivationRequestActivateItem.Raw[] | null;
         deactivate?: EvaluatorActivationDeactivationRequestDeactivateItem.Raw[] | null;
     }

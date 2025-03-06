@@ -15,7 +15,7 @@ export const UpdateDatasetRequest: core.serialization.Schema<
 });
 
 export declare namespace UpdateDatasetRequest {
-    interface Raw {
+    export interface Raw {
         path?: string | null;
         name?: string | null;
     }

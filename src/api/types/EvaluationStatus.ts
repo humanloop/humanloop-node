@@ -6,7 +6,6 @@
  * Status of an evaluation.
  */
 export type EvaluationStatus = "pending" | "running" | "completed" | "cancelled";
-
 export const EvaluationStatus = {
     Pending: "pending",
     Running: "running",
