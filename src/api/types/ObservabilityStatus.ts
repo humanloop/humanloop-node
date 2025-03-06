@@ -8,7 +8,6 @@
  * Observability is implemented by running monitoring Evaluators on Logs.
  */
 export type ObservabilityStatus = "pending" | "running" | "completed" | "failed";
-
 export const ObservabilityStatus = {
     Pending: "pending",
     Running: "running",

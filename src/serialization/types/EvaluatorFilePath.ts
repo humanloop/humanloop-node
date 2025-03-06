@@ -16,7 +16,7 @@ export const EvaluatorFilePath: core.serialization.ObjectSchema<
 });
 
 export declare namespace EvaluatorFilePath {
-    interface Raw {
+    export interface Raw {
         environment?: string | null;
         path: string;
         orchestrated?: boolean | null;

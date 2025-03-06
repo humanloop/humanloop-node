@@ -15,7 +15,7 @@ export const ToolFunction: core.serialization.ObjectSchema<serializers.ToolFunct
     });
 
 export declare namespace ToolFunction {
-    interface Raw {
+    export interface Raw {
         name: string;
         description: string;
         strict?: boolean | null;

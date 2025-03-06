@@ -20,7 +20,7 @@ export const DashboardConfiguration: core.serialization.ObjectSchema<
 });
 
 export declare namespace DashboardConfiguration {
-    interface Raw {
+    export interface Raw {
         time_unit: TimeUnit.Raw;
         time_range_days: number;
         model_config_ids: string[];

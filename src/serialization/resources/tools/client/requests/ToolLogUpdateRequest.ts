@@ -33,7 +33,7 @@ export const ToolLogUpdateRequest: core.serialization.Schema<
 });
 
 export declare namespace ToolLogUpdateRequest {
-    interface Raw {
+    export interface Raw {
         output?: string | null;
         created_at?: string | null;
         error?: string | null;

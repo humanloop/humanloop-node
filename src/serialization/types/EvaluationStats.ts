@@ -19,7 +19,7 @@ export const EvaluationStats: core.serialization.ObjectSchema<
 });
 
 export declare namespace EvaluationStats {
-    interface Raw {
+    export interface Raw {
         run_stats: RunStatsResponse.Raw[];
         progress?: string | null;
         report?: string | null;

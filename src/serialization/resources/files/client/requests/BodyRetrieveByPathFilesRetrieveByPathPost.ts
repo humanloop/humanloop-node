@@ -14,7 +14,7 @@ export const BodyRetrieveByPathFilesRetrieveByPathPost: core.serialization.Schem
 });
 
 export declare namespace BodyRetrieveByPathFilesRetrieveByPathPost {
-    interface Raw {
+    export interface Raw {
         path: string;
     }
 }

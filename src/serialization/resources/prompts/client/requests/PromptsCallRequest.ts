@@ -40,7 +40,7 @@ export const PromptsCallRequest: core.serialization.Schema<
 });
 
 export declare namespace PromptsCallRequest {
-    interface Raw {
+    export interface Raw {
         path?: string | null;
         id?: string | null;
         messages?: ChatMessage.Raw[] | null;

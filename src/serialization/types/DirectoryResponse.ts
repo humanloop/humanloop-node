@@ -22,7 +22,7 @@ export const DirectoryResponse: core.serialization.ObjectSchema<
 });
 
 export declare namespace DirectoryResponse {
-    interface Raw {
+    export interface Raw {
         id: string;
         parent_id?: string | null;
         name: string;

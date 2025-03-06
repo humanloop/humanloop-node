@@ -10,5 +10,5 @@ export const SortOrder: core.serialization.Schema<serializers.SortOrder.Raw, Hum
     core.serialization.enum_(["asc", "desc"]);
 
 export declare namespace SortOrder {
-    type Raw = "asc" | "desc";
+    export type Raw = "asc" | "desc";
 }

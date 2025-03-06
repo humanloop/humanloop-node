@@ -27,7 +27,7 @@ export const LlmEvaluatorRequest: core.serialization.ObjectSchema<
 });
 
 export declare namespace LlmEvaluatorRequest {
-    interface Raw {
+    export interface Raw {
         arguments_type: EvaluatorArgumentsType.Raw;
         return_type: EvaluatorReturnTypeEnum.Raw;
         attributes?: Record<string, unknown> | null;

@@ -17,7 +17,7 @@ export const VersionDeploymentResponse: core.serialization.ObjectSchema<
 });
 
 export declare namespace VersionDeploymentResponse {
-    interface Raw {
+    export interface Raw {
         file: serializers.VersionDeploymentResponseFile.Raw;
         environment: EnvironmentResponse.Raw;
         type: "environment";

@@ -18,5 +18,5 @@ export const PromptsCallStreamRequestToolChoice: core.serialization.Schema<
 ]);
 
 export declare namespace PromptsCallStreamRequestToolChoice {
-    type Raw = "none" | "auto" | "required" | ToolChoice.Raw;
+    export type Raw = "none" | "auto" | "required" | ToolChoice.Raw;
 }

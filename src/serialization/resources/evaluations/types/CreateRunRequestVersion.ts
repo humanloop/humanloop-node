@@ -15,5 +15,5 @@ export const CreateRunRequestVersion: core.serialization.Schema<
 > = core.serialization.undiscriminatedUnion([VersionId, FileId, FilePath]);
 
 export declare namespace CreateRunRequestVersion {
-    type Raw = VersionId.Raw | FileId.Raw | FilePath.Raw;
+    export type Raw = VersionId.Raw | FileId.Raw | FilePath.Raw;
 }

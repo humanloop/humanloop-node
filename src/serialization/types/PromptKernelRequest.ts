@@ -7,6 +7,7 @@ import * as Humanloop from "../../api/index";
 import * as core from "../../core";
 import { ModelEndpoints } from "./ModelEndpoints";
 import { PromptKernelRequestTemplate } from "./PromptKernelRequestTemplate";
+import { TemplateLanguage } from "./TemplateLanguage";
 import { ModelProviders } from "./ModelProviders";
 import { PromptKernelRequestStop } from "./PromptKernelRequestStop";
 import { ResponseFormat } from "./ResponseFormat";
@@ -20,6 +21,7 @@ export const PromptKernelRequest: core.serialization.ObjectSchema<
     model: core.serialization.string(),
     endpoint: ModelEndpoints.optional(),
     template: PromptKernelRequestTemplate.optional(),
+    templateLanguage: core.serialization.property("template_language", TemplateLanguage.optional()),
     provider: ModelProviders.optional(),
     maxTokens: core.serialization.property("max_tokens", core.serialization.number().optional()),
     temperature: core.serialization.number().optional(),
@@ -40,10 +42,11 @@ export const PromptKernelRequest: core.serialization.ObjectSchema<
 });
 
 export declare namespace PromptKernelRequest {
-    interface Raw {
+    export interface Raw {
         model: string;
         endpoint?: ModelEndpoints.Raw | null;
         template?: PromptKernelRequestTemplate.Raw | null;
+        template_language?: TemplateLanguage.Raw | null;
         provider?: ModelProviders.Raw | null;
         max_tokens?: number | null;
         temperature?: number | null;

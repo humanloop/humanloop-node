@@ -16,7 +16,7 @@ export const UpdateEvaluationRunRequest: core.serialization.Schema<
 });
 
 export declare namespace UpdateEvaluationRunRequest {
-    interface Raw {
+    export interface Raw {
         control?: boolean | null;
         status?: EvaluationStatus.Raw | null;
     }

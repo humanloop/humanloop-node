@@ -18,5 +18,5 @@ export const PromptLogUpdateRequestToolChoice: core.serialization.Schema<
 ]);
 
 export declare namespace PromptLogUpdateRequestToolChoice {
-    type Raw = "none" | "auto" | "required" | ToolChoice.Raw;
+    export type Raw = "none" | "auto" | "required" | ToolChoice.Raw;
 }

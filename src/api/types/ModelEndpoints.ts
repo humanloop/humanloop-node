@@ -6,7 +6,6 @@
  * Supported model provider endpoints.
  */
 export type ModelEndpoints = "complete" | "chat" | "edit";
-
 export const ModelEndpoints = {
     Complete: "complete",
     Chat: "chat",

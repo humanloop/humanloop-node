@@ -16,7 +16,7 @@ export const EvaluatorJudgmentNumberLimit: core.serialization.ObjectSchema<
 });
 
 export declare namespace EvaluatorJudgmentNumberLimit {
-    interface Raw {
+    export interface Raw {
         min?: number | null;
         max?: number | null;
         step?: number | null;

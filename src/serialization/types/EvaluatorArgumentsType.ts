@@ -12,5 +12,5 @@ export const EvaluatorArgumentsType: core.serialization.Schema<
 > = core.serialization.enum_(["target_free", "target_required"]);
 
 export declare namespace EvaluatorArgumentsType {
-    type Raw = "target_free" | "target_required";
+    export type Raw = "target_free" | "target_required";
 }

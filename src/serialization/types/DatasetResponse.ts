@@ -38,7 +38,7 @@ export const DatasetResponse: core.serialization.ObjectSchema<
 });
 
 export declare namespace DatasetResponse {
-    interface Raw {
+    export interface Raw {
         path: string;
         id: string;
         directory_id?: string | null;

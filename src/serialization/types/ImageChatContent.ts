@@ -16,7 +16,7 @@ export const ImageChatContent: core.serialization.ObjectSchema<
 });
 
 export declare namespace ImageChatContent {
-    interface Raw {
+    export interface Raw {
         type: "image_url";
         image_url: ImageUrl.Raw;
     }

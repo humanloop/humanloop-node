@@ -52,7 +52,7 @@ export const CreateEvaluatorLogRequest: core.serialization.Schema<
 });
 
 export declare namespace CreateEvaluatorLogRequest {
-    interface Raw {
+    export interface Raw {
         path?: string | null;
         id?: string | null;
         start_time?: string | null;

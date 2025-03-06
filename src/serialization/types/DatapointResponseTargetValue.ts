@@ -19,5 +19,5 @@ export const DatapointResponseTargetValue: core.serialization.Schema<
 ]);
 
 export declare namespace DatapointResponseTargetValue {
-    type Raw = string | number | number | boolean | unknown[] | Record<string, unknown>;
+    export type Raw = string | number | number | boolean | unknown[] | Record<string, unknown>;
 }

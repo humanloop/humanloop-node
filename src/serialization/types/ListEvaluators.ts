@@ -12,7 +12,7 @@ export const ListEvaluators: core.serialization.ObjectSchema<serializers.ListEva
     });
 
 export declare namespace ListEvaluators {
-    interface Raw {
+    export interface Raw {
         records: serializers.EvaluatorResponse.Raw[];
     }
 }

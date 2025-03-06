@@ -19,7 +19,7 @@ export const LinkedToolResponse: core.serialization.ObjectSchema<
 });
 
 export declare namespace LinkedToolResponse {
-    interface Raw {
+    export interface Raw {
         name: string;
         description: string;
         strict?: boolean | null;

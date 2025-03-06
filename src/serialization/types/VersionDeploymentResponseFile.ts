@@ -19,7 +19,7 @@ export const VersionDeploymentResponseFile: core.serialization.Schema<
 ]);
 
 export declare namespace VersionDeploymentResponseFile {
-    type Raw =
+    export type Raw =
         | serializers.PromptResponse.Raw
         | serializers.ToolResponse.Raw
         | DatasetResponse.Raw

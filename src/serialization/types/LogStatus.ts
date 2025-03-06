@@ -10,5 +10,5 @@ export const LogStatus: core.serialization.Schema<serializers.LogStatus.Raw, Hum
     core.serialization.enum_(["complete", "incomplete"]);
 
 export declare namespace LogStatus {
-    type Raw = "complete" | "incomplete";
+    export type Raw = "complete" | "incomplete";
 }

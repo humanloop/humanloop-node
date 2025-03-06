@@ -12,5 +12,5 @@ export const EvaluatorsRequest: core.serialization.Schema<
 > = core.serialization.unknown();
 
 export declare namespace EvaluatorsRequest {
-    type Raw = unknown;
+    export type Raw = unknown;
 }

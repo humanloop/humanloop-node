@@ -16,7 +16,7 @@ export const EvaluationEvaluatorResponse: core.serialization.ObjectSchema<
 });
 
 export declare namespace EvaluationEvaluatorResponse {
-    interface Raw {
+    export interface Raw {
         version: serializers.EvaluatorResponse.Raw;
         orchestrated: boolean;
         added_at: string;

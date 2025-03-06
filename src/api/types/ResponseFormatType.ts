@@ -3,7 +3,6 @@
  */
 
 export type ResponseFormatType = "json_object" | "json_schema";
-
 export const ResponseFormatType = {
     JsonObject: "json_object",
     JsonSchema: "json_schema",

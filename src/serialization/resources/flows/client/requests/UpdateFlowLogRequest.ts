@@ -8,9 +8,9 @@ import * as core from "../../../../../core";
 import { ChatMessage } from "../../../../types/ChatMessage";
 import { LogStatus } from "../../../../types/LogStatus";
 
-export const UpdateTraceRequest: core.serialization.Schema<
-    serializers.UpdateTraceRequest.Raw,
-    Humanloop.UpdateTraceRequest
+export const UpdateFlowLogRequest: core.serialization.Schema<
+    serializers.UpdateFlowLogRequest.Raw,
+    Humanloop.UpdateFlowLogRequest
 > = core.serialization.object({
     messages: core.serialization.list(ChatMessage).optional(),
     outputMessage: core.serialization.property("output_message", ChatMessage.optional()),
@@ -20,8 +20,8 @@ export const UpdateTraceRequest: core.serialization.Schema<
     logStatus: core.serialization.property("log_status", LogStatus.optional()),
 });
 
-export declare namespace UpdateTraceRequest {
-    interface Raw {
+export declare namespace UpdateFlowLogRequest {
+    export interface Raw {
         messages?: ChatMessage.Raw[] | null;
         output_message?: ChatMessage.Raw | null;
         inputs?: Record<string, unknown> | null;

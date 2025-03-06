@@ -12,5 +12,5 @@ export const EvaluatorReturnTypeEnum: core.serialization.Schema<
 > = core.serialization.enum_(["boolean", "number", "select", "multi_select", "text"]);
 
 export declare namespace EvaluatorReturnTypeEnum {
-    type Raw = "boolean" | "number" | "select" | "multi_select" | "text";
+    export type Raw = "boolean" | "number" | "select" | "multi_select" | "text";
 }

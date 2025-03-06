@@ -16,7 +16,7 @@ export const UpdateDirectoryRequest: core.serialization.Schema<
 });
 
 export declare namespace UpdateDirectoryRequest {
-    interface Raw {
+    export interface Raw {
         name?: string | null;
         parent_id?: string | null;
         path?: string | null;

@@ -18,7 +18,7 @@ export const CreateEvaluationRequest: core.serialization.Schema<
 });
 
 export declare namespace CreateEvaluationRequest {
-    interface Raw {
+    export interface Raw {
         file?: FileRequest.Raw | null;
         name?: string | null;
         evaluators: CreateEvaluationRequestEvaluatorsItem.Raw[];

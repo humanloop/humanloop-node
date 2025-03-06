@@ -6,7 +6,6 @@
  * An enumeration.
  */
 export type LogStatus = "complete" | "incomplete";
-
 export const LogStatus = {
     Complete: "complete",
     Incomplete: "incomplete",

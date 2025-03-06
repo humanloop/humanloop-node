@@ -10,5 +10,5 @@ export const FileType: core.serialization.Schema<serializers.FileType.Raw, Human
     core.serialization.enum_(["prompt", "tool", "dataset", "evaluator", "flow"]);
 
 export declare namespace FileType {
-    type Raw = "prompt" | "tool" | "dataset" | "evaluator" | "flow";
+    export type Raw = "prompt" | "tool" | "dataset" | "evaluator" | "flow";
 }

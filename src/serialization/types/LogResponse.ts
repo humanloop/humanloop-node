@@ -15,7 +15,7 @@ export const LogResponse: core.serialization.Schema<serializers.LogResponse.Raw,
     ]);
 
 export declare namespace LogResponse {
-    type Raw =
+    export type Raw =
         | serializers.PromptLogResponse.Raw
         | serializers.ToolLogResponse.Raw
         | serializers.EvaluatorLogResponse.Raw

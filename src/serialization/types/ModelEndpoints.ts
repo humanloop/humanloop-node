@@ -10,5 +10,5 @@ export const ModelEndpoints: core.serialization.Schema<serializers.ModelEndpoint
     core.serialization.enum_(["complete", "chat", "edit"]);
 
 export declare namespace ModelEndpoints {
-    type Raw = "complete" | "chat" | "edit";
+    export type Raw = "complete" | "chat" | "edit";
 }

@@ -43,7 +43,7 @@ export const ToolLogRequest: core.serialization.Schema<
 });
 
 export declare namespace ToolLogRequest {
-    interface Raw {
+    export interface Raw {
         path?: string | null;
         id?: string | null;
         start_time?: string | null;

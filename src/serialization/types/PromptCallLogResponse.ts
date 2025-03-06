@@ -27,7 +27,7 @@ export const PromptCallLogResponse: core.serialization.ObjectSchema<
 });
 
 export declare namespace PromptCallLogResponse {
-    interface Raw {
+    export interface Raw {
         output?: string | null;
         created_at?: string | null;
         error?: string | null;

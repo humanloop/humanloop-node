@@ -10,5 +10,5 @@ export const ChatToolType: core.serialization.Schema<serializers.ChatToolType.Ra
     core.serialization.stringLiteral("function");
 
 export declare namespace ChatToolType {
-    type Raw = "function";
+    export type Raw = "function";
 }

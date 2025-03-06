@@ -10,5 +10,5 @@ export const ImageUrlDetail: core.serialization.Schema<serializers.ImageUrlDetai
     core.serialization.enum_(["high", "low", "auto"]);
 
 export declare namespace ImageUrlDetail {
-    type Raw = "high" | "low" | "auto";
+    export type Raw = "high" | "low" | "auto";
 }

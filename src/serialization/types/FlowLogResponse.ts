@@ -55,7 +55,7 @@ export const FlowLogResponse: core.serialization.ObjectSchema<
 });
 
 export declare namespace FlowLogResponse {
-    interface Raw {
+    export interface Raw {
         messages?: ChatMessage.Raw[] | null;
         output_message?: ChatMessage.Raw | null;
         start_time?: string | null;

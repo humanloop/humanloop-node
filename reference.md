@@ -2,7 +2,7 @@
 
 ## Prompts
 
-<details><summary><code>client.prompts.<a href="/src/api/resources/prompts/client/Client.ts">log</a>({ ...params }) -> unknown</code></summary>
+<details><summary><code>client.prompts.<a href="/src/api/resources/prompts/client/Client.ts">log</a>({ ...params }) -> Humanloop.CreatePromptLogResponse</code></summary>
 <dl>
 <dd>
 
@@ -226,7 +226,10 @@ in the case where you are storing or deriving your Prompt details in code.
 <dd>
 
 ```typescript
-await client.prompts.callStream({});
+const response = await client.prompts.callStream({});
+for await (const item of response) {
+    console.log(item);
+}
 ```
 
 </dd>
@@ -397,9 +400,20 @@ Get a list of all Prompts.
 <dd>
 
 ```typescript
-await client.prompts.list({
+const response = await client.prompts.list({
     size: 1,
 });
+for await (const item of response) {
+    console.log(item);
+}
+
+// Or you can manually iterate page-by-page
+const page = await client.prompts.list({
+    size: 1,
+});
+while (page.hasNextPage()) {
+    page = page.getNextPage();
+}
 ```
 
 </dd>
@@ -709,6 +723,84 @@ await client.prompts.move("pr_30gco7dx6JDq4200GVOHa", {
 <dd>
 
 **request:** `Humanloop.UpdatePromptRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Prompts.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.prompts.<a href="/src/api/resources/prompts/client/Client.ts">populateTemplate</a>(id, { ...params }) -> Humanloop.PromptResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve the Prompt with the given ID, including the populated template.
+
+By default, the deployed version of the Prompt is returned. Use the query parameters
+`version_id` or `environment` to target a specific version of the Prompt.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.prompts.populateTemplate("id", {
+    body: {
+        key: "value",
+    },
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Unique identifier for Prompt.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.PopulateTemplatePromptsIdPopulatePostRequest`
 
 </dd>
 </dl>
@@ -1462,9 +1554,20 @@ Get a list of all Tools.
 <dd>
 
 ```typescript
-await client.tools.list({
+const response = await client.tools.list({
     size: 1,
 });
+for await (const item of response) {
+    console.log(item);
+}
+
+// Or you can manually iterate page-by-page
+const page = await client.tools.list({
+    size: 1,
+});
+while (page.hasNextPage()) {
+    page = page.getNextPage();
+}
 ```
 
 </dd>
@@ -2355,9 +2458,20 @@ List all Datasets.
 <dd>
 
 ```typescript
-await client.datasets.list({
+const response = await client.datasets.list({
     size: 1,
 });
+for await (const item of response) {
+    console.log(item);
+}
+
+// Or you can manually iterate page-by-page
+const page = await client.datasets.list({
+    size: 1,
+});
+while (page.hasNextPage()) {
+    page = page.getNextPage();
+}
 ```
 
 </dd>
@@ -2737,9 +2851,20 @@ List all Datapoints for the Dataset with the given ID.
 <dd>
 
 ```typescript
-await client.datasets.listDatapoints("ds_b0baF1ca7652", {
+const response = await client.datasets.listDatapoints("ds_b0baF1ca7652", {
     size: 1,
 });
+for await (const item of response) {
+    console.log(item);
+}
+
+// Or you can manually iterate page-by-page
+const page = await client.datasets.listDatapoints("ds_b0baF1ca7652", {
+    size: 1,
+});
+while (page.hasNextPage()) {
+    page = page.getNextPage();
+}
 ```
 
 </dd>
@@ -3413,9 +3538,20 @@ Get a list of all Evaluators.
 <dd>
 
 ```typescript
-await client.evaluators.list({
+const response = await client.evaluators.list({
     size: 1,
 });
+for await (const item of response) {
+    console.log(item);
+}
+
+// Or you can manually iterate page-by-page
+const page = await client.evaluators.list({
+    size: 1,
+});
+while (page.hasNextPage()) {
+    page = page.getNextPage();
+}
 ```
 
 </dd>
@@ -4277,6 +4413,9 @@ Log to a Flow.
 You can use query parameters `version_id`, or `environment`, to target
 an existing version of the Flow. Otherwise, the default deployed version will be chosen.
 
+If you create the Flow Log with a `log_status` of `incomplete`, you should later update it to `complete`
+in order to trigger Evaluators.
+
 </dd>
 </dl>
 </dd>
@@ -4292,7 +4431,6 @@ an existing version of the Flow. Otherwise, the default deployed version will be
 
 ```typescript
 await client.flows.log({
-    logId: "medqa_experiment_0001",
     id: "fl_6o701g4jmcanPVHxdqD0O",
     flow: {
         attributes: {
@@ -4333,6 +4471,90 @@ await client.flows.log({
 <dd>
 
 **request:** `Humanloop.FlowLogRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Flows.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.flows.<a href="/src/api/resources/flows/client/Client.ts">updateLog</a>(logId, { ...params }) -> Humanloop.FlowLogResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Update the status, inputs, output of a Flow Log.
+
+Marking a Flow Log as complete will trigger any monitoring Evaluators to run.
+Inputs and output (or error) must be provided in order to mark it as complete.
+
+The end_time log attribute will be set to match the time the log is marked as complete.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.flows.updateLog("medqa_experiment_0001", {
+    inputs: {
+        question:
+            "Patient with a history of diabetes and normal tension presents with chest pain and shortness of breath.",
+    },
+    output: "The patient is likely experiencing a myocardial infarction. Immediate medical attention is required.",
+    logStatus: "complete",
+    error: undefined,
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**logId:** `string` — Unique identifier of the Flow Log.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.UpdateFlowLogRequest`
 
 </dd>
 </dl>
@@ -4589,9 +4811,20 @@ Get a list of Flows.
 <dd>
 
 ```typescript
-await client.flows.list({
+const response = await client.flows.list({
     size: 1,
 });
+for await (const item of response) {
+    console.log(item);
+}
+
+// Or you can manually iterate page-by-page
+const page = await client.flows.list({
+    size: 1,
+});
+while (page.hasNextPage()) {
+    page = page.getNextPage();
+}
 ```
 
 </dd>
@@ -4692,90 +4925,6 @@ await client.flows.upsert({
 <dd>
 
 **request:** `Humanloop.FlowRequest`
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `Flows.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.flows.<a href="/src/api/resources/flows/client/Client.ts">updateLog</a>(logId, { ...params }) -> Humanloop.FlowLogResponse</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Update the status, inputs, output of a Flow Log.
-
-Marking a Flow Log as complete will trigger any monitoring Evaluators to run.
-Inputs and output (or error) must be provided in order to mark it as complete.
-
-The end_time log attribute will be set to match the time the log is marked as complete.
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.flows.updateLog("medqa_experiment_0001", {
-    inputs: {
-        question:
-            "Patient with a history of diabetes and normal tension presents with chest pain and shortness of breath.",
-    },
-    output: "The patient is likely experiencing a myocardial infarction. Immediate medical attention is required.",
-    logStatus: "complete",
-    error: undefined,
-});
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**logId:** `string` — Unique identifier of the Flow Log.
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request:** `Humanloop.UpdateTraceRequest`
 
 </dd>
 </dl>
@@ -5801,10 +5950,22 @@ Retrieve a list of Evaluations for the specified File.
 <dd>
 
 ```typescript
-await client.evaluations.list({
+const response = await client.evaluations.list({
     fileId: "pr_30gco7dx6JDq4200GVOHa",
     size: 1,
 });
+for await (const item of response) {
+    console.log(item);
+}
+
+// Or you can manually iterate page-by-page
+const page = await client.evaluations.list({
+    fileId: "pr_30gco7dx6JDq4200GVOHa",
+    size: 1,
+});
+while (page.hasNextPage()) {
+    page = page.getNextPage();
+}
 ```
 
 </dd>
@@ -6825,10 +6986,22 @@ List all Logs for the given filter criteria.
 <dd>
 
 ```typescript
-await client.logs.list({
+const response = await client.logs.list({
     fileId: "file_123abc",
     size: 1,
 });
+for await (const item of response) {
+    console.log(item);
+}
+
+// Or you can manually iterate page-by-page
+const page = await client.logs.list({
+    fileId: "file_123abc",
+    size: 1,
+});
+while (page.hasNextPage()) {
+    page = page.getNextPage();
+}
 ```
 
 </dd>
@@ -6891,7 +7064,9 @@ Delete Logs with the given IDs.
 <dd>
 
 ```typescript
-await client.logs.delete();
+await client.logs.delete({
+    id: "prv_Wu6zx1lAWJRqOyL8nWuZk",
+});
 ```
 
 </dd>

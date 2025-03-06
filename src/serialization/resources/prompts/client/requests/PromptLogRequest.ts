@@ -55,7 +55,7 @@ export const PromptLogRequest: core.serialization.Schema<
 });
 
 export declare namespace PromptLogRequest {
-    interface Raw {
+    export interface Raw {
         run_id?: string | null;
         path?: string | null;
         id?: string | null;

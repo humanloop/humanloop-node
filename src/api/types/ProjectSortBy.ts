@@ -6,7 +6,6 @@
  * An enumeration.
  */
 export type ProjectSortBy = "created_at" | "updated_at" | "name";
-
 export const ProjectSortBy = {
     CreatedAt: "created_at",
     UpdatedAt: "updated_at",

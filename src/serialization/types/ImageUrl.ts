@@ -14,7 +14,7 @@ export const ImageUrl: core.serialization.ObjectSchema<serializers.ImageUrl.Raw,
     });
 
 export declare namespace ImageUrl {
-    interface Raw {
+    export interface Raw {
         url: string;
         detail?: ImageUrlDetail.Raw | null;
     }

@@ -24,7 +24,7 @@ export const EvaluationResponse: core.serialization.ObjectSchema<
 });
 
 export declare namespace EvaluationResponse {
-    interface Raw {
+    export interface Raw {
         id: string;
         runs_count: number;
         evaluators: EvaluationEvaluatorResponse.Raw[];

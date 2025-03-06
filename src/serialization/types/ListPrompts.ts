@@ -12,7 +12,7 @@ export const ListPrompts: core.serialization.ObjectSchema<serializers.ListPrompt
     });
 
 export declare namespace ListPrompts {
-    interface Raw {
+    export interface Raw {
         records: serializers.PromptResponse.Raw[];
     }
 }

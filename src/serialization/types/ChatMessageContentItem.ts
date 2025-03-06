@@ -14,5 +14,5 @@ export const ChatMessageContentItem: core.serialization.Schema<
 > = core.serialization.undiscriminatedUnion([TextChatContent, ImageChatContent]);
 
 export declare namespace ChatMessageContentItem {
-    type Raw = TextChatContent.Raw | ImageChatContent.Raw;
+    export type Raw = TextChatContent.Raw | ImageChatContent.Raw;
 }

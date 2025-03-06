@@ -13,7 +13,7 @@ export const ListDatasets: core.serialization.ObjectSchema<serializers.ListDatas
     });
 
 export declare namespace ListDatasets {
-    interface Raw {
+    export interface Raw {
         records: DatasetResponse.Raw[];
     }
 }

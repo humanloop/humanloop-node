@@ -13,7 +13,7 @@ export const FunctionTool: core.serialization.ObjectSchema<serializers.FunctionT
     });
 
 export declare namespace FunctionTool {
-    interface Raw {
+    export interface Raw {
         name: string;
         arguments?: string | null;
     }

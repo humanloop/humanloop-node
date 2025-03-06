@@ -12,5 +12,5 @@ export const PaginatedSessionResponse: core.serialization.Schema<
 > = core.serialization.unknown();
 
 export declare namespace PaginatedSessionResponse {
-    type Raw = unknown;
+    export type Raw = unknown;
 }

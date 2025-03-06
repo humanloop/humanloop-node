@@ -6,7 +6,6 @@
  * Supported reasoning effort.
  */
 export type ReasoningEffort = "high" | "medium" | "low";
-
 export const ReasoningEffort = {
     High: "high",
     Medium: "medium",

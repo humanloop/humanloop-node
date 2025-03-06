@@ -6,7 +6,6 @@
  * Type of tool.
  */
 export type FilesToolType = "pinecone_search" | "google" | "mock" | "snippet" | "json_schema" | "get_api_call";
-
 export const FilesToolType = {
     PineconeSearch: "pinecone_search",
     Google: "google",

@@ -12,5 +12,5 @@ export const ObservabilityStatus: core.serialization.Schema<
 > = core.serialization.enum_(["pending", "running", "completed", "failed"]);
 
 export declare namespace ObservabilityStatus {
-    type Raw = "pending" | "running" | "completed" | "failed";
+    export type Raw = "pending" | "running" | "completed" | "failed";
 }

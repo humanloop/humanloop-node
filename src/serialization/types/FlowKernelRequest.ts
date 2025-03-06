@@ -14,7 +14,7 @@ export const FlowKernelRequest: core.serialization.ObjectSchema<
 });
 
 export declare namespace FlowKernelRequest {
-    interface Raw {
+    export interface Raw {
         attributes: Record<string, unknown>;
     }
 }

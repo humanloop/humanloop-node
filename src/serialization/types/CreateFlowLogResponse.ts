@@ -18,7 +18,7 @@ export const CreateFlowLogResponse: core.serialization.ObjectSchema<
 });
 
 export declare namespace CreateFlowLogResponse {
-    interface Raw {
+    export interface Raw {
         id: string;
         flow_id: string;
         version_id: string;

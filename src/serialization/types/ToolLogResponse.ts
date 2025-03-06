@@ -52,7 +52,7 @@ export const ToolLogResponse: core.serialization.ObjectSchema<
 });
 
 export declare namespace ToolLogResponse {
-    interface Raw {
+    export interface Raw {
         start_time?: string | null;
         end_time?: string | null;
         output?: string | null;

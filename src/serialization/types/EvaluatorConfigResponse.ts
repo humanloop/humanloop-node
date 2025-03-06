@@ -12,5 +12,5 @@ export const EvaluatorConfigResponse: core.serialization.ObjectSchema<
 > = core.serialization.object({});
 
 export declare namespace EvaluatorConfigResponse {
-    interface Raw {}
+    export interface Raw {}
 }

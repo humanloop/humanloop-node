@@ -20,7 +20,7 @@ export const PaginatedDataUnionPromptResponseToolResponseDatasetResponseEvaluato
 });
 
 export declare namespace PaginatedDataUnionPromptResponseToolResponseDatasetResponseEvaluatorResponseFlowResponse {
-    interface Raw {
+    export interface Raw {
         records: PaginatedDataUnionPromptResponseToolResponseDatasetResponseEvaluatorResponseFlowResponseRecordsItem.Raw[];
         page: number;
         size: number;

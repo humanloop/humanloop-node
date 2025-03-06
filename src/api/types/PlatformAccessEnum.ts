@@ -6,7 +6,6 @@
  * An enumeration.
  */
 export type PlatformAccessEnum = "superadmin" | "supportadmin" | "user";
-
 export const PlatformAccessEnum = {
     Superadmin: "superadmin",
     Supportadmin: "supportadmin",

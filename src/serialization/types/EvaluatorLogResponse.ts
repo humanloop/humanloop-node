@@ -59,7 +59,7 @@ export const EvaluatorLogResponse: core.serialization.ObjectSchema<
 });
 
 export declare namespace EvaluatorLogResponse {
-    interface Raw {
+    export interface Raw {
         start_time?: string | null;
         end_time?: string | null;
         output?: string | null;

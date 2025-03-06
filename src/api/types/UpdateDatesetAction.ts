@@ -6,7 +6,6 @@
  * An enumeration.
  */
 export type UpdateDatesetAction = "set" | "add" | "remove";
-
 export const UpdateDatesetAction = {
     Set: "set",
     Add: "add",

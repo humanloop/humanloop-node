@@ -17,7 +17,7 @@ export const PaginatedDataPromptResponse: core.serialization.ObjectSchema<
 });
 
 export declare namespace PaginatedDataPromptResponse {
-    interface Raw {
+    export interface Raw {
         records: serializers.PromptResponse.Raw[];
         page: number;
         size: number;

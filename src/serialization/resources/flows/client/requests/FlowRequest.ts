@@ -15,7 +15,7 @@ export const FlowRequest: core.serialization.Schema<serializers.FlowRequest.Raw,
     });
 
 export declare namespace FlowRequest {
-    interface Raw {
+    export interface Raw {
         path?: string | null;
         id?: string | null;
         attributes: Record<string, unknown>;

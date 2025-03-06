@@ -15,7 +15,7 @@ import * as Humanloop from "../../../../index";
  *         error: undefined
  *     }
  */
-export interface UpdateTraceRequest {
+export interface UpdateFlowLogRequest {
     /** List of chat messages that were used as an input to the Flow. */
     messages?: Humanloop.ChatMessage[];
     /** The output message returned by this Flow. */
@@ -26,6 +26,6 @@ export interface UpdateTraceRequest {
     output?: string;
     /** The error message of the Flow Log. Provide None to unset existing `error` value. Provide either this, `output_message` or `output`. */
     error?: string;
-    /** Status of the Trace. When a Log is updated from `incomplete` to `complete`, it becomes available to Monitoring Evaluators. */
+    /** Status of the Flow Log. When a Flow Log is updated to `complete`, no more Logs can be added to it. Monitoring Evaluators will only run on `complete` Flow Logs. */
     logStatus?: Humanloop.LogStatus;
 }

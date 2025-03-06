@@ -15,7 +15,7 @@ export const UpdatePromptRequest: core.serialization.Schema<
 });
 
 export declare namespace UpdatePromptRequest {
-    interface Raw {
+    export interface Raw {
         path?: string | null;
         name?: string | null;
     }

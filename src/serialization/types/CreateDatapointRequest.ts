@@ -18,7 +18,7 @@ export const CreateDatapointRequest: core.serialization.ObjectSchema<
 });
 
 export declare namespace CreateDatapointRequest {
-    interface Raw {
+    export interface Raw {
         inputs?: Record<string, string> | null;
         messages?: ChatMessage.Raw[] | null;
         target?: Record<string, CreateDatapointRequestTargetValue.Raw> | null;

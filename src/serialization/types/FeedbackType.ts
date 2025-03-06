@@ -10,5 +10,5 @@ export const FeedbackType: core.serialization.Schema<serializers.FeedbackType.Ra
     core.serialization.unknown();
 
 export declare namespace FeedbackType {
-    type Raw = unknown;
+    export type Raw = unknown;
 }

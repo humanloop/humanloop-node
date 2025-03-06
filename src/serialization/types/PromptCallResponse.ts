@@ -35,7 +35,7 @@ export const PromptCallResponse: core.serialization.ObjectSchema<
 });
 
 export declare namespace PromptCallResponse {
-    interface Raw {
+    export interface Raw {
         start_time?: string | null;
         end_time?: string | null;
         messages?: ChatMessage.Raw[] | null;

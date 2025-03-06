@@ -15,7 +15,7 @@ export const AddEvaluatorsRequest: core.serialization.Schema<
 });
 
 export declare namespace AddEvaluatorsRequest {
-    interface Raw {
+    export interface Raw {
         evaluators: AddEvaluatorsRequestEvaluatorsItem.Raw[];
     }
 }

@@ -12,7 +12,7 @@ export const CommitRequest: core.serialization.ObjectSchema<serializers.CommitRe
     });
 
 export declare namespace CommitRequest {
-    interface Raw {
+    export interface Raw {
         commit_message: string;
     }
 }

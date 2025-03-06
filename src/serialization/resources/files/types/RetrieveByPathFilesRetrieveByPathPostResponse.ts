@@ -19,7 +19,7 @@ export const RetrieveByPathFilesRetrieveByPathPostResponse: core.serialization.S
 ]);
 
 export declare namespace RetrieveByPathFilesRetrieveByPathPostResponse {
-    type Raw =
+    export type Raw =
         | serializers.PromptResponse.Raw
         | serializers.ToolResponse.Raw
         | DatasetResponse.Raw

@@ -10,5 +10,5 @@ export const ReasoningEffort: core.serialization.Schema<serializers.ReasoningEff
     core.serialization.enum_(["high", "medium", "low"]);
 
 export declare namespace ReasoningEffort {
-    type Raw = "high" | "medium" | "low";
+    export type Raw = "high" | "medium" | "low";
 }

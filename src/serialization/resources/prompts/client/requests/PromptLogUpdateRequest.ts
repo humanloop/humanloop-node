@@ -44,7 +44,7 @@ export const PromptLogUpdateRequest: core.serialization.Schema<
 });
 
 export declare namespace PromptLogUpdateRequest {
-    interface Raw {
+    export interface Raw {
         output_message?: ChatMessage.Raw | null;
         prompt_tokens?: number | null;
         reasoning_tokens?: number | null;

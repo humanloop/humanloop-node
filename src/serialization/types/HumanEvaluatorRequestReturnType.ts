@@ -12,5 +12,5 @@ export const HumanEvaluatorRequestReturnType: core.serialization.Schema<
 > = core.serialization.enum_(["select", "multi_select", "text", "number", "boolean"]);
 
 export declare namespace HumanEvaluatorRequestReturnType {
-    type Raw = "select" | "multi_select" | "text" | "number" | "boolean";
+    export type Raw = "select" | "multi_select" | "text" | "number" | "boolean";
 }

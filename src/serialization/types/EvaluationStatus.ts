@@ -10,5 +10,5 @@ export const EvaluationStatus: core.serialization.Schema<serializers.EvaluationS
     core.serialization.enum_(["pending", "running", "completed", "cancelled"]);
 
 export declare namespace EvaluationStatus {
-    type Raw = "pending" | "running" | "completed" | "cancelled";
+    export type Raw = "pending" | "running" | "completed" | "cancelled";
 }

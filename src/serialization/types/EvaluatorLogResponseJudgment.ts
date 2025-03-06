@@ -17,5 +17,5 @@ export const EvaluatorLogResponseJudgment: core.serialization.Schema<
 ]);
 
 export declare namespace EvaluatorLogResponseJudgment {
-    type Raw = boolean | string | string[] | number;
+    export type Raw = boolean | string | string[] | number;
 }

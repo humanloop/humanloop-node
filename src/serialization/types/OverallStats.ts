@@ -19,7 +19,7 @@ export const OverallStats: core.serialization.ObjectSchema<serializers.OverallSt
     });
 
 export declare namespace OverallStats {
-    interface Raw {
+    export interface Raw {
         num_datapoints: number;
         total_logs: number;
         total_evaluator_logs: number;

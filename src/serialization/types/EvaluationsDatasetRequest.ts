@@ -12,5 +12,5 @@ export const EvaluationsDatasetRequest: core.serialization.Schema<
 > = core.serialization.unknown();
 
 export declare namespace EvaluationsDatasetRequest {
-    type Raw = unknown;
+    export type Raw = unknown;
 }

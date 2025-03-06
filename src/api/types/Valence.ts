@@ -6,7 +6,6 @@
  * An enumeration.
  */
 export type Valence = "positive" | "negative" | "neutral";
-
 export const Valence = {
     Positive: "positive",
     Negative: "negative",

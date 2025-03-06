@@ -13,5 +13,5 @@ export const PromptResponseTemplate: core.serialization.Schema<
 > = core.serialization.undiscriminatedUnion([core.serialization.string(), core.serialization.list(ChatMessage)]);
 
 export declare namespace PromptResponseTemplate {
-    type Raw = string | ChatMessage.Raw[];
+    export type Raw = string | ChatMessage.Raw[];
 }

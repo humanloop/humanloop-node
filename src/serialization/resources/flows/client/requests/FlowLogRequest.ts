@@ -47,7 +47,7 @@ export const FlowLogRequest: core.serialization.Schema<
 });
 
 export declare namespace FlowLogRequest {
-    interface Raw {
+    export interface Raw {
         messages?: ChatMessage.Raw[] | null;
         output_message?: ChatMessage.Raw | null;
         run_id?: string | null;

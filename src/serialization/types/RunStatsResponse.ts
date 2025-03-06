@@ -24,7 +24,7 @@ export const RunStatsResponse: core.serialization.ObjectSchema<
 });
 
 export declare namespace RunStatsResponse {
-    interface Raw {
+    export interface Raw {
         run_id: string;
         version_id?: string | null;
         batch_id?: string | null;

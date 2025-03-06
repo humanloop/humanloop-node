@@ -18,7 +18,7 @@ export const EvaluatorAggregate: core.serialization.ObjectSchema<
 });
 
 export declare namespace EvaluatorAggregate {
-    interface Raw {
+    export interface Raw {
         value: number;
         evaluator_id: string;
         evaluator_version_id: string;
