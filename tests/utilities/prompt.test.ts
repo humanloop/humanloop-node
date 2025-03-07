@@ -9,12 +9,12 @@ import OpenAI from "openai";
 import { Humanloop } from "../../src";
 import { ModelProviders } from "../../src/api/types/ModelProviders";
 import { PromptKernelRequest } from "../../src/api/types/PromptKernelRequest";
+import { UtilityPromptKernel, promptUtilityFactory } from "../../src/decorators/prompt";
 import {
     HUMANLOOP_FILE_KEY,
     isHumanloopSpan,
     readFromOpenTelemetrySpan,
 } from "../../src/otel";
-import { UtilityPromptKernel, promptUtilityFactory } from "../../src/utilities/prompt";
 import {
     callLLMMessages,
     openTelemetryHLProcessorTestConfiguration,

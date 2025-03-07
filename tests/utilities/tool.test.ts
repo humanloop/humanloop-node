@@ -1,6 +1,7 @@
 import { Validator } from "jsonschema";
 import { add } from "lodash";
 
+import { toolUtilityFactory } from "../../src/decorators/tool";
 import {
     HUMANLOOP_FILE_KEY,
     HUMANLOOP_FILE_TYPE_KEY,
@@ -8,7 +9,6 @@ import {
     HUMANLOOP_META_FUNCTION_NAME,
     readFromOpenTelemetrySpan,
 } from "../../src/otel";
-import { toolUtilityFactory } from "../../src/utilities/tool";
 import { openTelemetryTestConfiguration } from "./fixtures";
 
 /**

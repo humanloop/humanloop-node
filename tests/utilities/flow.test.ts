@@ -2,10 +2,10 @@ import { Tracer } from "@opentelemetry/sdk-trace-node";
 import dotenv from "dotenv";
 import OpenAI from "openai";
 
+import { flowUtilityFactory } from "../../src/decorators/flow";
+import { promptUtilityFactory } from "../../src/decorators/prompt";
+import { toolUtilityFactory } from "../../src/decorators/tool";
 import { isLLMProviderCall } from "../../src/otel";
-import { flowUtilityFactory } from "../../src/utilities/flow";
-import { promptUtilityFactory } from "../../src/utilities/prompt";
-import { toolUtilityFactory } from "../../src/utilities/tool";
 import {
     callLLMMessages,
     openTelemetryMockedHLExporterConfiguration,

@@ -1,8 +1,9 @@
+import { CreatePromptLogResponse } from "api/types/CreatePromptLogResponse";
+
 import {
     CodeEvaluatorRequest,
     CreateEvaluatorLogResponse,
     CreateFlowLogResponse,
-    CreatePromptLogResponse,
     CreateToolLogResponse,
     CreateDatapointRequest as DatapointRequest,
     EvaluatorResponse,
@@ -54,7 +55,7 @@ interface Identifiers {
 
 export interface File extends Identifiers {
     /** The type of File this callable relates to on Humanloop. */
-    type?: FileType;
+    type?: "flow" | "prompt";
     /** The contents uniquely define the version of the File on Humanloop. */
     version?: Version;
     /**
@@ -64,20 +65,12 @@ export interface File extends Identifiers {
      * If messages are defined in your Dataset, then
      * `output = callable(datapoint.inputs, messages=datapoint.messages)`.
      */
-    callable?:
-        | ((inputs: any, messages?: any[]) => string | Promise<string>)
-        // Decorated callables carry metadata about path and version
-        // Which should match the ones provided in the File
-        | {
-              (inputs: any, messages?: any[]): string | Promise<string>;
-              version: Version;
-              path: string;
-          };
+    callable?: (inputs: { [key: string]: any } | never) => string | Promise<string>;
 }
 
 export interface Dataset extends Identifiers {
     /** The datapoints to map your function over to produce the outputs required by the evaluation. */
-    datapoints: DatapointRequest[];
+    datapoints?: DatapointRequest[];
     /**
      * How to update the Dataset given the provided Datapoints;
      * `set` replaces the existing Datapoints and `add` appends to the existing Datapoints.
@@ -91,22 +84,12 @@ export interface Evaluator extends Identifiers {
     /**The threshold to check the Evaluator against. If the aggregate value of the Evaluator is below this threshold, the check will fail.*/
     threshold?: number;
     /**The function to run on the logs to produce the judgment - only required for local Evaluators.*/
-    callable?: Function;
+    callable?: (inputs: {
+        log: Record<string, unknown>;
+        datapoint?: Record<string, unknown>;
+    }) => string | number | boolean;
     /**The type of arguments the Evaluator expects - only required for local Evaluators.*/
     argsType?: EvaluatorArgumentsType;
-}
-
-export interface TargetFreeEvaluator extends Evaluator {
-    argsType: "target_free";
-    callable: (log: LogResponse) => string | number | boolean;
-}
-
-export interface TargetedEvaluator extends Evaluator {
-    argsType: "target_required";
-    callable: (
-        inputs: LogResponse,
-        target: DatapointResponse,
-    ) => string | number | boolean;
 }
 
 /**
