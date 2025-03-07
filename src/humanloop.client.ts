@@ -11,14 +11,14 @@ import { Flows } from "./api/resources/flows/client/Client";
 import { Prompts } from "./api/resources/prompts/client/Client";
 import { Tools } from "./api/resources/tools/client/Client";
 import { ToolKernelRequest } from "./api/types/ToolKernelRequest";
-import { runEval } from "./eval_utils/run";
-import { Dataset, Evaluator, EvaluatorCheck, File } from "./eval_utils/types";
+import { flowUtilityFactory } from "./decorators/flow";
+import { promptDecoratorFactory } from "./decorators/prompt";
+import { toolUtilityFactory } from "./decorators/tool";
+import { runEval } from "./evals/run";
+import { Dataset, Evaluator, EvaluatorCheck, File } from "./evals/types";
 import { HumanloopSpanExporter } from "./otel/exporter";
 import { HumanloopSpanProcessor } from "./otel/processor";
 import { overloadCall, overloadLog } from "./overload";
-import { flowUtilityFactory } from "./utilities/flow";
-import { promptDecoratorFactory } from "./utilities/prompt";
-import { toolUtilityFactory } from "./utilities/tool";
 
 class ExtendedEvaluations extends BaseEvaluations {
     protected readonly _client: HumanloopClient;
@@ -177,6 +177,10 @@ export class HumanloopClient extends BaseHumanloopClient {
 
         this.opentelemetryTracer =
             this.opentelemetryTracerProvider.getTracer("humanloop.sdk");
+    }
+
+    public options(): BaseHumanloopClient.Options {
+        return this._options;
     }
 
     // Check if user has passed the LLM provider instrumentors

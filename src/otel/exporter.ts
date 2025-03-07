@@ -1,37 +1,34 @@
 import { ExportResult, ExportResultCode } from "@opentelemetry/core";
 import { ReadableSpan, SpanExporter } from "@opentelemetry/sdk-trace-base";
-import { log } from "console";
 
-import { getEvaluationContext } from "../eval_utils";
+import { HumanloopRuntimeError } from "../error";
+import { getEvaluationContext } from "../evals";
 import { HumanloopClient } from "../humanloop.client";
+import { SDK_VERSION } from "../version";
 import {
     HUMANLOOP_FILE_TYPE_KEY,
     HUMANLOOP_LOG_KEY,
     HUMANLOOP_PATH_KEY,
 } from "./constants";
-import {
-    isLLMProviderCall,
-    readFromOpenTelemetrySpan,
-    writeToOpenTelemetrySpan,
-} from "./helpers";
+import { readFromOpenTelemetrySpan, writeToOpenTelemetrySpan } from "./helpers";
 import { Span as ProtoBufferSpan } from "./proto/trace";
-import { TracesData } from "./proto/trace";
 
 export class HumanloopSpanExporter implements SpanExporter {
     private readonly client: HumanloopClient;
     private shutdownFlag: boolean;
     private readonly uploadPromises: Promise<void>[];
-    private readonly exportedSpans: ReadableSpan[];
 
     constructor(client: HumanloopClient) {
         this.client = client;
         this.shutdownFlag = false;
         this.uploadPromises = [];
-        this.exportedSpans = [];
     }
 
     export(spans: ReadableSpan[]): ExportResult {
         if (this.shutdownFlag) {
+            console.warn(
+                "[HumanloopSpanExporter] Shutting down, not accepting new spans",
+            );
             return {
                 code: ExportResultCode.FAILED,
                 error: new Error("Exporter is shutting down"),
@@ -39,14 +36,37 @@ export class HumanloopSpanExporter implements SpanExporter {
         }
 
         for (const span of spans) {
-            this.uploadPromises.push(this.exportSpanDispatch(span));
+            const fileType = span.attributes[HUMANLOOP_FILE_TYPE_KEY];
+            if (!fileType) {
+                throw new Error("Internal error: Span does not have type set");
+            }
+
+            let logArgs = {};
+            let evalCallback: ((log_id: string) => Promise<void>) | null = null;
+            try {
+                logArgs = readFromOpenTelemetrySpan(span, HUMANLOOP_LOG_KEY);
+                const path = readFromOpenTelemetrySpan(
+                    span,
+                    HUMANLOOP_PATH_KEY,
+                ) as unknown as string;
+                const evaluationContext = getEvaluationContext();
+                if (evaluationContext) {
+                    [logArgs, evalCallback] = evaluationContext.logArgsWithContext(
+                        logArgs,
+                        path,
+                    );
+                    writeToOpenTelemetrySpan(span, logArgs, HUMANLOOP_LOG_KEY);
+                }
+            } catch (e) {
+                if (!(e instanceof Error)) {
+                    evalCallback = null;
+                }
+            }
+
+            this.uploadPromises.push(this.exportSpan(span, evalCallback));
         }
 
-        this.exportedSpans.push(...spans);
-
-        return {
-            code: ExportResultCode.SUCCESS,
-        };
+        return { code: ExportResultCode.SUCCESS };
     }
 
     async shutdown(): Promise<void> {
@@ -58,87 +78,41 @@ export class HumanloopSpanExporter implements SpanExporter {
         await this.shutdown();
     }
 
-    private hrTimeToNanoseconds(hrTime: [number, number]): number {
-        // Convert high resolution time to nanoseconds
-        const [seconds, nanoseconds] = hrTime;
-        return seconds * 1e9 + nanoseconds;
-    }
-
-    private async exportSpanDispatch(span: ReadableSpan): Promise<void> {
-        const fileType = span.attributes[HUMANLOOP_FILE_TYPE_KEY];
-        const filePath = span.attributes[HUMANLOOP_PATH_KEY] as string;
-        let logArgs = {};
-        try {
-            logArgs = readFromOpenTelemetrySpan(span, HUMANLOOP_LOG_KEY);
-        } catch (e) {}
-
-        const evaluationContext = getEvaluationContext();
-        if (evaluationContext !== undefined) {
-            if (evaluationContext.path === filePath) {
-                logArgs = {
-                    ...logArgs,
-                    source_datapoint_id: evaluationContext.sourceDatapointId,
-                    run_id: evaluationContext.runId,
-                };
-            }
-        }
-
-        writeToOpenTelemetrySpan(span, logArgs, HUMANLOOP_LOG_KEY);
-
-        const payload: TracesData = {
-            resourceSpans: [
-                {
-                    scopeSpans: [
-                        {
-                            scope: {
-                                name: isLLMProviderCall(span)
-                                    ? "humanloop.sdk.provider"
-                                    : "humanloop.sdk.decorator",
-                            },
-                            spans: [this.spanToProto(span)],
-                        },
-                    ],
+    private async exportSpan(
+        span: ReadableSpan,
+        evalContextCallback: ((log_id: string) => Promise<void>) | null,
+    ): Promise<void> {
+        const response = await fetch(
+            `${this.client.options().baseUrl}/import/otel/v1/traces`,
+            {
+                method: "POST",
+                headers: {
+                    "X-API-KEY": this.client.options().apiKey!.toString(),
+                    "X-Fern-Language": "Typescript",
+                    "X-Fern-SDK-Name": "humanloop",
+                    "X-Fern-SDK-Version": SDK_VERSION,
                 },
-            ],
-        };
-        const response = await fetch("http://0.0.0.0:80/v5/import/otel/v1/traces", {
-            method: "POST",
-            headers: {
-                "X-API-KEY": "hl_sk_66c1dcc77e0499cb08cd785a9469dbf3cb733296cb6a7989",
+                body: JSON.stringify(this.spanToProto(span)),
             },
-            body: JSON.stringify(payload),
-        });
-        if (response.status != 200) {
-            // TODO: Handle error
-        } else {
-            if (
-                evaluationContext !== undefined &&
-                evaluationContext.path === filePath
-            ) {
-                if (evaluationContext.logging_counter > 0) {
-                    console.warn(
-                        `Evaluated callable should only log once against file ${filePath}. ` +
-                            `Will not add additional logs to Evaluation. ` +
-                            `Do you have multiple logging statements in the body of the function?`,
-                    );
-                }
-                const responseBody = await response.json();
-                const logId = responseBody["log_id"];
-                evaluationContext.logging_counter += 1;
-                await evaluationContext.callback(logId);
-            }
+        );
+
+        if (response.status !== 200) {
+            throw new HumanloopRuntimeError(
+                `Failed to upload OTEL span to Humanloop: ${await response.json()} ${response.status}`,
+            );
         }
-        // console.log("RECV", await response.json());
+        if (response.status === 200 && evalContextCallback) {
+            const responseBody = await response.json();
+            const logId = responseBody.records[0];
+            await evalContextCallback(logId);
+        }
     }
 
     private spanToProto(span: ReadableSpan): ProtoBufferSpan {
         return {
             traceId: span.spanContext().traceId,
             spanId: span.spanContext().spanId,
-            traceState:
-                span.spanContext().traceState !== undefined
-                    ? span.spanContext().traceState!.serialize()
-                    : "",
+            traceState: span.spanContext().traceState?.serialize() || "",
             name: span.name,
             kind: span.kind,
             startTimeUnixNano: this.hrTimeToNanoseconds(span.startTime),
@@ -147,28 +121,22 @@ export class HumanloopSpanExporter implements SpanExporter {
                 .filter(([_, value]) => value !== undefined)
                 .map(([key, value]) => ({
                     key,
-                    value: {
-                        // We filtered out undefined values, so we can safely cast to string
-                        stringValue: value!.toString(),
-                    },
+                    value: { stringValue: value!.toString() },
                 })),
             droppedAttributesCount: span.droppedAttributesCount,
             events: [],
             links: span.links.map((link) => ({
                 traceId: link.context.traceId,
                 spanId: link.context.spanId,
-                traceState: link.context.traceState!.serialize(),
-                attributes:
-                    link.attributes !== undefined
-                        ? Object.entries(link.attributes)
-                              .filter(([_, value]) => value !== undefined)
-                              .map(([key, value]) => ({
-                                  key,
-                                  value: {
-                                      stringValue: value!.toString(),
-                                  },
-                              }))
-                        : [],
+                traceState: link.context.traceState?.serialize() || "",
+                attributes: link.attributes
+                    ? Object.entries(link.attributes)
+                          .filter(([_, value]) => value !== undefined)
+                          .map(([key, value]) => ({
+                              key,
+                              value: { stringValue: value!.toString() },
+                          }))
+                    : [],
                 droppedAttributesCount: link.droppedAttributesCount || 0,
             })),
             droppedEventsCount: span.droppedEventsCount,
@@ -176,7 +144,8 @@ export class HumanloopSpanExporter implements SpanExporter {
         };
     }
 
-    public getExportedSpans(): ReadableSpan[] {
-        return this.exportedSpans;
+    private hrTimeToNanoseconds(hrTime: [number, number]): number {
+        const [seconds, nanoseconds] = hrTime;
+        return seconds * 1e9 + nanoseconds;
     }
 }

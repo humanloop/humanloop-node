@@ -1,6 +1,6 @@
 import * as contextApi from "@opentelemetry/api";
 
-import { setDecoratorContext, setPromptContext } from "../eval_utils";
+import { setDecoratorContext } from "../evals";
 
 export function promptDecoratorFactory<I, O>(path: string, callable: (inputs: I) => O) {
     const fileType = "prompt";
@@ -8,26 +8,28 @@ export function promptDecoratorFactory<I, O>(path: string, callable: (inputs: I)
     const wrappedFunction = (inputs: I) => {
         return contextApi.context.with(
             setDecoratorContext({
-                filePath: path,
+                path: path,
                 type: fileType,
+                version: {
+                    // TODO: Implement reverse lookup of template
+                    template: undefined,
+                },
             }),
             async () => {
-                contextApi.context.with(
-                    setPromptContext({
-                        path: path,
-                    }),
-                    async () => {
-                        return await callable(inputs);
-                    },
-                );
+                return await callable(inputs);
             },
         );
     };
 
     return Object.assign(wrappedFunction, {
-        decorator: {
+        file: {
             path: path,
             type: fileType,
+            version: {
+                // TODO: Implement reverse lookup of template
+                template: undefined,
+            },
+            callable: wrappedFunction,
         },
     });
 }

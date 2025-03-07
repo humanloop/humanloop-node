@@ -1,18 +1,16 @@
 import {
     CreateEvaluatorLogRequest,
-    CreateFlowLogResponse,
-    CreateToolLogResponse,
     FlowLogRequest,
     PromptCallResponse,
     PromptLogRequest,
     ToolLogRequest,
-} from "api";
-
+} from "./api";
 import { Evaluators } from "./api/resources/evaluators/client/Client";
 import { Flows } from "./api/resources/flows/client/Client";
 import { Prompts } from "./api/resources/prompts/client/Client";
 import { Tools } from "./api/resources/tools/client/Client";
-import { getDecoratorContext, getEvaluationContext, getTraceId } from "./eval_utils";
+import { getDecoratorContext, getEvaluationContext, getTraceId } from "./context";
+import { HumanloopRuntimeError } from "./error";
 
 export function overloadLog<T extends Flows | Prompts | Tools | Evaluators>(
     client: T,
@@ -39,23 +37,24 @@ export function overloadLog<T extends Flows | Prompts | Tools | Evaluators>(
                   ? Evaluators.RequestOptions
                   : never,
     ) => {
-        const decoratorContext = getDecoratorContext();
-        const evaluationContext = getEvaluationContext();
-
-        if (
-            decoratorContext !== undefined &&
-            decoratorContext.type === "prompt" &&
-            client instanceof Prompts
-        ) {
-            console.warn(
-                "You are using prompts.log() inside a Prompt-decorated function. This is discouraged.",
+        const traceId = getTraceId();
+        if (traceId !== undefined && client instanceof Flows) {
+            const context = getDecoratorContext();
+            if (context === undefined) {
+                throw new HumanloopRuntimeError(
+                    "Internal error: trace_id context is set outside a decorator context.",
+                );
+            }
+            throw new HumanloopRuntimeError(
+                `Using flows.log() is not allowed: Flow decorator for File ${context.path} manages the tracing and trace completion.`,
             );
         }
-        const traceId = getTraceId();
+
         if (traceId !== undefined) {
             if ("traceParentId" in request) {
-                // TODO: revisit
-                console.warn("Overriding trace_parent_id argument");
+                console.warn(
+                    "Ignoring trace_parent_id argument: the Flow decorator manages tracing.",
+                );
             }
             request = {
                 ...request,
@@ -63,42 +62,34 @@ export function overloadLog<T extends Flows | Prompts | Tools | Evaluators>(
             };
         }
 
+        const evaluationContext = getEvaluationContext();
         if (evaluationContext !== undefined) {
-            if ("sourceDatapointId" in request) {
-                console.warn(
-                    "You are trying to create a Log with a `sourceDatapointId` argument while running a local eval. The argument will be ignored.",
-                );
-                delete request.sourceDatapointId;
+            const [kwargsEval, evalCallback] = evaluationContext.logArgsWithContext(
+                request,
+                request.path,
+            );
+            try {
+                // @ts-ignore Polymorphism alarms the type checker
+                const response = await originalLog(kwargsEval, options);
+                if (evalCallback !== null) {
+                    await evalCallback(response.id);
+                }
+                return response;
+            } catch (e) {
+                throw new HumanloopRuntimeError(String(e));
             }
-            if ("runId" in request) {
-                console.warn(
-                    "You are trying to create a Log with a `runId` argument while running a local eval. The argument will be ignored.",
-                );
-                delete request.runId;
+        } else {
+            try {
+                // @ts-ignore Polymorphism alarms the type checker
+                return await originalLog(request, options);
+            } catch (e) {
+                throw new HumanloopRuntimeError(String(e));
             }
         }
-
-        let response: // @ts-ignore TODO: revisit
-        | CreatePromptLogResponse
-            | CreateFlowLogResponse
-            | CreateToolLogResponse
-            | undefined = undefined;
-        try {
-            // @ts-ignore
-            response = await originalLog(request, options);
-        } catch (e) {
-            // TODO: revisit
-            console.error(e);
-        }
-        return response;
     };
 
-    // @ts-ignore _overloadedLog is a polymorphic function and
-    // linting complains about typing
-    client.log = _overloadedLog.bind(client);
-
     // @ts-ignore
-    client._log = originalLog.bind(client);
+    client.log = _overloadedLog.bind(client);
 
     return client;
 }
@@ -110,23 +101,12 @@ export function overloadCall(client: Prompts): Prompts {
         request: PromptLogRequest,
         options?: Prompts.RequestOptions,
     ): Promise<PromptCallResponse> => {
-        const decoratorContext = getDecoratorContext();
-        const evaluationContext = getEvaluationContext();
-
-        if (
-            decoratorContext !== undefined &&
-            decoratorContext.type === "prompt" &&
-            client instanceof Prompts
-        ) {
-            console.warn(
-                "You are using prompts.call() inside a Prompt-decorated function. This is discouraged.",
-            );
-        }
         const traceId = getTraceId();
         if (traceId !== undefined) {
             if ("traceParentId" in request) {
-                // TODO: revisit
-                console.warn("Overriding trace_parent_id argument");
+                console.warn(
+                    "Ignoring trace_parent_id argument: the Flow decorator manages tracing.",
+                );
             }
             request = {
                 ...request,
@@ -134,33 +114,13 @@ export function overloadCall(client: Prompts): Prompts {
             };
         }
 
-        if (evaluationContext !== undefined) {
-            if ("sourceDatapointId" in request) {
-                console.warn(
-                    "You are trying to create a Log with a `sourceDatapointId` argument while running a local eval. The argument will be ignored.",
-                );
-                delete request.sourceDatapointId;
-            }
-            if ("runId" in request) {
-                console.warn(
-                    "You are trying to create a Log with a `runId` argument while running a local eval. The argument will be ignored.",
-                );
-                delete request.runId;
-            }
-        }
-        let response: PromptCallResponse | undefined = undefined;
-        response = await originalCall(request, options);
         try {
-        } catch (e: any) {
-            // TODO: revisit
-            console.error(e);
-            throw new Error(`HumanloopUtilityError: ${e.message}`);
+            return await originalCall(request, options);
+        } catch (e) {
+            throw new HumanloopRuntimeError(String(e));
         }
-        return response;
     };
 
-    // @ts-ignore _overloadedCall is a polymorphic function and
-    // linting complains about typing
     client.call = _overloadedCall.bind(client);
 
     return client;

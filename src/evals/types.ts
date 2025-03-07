@@ -55,7 +55,7 @@ interface Identifiers {
 
 export interface File extends Identifiers {
     /** The type of File this callable relates to on Humanloop. */
-    type?: FileType;
+    type?: "flow" | "prompt";
     /** The contents uniquely define the version of the File on Humanloop. */
     version?: Version;
     /**
@@ -84,22 +84,12 @@ export interface Evaluator extends Identifiers {
     /**The threshold to check the Evaluator against. If the aggregate value of the Evaluator is below this threshold, the check will fail.*/
     threshold?: number;
     /**The function to run on the logs to produce the judgment - only required for local Evaluators.*/
-    callable?: Function;
+    callable?: (inputs: {
+        log: Record<string, unknown>;
+        datapoint?: Record<string, unknown>;
+    }) => string | number | boolean;
     /**The type of arguments the Evaluator expects - only required for local Evaluators.*/
     argsType?: EvaluatorArgumentsType;
-}
-
-export interface TargetFreeEvaluator extends Evaluator {
-    argsType: "target_free";
-    callable: (log: LogResponse) => string | number | boolean;
-}
-
-export interface TargetedEvaluator extends Evaluator {
-    argsType: "target_required";
-    callable: (
-        inputs: LogResponse,
-        target: DatapointResponse,
-    ) => string | number | boolean;
 }
 
 /**

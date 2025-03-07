@@ -1,12 +1,10 @@
 import * as contextApi from "@opentelemetry/api";
-import { FileType } from "api";
 
 import {
     HUMANLOOP_CONTEXT_DECORATOR,
     HUMANLOOP_CONTEXT_EVALUATION,
-    HUMANLOOP_CONTEXT_PROMPT,
     HUMANLOOP_CONTEXT_TRACE_ID,
-} from "../otel/constants";
+} from "./otel/constants";
 
 export function getTraceId(): string | undefined {
     const key = contextApi.createContextKey(HUMANLOOP_CONTEXT_TRACE_ID);
@@ -19,26 +17,10 @@ export function setTraceId(flowLogId: string): contextApi.Context {
     return contextApi.context.active().setValue(key, flowLogId);
 }
 
-export type PromptContext = {
-    path: string;
-    template?: string;
-};
-
-export function setPromptContext(promptContext: PromptContext): contextApi.Context {
-    const key = contextApi.createContextKey(HUMANLOOP_CONTEXT_PROMPT);
-    return contextApi.context.active().setValue(key, promptContext);
-}
-
-export function getPromptContext(): PromptContext | undefined {
-    const key = contextApi.createContextKey(HUMANLOOP_CONTEXT_PROMPT);
-    return (contextApi.context.active().getValue(key) || undefined) as
-        | PromptContext
-        | undefined;
-}
-
 export type DecoratorContext = {
-    filePath: string;
-    type: FileType;
+    path: string;
+    type: "prompt" | "tool" | "flow";
+    version: Record<string, unknown>;
 };
 
 export function setDecoratorContext(
@@ -58,32 +40,78 @@ export function getDecoratorContext(): DecoratorContext | undefined {
 export class EvaluationContext {
     public sourceDatapointId: string;
     public runId: string;
-    public callback: (log_id: string) => Promise<void>;
     public fileId: string;
     public path: string;
-    public logging_counter: number;
+    private _logged: boolean;
+    private _callback: (log_id: string) => Promise<void>;
 
     constructor({
         sourceDatapointId,
         runId,
-        callback,
+        evalCallback,
         fileId,
         path,
     }: {
         sourceDatapointId: string;
         runId: string;
-        callback: (log_id: string) => Promise<void>;
+        evalCallback: (log_id: string) => Promise<void>;
         fileId: string;
         path: string;
     }) {
         this.sourceDatapointId = sourceDatapointId;
         this.runId = runId;
-        this.callback = callback;
+        this._callback = evalCallback;
         this.fileId = fileId;
         this.path = path;
-        this.logging_counter = 0;
+        this._logged = false;
+    }
+
+    public get logged(): boolean {
+        return this._logged;
+    }
+
+    public logArgsWithContext(
+        logArgs: Record<string, any>,
+        path?: string,
+        fileId?: string,
+    ): [Record<string, any>, ((log_id: string) => Promise<void>) | null] {
+        if (path === undefined && fileId === undefined) {
+            throw new Error(
+                "Internal error: Evaluation context called without providing a path or file_id",
+            );
+        }
+
+        if (this._logged) {
+            return [logArgs, null];
+        }
+
+        if (this.path !== undefined && this.path === path) {
+            this._logged = true;
+            return [
+                {
+                    ...logArgs,
+                    sourceDatapointId: this.sourceDatapointId,
+                    runId: this.runId,
+                },
+                this._callback,
+            ];
+        } else if (this.fileId !== undefined && this.fileId === fileId) {
+            this._logged = true;
+            return [
+                {
+                    ...logArgs,
+                    sourceDatapointId: this.sourceDatapointId,
+                    runId: this.runId,
+                },
+                this._callback,
+            ];
+        } else {
+            return [logArgs, null];
+        }
     }
 }
+
+// ... existing code ...
 
 export function setEvaluationContext(
     evaluationContext: EvaluationContext,

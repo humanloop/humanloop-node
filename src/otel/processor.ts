@@ -6,11 +6,7 @@ import {
     SpanProcessor,
 } from "@opentelemetry/sdk-trace-node";
 
-import {
-    getDecoratorContext,
-    getPromptContext,
-    getTraceId,
-} from "../eval_utils/context";
+import { getDecoratorContext, getEvaluationContext, getTraceId } from "../context";
 import {
     HUMANLOOP_FILE_KEY,
     HUMANLOOP_FILE_TYPE_KEY,
@@ -28,34 +24,39 @@ export class HumanloopSpanProcessor implements SpanProcessor {
 
     onStart(span: Span, _: Context): void {
         if (isLLMProviderCall(span)) {
-            const promptContext = getPromptContext();
-            if (promptContext !== undefined) {
-                const { path, template } = promptContext;
-                span.setAttribute(HUMANLOOP_PATH_KEY, path);
-                span.setAttribute(HUMANLOOP_FILE_TYPE_KEY, "prompt");
-                if (template) {
-                    span.setAttribute(`${HUMANLOOP_FILE_KEY}.template`, template);
+            const decoratorContext = getDecoratorContext();
+            if (decoratorContext && decoratorContext.type === "prompt") {
+                const { path, version } = decoratorContext;
+                const template = version?.template;
+                span = span.setAttribute(HUMANLOOP_PATH_KEY, path);
+                span = span.setAttribute(HUMANLOOP_FILE_TYPE_KEY, "prompt");
+                if (template !== undefined) {
+                    span = span.setAttribute(
+                        `${HUMANLOOP_FILE_KEY}.template`,
+                        // @ts-ignore
+                        template,
+                    );
                 }
-            } else {
-                // Spied LLM provider call outside of a @prompt decorated function
-                // Will be discarded in onEnd
             }
             const traceId = getTraceId();
-            if (traceId !== undefined) {
-                span = span.setAttribute(
-                    `${HUMANLOOP_LOG_KEY}.trace_parent_id`,
-                    traceId,
-                );
+            if (traceId) {
+                span.setAttribute(`${HUMANLOOP_LOG_KEY}.trace_parent_id`, traceId);
             }
         }
     }
 
     onEnd(span: ReadableSpan): void {
         if (isLLMProviderCall(span)) {
-            const promptContext = getDecoratorContext();
-            if (promptContext === undefined || promptContext.type !== "prompt") {
-                // Discard spans spied by the instrumentors if not made in
-                // the context of a @prompt decorated function
+            const decoratorContext = getDecoratorContext();
+            if (!decoratorContext || decoratorContext.type !== "prompt") {
+                // User made a provider call outside a @prompt context, ignore the span
+                return;
+            }
+            const evaluationContext = getEvaluationContext();
+            if (evaluationContext && evaluationContext.path === decoratorContext.path) {
+                // User made a provider call inside an evaluation context
+                // Ignore the span, evaluations.run() will use the output
+                // of the decorated function to create the Log
                 return;
             }
         }
