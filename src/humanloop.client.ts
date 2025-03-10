@@ -2,21 +2,33 @@ import { NodeTracerProvider, Tracer } from "@opentelemetry/sdk-trace-node";
 import { AnthropicInstrumentation } from "@traceloop/instrumentation-anthropic";
 import { CohereInstrumentation } from "@traceloop/instrumentation-cohere";
 import { OpenAIInstrumentation } from "@traceloop/instrumentation-openai";
+import { Evaluators } from "api/resources/evaluators/client/Client";
 
 import { HumanloopClient as BaseHumanloopClient } from "./Client";
+import { ChatMessage } from "./api";
 import { Evaluations as BaseEvaluations } from "./api/resources/evaluations/client/Client";
 import { Flows } from "./api/resources/flows/client/Client";
 import { Prompts } from "./api/resources/prompts/client/Client";
-import { FlowKernelRequest } from "./api/types/FlowKernelRequest";
+import { Tools } from "./api/resources/tools/client/Client";
 import { ToolKernelRequest } from "./api/types/ToolKernelRequest";
-import { overloadLog, runEval } from "./eval_utils/run";
-import { Dataset, Evaluator, EvaluatorCheck, File } from "./eval_utils/types";
+import { flowUtilityFactory } from "./decorators/flow";
+import { promptDecoratorFactory } from "./decorators/prompt";
+import { toolUtilityFactory } from "./decorators/tool";
+import { HumanloopRuntimeError } from "./error";
+import { runEval } from "./evals/run";
+import {
+    Dataset,
+    EvaluatorCheck,
+    File,
+    LocalEvaluator,
+    OnlineEvaluator,
+} from "./evals/types";
 import { HumanloopSpanExporter } from "./otel/exporter";
 import { HumanloopSpanProcessor } from "./otel/processor";
-import { flowUtilityFactory } from "./utilities/flow";
-import { UtilityPromptKernel, promptUtilityFactory } from "./utilities/prompt";
-import { toolUtilityFactory } from "./utilities/tool";
-import { InputsMessagesCallableType, ToolCallableType } from "./utilities/types";
+import { overloadCall, overloadLog } from "./overload";
+
+const RED = "\x1b[91m";
+const RESET = "\x1b[0m";
 
 class ExtendedEvaluations extends BaseEvaluations {
     protected readonly _client: HumanloopClient;
@@ -82,20 +94,34 @@ class ExtendedEvaluations extends BaseEvaluations {
      * @param evaluators - List of evaluators to be. Can be ran on Humanloop if specified only by path, or locally if a callable is provided.
      * @param concurrency - Number of datapoints to process in parallel.
      */
-    async run({
+    async run<I, O>({
         file,
         dataset,
         name,
         evaluators = [],
         concurrency = 8,
     }: {
-        file: File;
+        file: File<I, O>;
         dataset: Dataset;
         name?: string;
-        evaluators: Evaluator[];
+        evaluators: (
+            | OnlineEvaluator
+            | {
+                  [R in "text" | "boolean" | "number"]: {
+                      [A in "target_required" | "target_free"]: LocalEvaluator<R, A>;
+                  }["target_required" | "target_free"];
+              }["text" | "boolean" | "number"]
+        )[];
         concurrency?: number;
     }): Promise<EvaluatorCheck[]> {
-        return runEval(this._client, file, dataset, name, evaluators, concurrency);
+        return runEval<I, O>(
+            this._client,
+            file,
+            dataset,
+            name,
+            evaluators,
+            concurrency,
+        );
     }
 }
 
@@ -103,6 +129,8 @@ export class HumanloopClient extends BaseHumanloopClient {
     protected readonly _evaluations: ExtendedEvaluations;
     protected readonly _prompts_overloaded: Prompts;
     protected readonly _flows_overloaded: Flows;
+    protected readonly _tools_overloaded: Tools;
+    protected readonly _evaluators_overloaded: Evaluators;
 
     protected readonly OpenAI?: any;
     protected readonly Anthropic?: any;
@@ -115,11 +143,24 @@ export class HumanloopClient extends BaseHumanloopClient {
      * Constructs a new instance of the Humanloop client.
      *
      * @param _options - The base options for the Humanloop client.
-     * @param providerModules - LLM provider modules to instrument. Pass all LLM providers that you will use in your program if you intend to use File utilities such as `prompt()`.
+     * @param providerModules - LLM provider modules to instrument. Allows prompt decorator to spy on LLM provider calls and log them to Humanloop.
+     *
+     * Pass LLM provider modules as such:
+     *
+     * ```typescript
+     * import { OpenAI } from "openai";
+     * import { Anthropic } from "anthropic";
+     * import { HumanloopClient } from "humanloop";
+     *
+     * const humanloop = new HumanloopClient({apiKey: process.env.HUMANLOOP_KEY}, { OpenAI, Anthropic });
+     *
+     * const openai = new OpenAI({apiKey: process.env.OPENAI_KEY});
+     * const anthropic = new Anthropic({apiKey: process.env.ANTHROPIC_KEY});
+     * ```
      */
     constructor(
         _options: BaseHumanloopClient.Options,
-        providerModules?: {
+        providers?: {
             OpenAI?: any;
             Anthropic?: any;
             CohereAI?: any;
@@ -127,13 +168,20 @@ export class HumanloopClient extends BaseHumanloopClient {
     ) {
         super(_options);
 
-        this.OpenAI = providerModules?.OpenAI;
-        this.Anthropic = providerModules?.Anthropic;
-        this.CohereAI = providerModules?.CohereAI;
+        const { OpenAI, Anthropic, CohereAI } = providers ?? {};
+
+        this.OpenAI = OpenAI;
+        this.Anthropic = Anthropic;
+        this.CohereAI = CohereAI;
 
         this._prompts_overloaded = overloadLog(super.prompts);
+        this._prompts_overloaded = overloadCall(this._prompts_overloaded);
+
+        this._tools_overloaded = overloadLog(super.tools);
 
         this._flows_overloaded = overloadLog(super.flows);
+
+        this._evaluators_overloaded = overloadLog(super.evaluators);
 
         this._evaluations = new ExtendedEvaluations(_options, this);
 
@@ -143,25 +191,25 @@ export class HumanloopClient extends BaseHumanloopClient {
             ],
         });
 
-        if (providerModules?.OpenAI) {
+        if (OpenAI) {
             const instrumentor = new OpenAIInstrumentation({
                 enrichTokens: true,
             });
-            instrumentor.manuallyInstrument(providerModules?.OpenAI);
+            instrumentor.manuallyInstrument(OpenAI);
             instrumentor.setTracerProvider(this.opentelemetryTracerProvider);
             instrumentor.enable();
         }
 
-        if (providerModules?.Anthropic) {
+        if (Anthropic) {
             const instrumentor = new AnthropicInstrumentation();
-            instrumentor.manuallyInstrument(providerModules?.Anthropic);
+            instrumentor.manuallyInstrument(Anthropic);
             instrumentor.setTracerProvider(this.opentelemetryTracerProvider);
             instrumentor.enable();
         }
 
-        if (providerModules?.CohereAI) {
+        if (CohereAI) {
             const instrumentor = new CohereInstrumentation();
-            instrumentor.manuallyInstrument(providerModules?.CohereAI);
+            instrumentor.manuallyInstrument(CohereAI);
             instrumentor.setTracerProvider(this.opentelemetryTracerProvider);
             instrumentor.enable();
         }
@@ -172,6 +220,10 @@ export class HumanloopClient extends BaseHumanloopClient {
             this.opentelemetryTracerProvider.getTracer("humanloop.sdk");
     }
 
+    public options(): BaseHumanloopClient.Options {
+        return this._options;
+    }
+
     // Check if user has passed the LLM provider instrumentors
     private assertProviders(func: Function) {
         const noProviderInstrumented = [
@@ -180,292 +232,289 @@ export class HumanloopClient extends BaseHumanloopClient {
             this.CohereAI,
         ].every((p) => !p);
         if (noProviderInstrumented) {
-            throw new Error(
-                `${func.name}: To use the 'prompt()' utility, pass your LLM client library into the Humanloop client constructor; e.g. 'HumanloopClient(..., { providerModules: {OpenAI} } )'.`,
+            throw new HumanloopRuntimeError(
+                `${RED}To use the @prompt decorator, pass your LLM client library into the Humanloop client constructor. For example:\n\n
+import { OpenAI } from "openai";
+import { HumanloopClient } from "humanloop";
+
+const humanloop = new HumanloopClient({apiKey: process.env.HUMANLOOP_KEY}, { OpenAI });
+// Create the the OpenAI client after the client is initialized
+const openai = new OpenAI();
+${RESET}`,
             );
         }
     }
 
     /**
-     * Utility for managing a [Prompt](https://humanloop.com/docs/explanation/prompts) in code.
-     *
-     * The utility intercepts calls to the LLM provider APIs and creates a new Prompt
-     * file based on the hyperparameters used in the call. If a hyperparameter in
-     * promptKernel parameter, then they override any value intercepted from the
-     * LLM provider call.
-     *
-     * If the [Prompt](https://humanloop.com/docs/explanation/prompts) already exists
-     * on the specified path, a new version will be upserted when any of the above change.
-     *
-     *
-     * Here's an example of declaring a [Prompt](https://humanloop.com/docs/explanation/prompts) in code:
+     * Auto-instrument LLM provider calls and create [Prompt](https://humanloop.com/docs/explanation/prompts)
+     * Logs on Humanloop from them.
      *
      * ```typescript
-     * const openAIClient = new HumanloopClient({
-     *       apiKey: process.env.HUMANLOOP_API_KEY || ""
-     * })
+     * import { OpenAI } from "openai";
+     * import { HumanloopClient } from "humanloop";
      *
-     * const callModel = prompt({
-     *      callable: async (inputs, messages) => {
-     *          output = await openAIClient.chat.completions.create({
-     *              model: inputs.model,
-     *              temperature: inputs.temperature,
-     *              messages: messages,
-     *              frequencyPenalty: 1,
-     *              presencePenalty: 1
-     *          })
-     *          return output.choices[0].message.content || "";
-     *      },
-     *      path: "Project/Call LLM"
+     * const humanloop = new HumanloopClient({apiKey: process.env.HUMANLOOP_KEY}, { OpenAI });
+     * const openai = new OpenAI({apiKey: process.env.OPENAI_KEY});
+     *
+     * const callOpenaiWithHumanloop = humanloop.prompt({
+     *    path: "Chat Bot",
+     *    callable: (args: {
+     *      messages: ChatMessage[]
+     *    }) => {
+     *      const response = await openai.chat.completions.create({
+     *        model: "gpt-4o",
+     *        temperature: 0.8,
+     *        frequency_penalty: 0.5,
+     *        max_tokens: 200,
+     *        messages: args.messages,
+     *      });
+     *      return response.choices[0].message.content;
+     *    },
      * });
      *
-     * await callModel(
-     *    {model: 'gpt-4o-mini', temperature: 0.7},
-     *    [{
-     *       "role": "system",
-     *       "content": "You are a helpful assistant"
-     *    },
-     *    {
-     *      "role": "user",
-     *      "content": "Hi how are you?"
-     *    }
-     *   ],
-     * );
-     * ```
+     * const answer = await callOpenaiWithHumanloop({
+     *   messages: [{ role: "user", content: "What is the capital of the moon?" }],
+     * });
      *
-     * The `callable` argument is expected to have the signature `(inputs, messages) => string | JSON-serializable`.
-     * Consider wrapping the function returned by the utility in an arrow function
-     *
-     * The utility expects the `callable` function to make a call to one of the supported
-     * LLM provider APIs through official client libraries. Alternatively, provide a custom
-     * `model` override in the `promptKernel` argument or the logging will fail with an error.
-     *
-     * The decorated function should return a string or the output should be JSON serializable. If
-     * the output cannot be serialized, TypeError will be raised.
-     *
-     * If the function raises an exception, the log created by the function will have the output
-     * field set to `null` and the error field set to the string representation of the exception.
-     *
-     * @template I - The type of `inputs` argument of the callable.
-     * @template M - The type of `message` argument of the callable.
-     * @template O - The output type of the callable. Should be string or serializable to JSON.
-     * @param {Object} params - The arguments for the prompt utility.
-     * @param {InputsMessagesCallableType<I, M, O>} params.callable - The callable the utility should wrap and instrument.
-     * @param {string} params.path - The path of the instrumented Prompt on Humanloop.
-     * @param {UtilityPromptKernel} [params.promptKernel] - Optional override values for the Prompt, overriding inferences made by the utility from provider call
-     * @returns An async function that wraps around the provided `callable`, adding Prompt instrumentation
-     */
-    public prompt<I, M, O>({
-        callable,
-        path,
-        version,
-    }: {
-        callable: InputsMessagesCallableType<I, M, O>;
-        path: string;
-        version?: UtilityPromptKernel;
-    }) {
-        this.assertProviders(callable);
-        return promptUtilityFactory(this.opentelemetryTracer, callable, path, version);
-    }
-
-    /**
-     * Utility for managing a [Tool](https://humanloop.com/docs/explanation/tools) in code.
-     *
-     * If the [Tool](https://humanloop.com/docs/explanation/tools) already exists
-     * on the specified path, a new version will be upserted when the `toolKernel`
-     * utility argument or the source code of the callable changes.
-     *
-     * Here's an example of declaring a [Tool](https://humanloop.com/docs/explanation/tools) in code:
-     *
-     * ```typescript
-     * const calculator = tool({
-     *      callable: ({operation, num1, num2}: {
-     *          operation: string,
-     *          num1: number,
-     *          num2: number
-     *      }) => {
-     *          switch (operation) {
-     *              case "add":
-     *                  return num1 + num2;
-     *              case "subtract":
-     *                  return num1 - num2;
-     *              case "multiply":
-     *                  return num1 * num2;
-     *              case "divide":
-     *                  if (num2 === 0) {
-     *                      throw new Error("Cannot divide by zero");
-     *                  }
-     *                  return num1 / num2;
-     *              default:
-     *                  throw new Error("Cannot divide by zero")l
-     *          }
-     *      },
-     *      toolKernel: {
-     *          name: "calculator",
-     *          description: "Perform arithmetic operations on two numbers",
-     *          strict: true,
-     *          parameters: {
-     *              type: "object",
-     *              properties: {
-     *                  operation: {
-     *                      type: "string",
-     *                      description: "The operation to perform",
-     *                      enum: ["add", "subtract", "multiply", "divide"],
-     *                  },
-     *                  num1: {
-     *                      type: "number",
-     *                      description: "The first number",
-     *                  },
-     *                  num2: {
-     *                      type: "number",
-     *                      description: "The second number",
-     *                  }
-     *              },
-     *              required: ["operation", "num1", "num2"],
-     *              additionalProperties: false,
-     *          }
-     *      },
-     *      path: "Project/Calculator"
-     * })
-     * ```
-     *
-     * Every call to the decorated function will create a Log against the Tool. For example:
-     *
-     * ```typescript
-     * await calculator({num1: 1, num2: 2})
-     * ```
-     *
-     * Will create the following Log:
-     *
-     * ```typescript
+     * // Calling the function above creates a new Log on Humanloop
+     * // against this Prompt version:
      * {
-     *    inputs: {
-     *       num1: 1,
-     *       num2: 2
-     *    },
-     *    output: 3
+     *     provider: "openai",
+     *     model: "gpt-4o",
+     *     endpoint: "chat",
+     *     max_tokens: 200,
+     *     temperature: 0.8,
+     *     frequency_penalty: 0.5,
      * }
      * ```
      *
-     * The `callable` argument is expected to have the signature `(inputs) => string | JSON-serializable`.
+     * If a different model, endpoint, or hyperparameter is used, a new
+     * Prompt version is created. For example:
      *
-     * The returned callable has a `jsonAttribute` attribute that can be used for function calling.
+     * ```typescript
+     * humanloopClient.prompt({
+     *   path: "My Prompt",
+     *   callable: async (messages: ChatMessage[]) => {
+     *     const openaiClient = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+     *     const openaiResponse = await openaiClient.chat.completions.create({
+     *       model: "gpt-4o-mini",
+     *       temperature: 0.5,
+     *     });
+     *     const openaiContent = openaiResponse.choices[0].message.content;
      *
+     *     const anthropicClient = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+     *     const anthropicResponse = await anthropicClient.messages.create({
+     *       model: "claude-3-5-sonnet-20240620",
+     *       temperature: 0.5,
+     *     });
+     *     const anthropicContent = anthropicResponse.content;
      *
-     * @template I - The type of `inputs` argument of the callable.
-     * @template M - The type of `message` argument of the callable.
-     * @template O - The output type of the callable. Should be string or serializable to JSON.
-     * @param {Object} params - The arguments for the flow utility.
-     * @param {InputsMessagesCallableType<I, M, O>} params.callable - The callable the utility should wrap and instrument.
-     * @param {string} params.path - The path of the instrumented Tool on Humanloop.
-     * @param {ToolKernelRequest} [params.version] - Optional override values for the Prompt, overriding inferences made by the utility from provider call.
-     * @returns An async function that wraps around the provided `callable`, adding Tool instrumentation.
+     *     return { openaiContent, anthropicContent };
+     *   }
+     * });
+     *
+     * Calling this function will create two versions of the same Prompt:
+     * {
+     *     provider: "openai",
+     *     model: "gpt-4o-mini",
+     *     endpoint: "chat",
+     *     max_tokens: 200,
+     *     temperature: 0.5,
+     *     frequency_penalty: 0.5,
+     * }
+     *
+     * {
+     *     provider: "anthropic",
+     *     model: "claude-3-5-sonnet-20240620",
+     *     endpoint: "messages",
+     *     temperature: 0.5,
+     * }
+     *
+     * And one Log will be added to each version of the Prompt.
+     * ```
+     *
+     * @param callable - The callable to wrap.
+     * @param path - The path to the Prompt.
      */
-    public tool<I, O>({
-        callable,
-        path,
-        version,
-    }: {
-        callable: ToolCallableType<I, O>;
+    public prompt<I, O>(args: {
+        callable: I extends Record<string, unknown> & { messages?: ChatMessage[] }
+            ? (args: I) => O
+            : () => O;
         path: string;
-        version: ToolKernelRequest;
-    }) {
-        return toolUtilityFactory(this.opentelemetryTracer, callable, version, path);
+    }): I extends Record<string, unknown>
+        ? (
+              args: I,
+          ) => O extends Promise<infer R>
+              ? Promise<R | undefined>
+              : Promise<O | undefined>
+        : () => O extends Promise<infer R>
+              ? Promise<R | undefined>
+              : Promise<O | undefined> {
+        this.assertProviders(args.callable);
+        // @ts-ignore
+        return promptDecoratorFactory(args.path, args.callable);
     }
 
     /**
-     * Utility for managing a [Flow](https://humanloop.com/docs/explanation/flows) in code.
+     * Auto-instrument LLM provider calls and create [Tool](https://humanloop.com/docs/explanation/tools)
+     * Logs on Humanloop from them.
      *
-     * A [Flow](https://humanloop.com/docs/explanation/flows) callable should be added
-     * at the entrypoint of your LLM feature. Call other functions wrapped in Humanloop
-     * utilities to create a trace of Logs on Humanloop.
-     *
-     * If the [Flow](https://humanloop.com/docs/explanation/flows) already exists
-     * on the specified path, a new version will be upserted when the `flowUtility`
-     * argument changes.
-     *
-     * Here's an example of declaring a [Flow](https://humanloop.com/docs/explanation/flows) in code:
+     * You must provide a `version` argument specifying the JSON Schema of the Tool's inputs and outputs,
+     * along with a callable that accepts the inputs and returns the outputs.
      *
      * ```typescript
-     * const callModel = humanloop.prompt({
-     *     callable: async (inputs, messages) => {
-     *         output = await openAIClient.chat.completions.create({
-     *             model: inputs.model,
-     *             temperature: inputs.temperature,
-     *             messages: messages,
-     *             frequencyPenalty: 1,
-     *             presencePenalty: 1
-     *         })
-     *         return output.choices[0].message.content || "";
-     *    },
-     *    path: "Project/Call LLM"
-     * });
      *
-     * // Pass `undefined` to unused inputs and messages parameters
-     * const entrypoint = () => humanloop.flow({
-     *     callable: async (inputs: any, messages: any) => {
+     * const calculator = humanloop_client.tool({
+     *     callable: (inputs: { a: number; b: number }) => inputs.a + inputs.b,
+     *     path: "Andrei QA/SDK TS/Calculator",
+     *     version: {
+     *         function: {
+     *             name: "calculator",
+     *             description: "Add two numbers",
+     *             parameters: {
+     *                 type: "object",
+     *                 properties: {
+     *                     a: { type: "number", required: true },
+     *                     b: { type: "number", required: true },
+     *                 },
+     *             },
+     *         },
+     *     },
+     * });
+     * ```
+     *
+     * @param callable - The callable to wrap.
+     * @param path - The path to the Tool.
+     * @param version - The JSON Schema of the Tool's inputs and outputs, plus the optional Humanloop fields `attributes and `setupValues`. See API reference for details.
+     */
+    public tool<I, O>(args: {
+        callable: I extends Record<string, unknown> ? (args: I) => O : () => O;
+        path: string;
+        version: ToolKernelRequest;
+    }): I extends Record<string, unknown>
+        ? (
+              args: I,
+          ) => O extends Promise<infer R>
+              ? Promise<R | undefined>
+              : Promise<O | undefined>
+        : () => O extends Promise<infer R>
+              ? Promise<R | undefined>
+              : Promise<O | undefined> {
+        // @ts-ignore
+        return toolUtilityFactory(
+            this.opentelemetryTracer,
+            args.callable,
+            args.version,
+            args.path,
+        );
+    }
+
+    /**
+     * Trace SDK logging calls through [Flows](https://humanloop.com/docs/explanation/flows).
+     *
+     * Use it as the entrypoint of your LLM feature. Logging calls like `prompts.call(...)`,
+     * `tools.call(...)`, or other Humanloop decorators will be automatically added to the trace.
+     *
+     * Example:
+     *
+     * ```typescript
+     * const callLLM = humanloop_client.prompt({
+     *     path: "My Prompt",
+     *     callable: (messages: ChatMessage[]) => {
+     *         const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+     *         return client.chat.completions.create({
+     *             model: "gpt-4o",
+     *             temperature: 0.8,
+     *             frequency_penalty: 0.5,
+     *         max_tokens: 200,
+     *         messages: messages,
+     *     }).choices[0].message.content;
+     * }
+     *
+     * const agent = humanloop_client.flow({
+     *     callable: () => {
      *         while (true) {
-     *             const messages = []
-     *             // I/O operation
-     *             const userInput = read_input("You: ")
+     *             const messages: ChatMessage[] = [];
+     *             const userInput = prompt("You: ");
      *             if (userInput === "exit") {
      *                 break;
      *             }
-     *             messages.push({"role": "user", "content": userInput})
-     *             const response = await callLLM(messages)
-     *             messages.append({"role": "assistant", "content": response})
-     *             console.log(f`Assistant: ${response}`)
+     *             messages.push({ role: "user", content: userInput });
+     *             const response = callLLM(messages);
+     *             messages.push({ role: "assistant", content: response });
+     *             console.log(`Assistant: ${response}`);
      *         }
-     *     }
-     * })(undefined, undefined)
-     * await entrypoint()
+     *     },
+     *     path: "My Flow",
+     *     attributes: { version: "v1" },
+     * });
+     *
      * ```
      *
-     * In this example, the Flow instruments a conversational agent where the
-     * Prompt defined in `callModel` is called multiple times in a loop. Calling
-     * `entrypoint` will create a Flow Trace under which multiple Prompt Logs
-     * will be nested, allowing you to track the whole conversation session
-     * between the user and the assistant.
+     * Each call to `agent` will create a trace corresponding to the conversation
+     * session. Multiple Prompt Logs will be created as the LLM is called. They
+     * will be added to the trace, allowing you to see the whole conversation
+     * in the UI.
      *
-     * The decorated function should return a string or the output should be JSON serializable. If
-     * the output cannot be serialized, TypeError will be raised.
+     * If the function returns a ChatMessage-like object, the Log will
+     * populate the `outputMessage` field. Otherwise, it will serialize
+     * the return value and populate the `output` field.
      *
-     * If the function raises an exception, the log created by the function will have the `output`
-     * field set to None and the `error` field set to the string representation of the exception.
+     * If an exception is raised, the output fields will be set to None
+     * and the error message will be set in the Log's `error` field.
      *
+     * @param path - The path to the Flow. If not provided, the function name
+     *     will be used as the path and the File will be created in the root
+     *     of your organization workspace.
      *
-     * @template I - The type of `inputs` argument of the callable.
-     * @template M - The type of `message` argument of the callable.
-     * @template O - The output type of the callable. Should be string or serializable to JSON.
-     * @param {Object} params - The arguments for the prompt utility.
-     * @param {InputsMessagesCallableType<I, M, O>} params.callable - The callable the utility should wrap and instrument.
-     * @param {string} params.path - The path of the instrumented Flow on Humanloop.
-     * @param {FlowKernelRequest} [params.flowKernel] - Versioning information for the Flow.
-     * @returns An async function that wraps around the provided `callable`, adding Tool instrumentation.
+     * @param attributes - Additional fields to describe the Flow. Helpful to separate Flow versions from each other with details on how they were created or used.
      */
-    public flow<I, M, O>({
+    public flow<I, O>({
         callable,
         path,
-        version,
+        attributes,
     }: {
-        callable: InputsMessagesCallableType<I, M, O>;
+        callable: I extends Record<string, unknown> & { messages?: ChatMessage[] }
+            ? ((args: I) => O) | (() => O)
+            : never;
         path: string;
-        version?: FlowKernelRequest;
-    }) {
-        return flowUtilityFactory(this.opentelemetryTracer, callable, path, version);
+        attributes?: Record<string, unknown>;
+    }): I extends Record<string, unknown> & { messages?: ChatMessage[] }
+        ? (
+              args: I,
+          ) => O extends Promise<infer R>
+              ? Promise<R | undefined>
+              : Promise<O | undefined>
+        : () => O extends Promise<infer R>
+              ? Promise<R | undefined>
+              : Promise<O | undefined> {
+        // @ts-ignore
+        return flowUtilityFactory(
+            this,
+            this.opentelemetryTracer,
+            callable,
+            path,
+            attributes,
+        );
     }
 
     public get evaluations(): ExtendedEvaluations {
         return this._evaluations;
     }
 
-    // @ts-ignore
     public get prompts(): Prompts {
         return this._prompts_overloaded;
     }
 
-    // @ts-ignore
     public get flows(): Flows {
         return this._flows_overloaded;
+    }
+
+    public get tools(): Tools {
+        return this._tools_overloaded;
+    }
+
+    public get evaluators(): Evaluators {
+        return this._evaluators_overloaded;
     }
 }

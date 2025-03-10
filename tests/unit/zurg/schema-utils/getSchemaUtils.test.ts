@@ -35,8 +35,11 @@ describe("getSchemaUtils", () => {
         });
 
         it("throws on invalid value", async () => {
-            const value = () => object({ a: string(), b: string() }).parseOrThrow({ a: 24 });
-            expect(value).toThrowError(new Error('a: Expected string. Received 24.; Missing required key "b"'));
+            const value = () =>
+                object({ a: string(), b: string() }).parseOrThrow({ a: 24 });
+            expect(value).toThrowError(
+                new Error('a: Expected string. Received 24.; Missing required key "b"'),
+            );
         });
     });
 
@@ -47,8 +50,11 @@ describe("getSchemaUtils", () => {
         });
 
         it("throws on invalid value", async () => {
-            const value = () => object({ a: string(), b: string() }).jsonOrThrow({ a: 24 });
-            expect(value).toThrowError(new Error('a: Expected string. Received 24.; Missing required key "b"'));
+            const value = () =>
+                object({ a: string(), b: string() }).jsonOrThrow({ a: 24 });
+            expect(value).toThrowError(
+                new Error('a: Expected string. Received 24.; Missing required key "b"'),
+            );
         });
     });
 

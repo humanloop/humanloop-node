@@ -9,13 +9,17 @@ describe("Test createRequestUrl", () => {
     it("should append simple query parameters", () => {
         const baseUrl = "https://api.example.com";
         const queryParams = { key: "value", another: "param" };
-        expect(createRequestUrl(baseUrl, queryParams)).toBe("https://api.example.com?key=value&another=param");
+        expect(createRequestUrl(baseUrl, queryParams)).toBe(
+            "https://api.example.com?key=value&another=param",
+        );
     });
 
     it("should handle array query parameters", () => {
         const baseUrl = "https://api.example.com";
         const queryParams = { items: ["a", "b", "c"] };
-        expect(createRequestUrl(baseUrl, queryParams)).toBe("https://api.example.com?items=a&items=b&items=c");
+        expect(createRequestUrl(baseUrl, queryParams)).toBe(
+            "https://api.example.com?items=a&items=b&items=c",
+        );
     });
 
     it("should handle object query parameters", () => {
@@ -46,6 +50,8 @@ describe("Test createRequestUrl", () => {
     it("should encode special characters in query parameters", () => {
         const baseUrl = "https://api.example.com";
         const queryParams = { special: "a&b=c d" };
-        expect(createRequestUrl(baseUrl, queryParams)).toBe("https://api.example.com?special=a%26b%3Dc%20d");
+        expect(createRequestUrl(baseUrl, queryParams)).toBe(
+            "https://api.example.com?special=a%26b%3Dc%20d",
+        );
     });
 });

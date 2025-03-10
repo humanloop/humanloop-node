@@ -22,10 +22,12 @@ describe("requestWithRetries", () => {
     });
 
     it("should retry on retryable status codes", async () => {
-        setTimeoutSpy = jest.spyOn(global, "setTimeout").mockImplementation((callback: (args: void) => void) => {
-            process.nextTick(callback);
-            return null as any;
-        });
+        setTimeoutSpy = jest
+            .spyOn(global, "setTimeout")
+            .mockImplementation((callback: (args: void) => void) => {
+                process.nextTick(callback);
+                return null as any;
+            });
 
         const retryableStatuses = [408, 429, 500, 502];
         let callCount = 0;
@@ -37,7 +39,10 @@ describe("requestWithRetries", () => {
             return new Response("", { status: 200 });
         });
 
-        const responsePromise = requestWithRetries(() => mockFetch(), retryableStatuses.length);
+        const responsePromise = requestWithRetries(
+            () => mockFetch(),
+            retryableStatuses.length,
+        );
         await jest.runAllTimersAsync();
         const response = await responsePromise;
 
@@ -46,10 +51,12 @@ describe("requestWithRetries", () => {
     });
 
     it("should respect maxRetries limit", async () => {
-        setTimeoutSpy = jest.spyOn(global, "setTimeout").mockImplementation((callback: (args: void) => void) => {
-            process.nextTick(callback);
-            return null as any;
-        });
+        setTimeoutSpy = jest
+            .spyOn(global, "setTimeout")
+            .mockImplementation((callback: (args: void) => void) => {
+                process.nextTick(callback);
+                return null as any;
+            });
 
         const maxRetries = 2;
         mockFetch.mockResolvedValue(new Response("", { status: 500 }));
@@ -63,10 +70,12 @@ describe("requestWithRetries", () => {
     });
 
     it("should not retry on success status codes", async () => {
-        setTimeoutSpy = jest.spyOn(global, "setTimeout").mockImplementation((callback: (args: void) => void) => {
-            process.nextTick(callback);
-            return null as any;
-        });
+        setTimeoutSpy = jest
+            .spyOn(global, "setTimeout")
+            .mockImplementation((callback: (args: void) => void) => {
+                process.nextTick(callback);
+                return null as any;
+            });
 
         const successStatuses = [200, 201, 202];
 
@@ -85,10 +94,12 @@ describe("requestWithRetries", () => {
     });
 
     it("should apply correct exponential backoff with jitter", async () => {
-        setTimeoutSpy = jest.spyOn(global, "setTimeout").mockImplementation((callback: (args: void) => void) => {
-            process.nextTick(callback);
-            return null as any;
-        });
+        setTimeoutSpy = jest
+            .spyOn(global, "setTimeout")
+            .mockImplementation((callback: (args: void) => void) => {
+                process.nextTick(callback);
+                return null as any;
+            });
 
         mockFetch.mockResolvedValue(new Response("", { status: 500 }));
         const maxRetries = 3;
@@ -102,17 +113,23 @@ describe("requestWithRetries", () => {
         expect(setTimeoutSpy).toHaveBeenCalledTimes(expectedDelays.length);
 
         expectedDelays.forEach((delay, index) => {
-            expect(setTimeoutSpy).toHaveBeenNthCalledWith(index + 1, expect.any(Function), delay);
+            expect(setTimeoutSpy).toHaveBeenNthCalledWith(
+                index + 1,
+                expect.any(Function),
+                delay,
+            );
         });
 
         expect(mockFetch).toHaveBeenCalledTimes(maxRetries + 1);
     });
 
     it("should handle concurrent retries independently", async () => {
-        setTimeoutSpy = jest.spyOn(global, "setTimeout").mockImplementation((callback: (args: void) => void) => {
-            process.nextTick(callback);
-            return null as any;
-        });
+        setTimeoutSpy = jest
+            .spyOn(global, "setTimeout")
+            .mockImplementation((callback: (args: void) => void) => {
+                process.nextTick(callback);
+                return null as any;
+            });
 
         mockFetch
             .mockResolvedValueOnce(new Response("", { status: 500 }))
