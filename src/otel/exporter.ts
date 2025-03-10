@@ -1,51 +1,38 @@
 import { ExportResult, ExportResultCode } from "@opentelemetry/core";
 import { ReadableSpan, SpanExporter } from "@opentelemetry/sdk-trace-base";
 
-import { FlowKernelRequest, PromptKernelRequest, ToolKernelRequest } from "../api";
+import { HumanloopRuntimeError } from "../error";
+import { getEvaluationContext } from "../evals";
 import { HumanloopClient } from "../humanloop.client";
+import { SDK_VERSION } from "../version";
 import {
-    HUMANLOOP_FILE_KEY,
     HUMANLOOP_FILE_TYPE_KEY,
-    HUMANLOOP_FLOW_PREREQUISITES_KEY,
     HUMANLOOP_LOG_KEY,
     HUMANLOOP_PATH_KEY,
 } from "./constants";
-import { isHumanloopSpan, readFromOpenTelemetrySpan } from "./helpers";
-
-/**
- * Converts a high-resolution time tuple to a JavaScript Date object.
- *
- * @param hrTime - A tuple containing the high-resolution time, where the first element is the number of seconds
- * and the second element is the number of nanoseconds.
- * @returns A Date object representing the high-resolution time.
- */
-function hrTimeToDate(hrTime: [number, number]): Date {
-    const [seconds, nanoseconds] = hrTime;
-    const secondsTotal = seconds + nanoseconds / 1e9;
-    return new Date(secondsTotal * 1000);
-}
+import {
+    isLLMProviderCall,
+    readFromOpenTelemetrySpan,
+    writeToOpenTelemetrySpan,
+} from "./helpers";
+import { TracesData } from "./proto/trace";
 
 export class HumanloopSpanExporter implements SpanExporter {
     private readonly client: HumanloopClient;
-    private readonly spanIdToUploadedLogId: Map<string, string | null>;
     private shutdownFlag: boolean;
     private readonly uploadPromises: Promise<void>[];
-    private readonly exportedSpans: ReadableSpan[];
-    // List of spans that must be uploaded before completing the Flow log
-    // This maps [flow log span ID] -> [set of child span IDs]
-    private readonly prerequisites: Map<string, Set<string>>;
 
     constructor(client: HumanloopClient) {
         this.client = client;
-        this.spanIdToUploadedLogId = new Map();
         this.shutdownFlag = false;
         this.uploadPromises = [];
-        this.exportedSpans = [];
-        this.prerequisites = new Map();
     }
 
     export(spans: ReadableSpan[]): ExportResult {
         if (this.shutdownFlag) {
+            console.warn(
+                "[HumanloopSpanExporter] Shutting down, not accepting new spans",
+            );
             return {
                 code: ExportResultCode.FAILED,
                 error: new Error("Exporter is shutting down"),
@@ -53,16 +40,38 @@ export class HumanloopSpanExporter implements SpanExporter {
         }
 
         for (const span of spans) {
-            if (isHumanloopSpan(span)) {
-                this.uploadPromises.push(this.exportSpanDispatch(span));
+            const fileType = span.attributes[HUMANLOOP_FILE_TYPE_KEY];
+            if (!fileType) {
+                throw new Error("Internal error: Span does not have type set");
             }
+
+            let logArgs = {};
+            let evalCallback: ((log_id: string) => Promise<void>) | null = null;
+            try {
+                logArgs = readFromOpenTelemetrySpan(span, HUMANLOOP_LOG_KEY);
+                const path = readFromOpenTelemetrySpan(
+                    span,
+                    HUMANLOOP_PATH_KEY,
+                ) as unknown as string;
+                const evaluationContext = getEvaluationContext();
+                if (evaluationContext) {
+                    [logArgs, evalCallback] = evaluationContext.logArgsWithContext({
+                        logArgs,
+                        forOtel: true,
+                        path,
+                    });
+                    writeToOpenTelemetrySpan(span, logArgs, HUMANLOOP_LOG_KEY);
+                }
+            } catch (e) {
+                if (!(e instanceof Error)) {
+                    evalCallback = null;
+                }
+            }
+
+            this.uploadPromises.push(this.exportSpan(span, evalCallback));
         }
 
-        this.exportedSpans.push(...spans);
-
-        return {
-            code: ExportResultCode.SUCCESS,
-        };
+        return { code: ExportResultCode.SUCCESS };
     }
 
     async shutdown(): Promise<void> {
@@ -74,165 +83,105 @@ export class HumanloopSpanExporter implements SpanExporter {
         await this.shutdown();
     }
 
-    /**
-     * Mark a span as uploaded to the Humanloop.
-     *
-     * A Log might be contained inside a Flow trace, which must be marked as complete
-     * when all its children are uploaded. Each Flow Log span contains a
-     * 'humanloop.flow.prerequisites' attribute, which is a list of all spans that must
-     * be uploaded before the Flow Log is marked as complete.
-     *
-     * This method finds the trace the Span belongs to and removes the Span from the list.
-     * Once all prerequisites are uploaded, the method marks the Flow Log as complete.
-     *
-     * @param spanId - The ID of the span that has been uploaded.
-     */
-    private markSpanCompleted(spanId: string) {
-        for (const [flowLogSpanId, flowChildrenSpanIds] of this.prerequisites) {
-            if (flowChildrenSpanIds.has(spanId)) {
-                flowChildrenSpanIds.delete(spanId);
-                if (flowChildrenSpanIds.size === 0) {
-                    const flowLogId = this.spanIdToUploadedLogId.get(flowLogSpanId)!;
-                    this.client.flows.updateLog(flowLogId, { logStatus: "complete" });
-                }
-                break;
-            }
-        }
-    }
-
-    private async exportSpanDispatch(span: ReadableSpan): Promise<void> {
-        const fileType = span.attributes[HUMANLOOP_FILE_TYPE_KEY];
-        const parentSpanId = span.parentSpanId;
-
-        while (parentSpanId && !this.spanIdToUploadedLogId.has(parentSpanId)) {
-            await new Promise((resolve) => setTimeout(resolve, 100));
-        }
-
-        try {
-            switch (fileType) {
-                case "prompt":
-                    await this.exportPrompt(span);
-                    break;
-                case "tool":
-                    await this.exportTool(span);
-                    break;
-                case "flow":
-                    await this.exportFlow(span);
-                    break;
-                default:
-                    throw new Error(`Unknown span type: ${fileType}`);
-            }
-        } catch (error) {
-            console.error(`Failed to export span: ${error}`);
-        }
-    }
-
-    public getExportedSpans(): ReadableSpan[] {
-        return this.exportedSpans;
-    }
-
-    private async exportPrompt(span: ReadableSpan): Promise<void> {
-        const fileObject = readFromOpenTelemetrySpan(span, HUMANLOOP_FILE_KEY);
-        const logObject = readFromOpenTelemetrySpan(span, HUMANLOOP_LOG_KEY) as {
-            [key: string]: unknown;
-        };
-        logObject.startTime = hrTimeToDate(span.startTime);
-        logObject.endTime = hrTimeToDate(span.endTime);
-        logObject.createdAt = hrTimeToDate(span.endTime);
-        const path = span.attributes[HUMANLOOP_PATH_KEY] as string;
-
-        const spanParentId = span.parentSpanId;
-        const traceParentId =
-            spanParentId !== undefined
-                ? (this.spanIdToUploadedLogId.get(spanParentId) as string)
-                : undefined;
-
-        const prompt: PromptKernelRequest = (fileObject.prompt ||
-            {}) as unknown as PromptKernelRequest;
-
-        try {
-            const response = await this.client.prompts.log({
-                path: path,
-                prompt,
-                traceParentId,
-                ...logObject,
-            });
-            this.spanIdToUploadedLogId.set(span.spanContext().spanId, response.id);
-        } catch (error) {
-            console.error(`Error exporting prompt: ${error}`);
-        }
-        this.markSpanCompleted(span.spanContext().spanId);
-    }
-
-    private async exportTool(span: ReadableSpan): Promise<void> {
-        const fileObject = readFromOpenTelemetrySpan(span, HUMANLOOP_FILE_KEY);
-        const logObject = readFromOpenTelemetrySpan(span, HUMANLOOP_LOG_KEY) as {
-            [key: string]: unknown;
-        };
-        logObject.startTime = hrTimeToDate(span.startTime);
-        logObject.endTime = hrTimeToDate(span.endTime);
-        logObject.createdAt = hrTimeToDate(span.endTime);
-        const path = span.attributes[HUMANLOOP_PATH_KEY] as string;
-
-        const spanParentId = span.parentSpanId;
-        const traceParentId = spanParentId
-            ? (this.spanIdToUploadedLogId.get(spanParentId) as string)
-            : undefined;
-
-        try {
-            const response = await this.client.tools.log({
-                path: path,
-                tool: fileObject.tool as ToolKernelRequest,
-                traceParentId,
-                ...logObject,
-            });
-            this.spanIdToUploadedLogId.set(span.spanContext().spanId, response.id);
-        } catch (error) {
-            console.error(`Error exporting tool: ${error}`);
-        }
-        this.markSpanCompleted(span.spanContext().spanId);
-    }
-
-    private async exportFlow(span: ReadableSpan): Promise<void> {
-        const fileObject = readFromOpenTelemetrySpan(span, HUMANLOOP_FILE_KEY);
-        const logObject = readFromOpenTelemetrySpan(span, HUMANLOOP_LOG_KEY) as {
-            [key: string]: unknown;
-        };
-        logObject.startTime = hrTimeToDate(span.startTime);
-        logObject.endTime = hrTimeToDate(span.endTime);
-        logObject.createdAt = hrTimeToDate(span.endTime);
-        // Spans that must be uploaded before the Flow Span is completed
-        let prerequisites: string[] | undefined = undefined;
-        try {
-            prerequisites = readFromOpenTelemetrySpan(
-                span,
-                HUMANLOOP_FLOW_PREREQUISITES_KEY,
-            ) as unknown as string[];
-        } catch (error) {
-            prerequisites = [];
-        }
-
-        this.prerequisites.set(span.spanContext().spanId, new Set(prerequisites));
-
-        const spanParentId = span.parentSpanId;
-        const traceParentId = spanParentId
-            ? (this.spanIdToUploadedLogId.get(spanParentId) as string)
-            : undefined;
-        const path = span.attributes[HUMANLOOP_PATH_KEY] as string;
-
-        try {
-            const response = await this.client.flows.log({
-                path: path as string,
-                flow: (fileObject.flow as unknown as FlowKernelRequest) || {
-                    attributes: {},
+    private async exportSpan(
+        span: ReadableSpan,
+        evalContextCallback: ((log_id: string) => Promise<void>) | null,
+    ): Promise<void> {
+        const response = await fetch(
+            `${this.client.options().baseUrl}/import/otel/v1/traces`,
+            {
+                method: "POST",
+                headers: {
+                    "X-API-KEY": this.client.options().apiKey!.toString(),
+                    "X-Fern-Language": "Typescript",
+                    "X-Fern-SDK-Name": "humanloop",
+                    "X-Fern-SDK-Version": SDK_VERSION,
                 },
-                traceParentId,
-                ...logObject,
-            });
-            this.spanIdToUploadedLogId.set(span.spanContext().spanId, response.id);
-        } catch (error) {
-            console.error("Error exporting flow: ", error, span.spanContext().spanId);
+                body: JSON.stringify(this.spanToPayload(span)),
+            },
+        );
+
+        if (response.status !== 200) {
+            throw new HumanloopRuntimeError(
+                `Failed to upload OTEL span to Humanloop: ${JSON.stringify(await response.json())} ${response.status}`,
+            );
         }
-        this.markSpanCompleted(span.spanContext().spanId);
+        if (response.status === 200 && evalContextCallback) {
+            const responseBody = await response.json();
+            const logId = responseBody.records[0];
+            await evalContextCallback(logId);
+        }
+    }
+
+    private spanToPayload(span: ReadableSpan): TracesData {
+        return {
+            resourceSpans: [
+                {
+                    scopeSpans: [
+                        {
+                            scope: {
+                                name: isLLMProviderCall(span)
+                                    ? "humanloop.sdk.provider"
+                                    : "humanloop.sdk.decorator",
+                            },
+                            spans: [
+                                {
+                                    traceId: span.spanContext().traceId,
+                                    spanId: span.spanContext().spanId,
+                                    traceState:
+                                        span.spanContext().traceState?.serialize() ||
+                                        "",
+                                    name: span.name,
+                                    kind: span.kind,
+                                    startTimeUnixNano: this.hrTimeToNanoseconds(
+                                        span.startTime,
+                                    ),
+                                    endTimeUnixNano: this.hrTimeToNanoseconds(
+                                        span.endTime,
+                                    ),
+                                    attributes: Object.entries(span.attributes)
+                                        .filter(([_, value]) => value !== undefined)
+                                        .map(([key, value]) => ({
+                                            key,
+                                            value: { stringValue: value!.toString() },
+                                        })),
+                                    droppedAttributesCount: span.droppedAttributesCount,
+                                    events: [],
+                                    links: span.links.map((link) => ({
+                                        traceId: link.context.traceId,
+                                        spanId: link.context.spanId,
+                                        traceState:
+                                            link.context.traceState?.serialize() || "",
+                                        attributes: link.attributes
+                                            ? Object.entries(link.attributes)
+                                                  .filter(
+                                                      ([_, value]) =>
+                                                          value !== undefined,
+                                                  )
+                                                  .map(([key, value]) => ({
+                                                      key,
+                                                      value: {
+                                                          stringValue:
+                                                              value!.toString(),
+                                                      },
+                                                  }))
+                                            : [],
+                                        droppedAttributesCount:
+                                            link.droppedAttributesCount || 0,
+                                    })),
+                                    droppedEventsCount: span.droppedEventsCount,
+                                    droppedLinksCount: span.droppedLinksCount,
+                                },
+                            ],
+                        },
+                    ],
+                },
+            ],
+        };
+    }
+
+    private hrTimeToNanoseconds(hrTime: [number, number]): number {
+        const [seconds, nanoseconds] = hrTime;
+        return seconds * 1e9 + nanoseconds;
     }
 }

@@ -53,10 +53,7 @@
         "jsonschema": "^1.4.1",
         "@types/cli-progress": "^3.11.6",
         "@types/lodash": "4.14.74",
-        "@trivago/prettier-plugin-sort-imports": "^4.3.0",
-        "babel-jest": "^29.7.0",
-        "@babel/core": "^7.26.0",
-        "@babel/preset-env": "^7.26.0"
+        "@trivago/prettier-plugin-sort-imports": "^4.3.0"
     },
     "browser": {
         "fs": false,

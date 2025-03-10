@@ -25,7 +25,6 @@ tests/unit/fetcher/stream-wrappers/webpack.test.ts
 .prettierrc.yml
 .prettierignore
 .gitignore
-babel.config.js
 
 # Package Scripts
 

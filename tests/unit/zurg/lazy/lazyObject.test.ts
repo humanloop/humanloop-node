@@ -1,4 +1,9 @@
-import { lazyObject, number, object, string } from "../../../../src/core/schemas/builders";
+import {
+    lazyObject,
+    number,
+    object,
+    string,
+} from "../../../../src/core/schemas/builders";
 import { itSchemaIdentity } from "../utils/itSchema";
 
 describe("lazy", () => {
