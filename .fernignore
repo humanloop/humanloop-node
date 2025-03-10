@@ -3,14 +3,17 @@
 # Custom code
 
 src/otel
-src/eval_utils
-src/utilities
+src/evals
+src/decorators
 src/index.ts
 src/humanloop.client.ts
+src/overload.ts
+src/error.ts
+src/context.ts
 
 # Tests
 
-tests
+## Add custom tests here
 
 # CI Action
 
@@ -19,8 +22,6 @@ tests
 # Config files
 
 .prettierrc.yml
-babel.config.js
-jest.config.js
 .prettierignore
 .gitignore
 
