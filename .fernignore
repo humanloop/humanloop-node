@@ -13,7 +13,8 @@ src/context.ts
 
 # Tests
 
-## Add custom tests here
+# Modified due to issues with OTEL
+tests/unit/fetcher/stream-wrappers/webpack.test.ts
 
 # CI Action
 
@@ -24,6 +25,7 @@ src/context.ts
 .prettierrc.yml
 .prettierignore
 .gitignore
+babel.config.js
 
 # Package Scripts
 
