@@ -236,7 +236,7 @@ export async function runEval<I, O>(
         // @ts-ignore
         const decoratorType = (function_.file as File).type;
         if (decoratorType !== type_) {
-            throw new Error(
+            throw new HumanloopRuntimeError(
                 `The type of the decorated function does not match the type of the file. Expected \`${capitalize(type_)}\`, got \`${capitalize(decoratorType)}\`.`,
             );
         }
@@ -246,7 +246,9 @@ export async function runEval<I, O>(
     try {
         hlFile = await upsertFile({ file: file_, type: type_, client: client });
     } catch (e: any) {
-        console.error(`${RED}Error in your \`file\` argument:\n\n${e.message}${RESET}`);
+        console.error(
+            `${RED}Error in your \`file\` argument:\n\n${e.constructor.name}: ${e.message}${RESET}`,
+        );
         return [];
     }
 
@@ -255,7 +257,7 @@ export async function runEval<I, O>(
         hlDataset = await upsertDataset({ dataset: dataset, client: client });
     } catch (e: any) {
         console.error(
-            `${RED}Error in your \`dataset\` argument:\n\n${e.message}${RESET}`,
+            `${RED}Error in your \`file\` argument:\n\n${e.constructor.name}: ${e.message}${RESET}`,
         );
         return [];
     }
@@ -273,7 +275,7 @@ export async function runEval<I, O>(
         });
     } catch (e: any) {
         console.error(
-            `${RED}Error in your \`evaluators\` argument:\n\n${e.message}${RESET}`,
+            `${RED}Error in your \`file\` argument:\n\n${e.constructor.name} ${e.message}${RESET}`,
         );
         return [];
     }
