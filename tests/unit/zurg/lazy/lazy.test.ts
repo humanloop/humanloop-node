@@ -51,9 +51,7 @@ describe("lazy", () => {
             interface TreeNode {
                 children: TreeNode[];
             }
-            const TreeNode: Schema<TreeNode, TreeNode> = lazy(() =>
-                object({ children: list(TreeNode) }),
-            );
+            const TreeNode: Schema<TreeNode, TreeNode> = lazy(() => object({ children: list(TreeNode) }));
         };
     });
 });

@@ -741,7 +741,7 @@ await client.prompts.move("pr_30gco7dx6JDq4200GVOHa", {
 </dl>
 </details>
 
-<details><summary><code>client.prompts.<a href="/src/api/resources/prompts/client/Client.ts">populateTemplate</a>(id, { ...params }) -> Humanloop.PromptResponse</code></summary>
+<details><summary><code>client.prompts.<a href="/src/api/resources/prompts/client/Client.ts">populateTemplate</a>(id, { ...params }) -> Humanloop.PopulateTemplateResponse</code></summary>
 <dl>
 <dd>
 
