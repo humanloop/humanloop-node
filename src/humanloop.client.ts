@@ -2,11 +2,11 @@ import { NodeTracerProvider, Tracer } from "@opentelemetry/sdk-trace-node";
 import { AnthropicInstrumentation } from "@traceloop/instrumentation-anthropic";
 import { CohereInstrumentation } from "@traceloop/instrumentation-cohere";
 import { OpenAIInstrumentation } from "@traceloop/instrumentation-openai";
-import { Evaluators } from "api/resources/evaluators/client/Client";
 
 import { HumanloopClient as BaseHumanloopClient } from "./Client";
 import { ChatMessage } from "./api";
 import { Evaluations as BaseEvaluations } from "./api/resources/evaluations/client/Client";
+import { Evaluators } from "./api/resources/evaluators/client/Client";
 import { Flows } from "./api/resources/flows/client/Client";
 import { Prompts } from "./api/resources/prompts/client/Client";
 import { Tools } from "./api/resources/tools/client/Client";
