@@ -1,5 +1,6 @@
 import * as contextApi from "@opentelemetry/api";
-import { ReadableSpan, Tracer } from "@opentelemetry/sdk-trace-node";
+import { Tracer } from "@opentelemetry/api";
+import { ReadableSpan } from "@opentelemetry/sdk-trace-node";
 
 import { HumanloopClient } from "../Client";
 import { ChatMessage, FlowLogRequest, FlowLogResponse } from "../api";

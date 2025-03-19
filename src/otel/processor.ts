@@ -60,6 +60,22 @@ export class HumanloopSpanProcessor implements SpanProcessor {
                 return;
             }
         }
+        if (!span.attributes[HUMANLOOP_FILE_TYPE_KEY]) {
+            // Not a Humanloop span, unexpected
+            console.warn(
+                `Internal error: Span does not have type set:\n${JSON.stringify(
+                    {
+                        attributes: span.attributes,
+                        name: span.name,
+                        kind: span.kind,
+                        instrumentationScope: span.instrumentationScope,
+                    },
+                    null,
+                    2,
+                )}`,
+            );
+            return;
+        }
         this.spanExporter.export([span], () => {});
     }
 

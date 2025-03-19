@@ -3,8 +3,6 @@ import { ReadableSpan, SpanExporter } from "@opentelemetry/sdk-trace-base";
 
 import { HumanloopRuntimeError } from "../error";
 import { getEvaluationContext } from "../evals";
-import { HumanloopClient } from "../humanloop.client";
-import { SDK_VERSION } from "../version";
 import {
     HUMANLOOP_FILE_TYPE_KEY,
     HUMANLOOP_LOG_KEY,
@@ -18,12 +16,20 @@ import {
 import { TracesData } from "./proto/trace";
 
 export class HumanloopSpanExporter implements SpanExporter {
-    private readonly client: HumanloopClient;
+    private readonly hlClientBaseUrl: string;
+
+    private readonly hlClientHeaders: Record<string, string>;
+
     private shutdownFlag: boolean;
+
     private readonly uploadPromises: Promise<void>[];
 
-    constructor(client: HumanloopClient) {
-        this.client = client;
+    constructor(options: {
+        hlClientHeaders: Record<string, string>;
+        hlClientBaseUrl: string;
+    }) {
+        this.hlClientHeaders = options.hlClientHeaders;
+        this.hlClientBaseUrl = options.hlClientBaseUrl;
         this.shutdownFlag = false;
         this.uploadPromises = [];
     }
@@ -42,7 +48,21 @@ export class HumanloopSpanExporter implements SpanExporter {
         for (const span of spans) {
             const fileType = span.attributes[HUMANLOOP_FILE_TYPE_KEY];
             if (!fileType) {
-                throw new Error("Internal error: Span does not have type set");
+                return {
+                    code: ExportResultCode.FAILED,
+                    error: new Error(
+                        `Internal error: Span does not have type set:\n${JSON.stringify(
+                            {
+                                attributes: span.attributes,
+                                name: span.name,
+                                kind: span.kind,
+                                instrumentationScope: span.instrumentationScope,
+                            },
+                            null,
+                            2,
+                        )}`,
+                    ),
+                };
             }
 
             let logArgs = {};
@@ -87,20 +107,11 @@ export class HumanloopSpanExporter implements SpanExporter {
         span: ReadableSpan,
         evalContextCallback: ((log_id: string) => Promise<void>) | null,
     ): Promise<void> {
-        const response = await fetch(
-            `${this.client.options().baseUrl}/import/otel/v1/traces`,
-            {
-                method: "POST",
-                headers: {
-                    "X-API-KEY": this.client.options().apiKey!.toString(),
-                    "X-Fern-Language": "Typescript",
-                    "X-Fern-SDK-Name": "humanloop",
-                    "X-Fern-SDK-Version": SDK_VERSION,
-                },
-                body: JSON.stringify(this.spanToPayload(span)),
-            },
-        );
-
+        const response = await fetch(`${this.hlClientBaseUrl}/import/otel/v1/traces`, {
+            method: "POST",
+            headers: this.hlClientHeaders,
+            body: JSON.stringify(this.spanToPayload(span)),
+        });
         if (response.status !== 200) {
             throw new HumanloopRuntimeError(
                 `Failed to upload OTEL span to Humanloop: ${JSON.stringify(await response.json())} ${response.status}`,
