@@ -166,9 +166,9 @@ export function readFromOpenTelemetrySpan(
  * @returns True if the span corresponds to an LLM provider call, false otherwise
  */
 export function isLLMProviderCall(span: ReadableSpan): boolean {
-    if (!span.instrumentationLibrary) return false;
+    if (!span.instrumentationScope) return false;
 
-    const spanInstrumentor = span.instrumentationLibrary.name;
+    const spanInstrumentor = span.instrumentationScope.name;
     const instrumentorPrefixes = [
         "@traceloop/instrumentation-openai",
         "@traceloop/instrumentation-anthropic",

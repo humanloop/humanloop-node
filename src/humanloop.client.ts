@@ -1,12 +1,18 @@
-import { NodeTracerProvider, Tracer } from "@opentelemetry/sdk-trace-node";
+import { Tracer } from "@opentelemetry/api";
+import {
+    Instrumentation,
+    registerInstrumentations,
+} from "@opentelemetry/instrumentation";
+import { resourceFromAttributes } from "@opentelemetry/resources";
+import { NodeTracerProvider } from "@opentelemetry/sdk-trace-node";
 import { AnthropicInstrumentation } from "@traceloop/instrumentation-anthropic";
 import { CohereInstrumentation } from "@traceloop/instrumentation-cohere";
 import { OpenAIInstrumentation } from "@traceloop/instrumentation-openai";
-import { Evaluators } from "api/resources/evaluators/client/Client";
 
 import { HumanloopClient as BaseHumanloopClient } from "./Client";
 import { ChatMessage } from "./api";
 import { Evaluations as BaseEvaluations } from "./api/resources/evaluations/client/Client";
+import { Evaluators } from "./api/resources/evaluators/client/Client";
 import { Flows } from "./api/resources/flows/client/Client";
 import { Prompts } from "./api/resources/prompts/client/Client";
 import { Tools } from "./api/resources/tools/client/Client";
@@ -14,6 +20,7 @@ import { ToolKernelRequest } from "./api/types/ToolKernelRequest";
 import { flowUtilityFactory } from "./decorators/flow";
 import { promptDecoratorFactory } from "./decorators/prompt";
 import { toolUtilityFactory } from "./decorators/tool";
+import { HumanloopEnvironment } from "./environments";
 import { HumanloopRuntimeError } from "./error";
 import { runEval } from "./evals/run";
 import {
@@ -26,6 +33,7 @@ import {
 import { HumanloopSpanExporter } from "./otel/exporter";
 import { HumanloopSpanProcessor } from "./otel/processor";
 import { overloadCall, overloadLog } from "./overload";
+import { SDK_VERSION } from "./version";
 
 const RED = "\x1b[91m";
 const RESET = "\x1b[0m";
@@ -125,25 +133,121 @@ class ExtendedEvaluations extends BaseEvaluations {
     }
 }
 
+class HumanloopTracerSingleton {
+    private static instance: HumanloopTracerSingleton;
+    private readonly tracerProvider: NodeTracerProvider;
+    public readonly tracer: Tracer;
+
+    private constructor(config: {
+        hlClientApiKey: string;
+        hlClientBaseUrl: string;
+        instrumentProviders?: {
+            OpenAI?: any;
+            Anthropic?: any;
+            CohereAI?: any;
+        };
+    }) {
+        this.tracerProvider = new NodeTracerProvider({
+            resource: resourceFromAttributes({
+                "service.name": "humanloop-typescript-sdk",
+                "service.version": SDK_VERSION,
+            }),
+            spanProcessors: [
+                new HumanloopSpanProcessor(
+                    new HumanloopSpanExporter({
+                        hlClientHeaders: {
+                            "X-API-KEY": config.hlClientApiKey,
+                            "X-Fern-Language": "Typescript",
+                            "X-Fern-SDK-Name": "humanloop",
+                            "X-Fern-SDK-Version": SDK_VERSION,
+                        },
+                        hlClientBaseUrl: config.hlClientBaseUrl,
+                    }),
+                ),
+            ],
+        });
+        const instrumentations: Instrumentation[] = [];
+        if (config.instrumentProviders?.OpenAI) {
+            const openaiInstrumentation = new OpenAIInstrumentation({
+                enrichTokens: true,
+            });
+            openaiInstrumentation.manuallyInstrument(config.instrumentProviders.OpenAI);
+            openaiInstrumentation.setTracerProvider(this.tracerProvider);
+            openaiInstrumentation.enable();
+            instrumentations.push(openaiInstrumentation);
+        }
+        if (config.instrumentProviders?.Anthropic) {
+            const anthropicInstrumentation = new AnthropicInstrumentation();
+            anthropicInstrumentation.manuallyInstrument(
+                config.instrumentProviders.Anthropic,
+            );
+            anthropicInstrumentation.setTracerProvider(this.tracerProvider);
+            anthropicInstrumentation.enable();
+            instrumentations.push(anthropicInstrumentation);
+        }
+        if (config.instrumentProviders?.CohereAI) {
+            const cohereInstrumentation = new CohereInstrumentation();
+            cohereInstrumentation.manuallyInstrument(
+                config.instrumentProviders.CohereAI,
+            );
+            cohereInstrumentation.setTracerProvider(this.tracerProvider);
+            cohereInstrumentation.enable();
+            instrumentations.push(cohereInstrumentation);
+        }
+
+        this.tracerProvider.register();
+
+        registerInstrumentations({
+            tracerProvider: this.tracerProvider,
+            instrumentations,
+        });
+
+        this.tracer = this.tracerProvider.getTracer("humanloop.sdk");
+    }
+
+    public static getInstance(config: {
+        hlClientApiKey: string;
+        hlClientBaseUrl: string;
+        instrumentProviders?: {
+            OpenAI?: any;
+            Anthropic?: any;
+            CohereAI?: any;
+        };
+    }): HumanloopTracerSingleton {
+        if (!HumanloopTracerSingleton.instance) {
+            HumanloopTracerSingleton.instance = new HumanloopTracerSingleton(config);
+        }
+        return HumanloopTracerSingleton.instance;
+    }
+}
+
 export class HumanloopClient extends BaseHumanloopClient {
     protected readonly _evaluations: ExtendedEvaluations;
     protected readonly _prompts_overloaded: Prompts;
     protected readonly _flows_overloaded: Flows;
     protected readonly _tools_overloaded: Tools;
     protected readonly _evaluators_overloaded: Evaluators;
+    protected readonly instrumentProviders: {
+        OpenAI?: any;
+        Anthropic?: any;
+        CohereAI?: any;
+    };
 
-    protected readonly OpenAI?: any;
-    protected readonly Anthropic?: any;
-    protected readonly CohereAI?: any;
-
-    protected readonly opentelemetryTracerProvider: NodeTracerProvider;
-    protected readonly opentelemetryTracer: Tracer;
+    protected get opentelemetryTracer(): Tracer {
+        return HumanloopTracerSingleton.getInstance({
+            hlClientApiKey: this.options().apiKey!.toString(),
+            hlClientBaseUrl:
+                this.options().baseUrl?.toString() ||
+                HumanloopEnvironment.Default.toString(),
+            instrumentProviders: this.instrumentProviders,
+        }).tracer;
+    }
 
     /**
      * Constructs a new instance of the Humanloop client.
      *
      * @param _options - The base options for the Humanloop client.
-     * @param providerModules - LLM provider modules to instrument. Allows prompt decorator to spy on LLM provider calls and log them to Humanloop.
+     * @param _options.instrumentProviders - LLM provider modules to instrument. Allows the prompt decorator to spy on provider calls and log them to Humanloop
      *
      * Pass LLM provider modules as such:
      *
@@ -152,27 +256,27 @@ export class HumanloopClient extends BaseHumanloopClient {
      * import { Anthropic } from "anthropic";
      * import { HumanloopClient } from "humanloop";
      *
-     * const humanloop = new HumanloopClient({apiKey: process.env.HUMANLOOP_KEY}, { OpenAI, Anthropic });
+     * const humanloop = new HumanloopClient({
+     *     apiKey: process.env.HUMANLOOP_KEY,
+     *     instrumentProviders: { OpenAI, Anthropic },
+     * });
      *
      * const openai = new OpenAI({apiKey: process.env.OPENAI_KEY});
      * const anthropic = new Anthropic({apiKey: process.env.ANTHROPIC_KEY});
      * ```
      */
     constructor(
-        _options: BaseHumanloopClient.Options,
-        providers?: {
-            OpenAI?: any;
-            Anthropic?: any;
-            CohereAI?: any;
+        _options: BaseHumanloopClient.Options & {
+            instrumentProviders?: {
+                OpenAI?: any;
+                Anthropic?: any;
+                CohereAI?: any;
+            };
         },
     ) {
         super(_options);
 
-        const { OpenAI, Anthropic, CohereAI } = providers ?? {};
-
-        this.OpenAI = OpenAI;
-        this.Anthropic = Anthropic;
-        this.CohereAI = CohereAI;
+        this.instrumentProviders = _options.instrumentProviders || {};
 
         this._prompts_overloaded = overloadLog(super.prompts);
         this._prompts_overloaded = overloadCall(this._prompts_overloaded);
@@ -185,39 +289,14 @@ export class HumanloopClient extends BaseHumanloopClient {
 
         this._evaluations = new ExtendedEvaluations(_options, this);
 
-        this.opentelemetryTracerProvider = new NodeTracerProvider({
-            spanProcessors: [
-                new HumanloopSpanProcessor(new HumanloopSpanExporter(this)),
-            ],
+        // Initialize the tracer singleton
+        HumanloopTracerSingleton.getInstance({
+            hlClientApiKey: this.options().apiKey!.toString(),
+            hlClientBaseUrl:
+                this.options().baseUrl?.toString() ||
+                HumanloopEnvironment.Default.toString(),
+            instrumentProviders: this.instrumentProviders,
         });
-
-        if (OpenAI) {
-            const instrumentor = new OpenAIInstrumentation({
-                enrichTokens: true,
-            });
-            instrumentor.manuallyInstrument(OpenAI);
-            instrumentor.setTracerProvider(this.opentelemetryTracerProvider);
-            instrumentor.enable();
-        }
-
-        if (Anthropic) {
-            const instrumentor = new AnthropicInstrumentation();
-            instrumentor.manuallyInstrument(Anthropic);
-            instrumentor.setTracerProvider(this.opentelemetryTracerProvider);
-            instrumentor.enable();
-        }
-
-        if (CohereAI) {
-            const instrumentor = new CohereInstrumentation();
-            instrumentor.manuallyInstrument(CohereAI);
-            instrumentor.setTracerProvider(this.opentelemetryTracerProvider);
-            instrumentor.enable();
-        }
-
-        this.opentelemetryTracerProvider.register();
-
-        this.opentelemetryTracer =
-            this.opentelemetryTracerProvider.getTracer("humanloop.sdk");
     }
 
     public options(): BaseHumanloopClient.Options {
@@ -225,20 +304,17 @@ export class HumanloopClient extends BaseHumanloopClient {
     }
 
     // Check if user has passed the LLM provider instrumentors
-    private assertProviders(func: Function) {
-        const noProviderInstrumented = [
-            this.OpenAI,
-            this.Anthropic,
-            this.CohereAI,
-        ].every((p) => !p);
-        if (noProviderInstrumented) {
+    private assertProviders() {
+        const userDidNotPassProviders = Object.values(this.instrumentProviders).every(
+            (provider) => !provider,
+        );
+        if (userDidNotPassProviders) {
             throw new HumanloopRuntimeError(
                 `${RED}To use the @prompt decorator, pass your LLM client library into the Humanloop client constructor. For example:\n\n
 import { OpenAI } from "openai";
 import { HumanloopClient } from "humanloop";
 
 const humanloop = new HumanloopClient({apiKey: process.env.HUMANLOOP_KEY}, { OpenAI });
-// Create the the OpenAI client after the client is initialized
 const openai = new OpenAI();
 ${RESET}`,
             );
@@ -251,9 +327,13 @@ ${RESET}`,
      *
      * ```typescript
      * import { OpenAI } from "openai";
+     * import { Anthropic } from "anthropic";
      * import { HumanloopClient } from "humanloop";
      *
-     * const humanloop = new HumanloopClient({apiKey: process.env.HUMANLOOP_KEY}, { OpenAI });
+     * const humanloop = new HumanloopClient({
+     *     apiKey: process.env.HUMANLOOP_KEY,
+     *     instrumentProviders: { OpenAI, Anthropic },
+     * });
      * const openai = new OpenAI({apiKey: process.env.OPENAI_KEY});
      *
      * const callOpenaiWithHumanloop = humanloop.prompt({
@@ -350,7 +430,7 @@ ${RESET}`,
         : () => O extends Promise<infer R>
               ? Promise<R | undefined>
               : Promise<O | undefined> {
-        this.assertProviders(args.callable);
+        this.assertProviders();
         // @ts-ignore
         return promptDecoratorFactory(args.path, args.callable);
     }

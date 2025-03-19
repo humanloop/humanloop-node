@@ -1,4 +1,5 @@
-import { ReadableSpan, Tracer } from "@opentelemetry/sdk-trace-node";
+import { Tracer } from "@opentelemetry/api";
+import { ReadableSpan } from "@opentelemetry/sdk-trace-node";
 
 import { ToolKernelRequest } from "../api/types/ToolKernelRequest";
 import { getEvaluationContext, getTraceId } from "../context";
