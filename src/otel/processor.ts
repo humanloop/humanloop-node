@@ -74,6 +74,7 @@ export class HumanloopSpanProcessor implements SpanProcessor {
                     2,
                 )}`,
             );
+            return;
         }
         this.spanExporter.export([span], () => {});
     }
