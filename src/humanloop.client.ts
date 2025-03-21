@@ -166,7 +166,6 @@ class HumanloopTracerSingleton {
                 ),
             ],
         });
-        const instrumentations: Instrumentation[] = [];
         if (config.instrumentProviders?.OpenAI) {
             const openaiInstrumentation = new OpenAIInstrumentation({
                 enrichTokens: true,
@@ -174,7 +173,6 @@ class HumanloopTracerSingleton {
             openaiInstrumentation.manuallyInstrument(config.instrumentProviders.OpenAI);
             openaiInstrumentation.setTracerProvider(this.tracerProvider);
             openaiInstrumentation.enable();
-            instrumentations.push(openaiInstrumentation);
         }
         if (config.instrumentProviders?.Anthropic) {
             const anthropicInstrumentation = new AnthropicInstrumentation();
@@ -183,7 +181,6 @@ class HumanloopTracerSingleton {
             );
             anthropicInstrumentation.setTracerProvider(this.tracerProvider);
             anthropicInstrumentation.enable();
-            instrumentations.push(anthropicInstrumentation);
         }
         if (config.instrumentProviders?.CohereAI) {
             const cohereInstrumentation = new CohereInstrumentation();
@@ -192,15 +189,7 @@ class HumanloopTracerSingleton {
             );
             cohereInstrumentation.setTracerProvider(this.tracerProvider);
             cohereInstrumentation.enable();
-            instrumentations.push(cohereInstrumentation);
         }
-
-        this.tracerProvider.register();
-
-        registerInstrumentations({
-            tracerProvider: this.tracerProvider,
-            instrumentations,
-        });
 
         this.tracer = this.tracerProvider.getTracer("humanloop.sdk");
     }

@@ -7,13 +7,11 @@
  * Functions in this module should be accessed via the Humanloop client. They should
  * not be called directly.
  */
-import * as contextApi from "@opentelemetry/api";
 import cliProgress from "cli-progress";
 import _, { capitalize } from "lodash";
 
 import {
     BooleanEvaluatorStatsResponse,
-    ChatMessage,
     CreateEvaluationRequestEvaluatorsItem,
     DatapointResponse,
     DatasetResponse,
@@ -35,25 +33,23 @@ import {
     PromptRequest,
     PromptResponse,
     RunStatsResponse,
-    ToolKernelRequest,
     ToolLogRequest,
     ToolRequest,
     ToolResponse,
 } from "../api";
 import {
     EvaluationContext,
+    HL_CONTEXT,
     getEvaluationContext,
     setEvaluationContext,
 } from "../context";
 import { HumanloopRuntimeError } from "../error";
 import { Humanloop, HumanloopClient } from "../index";
-import { jsonifyIfNotString } from "../otel/helpers";
 import {
     Dataset,
     Evaluator,
     EvaluatorCheck,
     File,
-    FileResponse,
     LocalEvaluator,
     LocalEvaluatorReturnTypeEnum,
     OnlineEvaluator,
@@ -371,7 +367,7 @@ export async function runEval<I, O>(
             throw new Error(`Datapoint 'inputs' attribute is undefined.`);
         }
 
-        contextApi.context.with(
+        HL_CONTEXT.with(
             setEvaluationContext(
                 new EvaluationContext({
                     sourceDatapointId: datapoint.id,

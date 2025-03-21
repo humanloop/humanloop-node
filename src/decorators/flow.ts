@@ -1,10 +1,9 @@
-import * as contextApi from "@opentelemetry/api";
 import { Tracer } from "@opentelemetry/api";
 import { ReadableSpan } from "@opentelemetry/sdk-trace-node";
 
 import { HumanloopClient } from "../Client";
 import { ChatMessage, FlowLogRequest, FlowLogResponse } from "../api";
-import { getTraceId, setDecoratorContext, setTraceId } from "../context";
+import { HL_CONTEXT, getTraceId, setDecoratorContext, setTraceId } from "../context";
 import { jsonifyIfNotString, writeToOpenTelemetrySpan } from "../otel";
 import {
     HUMANLOOP_FILE_TYPE_KEY,
@@ -42,7 +41,7 @@ export function flowUtilityFactory<I, O>(
             ? I
             : never,
     ) => {
-        return contextApi.context.with(
+        return HL_CONTEXT.with(
             setDecoratorContext({
                 path: path,
                 type: fileType,
@@ -77,7 +76,7 @@ export function flowUtilityFactory<I, O>(
                                 ...initLogInputs,
                             });
 
-                        return await contextApi.context.with(
+                        return await HL_CONTEXT.with(
                             setTraceId(flowLogResponse.id),
                             async () => {
                                 let logOutput: string | undefined;

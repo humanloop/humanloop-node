@@ -1,12 +1,10 @@
-import * as contextApi from "@opentelemetry/api";
-
-import { setDecoratorContext } from "../evals";
+import { HL_CONTEXT, setDecoratorContext } from "../context";
 
 export function promptDecoratorFactory<I, O>(path: string, callable: (inputs: I) => O) {
     const fileType = "prompt";
 
     const wrappedFunction = (inputs: I) => {
-        return contextApi.context.with(
+        return HL_CONTEXT.with(
             setDecoratorContext({
                 path: path,
                 type: fileType,

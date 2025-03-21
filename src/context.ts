@@ -1,4 +1,5 @@
-import * as contextApi from "@opentelemetry/api";
+import * as otel_api from "@opentelemetry/api";
+import { AsyncHooksContextManager } from "@opentelemetry/context-async-hooks";
 
 import { HumanloopRuntimeError } from "./error";
 import {
@@ -7,15 +8,18 @@ import {
     HUMANLOOP_CONTEXT_TRACE_ID,
 } from "./otel/constants";
 
+export const HL_CONTEXT = new AsyncHooksContextManager();
+HL_CONTEXT.enable();
+
 export function getTraceId(): string | undefined {
-    const key = contextApi.createContextKey(HUMANLOOP_CONTEXT_TRACE_ID);
-    const value = contextApi.context.active().getValue(key);
+    const key = otel_api.createContextKey(HUMANLOOP_CONTEXT_TRACE_ID);
+    const value = HL_CONTEXT.active().getValue(key);
     return (value || undefined) as string | undefined;
 }
 
-export function setTraceId(flowLogId: string): contextApi.Context {
-    const key = contextApi.createContextKey(HUMANLOOP_CONTEXT_TRACE_ID);
-    return contextApi.context.active().setValue(key, flowLogId);
+export function setTraceId(flowLogId: string): otel_api.Context {
+    const key = otel_api.createContextKey(HUMANLOOP_CONTEXT_TRACE_ID);
+    return HL_CONTEXT.active().setValue(key, flowLogId);
 }
 
 export type DecoratorContext = {
@@ -26,14 +30,14 @@ export type DecoratorContext = {
 
 export function setDecoratorContext(
     decoratorContext: DecoratorContext,
-): contextApi.Context {
-    const key = contextApi.createContextKey(HUMANLOOP_CONTEXT_DECORATOR);
-    return contextApi.context.active().setValue(key, decoratorContext);
+): otel_api.Context {
+    const key = otel_api.createContextKey(HUMANLOOP_CONTEXT_DECORATOR);
+    return HL_CONTEXT.active().setValue(key, decoratorContext);
 }
 
 export function getDecoratorContext(): DecoratorContext | undefined {
-    const key = contextApi.createContextKey(HUMANLOOP_CONTEXT_DECORATOR);
-    return (contextApi.context.active().getValue(key) || undefined) as
+    const key = otel_api.createContextKey(HUMANLOOP_CONTEXT_DECORATOR);
+    return (HL_CONTEXT.active().getValue(key) || undefined) as
         | DecoratorContext
         | undefined;
 }
@@ -134,14 +138,14 @@ export class EvaluationContext {
 
 export function setEvaluationContext(
     evaluationContext: EvaluationContext,
-): contextApi.Context {
-    const key = contextApi.createContextKey(HUMANLOOP_CONTEXT_EVALUATION);
-    return contextApi.context.active().setValue(key, evaluationContext);
+): otel_api.Context {
+    const key = otel_api.createContextKey(HUMANLOOP_CONTEXT_EVALUATION);
+    return HL_CONTEXT.active().setValue(key, evaluationContext);
 }
 
 export function getEvaluationContext(): EvaluationContext | undefined {
-    const key = contextApi.createContextKey(HUMANLOOP_CONTEXT_EVALUATION);
-    return (contextApi.context.active().getValue(key) || undefined) as
+    const key = otel_api.createContextKey(HUMANLOOP_CONTEXT_EVALUATION);
+    return (HL_CONTEXT.active().getValue(key) || undefined) as
         | EvaluationContext
         | undefined;
 }
