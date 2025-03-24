@@ -97,7 +97,7 @@ export class HumanloopChatLanguageModel implements LanguageModelV1 {
         const { path, id, prompt: promptProviderMetadata, ...restProviderMetadata } = (providerMetadata?.humanloop as HumanloopProviderMetadata) ?? {};
 
         if (!path && !id) {
-            throw new Error("One of path or id is required in providerMetadata.humanloop.")
+            throw new Error("Either path or id is required in providerOptions.humanloop.")
         }
 
         // prompt hyperparameters:

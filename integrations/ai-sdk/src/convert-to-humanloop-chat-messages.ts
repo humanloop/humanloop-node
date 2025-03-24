@@ -11,6 +11,11 @@ import { HumanloopChatPrompt } from './humanloop-api-types';
     const messages: HumanloopChatPrompt = [];
   
     for (const { role, content } of prompt) {
+      // Skip empty messages, i.e. when prompt == ""
+      if (content === "") {
+        continue;
+      }
+
       switch (role) {
         case 'system': {
           messages.push({ role: 'system', content });
