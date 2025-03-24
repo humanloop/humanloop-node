@@ -1,0 +1,26 @@
+{
+  "name": "ai-provider",
+  "version": "0.0.1",
+  "description": "Humanloop provider for the AI SDK by Vercel",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/humanloop/humanloop-node/integrations/ai-sdk"
+  },
+  "keywords": [
+    "ai",
+    "ai-sdk",
+    "vercel-ai-sdk"
+  ],
+  "author": "",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@ai-sdk/provider": "^1.0.11",
+    "@ai-sdk/provider-utils": "^2.1.13",
+    "tsup": "^8.4.0",
+    "zod": "^3.24.2"
+  }
+}
