@@ -8,6 +8,7 @@ import { NodeTracerProvider } from "@opentelemetry/sdk-trace-node";
 import { AnthropicInstrumentation } from "@traceloop/instrumentation-anthropic";
 import { CohereInstrumentation } from "@traceloop/instrumentation-cohere";
 import { OpenAIInstrumentation } from "@traceloop/instrumentation-openai";
+import { Agents } from "api/resources/agents/client/Client";
 
 import { HumanloopClient as BaseHumanloopClient } from "./Client";
 import { ChatMessage } from "./api";
@@ -216,6 +217,7 @@ export class HumanloopClient extends BaseHumanloopClient {
     protected readonly _flows_overloaded: Flows;
     protected readonly _tools_overloaded: Tools;
     protected readonly _evaluators_overloaded: Evaluators;
+    protected readonly _agents_overloaded: Agents;
     protected readonly instrumentProviders: {
         OpenAI?: any;
         Anthropic?: any;
@@ -275,6 +277,8 @@ export class HumanloopClient extends BaseHumanloopClient {
         this._flows_overloaded = overloadLog(super.flows);
 
         this._evaluators_overloaded = overloadLog(super.evaluators);
+
+        this._agents_overloaded = overloadLog(super.agents);
 
         this._evaluations = new ExtendedEvaluations(_options, this);
 
@@ -569,6 +573,10 @@ ${RESET}`,
 
     public get evaluations(): ExtendedEvaluations {
         return this._evaluations;
+    }
+
+    public get agents(): Agents {
+        return this._agents_overloaded;
     }
 
     public get prompts(): Prompts {
