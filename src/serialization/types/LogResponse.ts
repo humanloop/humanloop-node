@@ -12,6 +12,7 @@ export const LogResponse: core.serialization.Schema<serializers.LogResponse.Raw,
         core.serialization.lazyObject(() => serializers.ToolLogResponse),
         core.serialization.lazyObject(() => serializers.EvaluatorLogResponse),
         core.serialization.lazyObject(() => serializers.FlowLogResponse),
+        core.serialization.lazyObject(() => serializers.AgentLogResponse),
     ]);
 
 export declare namespace LogResponse {
@@ -19,5 +20,6 @@ export declare namespace LogResponse {
         | serializers.PromptLogResponse.Raw
         | serializers.ToolLogResponse.Raw
         | serializers.EvaluatorLogResponse.Raw
-        | serializers.FlowLogResponse.Raw;
+        | serializers.FlowLogResponse.Raw
+        | serializers.AgentLogResponse.Raw;
 }

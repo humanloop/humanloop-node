@@ -52,16 +52,18 @@ export interface PromptResponse {
     seed?: number;
     /** The format of the response. Only `{"type": "json_object"}` is currently supported for chat. */
     responseFormat?: Humanloop.ResponseFormat;
-    /** Give model guidance on how many reasoning tokens it should generate before creating a response to the prompt. This is only supported for OpenAI reasoning (o1, o3-mini) models. */
-    reasoningEffort?: Humanloop.ReasoningEffort;
+    /** Guidance on how many reasoning tokens it should generate before creating a response to the prompt. OpenAI reasoning models (o1, o3-mini) expect a OpenAIReasoningEffort enum. Anthropic reasoning models expect an integer, which signifies the maximum token budget. */
+    reasoningEffort?: Humanloop.PromptResponseReasoningEffort;
     /** The tool specification that the model can choose to call if Tool calling is supported. */
     tools?: Humanloop.ToolFunction[];
     /** The tools linked to your prompt that the model can call. */
     linkedTools?: Humanloop.LinkedToolResponse[];
     /** Additional fields to describe the Prompt. Helpful to separate Prompt versions from each other with details on how they were created or used. */
     attributes?: Record<string, unknown>;
-    /** Message describing the changes made. */
-    commitMessage?: string;
+    /** Unique name for the Prompt version. Version names must be unique for a given Prompt. */
+    versionName?: string;
+    /** Description of the version, e.g., the changes made in this version. */
+    versionDescription?: string;
     /** Description of the Prompt. */
     description?: string;
     /** List of tags associated with the file. */
@@ -70,6 +72,8 @@ export interface PromptResponse {
     readme?: string;
     /** Name of the Prompt. */
     name: string;
+    /** The JSON schema for the Prompt. */
+    schema?: Record<string, unknown>;
     /** Unique identifier for the specific Prompt Version. If no query params provided, the default deployed Prompt Version is returned. */
     versionId: string;
     type?: "prompt";
@@ -79,12 +83,6 @@ export interface PromptResponse {
     updatedAt: Date;
     /** The user who created the Prompt. */
     createdBy?: Humanloop.UserResponse | undefined;
-    /** The user who committed the Prompt Version. */
-    committedBy?: Humanloop.UserResponse | undefined;
-    /** The date and time the Prompt Version was committed. */
-    committedAt?: Date;
-    /** The status of the Prompt Version. */
-    status: Humanloop.VersionStatus;
     lastUsedAt: Date;
     /** The number of logs that have been generated for this Prompt Version */
     versionLogsCount: number;

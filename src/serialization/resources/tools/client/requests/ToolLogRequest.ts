@@ -5,8 +5,8 @@
 import * as serializers from "../../../../index";
 import * as Humanloop from "../../../../../api/index";
 import * as core from "../../../../../core";
-import { LogStatus } from "../../../../types/LogStatus";
 import { ToolKernelRequest } from "../../../../types/ToolKernelRequest";
+import { LogStatus } from "../../../../types/LogStatus";
 
 export const ToolLogRequest: core.serialization.Schema<
     serializers.ToolLogRequest.Raw,
@@ -14,6 +14,7 @@ export const ToolLogRequest: core.serialization.Schema<
 > = core.serialization.object({
     path: core.serialization.string().optional(),
     id: core.serialization.string().optional(),
+    tool: ToolKernelRequest.optional(),
     startTime: core.serialization.property("start_time", core.serialization.date().optional()),
     endTime: core.serialization.property("end_time", core.serialization.date().optional()),
     output: core.serialization.string().optional(),
@@ -39,13 +40,13 @@ export const ToolLogRequest: core.serialization.Schema<
     toolLogRequestEnvironment: core.serialization.property("environment", core.serialization.string().optional()),
     save: core.serialization.boolean().optional(),
     logId: core.serialization.property("log_id", core.serialization.string().optional()),
-    tool: ToolKernelRequest.optional(),
 });
 
 export declare namespace ToolLogRequest {
     export interface Raw {
         path?: string | null;
         id?: string | null;
+        tool?: ToolKernelRequest.Raw | null;
         start_time?: string | null;
         end_time?: string | null;
         output?: string | null;
@@ -65,6 +66,5 @@ export declare namespace ToolLogRequest {
         environment?: string | null;
         save?: boolean | null;
         log_id?: string | null;
-        tool?: ToolKernelRequest.Raw | null;
     }
 }

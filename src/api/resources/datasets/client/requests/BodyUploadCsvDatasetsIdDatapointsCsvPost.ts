@@ -4,9 +4,7 @@
 
 /**
  * @example
- *     {
- *         commitMessage: "commit_message"
- *     }
+ *     {}
  */
 export interface BodyUploadCsvDatasetsIdDatapointsCsvPost {
     /**
@@ -17,6 +15,8 @@ export interface BodyUploadCsvDatasetsIdDatapointsCsvPost {
      * Name of the Environment identifying a deployed Version to base the created Version on.
      */
     environment?: string;
-    /** Commit message for the new Dataset version. */
-    commitMessage: string;
+    /** Name for the new Dataset version. */
+    versionName?: string;
+    /** Description for the new Dataset version. */
+    versionDescription?: string;
 }

@@ -16,6 +16,7 @@ export const DirectoryWithParentsAndChildrenResponseFilesItem: core.serializatio
     core.serialization.lazyObject(() => serializers.EvaluatorResponse),
     DatasetResponse,
     core.serialization.lazyObject(() => serializers.FlowResponse),
+    core.serialization.lazyObject(() => serializers.AgentResponse),
 ]);
 
 export declare namespace DirectoryWithParentsAndChildrenResponseFilesItem {
@@ -24,5 +25,6 @@ export declare namespace DirectoryWithParentsAndChildrenResponseFilesItem {
         | serializers.ToolResponse.Raw
         | serializers.EvaluatorResponse.Raw
         | DatasetResponse.Raw
-        | serializers.FlowResponse.Raw;
+        | serializers.FlowResponse.Raw
+        | serializers.AgentResponse.Raw;
 }

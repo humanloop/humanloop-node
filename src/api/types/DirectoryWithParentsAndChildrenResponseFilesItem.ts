@@ -9,4 +9,5 @@ export type DirectoryWithParentsAndChildrenResponseFilesItem =
     | Humanloop.ToolResponse
     | Humanloop.EvaluatorResponse
     | Humanloop.DatasetResponse
-    | Humanloop.FlowResponse;
+    | Humanloop.FlowResponse
+    | Humanloop.AgentResponse;

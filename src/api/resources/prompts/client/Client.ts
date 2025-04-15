@@ -39,7 +39,7 @@ export declare namespace Prompts {
  * A Prompt on Humanloop encapsulates the base instructions and other configuration for how a large language model should
  * perform a specific task.
  *
- * Prompts have immutable versions that you can **Commit** and **Deploy**.
+ * Prompts have immutable versions that you can **Save** and **Deploy**.
  * To use a Prompt, you can **Call** it to create a generation and you can **Log** generations manually.
  *
  * #### Referencing Prompts
@@ -129,8 +129,8 @@ export class Prompts {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.18",
-                "User-Agent": "humanloop/0.8.18",
+                "X-Fern-SDK-Version": "0.8.20",
+                "User-Agent": "humanloop/0.8.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -221,8 +221,8 @@ export class Prompts {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.18",
-                "User-Agent": "humanloop/0.8.18",
+                "X-Fern-SDK-Version": "0.8.20",
+                "User-Agent": "humanloop/0.8.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -321,8 +321,8 @@ export class Prompts {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.18",
-                "User-Agent": "humanloop/0.8.18",
+                "X-Fern-SDK-Version": "0.8.20",
+                "User-Agent": "humanloop/0.8.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -502,8 +502,8 @@ export class Prompts {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.18",
-                "User-Agent": "humanloop/0.8.18",
+                "X-Fern-SDK-Version": "0.8.20",
+                "User-Agent": "humanloop/0.8.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -618,8 +618,8 @@ export class Prompts {
                 headers: {
                     "X-Fern-Language": "JavaScript",
                     "X-Fern-SDK-Name": "humanloop",
-                    "X-Fern-SDK-Version": "0.8.18",
-                    "User-Agent": "humanloop/0.8.18",
+                    "X-Fern-SDK-Version": "0.8.20",
+                    "User-Agent": "humanloop/0.8.20",
                     "X-Fern-Runtime": core.RUNTIME.type,
                     "X-Fern-Runtime-Version": core.RUNTIME.version,
                     ...(await this._getCustomAuthorizationHeaders()),
@@ -691,9 +691,9 @@ export class Prompts {
      *
      * Prompts are identified by the `ID` or their `path`. The parameters (i.e. the prompt template, temperature, model etc.) determine the versions of the Prompt.
      *
-     * If you provide a commit message, then the new version will be committed;
-     * otherwise it will be uncommitted. If you try to commit an already committed version,
-     * an exception will be raised.
+     * You can provide `version_name` and `version_description` to identify and describe your versions.
+     * Version names must be unique within a Prompt - attempting to create a version with a name
+     * that already exists will result in a 409 Conflict error.
      *
      * @param {Humanloop.PromptRequest} request
      * @param {Prompts.RequestOptions} requestOptions - Request-specific configuration.
@@ -711,8 +711,7 @@ export class Prompts {
      *             }],
      *         provider: "openai",
      *         maxTokens: -1,
-     *         temperature: 0.7,
-     *         commitMessage: "Initial commit"
+     *         temperature: 0.7
      *     })
      */
     public async upsert(
@@ -730,8 +729,8 @@ export class Prompts {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.18",
-                "User-Agent": "humanloop/0.8.18",
+                "X-Fern-SDK-Version": "0.8.20",
+                "User-Agent": "humanloop/0.8.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -830,8 +829,8 @@ export class Prompts {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.18",
-                "User-Agent": "humanloop/0.8.18",
+                "X-Fern-SDK-Version": "0.8.20",
+                "User-Agent": "humanloop/0.8.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -912,8 +911,8 @@ export class Prompts {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.18",
-                "User-Agent": "humanloop/0.8.18",
+                "X-Fern-SDK-Version": "0.8.20",
+                "User-Agent": "humanloop/0.8.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -994,8 +993,8 @@ export class Prompts {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.18",
-                "User-Agent": "humanloop/0.8.18",
+                "X-Fern-SDK-Version": "0.8.20",
+                "User-Agent": "humanloop/0.8.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1060,21 +1059,21 @@ export class Prompts {
      * `version_id` or `environment` to target a specific version of the Prompt.
      *
      * @param {string} id - Unique identifier for Prompt.
-     * @param {Humanloop.PopulateTemplatePromptsIdPopulatePostRequest} request
+     * @param {Humanloop.PopulatePromptsIdPopulatePostRequest} request
      * @param {Prompts.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Humanloop.UnprocessableEntityError}
      *
      * @example
-     *     await client.prompts.populateTemplate("id", {
+     *     await client.prompts.populate("id", {
      *         body: {
      *             "key": "value"
      *         }
      *     })
      */
-    public async populateTemplate(
+    public async populate(
         id: string,
-        request: Humanloop.PopulateTemplatePromptsIdPopulatePostRequest,
+        request: Humanloop.PopulatePromptsIdPopulatePostRequest,
         requestOptions?: Prompts.RequestOptions,
     ): Promise<Humanloop.PopulateTemplateResponse> {
         const { versionId, environment, body: _body } = request;
@@ -1098,8 +1097,8 @@ export class Prompts {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.18",
-                "User-Agent": "humanloop/0.8.18",
+                "X-Fern-SDK-Version": "0.8.20",
+                "User-Agent": "humanloop/0.8.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1108,7 +1107,7 @@ export class Prompts {
             contentType: "application/json",
             queryParameters: _queryParams,
             requestType: "json",
-            body: serializers.prompts.populateTemplate.Request.jsonOrThrow(_body, { unrecognizedObjectKeys: "strip" }),
+            body: serializers.prompts.populate.Request.jsonOrThrow(_body, { unrecognizedObjectKeys: "strip" }),
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -1168,21 +1167,15 @@ export class Prompts {
      * @throws {@link Humanloop.UnprocessableEntityError}
      *
      * @example
-     *     await client.prompts.listVersions("pr_30gco7dx6JDq4200GVOHa", {
-     *         status: "committed"
-     *     })
+     *     await client.prompts.listVersions("pr_30gco7dx6JDq4200GVOHa")
      */
     public async listVersions(
         id: string,
         request: Humanloop.ListVersionsPromptsIdVersionsGetRequest = {},
         requestOptions?: Prompts.RequestOptions,
     ): Promise<Humanloop.ListPrompts> {
-        const { status, evaluatorAggregates } = request;
+        const { evaluatorAggregates } = request;
         const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-        if (status != null) {
-            _queryParams["status"] = serializers.VersionStatus.jsonOrThrow(status, { unrecognizedObjectKeys: "strip" });
-        }
-
         if (evaluatorAggregates != null) {
             _queryParams["evaluator_aggregates"] = evaluatorAggregates.toString();
         }
@@ -1198,8 +1191,8 @@ export class Prompts {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.18",
-                "User-Agent": "humanloop/0.8.18",
+                "X-Fern-SDK-Version": "0.8.20",
+                "User-Agent": "humanloop/0.8.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1258,101 +1251,6 @@ export class Prompts {
     }
 
     /**
-     * Commit a version of the Prompt with a commit message.
-     *
-     * If the version is already committed, an exception will be raised.
-     *
-     * @param {string} id - Unique identifier for Prompt.
-     * @param {string} versionId - Unique identifier for the specific version of the Prompt.
-     * @param {Humanloop.CommitRequest} request
-     * @param {Prompts.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @throws {@link Humanloop.UnprocessableEntityError}
-     *
-     * @example
-     *     await client.prompts.commit("pr_30gco7dx6JDq4200GVOHa", "prv_F34aba5f3asp0", {
-     *         commitMessage: "Reiterated point about not discussing sentience"
-     *     })
-     */
-    public async commit(
-        id: string,
-        versionId: string,
-        request: Humanloop.CommitRequest,
-        requestOptions?: Prompts.RequestOptions,
-    ): Promise<Humanloop.PromptResponse> {
-        const _response = await (this._options.fetcher ?? core.fetcher)({
-            url: urlJoin(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.HumanloopEnvironment.Default,
-                `prompts/${encodeURIComponent(id)}/versions/${encodeURIComponent(versionId)}/commit`,
-            ),
-            method: "POST",
-            headers: {
-                "X-Fern-Language": "JavaScript",
-                "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.18",
-                "User-Agent": "humanloop/0.8.18",
-                "X-Fern-Runtime": core.RUNTIME.type,
-                "X-Fern-Runtime-Version": core.RUNTIME.version,
-                ...(await this._getCustomAuthorizationHeaders()),
-                ...requestOptions?.headers,
-            },
-            contentType: "application/json",
-            requestType: "json",
-            body: serializers.CommitRequest.jsonOrThrow(request, { unrecognizedObjectKeys: "strip" }),
-            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-            maxRetries: requestOptions?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-        });
-        if (_response.ok) {
-            return serializers.PromptResponse.parseOrThrow(_response.body, {
-                unrecognizedObjectKeys: "passthrough",
-                allowUnrecognizedUnionMembers: true,
-                allowUnrecognizedEnumValues: true,
-                skipValidation: true,
-                breadcrumbsPrefix: ["response"],
-            });
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 422:
-                    throw new Humanloop.UnprocessableEntityError(
-                        serializers.HttpValidationError.parseOrThrow(_response.error.body, {
-                            unrecognizedObjectKeys: "passthrough",
-                            allowUnrecognizedUnionMembers: true,
-                            allowUnrecognizedEnumValues: true,
-                            skipValidation: true,
-                            breadcrumbsPrefix: ["response"],
-                        }),
-                    );
-                default:
-                    throw new errors.HumanloopError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                    });
-            }
-        }
-
-        switch (_response.error.reason) {
-            case "non-json":
-                throw new errors.HumanloopError({
-                    statusCode: _response.error.statusCode,
-                    body: _response.error.rawBody,
-                });
-            case "timeout":
-                throw new errors.HumanloopTimeoutError(
-                    "Timeout exceeded when calling POST /prompts/{id}/versions/{version_id}/commit.",
-                );
-            case "unknown":
-                throw new errors.HumanloopError({
-                    message: _response.error.errorMessage,
-                });
-        }
-    }
-
-    /**
      * Delete a version of the Prompt.
      *
      * @param {string} id - Unique identifier for Prompt.
@@ -1380,8 +1278,8 @@ export class Prompts {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.18",
-                "User-Agent": "humanloop/0.8.18",
+                "X-Fern-SDK-Version": "0.8.20",
+                "User-Agent": "humanloop/0.8.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1435,6 +1333,97 @@ export class Prompts {
     }
 
     /**
+     * Update the name or description of the Prompt version.
+     *
+     * @param {string} id - Unique identifier for Prompt.
+     * @param {string} versionId - Unique identifier for the specific version of the Prompt.
+     * @param {Humanloop.UpdateVersionRequest} request
+     * @param {Prompts.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Humanloop.UnprocessableEntityError}
+     *
+     * @example
+     *     await client.prompts.patchPromptVersion("id", "version_id", {})
+     */
+    public async patchPromptVersion(
+        id: string,
+        versionId: string,
+        request: Humanloop.UpdateVersionRequest,
+        requestOptions?: Prompts.RequestOptions,
+    ): Promise<Humanloop.PromptResponse> {
+        const _response = await (this._options.fetcher ?? core.fetcher)({
+            url: urlJoin(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.HumanloopEnvironment.Default,
+                `prompts/${encodeURIComponent(id)}/versions/${encodeURIComponent(versionId)}`,
+            ),
+            method: "PATCH",
+            headers: {
+                "X-Fern-Language": "JavaScript",
+                "X-Fern-SDK-Name": "humanloop",
+                "X-Fern-SDK-Version": "0.8.20",
+                "User-Agent": "humanloop/0.8.20",
+                "X-Fern-Runtime": core.RUNTIME.type,
+                "X-Fern-Runtime-Version": core.RUNTIME.version,
+                ...(await this._getCustomAuthorizationHeaders()),
+                ...requestOptions?.headers,
+            },
+            contentType: "application/json",
+            requestType: "json",
+            body: serializers.UpdateVersionRequest.jsonOrThrow(request, { unrecognizedObjectKeys: "strip" }),
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return serializers.PromptResponse.parseOrThrow(_response.body, {
+                unrecognizedObjectKeys: "passthrough",
+                allowUnrecognizedUnionMembers: true,
+                allowUnrecognizedEnumValues: true,
+                skipValidation: true,
+                breadcrumbsPrefix: ["response"],
+            });
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 422:
+                    throw new Humanloop.UnprocessableEntityError(
+                        serializers.HttpValidationError.parseOrThrow(_response.error.body, {
+                            unrecognizedObjectKeys: "passthrough",
+                            allowUnrecognizedUnionMembers: true,
+                            allowUnrecognizedEnumValues: true,
+                            skipValidation: true,
+                            breadcrumbsPrefix: ["response"],
+                        }),
+                    );
+                default:
+                    throw new errors.HumanloopError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                    });
+            }
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.HumanloopError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
+                });
+            case "timeout":
+                throw new errors.HumanloopTimeoutError(
+                    "Timeout exceeded when calling PATCH /prompts/{id}/versions/{version_id}.",
+                );
+            case "unknown":
+                throw new errors.HumanloopError({
+                    message: _response.error.errorMessage,
+                });
+        }
+    }
+
+    /**
      * Deploy Prompt to an Environment.
      *
      * Set the deployed version for the specified Environment. This Prompt
@@ -1472,8 +1461,8 @@ export class Prompts {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.18",
-                "User-Agent": "humanloop/0.8.18",
+                "X-Fern-SDK-Version": "0.8.20",
+                "User-Agent": "humanloop/0.8.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1564,8 +1553,8 @@ export class Prompts {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.18",
-                "User-Agent": "humanloop/0.8.18",
+                "X-Fern-SDK-Version": "0.8.20",
+                "User-Agent": "humanloop/0.8.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1644,8 +1633,8 @@ export class Prompts {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.18",
-                "User-Agent": "humanloop/0.8.18",
+                "X-Fern-SDK-Version": "0.8.20",
+                "User-Agent": "humanloop/0.8.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1737,8 +1726,8 @@ export class Prompts {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.18",
-                "User-Agent": "humanloop/0.8.18",
+                "X-Fern-SDK-Version": "0.8.20",
+                "User-Agent": "humanloop/0.8.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),

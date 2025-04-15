@@ -5,11 +5,12 @@
 /**
  * Enum for File types.
  */
-export type FileType = "prompt" | "tool" | "dataset" | "evaluator" | "flow";
+export type FileType = "prompt" | "tool" | "dataset" | "evaluator" | "flow" | "agent";
 export const FileType = {
     Prompt: "prompt",
     Tool: "tool",
     Dataset: "dataset",
     Evaluator: "evaluator",
     Flow: "flow",
+    Agent: "agent",
 } as const;

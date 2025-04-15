@@ -12,4 +12,5 @@ export type FileEnvironmentResponseFile =
     | Humanloop.ToolResponse
     | Humanloop.DatasetResponse
     | Humanloop.EvaluatorResponse
-    | Humanloop.FlowResponse;
+    | Humanloop.FlowResponse
+    | Humanloop.AgentResponse;

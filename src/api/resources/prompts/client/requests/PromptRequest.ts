@@ -16,8 +16,7 @@ import * as Humanloop from "../../../../index";
  *             }],
  *         provider: "openai",
  *         maxTokens: -1,
- *         temperature: 0.7,
- *         commitMessage: "Initial commit"
+ *         temperature: 0.7
  *     }
  */
 export interface PromptRequest {
@@ -60,16 +59,18 @@ export interface PromptRequest {
     seed?: number;
     /** The format of the response. Only `{"type": "json_object"}` is currently supported for chat. */
     responseFormat?: Humanloop.ResponseFormat;
-    /** Give model guidance on how many reasoning tokens it should generate before creating a response to the prompt. This is only supported for OpenAI reasoning (o1, o3-mini) models. */
-    reasoningEffort?: Humanloop.ReasoningEffort;
+    /** Guidance on how many reasoning tokens it should generate before creating a response to the prompt. OpenAI reasoning models (o1, o3-mini) expect a OpenAIReasoningEffort enum. Anthropic reasoning models expect an integer, which signifies the maximum token budget. */
+    reasoningEffort?: Humanloop.PromptRequestReasoningEffort;
     /** The tool specification that the model can choose to call if Tool calling is supported. */
     tools?: Humanloop.ToolFunction[];
     /** The IDs of the Tools in your organization that the model can choose to call if Tool calling is supported. The default deployed version of that tool is called. */
     linkedTools?: string[];
     /** Additional fields to describe the Prompt. Helpful to separate Prompt versions from each other with details on how they were created or used. */
     attributes?: Record<string, unknown>;
-    /** Message describing the changes made. */
-    commitMessage?: string;
+    /** Unique name for the Prompt version. Version names must be unique for a given Prompt. */
+    versionName?: string;
+    /** Description of the version, e.g., the changes made in this version. */
+    versionDescription?: string;
     /** Description of the Prompt. */
     description?: string;
     /** List of tags associated with this prompt. */

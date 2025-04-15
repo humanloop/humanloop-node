@@ -16,12 +16,16 @@ export interface FlowResponse {
     directoryId?: string;
     /** A key-value object identifying the Flow Version. */
     attributes: Record<string, unknown>;
-    /** Message describing the changes made. If provided, a committed version of the Flow is created. Otherwise, an uncommitted version is created. */
-    commitMessage?: string;
+    /** Unique name for the Flow version. Version names must be unique for a given Flow. */
+    versionName?: string;
+    /** Description of the Version. */
+    versionDescription?: string;
     /** Name of the Flow. */
     name: string;
     /** Description of the Flow. */
     description?: string;
+    /** The JSON schema for the File. */
+    schema?: Record<string, unknown>;
     /** Long description of the file. */
     readme?: string;
     /** List of tags associated with the file. */
@@ -35,12 +39,6 @@ export interface FlowResponse {
     updatedAt: Date;
     /** The user who created the Flow. */
     createdBy?: Humanloop.UserResponse | undefined;
-    /** The user who committed the Flow Version. */
-    committedBy?: Humanloop.UserResponse | undefined;
-    /** The date and time the Flow Version was committed. */
-    committedAt?: Date;
-    /** The status of the Flow Version. */
-    status: Humanloop.VersionStatus;
     lastUsedAt: Date;
     /** The number of logs that have been generated for this Flow Version */
     versionLogsCount: number;

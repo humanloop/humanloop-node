@@ -21,6 +21,8 @@ export interface DatasetResponse {
     name: string;
     /** Description of the Dataset. */
     description?: string;
+    /** The JSON schema for the File. */
+    schema?: Record<string, unknown>;
     /** Long description of the file. */
     readme?: string;
     /** List of tags associated with the file. */
@@ -34,15 +36,11 @@ export interface DatasetResponse {
     updatedAt: Date;
     /** The user who created the Dataset. */
     createdBy?: Humanloop.UserResponse | undefined;
-    /** The user who committed the Dataset Version. */
-    committedBy?: Humanloop.UserResponse | undefined;
-    /** The date and time the Dataset Version was committed. */
-    committedAt?: Date;
-    /** The status of the Dataset Version. */
-    status: Humanloop.VersionStatus;
     lastUsedAt: Date;
-    /** Message describing the changes made. If provided, a committed version of the Dataset is created. Otherwise, an uncommitted version is created. */
-    commitMessage?: string;
+    /** Unique name for the Dataset version. Version names must be unique for a given Dataset. */
+    versionName?: string;
+    /** Description of the version, e.g., the changes made in this version. */
+    versionDescription?: string;
     /** The number of Datapoints in this Dataset version. */
     datapointsCount: number;
     /** The list of Datapoints in this Dataset version. Only provided if explicitly requested. */

@@ -6,25 +6,25 @@
  * Supported model providers.
  */
 export type ModelProviders =
-    | "openai"
-    | "openai_azure"
-    | "mock"
     | "anthropic"
     | "bedrock"
     | "cohere"
-    | "replicate"
+    | "deepseek"
     | "google"
     | "groq"
-    | "deepseek";
+    | "mock"
+    | "openai"
+    | "openai_azure"
+    | "replicate";
 export const ModelProviders = {
-    Openai: "openai",
-    OpenaiAzure: "openai_azure",
-    Mock: "mock",
     Anthropic: "anthropic",
     Bedrock: "bedrock",
     Cohere: "cohere",
-    Replicate: "replicate",
+    Deepseek: "deepseek",
     Google: "google",
     Groq: "groq",
-    Deepseek: "deepseek",
+    Mock: "mock",
+    Openai: "openai",
+    OpenaiAzure: "openai_azure",
+    Replicate: "replicate",
 } as const;

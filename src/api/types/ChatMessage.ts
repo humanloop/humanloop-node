@@ -15,4 +15,6 @@ export interface ChatMessage {
     role: Humanloop.ChatRole;
     /** A list of tool calls requested by the assistant. */
     toolCalls?: Humanloop.ToolCall[];
+    /** Model's chain-of-thought for providing the response. Present on assistant messages if model supports it. */
+    thinking?: Humanloop.ChatMessageThinkingItem[];
 }

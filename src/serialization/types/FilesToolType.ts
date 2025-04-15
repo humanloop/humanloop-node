@@ -7,8 +7,8 @@ import * as Humanloop from "../../api/index";
 import * as core from "../../core";
 
 export const FilesToolType: core.serialization.Schema<serializers.FilesToolType.Raw, Humanloop.FilesToolType> =
-    core.serialization.enum_(["pinecone_search", "google", "mock", "snippet", "json_schema", "get_api_call"]);
+    core.serialization.enum_(["pinecone_search", "google", "mock", "snippet", "json_schema", "get_api_call", "python"]);
 
 export declare namespace FilesToolType {
-    export type Raw = "pinecone_search" | "google" | "mock" | "snippet" | "json_schema" | "get_api_call";
+    export type Raw = "pinecone_search" | "google" | "mock" | "snippet" | "json_schema" | "get_api_call" | "python";
 }

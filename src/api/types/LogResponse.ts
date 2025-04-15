@@ -8,4 +8,5 @@ export type LogResponse =
     | Humanloop.PromptLogResponse
     | Humanloop.ToolLogResponse
     | Humanloop.EvaluatorLogResponse
-    | Humanloop.FlowLogResponse;
+    | Humanloop.FlowLogResponse
+    | Humanloop.AgentLogResponse;

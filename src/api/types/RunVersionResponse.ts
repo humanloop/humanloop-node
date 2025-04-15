@@ -8,4 +8,5 @@ export type RunVersionResponse =
     | Humanloop.PromptResponse
     | Humanloop.ToolResponse
     | Humanloop.EvaluatorResponse
-    | Humanloop.FlowResponse;
+    | Humanloop.FlowResponse
+    | Humanloop.AgentResponse;

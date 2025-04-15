@@ -26,8 +26,7 @@ import * as Humanloop from "../../../../index";
  *                     "b"
  *                 ]
  *             }
- *         },
- *         commitMessage: "Initial commit"
+ *         }
  *     }
  */
 export interface ToolRequest {
@@ -45,6 +44,8 @@ export interface ToolRequest {
     attributes?: Record<string, unknown>;
     /** Type of Tool. */
     toolType?: Humanloop.FilesToolType;
-    /** Message describing the changes made. */
-    commitMessage?: string;
+    /** Unique identifier for this Tool version. Each Tool can only have one version with a given name. */
+    versionName?: string;
+    /** Description of the Version. */
+    versionDescription?: string;
 }

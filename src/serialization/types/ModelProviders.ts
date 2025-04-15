@@ -8,28 +8,28 @@ import * as core from "../../core";
 
 export const ModelProviders: core.serialization.Schema<serializers.ModelProviders.Raw, Humanloop.ModelProviders> =
     core.serialization.enum_([
-        "openai",
-        "openai_azure",
-        "mock",
         "anthropic",
         "bedrock",
         "cohere",
-        "replicate",
+        "deepseek",
         "google",
         "groq",
-        "deepseek",
+        "mock",
+        "openai",
+        "openai_azure",
+        "replicate",
     ]);
 
 export declare namespace ModelProviders {
     export type Raw =
-        | "openai"
-        | "openai_azure"
-        | "mock"
         | "anthropic"
         | "bedrock"
         | "cohere"
-        | "replicate"
+        | "deepseek"
         | "google"
         | "groq"
-        | "deepseek";
+        | "mock"
+        | "openai"
+        | "openai_azure"
+        | "replicate";
 }

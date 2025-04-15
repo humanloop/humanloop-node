@@ -16,6 +16,7 @@ export const RetrieveByPathFilesRetrieveByPathPostResponse: core.serialization.S
     DatasetResponse,
     core.serialization.lazyObject(() => serializers.EvaluatorResponse),
     core.serialization.lazyObject(() => serializers.FlowResponse),
+    core.serialization.lazyObject(() => serializers.AgentResponse),
 ]);
 
 export declare namespace RetrieveByPathFilesRetrieveByPathPostResponse {
@@ -24,5 +25,6 @@ export declare namespace RetrieveByPathFilesRetrieveByPathPostResponse {
         | serializers.ToolResponse.Raw
         | DatasetResponse.Raw
         | serializers.EvaluatorResponse.Raw
-        | serializers.FlowResponse.Raw;
+        | serializers.FlowResponse.Raw
+        | serializers.AgentResponse.Raw;
 }

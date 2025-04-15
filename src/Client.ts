@@ -9,6 +9,7 @@ import { Tools } from "./api/resources/tools/client/Client";
 import { Datasets } from "./api/resources/datasets/client/Client";
 import { Evaluators } from "./api/resources/evaluators/client/Client";
 import { Flows } from "./api/resources/flows/client/Client";
+import { Agents } from "./api/resources/agents/client/Client";
 import { Directories } from "./api/resources/directories/client/Client";
 import { Files } from "./api/resources/files/client/Client";
 import { Evaluations } from "./api/resources/evaluations/client/Client";
@@ -41,6 +42,7 @@ export class HumanloopClient {
     protected _datasets: Datasets | undefined;
     protected _evaluators: Evaluators | undefined;
     protected _flows: Flows | undefined;
+    protected _agents: Agents | undefined;
     protected _directories: Directories | undefined;
     protected _files: Files | undefined;
     protected _evaluations: Evaluations | undefined;
@@ -66,6 +68,10 @@ export class HumanloopClient {
 
     public get flows(): Flows {
         return (this._flows ??= new Flows(this._options));
+    }
+
+    public get agents(): Agents {
+        return (this._agents ??= new Agents(this._options));
     }
 
     public get directories(): Directories {

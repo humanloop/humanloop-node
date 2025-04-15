@@ -7,7 +7,6 @@ import * as Humanloop from "../../api/index";
 import * as core from "../../core";
 import { EnvironmentResponse } from "./EnvironmentResponse";
 import { UserResponse } from "./UserResponse";
-import { VersionStatus } from "./VersionStatus";
 import { DatapointResponse } from "./DatapointResponse";
 
 export const DatasetResponse: core.serialization.ObjectSchema<
@@ -19,6 +18,7 @@ export const DatasetResponse: core.serialization.ObjectSchema<
     directoryId: core.serialization.property("directory_id", core.serialization.string().optional()),
     name: core.serialization.string(),
     description: core.serialization.string().optional(),
+    schema: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
     readme: core.serialization.string().optional(),
     tags: core.serialization.list(core.serialization.string()).optional(),
     versionId: core.serialization.property("version_id", core.serialization.string()),
@@ -27,11 +27,9 @@ export const DatasetResponse: core.serialization.ObjectSchema<
     createdAt: core.serialization.property("created_at", core.serialization.date()),
     updatedAt: core.serialization.property("updated_at", core.serialization.date()),
     createdBy: core.serialization.property("created_by", UserResponse.optional()),
-    committedBy: core.serialization.property("committed_by", UserResponse.optional()),
-    committedAt: core.serialization.property("committed_at", core.serialization.date().optional()),
-    status: VersionStatus,
     lastUsedAt: core.serialization.property("last_used_at", core.serialization.date()),
-    commitMessage: core.serialization.property("commit_message", core.serialization.string().optional()),
+    versionName: core.serialization.property("version_name", core.serialization.string().optional()),
+    versionDescription: core.serialization.property("version_description", core.serialization.string().optional()),
     datapointsCount: core.serialization.property("datapoints_count", core.serialization.number()),
     datapoints: core.serialization.list(DatapointResponse).optional(),
     attributes: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
@@ -44,6 +42,7 @@ export declare namespace DatasetResponse {
         directory_id?: string | null;
         name: string;
         description?: string | null;
+        schema?: Record<string, unknown> | null;
         readme?: string | null;
         tags?: string[] | null;
         version_id: string;
@@ -52,11 +51,9 @@ export declare namespace DatasetResponse {
         created_at: string;
         updated_at: string;
         created_by?: (UserResponse.Raw | undefined) | null;
-        committed_by?: (UserResponse.Raw | undefined) | null;
-        committed_at?: string | null;
-        status: VersionStatus.Raw;
         last_used_at: string;
-        commit_message?: string | null;
+        version_name?: string | null;
+        version_description?: string | null;
         datapoints_count: number;
         datapoints?: DatapointResponse.Raw[] | null;
         attributes?: Record<string, unknown> | null;

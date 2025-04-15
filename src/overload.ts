@@ -1,3 +1,4 @@
+import { Agents } from "api/resources/agents/client/Client";
 import {
     CreateEvaluatorLogRequest,
     FlowLogRequest,
@@ -12,7 +13,7 @@ import { Tools } from "./api/resources/tools/client/Client";
 import { getDecoratorContext, getEvaluationContext, getTraceId } from "./context";
 import { HumanloopRuntimeError } from "./error";
 
-export function overloadLog<T extends Flows | Prompts | Tools | Evaluators>(
+export function overloadLog<T extends Flows | Prompts | Tools | Evaluators | Agents>(
     client: T,
 ): T {
     const originalLog = client.log.bind(client);
@@ -35,7 +36,9 @@ export function overloadLog<T extends Flows | Prompts | Tools | Evaluators>(
                 ? Tools.RequestOptions
                 : T extends Evaluators
                   ? Evaluators.RequestOptions
-                  : never,
+                  : T extends Agents
+                    ? Agents.RequestOptions
+                    : never,
     ) => {
         const traceId = getTraceId();
         if (traceId !== undefined && client instanceof Flows) {

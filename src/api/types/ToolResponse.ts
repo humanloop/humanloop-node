@@ -27,8 +27,10 @@ export interface ToolResponse {
     attributes?: Record<string, unknown>;
     /** Type of Tool. */
     toolType?: Humanloop.FilesToolType;
-    /** Message describing the changes made. */
-    commitMessage?: string;
+    /** Unique identifier for this Tool version. Each Tool can only have one version with a given name. */
+    versionName?: string;
+    /** Description of the Version. */
+    versionDescription?: string;
     /** Name of the Tool, which is used as a unique identifier. */
     name: string;
     /** Description of the Tool. */
@@ -46,12 +48,6 @@ export interface ToolResponse {
     updatedAt: Date;
     /** The user who created the Tool. */
     createdBy?: Humanloop.UserResponse | undefined;
-    /** The user who committed the Tool Version. */
-    committedBy?: Humanloop.UserResponse | undefined;
-    /** The date and time the Tool Version was committed. */
-    committedAt?: Date;
-    /** The status of the Tool Version. */
-    status: Humanloop.VersionStatus;
     lastUsedAt: Date;
     /** The number of logs that have been generated for this Tool Version */
     versionLogsCount: number;

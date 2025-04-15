@@ -11,7 +11,7 @@ import { TemplateLanguage } from "../../../../types/TemplateLanguage";
 import { ModelProviders } from "../../../../types/ModelProviders";
 import { PromptRequestStop } from "../../types/PromptRequestStop";
 import { ResponseFormat } from "../../../../types/ResponseFormat";
-import { ReasoningEffort } from "../../../../types/ReasoningEffort";
+import { PromptRequestReasoningEffort } from "../../types/PromptRequestReasoningEffort";
 import { ToolFunction } from "../../../../types/ToolFunction";
 
 export const PromptRequest: core.serialization.Schema<serializers.PromptRequest.Raw, Humanloop.PromptRequest> =
@@ -32,14 +32,15 @@ export const PromptRequest: core.serialization.Schema<serializers.PromptRequest.
         other: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
         seed: core.serialization.number().optional(),
         responseFormat: core.serialization.property("response_format", ResponseFormat.optional()),
-        reasoningEffort: core.serialization.property("reasoning_effort", ReasoningEffort.optional()),
+        reasoningEffort: core.serialization.property("reasoning_effort", PromptRequestReasoningEffort.optional()),
         tools: core.serialization.list(ToolFunction).optional(),
         linkedTools: core.serialization.property(
             "linked_tools",
             core.serialization.list(core.serialization.string()).optional(),
         ),
         attributes: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
-        commitMessage: core.serialization.property("commit_message", core.serialization.string().optional()),
+        versionName: core.serialization.property("version_name", core.serialization.string().optional()),
+        versionDescription: core.serialization.property("version_description", core.serialization.string().optional()),
         description: core.serialization.string().optional(),
         tags: core.serialization.list(core.serialization.string()).optional(),
         readme: core.serialization.string().optional(),
@@ -63,11 +64,12 @@ export declare namespace PromptRequest {
         other?: Record<string, unknown> | null;
         seed?: number | null;
         response_format?: ResponseFormat.Raw | null;
-        reasoning_effort?: ReasoningEffort.Raw | null;
+        reasoning_effort?: PromptRequestReasoningEffort.Raw | null;
         tools?: ToolFunction.Raw[] | null;
         linked_tools?: string[] | null;
         attributes?: Record<string, unknown> | null;
-        commit_message?: string | null;
+        version_name?: string | null;
+        version_description?: string | null;
         description?: string | null;
         tags?: string[] | null;
         readme?: string | null;
