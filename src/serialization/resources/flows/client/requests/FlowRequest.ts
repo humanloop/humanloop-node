@@ -11,7 +11,8 @@ export const FlowRequest: core.serialization.Schema<serializers.FlowRequest.Raw,
         path: core.serialization.string().optional(),
         id: core.serialization.string().optional(),
         attributes: core.serialization.record(core.serialization.string(), core.serialization.unknown()),
-        commitMessage: core.serialization.property("commit_message", core.serialization.string().optional()),
+        versionName: core.serialization.property("version_name", core.serialization.string().optional()),
+        versionDescription: core.serialization.property("version_description", core.serialization.string().optional()),
     });
 
 export declare namespace FlowRequest {
@@ -19,6 +20,7 @@ export declare namespace FlowRequest {
         path?: string | null;
         id?: string | null;
         attributes: Record<string, unknown>;
-        commit_message?: string | null;
+        version_name?: string | null;
+        version_description?: string | null;
     }
 }

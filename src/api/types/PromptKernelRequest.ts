@@ -4,6 +4,11 @@
 
 import * as Humanloop from "../index";
 
+/**
+ * Base class used by both PromptKernelRequest and AgentKernelRequest.
+ *
+ * Contains the consistent Prompt-related fields.
+ */
 export interface PromptKernelRequest {
     /** The model instance used, e.g. `gpt-4`. See [supported models](https://humanloop.com/docs/reference/supported-models) */
     model: string;
@@ -40,8 +45,8 @@ export interface PromptKernelRequest {
     seed?: number;
     /** The format of the response. Only `{"type": "json_object"}` is currently supported for chat. */
     responseFormat?: Humanloop.ResponseFormat;
-    /** Give model guidance on how many reasoning tokens it should generate before creating a response to the prompt. This is only supported for OpenAI reasoning (o1, o3-mini) models. */
-    reasoningEffort?: Humanloop.ReasoningEffort;
+    /** Guidance on how many reasoning tokens it should generate before creating a response to the prompt. OpenAI reasoning models (o1, o3-mini) expect a OpenAIReasoningEffort enum. Anthropic reasoning models expect an integer, which signifies the maximum token budget. */
+    reasoningEffort?: Humanloop.PromptKernelRequestReasoningEffort;
     /** The tool specification that the model can choose to call if Tool calling is supported. */
     tools?: Humanloop.ToolFunction[];
     /** The IDs of the Tools in your organization that the model can choose to call if Tool calling is supported. The default deployed version of that tool is called. */

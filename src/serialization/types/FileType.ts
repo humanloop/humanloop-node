@@ -7,8 +7,8 @@ import * as Humanloop from "../../api/index";
 import * as core from "../../core";
 
 export const FileType: core.serialization.Schema<serializers.FileType.Raw, Humanloop.FileType> =
-    core.serialization.enum_(["prompt", "tool", "dataset", "evaluator", "flow"]);
+    core.serialization.enum_(["prompt", "tool", "dataset", "evaluator", "flow", "agent"]);
 
 export declare namespace FileType {
-    export type Raw = "prompt" | "tool" | "dataset" | "evaluator" | "flow";
+    export type Raw = "prompt" | "tool" | "dataset" | "evaluator" | "flow" | "agent";
 }

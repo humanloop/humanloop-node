@@ -6,17 +6,11 @@ import * as Humanloop from "../../../../index";
 
 /**
  * @example
- *     {
- *         status: "committed"
- *     }
+ *     {}
  */
 export interface ListVersionsDatasetsIdVersionsGetRequest {
     /**
-     * Filter versions by status: 'uncommitted', 'committed'. If no status is provided, all versions are returned.
+     * If set to 'latest_saved', include datapoints for the latest saved version. Alternatively, 'latest_committed' (deprecated) includes datapoints for the latest committed version only.
      */
-    status?: Humanloop.VersionStatus;
-    /**
-     * If set to 'latest_committed', include the Datapoints for the latest committed version. Defaults to `None`.
-     */
-    includeDatapoints?: "latest_committed";
+    includeDatapoints?: Humanloop.ListVersionsDatasetsIdVersionsGetRequestIncludeDatapoints;
 }

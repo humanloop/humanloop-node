@@ -14,13 +14,17 @@ export interface EvaluatorResponse {
     id: string;
     /** ID of the directory that the file is in on Humanloop. */
     directoryId?: string;
-    /** Message describing the changes made. */
-    commitMessage?: string;
+    /** Unique name for the Evaluator version. Version names must be unique for a given Evaluator. */
+    versionName?: string;
+    /** Description of the version, e.g., the changes made in this version. */
+    versionDescription?: string;
     spec: Humanloop.EvaluatorResponseSpec;
     /** Name of the Evaluator, which is used as a unique identifier. */
     name: string;
     /** Description of the Evaluator. */
     description?: string;
+    /** The JSON schema for the File. */
+    schema?: Record<string, unknown>;
     /** Long description of the file. */
     readme?: string;
     /** List of tags associated with the file. */
@@ -34,11 +38,6 @@ export interface EvaluatorResponse {
     updatedAt: Date;
     /** The user who created the Evaluator. */
     createdBy?: Humanloop.UserResponse | undefined;
-    /** The user who committed the Evaluator Version. */
-    committedBy?: Humanloop.UserResponse | undefined;
-    /** The date and time the Evaluator Version was committed. */
-    committedAt?: Date;
-    status: Humanloop.VersionStatus;
     lastUsedAt: Date;
     /** The number of logs that have been generated for this Evaluator Version */
     versionLogsCount: number;

@@ -464,9 +464,9 @@ Create a Prompt or update it with a new version if it already exists.
 
 Prompts are identified by the `ID` or their `path`. The parameters (i.e. the prompt template, temperature, model etc.) determine the versions of the Prompt.
 
-If you provide a commit message, then the new version will be committed;
-otherwise it will be uncommitted. If you try to commit an already committed version,
-an exception will be raised.
+You can provide `version_name` and `version_description` to identify and describe your versions.
+Version names must be unique within a Prompt - attempting to create a version with a name
+that already exists will result in a 409 Conflict error.
 
 </dd>
 </dl>
@@ -495,7 +495,6 @@ await client.prompts.upsert({
     provider: "openai",
     maxTokens: -1,
     temperature: 0.7,
-    commitMessage: "Initial commit",
 });
 ```
 
@@ -741,7 +740,7 @@ await client.prompts.move("pr_30gco7dx6JDq4200GVOHa", {
 </dl>
 </details>
 
-<details><summary><code>client.prompts.<a href="/src/api/resources/prompts/client/Client.ts">populateTemplate</a>(id, { ...params }) -> Humanloop.PopulateTemplateResponse</code></summary>
+<details><summary><code>client.prompts.<a href="/src/api/resources/prompts/client/Client.ts">populate</a>(id, { ...params }) -> Humanloop.PopulateTemplateResponse</code></summary>
 <dl>
 <dd>
 
@@ -772,7 +771,7 @@ By default, the deployed version of the Prompt is returned. Use the query parame
 <dd>
 
 ```typescript
-await client.prompts.populateTemplate("id", {
+await client.prompts.populate("id", {
     body: {
         key: "value",
     },
@@ -800,7 +799,7 @@ await client.prompts.populateTemplate("id", {
 <dl>
 <dd>
 
-**request:** `Humanloop.PopulateTemplatePromptsIdPopulatePostRequest`
+**request:** `Humanloop.PopulatePromptsIdPopulatePostRequest`
 
 </dd>
 </dl>
@@ -847,9 +846,7 @@ Get a list of all the versions of a Prompt.
 <dd>
 
 ```typescript
-await client.prompts.listVersions("pr_30gco7dx6JDq4200GVOHa", {
-    status: "committed",
-});
+await client.prompts.listVersions("pr_30gco7dx6JDq4200GVOHa");
 ```
 
 </dd>
@@ -874,89 +871,6 @@ await client.prompts.listVersions("pr_30gco7dx6JDq4200GVOHa", {
 <dd>
 
 **request:** `Humanloop.ListVersionsPromptsIdVersionsGetRequest`
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `Prompts.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.prompts.<a href="/src/api/resources/prompts/client/Client.ts">commit</a>(id, versionId, { ...params }) -> Humanloop.PromptResponse</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Commit a version of the Prompt with a commit message.
-
-If the version is already committed, an exception will be raised.
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.prompts.commit("pr_30gco7dx6JDq4200GVOHa", "prv_F34aba5f3asp0", {
-    commitMessage: "Reiterated point about not discussing sentience",
-});
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**id:** `string` — Unique identifier for Prompt.
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**versionId:** `string` — Unique identifier for the specific version of the Prompt.
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request:** `Humanloop.CommitRequest`
 
 </dd>
 </dl>
@@ -1028,6 +942,85 @@ await client.prompts.deletePromptVersion("id", "version_id");
 <dd>
 
 **versionId:** `string` — Unique identifier for the specific version of the Prompt.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Prompts.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.prompts.<a href="/src/api/resources/prompts/client/Client.ts">patchPromptVersion</a>(id, versionId, { ...params }) -> Humanloop.PromptResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Update the name or description of the Prompt version.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.prompts.patchPromptVersion("id", "version_id", {});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Unique identifier for Prompt.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**versionId:** `string` — Unique identifier for the specific version of the Prompt.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.UpdateVersionRequest`
 
 </dd>
 </dl>
@@ -1349,6 +1342,79 @@ await client.prompts.updateMonitoring("pr_30gco7dx6JDq4200GVOHa", {
 
 ## Tools
 
+<details><summary><code>client.tools.<a href="/src/api/resources/tools/client/Client.ts">call</a>({ ...params }) -> Humanloop.ToolCallResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Call a Tool.
+
+Calling a Tool with inputs runs the tool's source code and logs the result and metadata to Humanloop.
+
+You can use query parameters `version_id`, or `environment`, to target
+an existing version of the Tool. Otherwise, the default deployed version will be chosen.
+
+Instead of targeting an existing version explicitly, you can instead pass in
+Tool details in the request body. In this case, we will check if the details correspond
+to an existing version of the Tool. If they do not, we will create a new version. This is helpful
+in the case where you are storing or deriving your Tool details in code.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.tools.call();
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.ToolCallRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Tools.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.tools.<a href="/src/api/resources/tools/client/Client.ts">log</a>({ ...params }) -> Humanloop.CreateToolLogResponse</code></summary>
 <dl>
 <dd>
@@ -1618,9 +1684,9 @@ Create a Tool or update it with a new version if it already exists.
 
 Tools are identified by the `ID` or their `path`. The name, description and parameters determine the versions of the Tool.
 
-If you provide a commit message, then the new version will be committed;
-otherwise it will be uncommitted. If you try to commit an already committed version,
-an exception will be raised.
+You can provide `version_name` and `version_description` to identify and describe your versions.
+Version names must be unique within a Tool - attempting to create a version with a name
+that already exists will result in a 409 Conflict error.
 
 </dd>
 </dl>
@@ -1654,7 +1720,6 @@ await client.tools.upsert({
             required: ["a", "b"],
         },
     },
-    commitMessage: "Initial commit",
 });
 ```
 
@@ -1928,9 +1993,7 @@ Get a list of all the versions of a Tool.
 <dd>
 
 ```typescript
-await client.tools.listVersions("tl_789ghi", {
-    status: "committed",
-});
+await client.tools.listVersions("tl_789ghi");
 ```
 
 </dd>
@@ -1955,89 +2018,6 @@ await client.tools.listVersions("tl_789ghi", {
 <dd>
 
 **request:** `Humanloop.ListVersionsToolsIdVersionsGetRequest`
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `Tools.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.tools.<a href="/src/api/resources/tools/client/Client.ts">commit</a>(id, versionId, { ...params }) -> Humanloop.ToolResponse</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Commit a version of the Tool with a commit message.
-
-If the version is already committed, an exception will be raised.
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.tools.commit("tl_789ghi", "tv_012jkl", {
-    commitMessage: "Initial commit",
-});
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**id:** `string` — Unique identifier for Tool.
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**versionId:** `string` — Unique identifier for the specific version of the Tool.
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request:** `Humanloop.CommitRequest`
 
 </dd>
 </dl>
@@ -2109,6 +2089,85 @@ await client.tools.deleteToolVersion("id", "version_id");
 <dd>
 
 **versionId:** `string` — Unique identifier for the specific version of the Tool.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Tools.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.tools.<a href="/src/api/resources/tools/client/Client.ts">updateToolVersion</a>(id, versionId, { ...params }) -> Humanloop.ToolResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Update the name or description of the Tool version.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.tools.updateToolVersion("id", "version_id", {});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Unique identifier for Tool.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**versionId:** `string` — Unique identifier for the specific version of the Tool.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.UpdateVersionRequest`
 
 </dd>
 </dl>
@@ -2428,6 +2487,186 @@ await client.tools.updateMonitoring("tl_789ghi", {
 </dl>
 </details>
 
+<details><summary><code>client.tools.<a href="/src/api/resources/tools/client/Client.ts">getEnvironmentVariables</a>(id) -> Humanloop.FileEnvironmentVariableRequest[]</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.tools.getEnvironmentVariables("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Unique identifier for File.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Tools.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.tools.<a href="/src/api/resources/tools/client/Client.ts">addEnvironmentVariable</a>(id, { ...params }) -> Humanloop.FileEnvironmentVariableRequest[]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Add an environment variable to a Tool.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.tools.addEnvironmentVariable("id", [
+    {
+        name: "name",
+        value: "value",
+    },
+]);
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Unique identifier for Tool.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.FileEnvironmentVariableRequest[]`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Tools.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.tools.<a href="/src/api/resources/tools/client/Client.ts">deleteEnvironmentVariable</a>(id, name) -> Humanloop.FileEnvironmentVariableRequest[]</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.tools.deleteEnvironmentVariable("id", "name");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Unique identifier for File.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**name:** `string` — Name of the Environment Variable to delete.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Tools.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
 ## Datasets
 
 <details><summary><code>client.datasets.<a href="/src/api/resources/datasets/client/Client.ts">list</a>({ ...params }) -> core.Page<Humanloop.DatasetResponse></code></summary>
@@ -2528,9 +2767,9 @@ by specifying `action` as `add` or `remove` respectively. In this case, you may 
 the `version_id` or `environment` query parameters to identify the existing version to base
 the new version on. If neither is provided, the latest created version will be used.
 
-If you provide a commit message, then the new version will be committed;
-otherwise it will be uncommitted. If you try to commit an already committed version,
-an exception will be raised.
+You can provide `version_name` and `version_description` to identify and describe your versions.
+Version names must be unique within a Dataset - attempting to create a version with a name
+that already exists will result in a 409 Conflict error.
 
 Humanloop also deduplicates Datapoints. If you try to add a Datapoint that already
 exists, it will be ignored. If you intentionally want to add a duplicate Datapoint,
@@ -2571,7 +2810,6 @@ await client.datasets.upsert({
         },
     ],
     action: "set",
-    commitMessage: "Add two new questions and answers",
 });
 ```
 
@@ -2935,9 +3173,7 @@ Get a list of the versions for a Dataset.
 <dd>
 
 ```typescript
-await client.datasets.listVersions("ds_b0baF1ca7652", {
-    status: "committed",
-});
+await client.datasets.listVersions("ds_b0baF1ca7652");
 ```
 
 </dd>
@@ -2962,89 +3198,6 @@ await client.datasets.listVersions("ds_b0baF1ca7652", {
 <dd>
 
 **request:** `Humanloop.ListVersionsDatasetsIdVersionsGetRequest`
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `Datasets.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.datasets.<a href="/src/api/resources/datasets/client/Client.ts">commit</a>(id, versionId, { ...params }) -> Humanloop.DatasetResponse</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Commit a version of the Dataset with a commit message.
-
-If the version is already committed, an exception will be raised.
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.datasets.commit("ds_b0baF1ca7652", "dsv_6L78pqrdFi2xa", {
-    commitMessage: "initial commit",
-});
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**id:** `string` — Unique identifier for Dataset.
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**versionId:** `string` — Unique identifier for the specific version of the Dataset.
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request:** `Humanloop.CommitRequest`
 
 </dd>
 </dl>
@@ -3134,7 +3287,7 @@ await client.datasets.deleteDatasetVersion("id", "version_id");
 </dl>
 </details>
 
-<details><summary><code>client.datasets.<a href="/src/api/resources/datasets/client/Client.ts">uploadCsv</a>(file, id, { ...params }) -> Humanloop.DatasetResponse</code></summary>
+<details><summary><code>client.datasets.<a href="/src/api/resources/datasets/client/Client.ts">updateDatasetVersion</a>(id, versionId, { ...params }) -> Humanloop.DatasetResponse</code></summary>
 <dl>
 <dd>
 
@@ -3146,14 +3299,7 @@ await client.datasets.deleteDatasetVersion("id", "version_id");
 <dl>
 <dd>
 
-Add Datapoints from a CSV file to a Dataset.
-
-This will create a new committed version of the Dataset with the Datapoints from the CSV file.
-
-If either `version_id` or `environment` is provided, the new version will be based on the specified version,
-with the Datapoints from the CSV file added to the existing Datapoints in the version.
-If neither `version_id` nor `environment` is provided, the new version will be based on the version
-of the Dataset that is deployed to the default Environment.
+Update the name or description of the Dataset version.
 
 </dd>
 </dl>
@@ -3169,9 +3315,96 @@ of the Dataset that is deployed to the default Environment.
 <dd>
 
 ```typescript
-await client.datasets.uploadCsv(fs.createReadStream("/path/to/your/file"), "id", {
-    commitMessage: "commit_message",
-});
+await client.datasets.updateDatasetVersion("id", "version_id", {});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Unique identifier for Dataset.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**versionId:** `string` — Unique identifier for the specific version of the Dataset.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.UpdateVersionRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Datasets.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.datasets.<a href="/src/api/resources/datasets/client/Client.ts">uploadCsv</a>(file, id, { ...params }) -> Humanloop.DatasetResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Add Datapoints from a CSV file to a Dataset.
+
+This will create a new version of the Dataset with the Datapoints from the CSV file.
+
+If either `version_id` or `environment` is provided, the new version will be based on the specified version,
+with the Datapoints from the CSV file added to the existing Datapoints in the version.
+If neither `version_id` nor `environment` is provided, the new version will be based on the version
+of the Dataset that is deployed to the default Environment.
+
+You can optionally provide a name and description for the new version using `version_name`
+and `version_description` parameters.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.datasets.uploadCsv(fs.createReadStream("/path/to/your/file"), "id", {});
 ```
 
 </dd>
@@ -3602,9 +3835,9 @@ Create an Evaluator or update it with a new version if it already exists.
 
 Evaluators are identified by the `ID` or their `path`. The spec provided determines the version of the Evaluator.
 
-If you provide a commit message, then the new version will be committed;
-otherwise it will be uncommitted. If you try to commit an already committed version,
-an exception will be raised.
+You can provide `version_name` and `version_description` to identify and describe your versions.
+Version names must be unique within an Evaluator - attempting to create a version with a name
+that already exists will result in a 409 Conflict error.
 
 </dd>
 </dl>
@@ -3628,7 +3861,6 @@ await client.evaluators.upsert({
         evaluatorType: "python",
         code: "def evaluate(answer, target):\n    return 0.5",
     },
-    commitMessage: "Initial commit",
 });
 ```
 
@@ -3945,89 +4177,6 @@ await client.evaluators.listVersions("ev_890bcd");
 </dl>
 </details>
 
-<details><summary><code>client.evaluators.<a href="/src/api/resources/evaluators/client/Client.ts">commit</a>(id, versionId, { ...params }) -> Humanloop.EvaluatorResponse</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Commit a version of the Evaluator with a commit message.
-
-If the version is already committed, an exception will be raised.
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.evaluators.commit("ev_890bcd", "evv_012def", {
-    commitMessage: "Initial commit",
-});
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**id:** `string` — Unique identifier for Prompt.
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**versionId:** `string` — Unique identifier for the specific version of the Evaluator.
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request:** `Humanloop.CommitRequest`
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `Evaluators.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
 <details><summary><code>client.evaluators.<a href="/src/api/resources/evaluators/client/Client.ts">deleteEvaluatorVersion</a>(id, versionId) -> void</code></summary>
 <dl>
 <dd>
@@ -4081,6 +4230,85 @@ await client.evaluators.deleteEvaluatorVersion("id", "version_id");
 <dd>
 
 **versionId:** `string` — Unique identifier for the specific version of the Evaluator.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Evaluators.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.evaluators.<a href="/src/api/resources/evaluators/client/Client.ts">updateEvaluatorVersion</a>(id, versionId, { ...params }) -> Humanloop.EvaluatorResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Update the name or description of the Evaluator version.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.evaluators.updateEvaluatorVersion("id", "version_id", {});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Unique identifier for Evaluator.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**versionId:** `string` — Unique identifier for the specific version of the Evaluator.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.UpdateVersionRequest`
 
 </dd>
 </dl>
@@ -4875,9 +5103,9 @@ Create or update a Flow.
 
 Flows can also be identified by the `ID` or their `path`.
 
-If you provide a commit message, then the new version will be committed;
-otherwise it will be uncommitted. If you try to commit an already committed version,
-an exception will be raised.
+You can provide `version_name` and `version_description` to identify and describe your versions.
+Version names must be unique within a Flow - attempting to create a version with a name
+that already exists will result in a 409 Conflict error.
 
 </dd>
 </dl>
@@ -4906,7 +5134,6 @@ await client.flows.upsert({
             description: "Retrieval tool for MedQA.",
             source_code: "def retrieval_tool(question: str) -> str:\n    pass\n",
         },
-        commit_message: "Initial commit",
     },
 });
 ```
@@ -4971,9 +5198,7 @@ Get a list of all the versions of a Flow.
 <dd>
 
 ```typescript
-await client.flows.listVersions("fl_6o701g4jmcanPVHxdqD0O", {
-    status: "committed",
-});
+await client.flows.listVersions("fl_6o701g4jmcanPVHxdqD0O");
 ```
 
 </dd>
@@ -4998,89 +5223,6 @@ await client.flows.listVersions("fl_6o701g4jmcanPVHxdqD0O", {
 <dd>
 
 **request:** `Humanloop.ListVersionsFlowsIdVersionsGetRequest`
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `Flows.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.flows.<a href="/src/api/resources/flows/client/Client.ts">commit</a>(id, versionId, { ...params }) -> Humanloop.FlowResponse</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Commit a version of the Flow with a commit message.
-
-If the version is already committed, an exception will be raised.
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.flows.commit("fl_6o701g4jmcanPVHxdqD0O", "flv_6o701g4jmcanPVHxdqD0O", {
-    commitMessage: "RAG lookup tool bug fixing",
-});
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**id:** `string` — Unique identifier for Flow.
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**versionId:** `string` — Unique identifier for the specific version of the Flow.
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request:** `Humanloop.CommitRequest`
 
 </dd>
 </dl>
@@ -5152,6 +5294,85 @@ await client.flows.deleteFlowVersion("id", "version_id");
 <dd>
 
 **versionId:** `string` — Unique identifier for the specific version of the Flow.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Flows.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.flows.<a href="/src/api/resources/flows/client/Client.ts">updateFlowVersion</a>(id, versionId, { ...params }) -> Humanloop.FlowResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Update the name or description of the Flow version.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.flows.updateFlowVersion("id", "version_id", {});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Unique identifier for Flow.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**versionId:** `string` — Unique identifier for the specific version of the Flow.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.UpdateVersionRequest`
 
 </dd>
 </dl>
@@ -5461,6 +5682,1327 @@ await client.flows.updateMonitoring("fl_6o701g4jmcanPVHxdqD0O", {
 <dd>
 
 **requestOptions:** `Flows.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+## Agents
+
+<details><summary><code>client.agents.<a href="/src/api/resources/agents/client/Client.ts">log</a>({ ...params }) -> Humanloop.CreateAgentLogResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Create an Agent Log.
+
+You can use query parameters `version_id`, or `environment`, to target
+an existing version of the Agent. Otherwise, the default deployed version will be chosen.
+
+If you create the Agent Log with a `log_status` of `incomplete`, you should later update it to `complete`
+in order to trigger Evaluators.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.agents.log();
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.AgentLogRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Agents.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.agents.<a href="/src/api/resources/agents/client/Client.ts">updateLog</a>(id, logId, { ...params }) -> Humanloop.LogResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Update a Log.
+
+Update the details of a Log with the given ID.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.agents.updateLog("id", "log_id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Unique identifier for Agent.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**logId:** `string` — Unique identifier for the Log.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.UpdateAgentLogRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Agents.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.agents.<a href="/src/api/resources/agents/client/Client.ts">callStream</a>({ ...params }) -> core.Stream<Humanloop.AgentCallStreamResponse></code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Call an Agent.
+
+Calling an Agent calls the model provider before logging
+the request, responses and metadata to Humanloop.
+
+You can use query parameters `version_id`, or `environment`, to target
+an existing version of the Agent. Otherwise the default deployed version will be chosen.
+
+Instead of targeting an existing version explicitly, you can instead pass in
+Agent details in the request body. In this case, we will check if the details correspond
+to an existing version of the Agent. If they do not, we will create a new version. This is helpful
+in the case where you are storing or deriving your Agent details in code.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+const response = await client.agents.callStream({});
+for await (const item of response) {
+    console.log(item);
+}
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.AgentsCallStreamRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Agents.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.agents.<a href="/src/api/resources/agents/client/Client.ts">call</a>({ ...params }) -> Humanloop.AgentCallResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Call an Agent.
+
+Calling an Agent calls the model provider before logging
+the request, responses and metadata to Humanloop.
+
+You can use query parameters `version_id`, or `environment`, to target
+an existing version of the Agent. Otherwise the default deployed version will be chosen.
+
+Instead of targeting an existing version explicitly, you can instead pass in
+Agent details in the request body. In this case, we will check if the details correspond
+to an existing version of the Agent. If they do not, we will create a new version. This is helpful
+in the case where you are storing or deriving your Agent details in code.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.agents.call({});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.AgentsCallRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Agents.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.agents.<a href="/src/api/resources/agents/client/Client.ts">continueStream</a>({ ...params }) -> core.Stream<Humanloop.AgentContinueStreamResponse></code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Continue an incomplete Agent call.
+
+This endpoint allows continuing an existing incomplete Agent call, using the context
+from the previous interaction. The Agent will resume processing from where it left off.
+
+The original log must be in an incomplete state to be continued.
+
+The messages in the request will be appended
+to the original messages in the log.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+const response = await client.agents.continueStream({
+    logId: "log_id",
+    messages: [
+        {
+            role: "user",
+        },
+    ],
+});
+for await (const item of response) {
+    console.log(item);
+}
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.AgentsContinueStreamRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Agents.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.agents.<a href="/src/api/resources/agents/client/Client.ts">continue</a>({ ...params }) -> Humanloop.AgentContinueResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Continue an incomplete Agent call.
+
+This endpoint allows continuing an existing incomplete Agent call, using the context
+from the previous interaction. The Agent will resume processing from where it left off.
+
+The original log must be in an incomplete state to be continued.
+
+The messages in the request will be appended
+to the original messages in the log.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.agents.continue({
+    logId: "log_id",
+    messages: [
+        {
+            role: "user",
+        },
+    ],
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.AgentsContinueRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Agents.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.agents.<a href="/src/api/resources/agents/client/Client.ts">list</a>({ ...params }) -> Humanloop.PaginatedDataAgentResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Get a list of all Agents.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.agents.list();
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.ListAgentsGetRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Agents.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.agents.<a href="/src/api/resources/agents/client/Client.ts">upsert</a>({ ...params }) -> Humanloop.AgentResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Create an Agent or update it with a new version if it already exists.
+
+Agents are identified by the `ID` or their `path`. The parameters (i.e. the template, temperature, model etc.) and
+tools determine the versions of the Agent.
+
+You can provide `version_name` and `version_description` to identify and describe your versions.
+Version names must be unique within an Agent - attempting to create a version with a name
+that already exists will result in a 409 Conflict error.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.agents.upsert({
+    model: "model",
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.AgentRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Agents.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.agents.<a href="/src/api/resources/agents/client/Client.ts">deleteAgentVersion</a>(id, versionId) -> void</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Delete a version of the Agent.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.agents.deleteAgentVersion("id", "version_id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Unique identifier for Agent.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**versionId:** `string` — Unique identifier for the specific version of the Agent.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Agents.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.agents.<a href="/src/api/resources/agents/client/Client.ts">patchAgentVersion</a>(id, versionId, { ...params }) -> Humanloop.AgentResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Update the name or description of the Agent version.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.agents.patchAgentVersion("id", "version_id", {});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Unique identifier for Agent.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**versionId:** `string` — Unique identifier for the specific version of the Agent.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.UpdateVersionRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Agents.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.agents.<a href="/src/api/resources/agents/client/Client.ts">get</a>(id, { ...params }) -> Humanloop.AgentResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve the Agent with the given ID.
+
+By default, the deployed version of the Agent is returned. Use the query parameters
+`version_id` or `environment` to target a specific version of the Agent.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.agents.get("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Unique identifier for Agent.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.GetAgentsIdGetRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Agents.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.agents.<a href="/src/api/resources/agents/client/Client.ts">delete</a>(id) -> void</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Delete the Agent with the given ID.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.agents.delete("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Unique identifier for Agent.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Agents.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.agents.<a href="/src/api/resources/agents/client/Client.ts">move</a>(id, { ...params }) -> Humanloop.AgentResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Move the Agent to a different path or change the name.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.agents.move("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Unique identifier for Agent.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.UpdateAgentRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Agents.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.agents.<a href="/src/api/resources/agents/client/Client.ts">listVersions</a>(id, { ...params }) -> Humanloop.ListAgents</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Get a list of all the versions of a Agent.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.agents.listVersions("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Unique identifier for Agent.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.ListVersionsAgentsIdVersionsGetRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Agents.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.agents.<a href="/src/api/resources/agents/client/Client.ts">setDeployment</a>(id, environmentId, { ...params }) -> Humanloop.AgentResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Deploy Agent to an Environment.
+
+Set the deployed version for the specified Environment. This Agent
+will be used for calls made to the Agent in this Environment.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.agents.setDeployment("id", "environment_id", {
+    versionId: "version_id",
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Unique identifier for Agent.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**environmentId:** `string` — Unique identifier for the Environment to deploy the Version to.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.SetDeploymentAgentsIdEnvironmentsEnvironmentIdPostRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Agents.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.agents.<a href="/src/api/resources/agents/client/Client.ts">removeDeployment</a>(id, environmentId) -> void</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Remove deployed Agent from the Environment.
+
+Remove the deployed version for the specified Environment. This Agent
+will no longer be used for calls made to the Agent in this Environment.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.agents.removeDeployment("id", "environment_id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Unique identifier for Agent.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**environmentId:** `string` — Unique identifier for the Environment to remove the deployment from.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Agents.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.agents.<a href="/src/api/resources/agents/client/Client.ts">listEnvironments</a>(id) -> Humanloop.FileEnvironmentResponse[]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+List all Environments and their deployed versions for the Agent.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.agents.listEnvironments("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Unique identifier for Agent.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Agents.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.agents.<a href="/src/api/resources/agents/client/Client.ts">updateMonitoring</a>(id, { ...params }) -> Humanloop.AgentResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Activate and deactivate Evaluators for monitoring the Agent.
+
+An activated Evaluator will automatically be run on all new Logs
+within the Agent for monitoring purposes.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.agents.updateMonitoring("id", {});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.EvaluatorActivationDeactivationRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Agents.RequestOptions`
 
 </dd>
 </dl>
@@ -5792,7 +7334,7 @@ await client.directories.update("id");
 
 ## Files
 
-<details><summary><code>client.files.<a href="/src/api/resources/files/client/Client.ts">listFiles</a>({ ...params }) -> Humanloop.PaginatedDataUnionPromptResponseToolResponseDatasetResponseEvaluatorResponseFlowResponse</code></summary>
+<details><summary><code>client.files.<a href="/src/api/resources/files/client/Client.ts">listFiles</a>({ ...params }) -> Humanloop.PaginatedDataUnionPromptResponseToolResponseDatasetResponseEvaluatorResponseFlowResponseAgentResponse</code></summary>
 <dl>
 <dd>
 
