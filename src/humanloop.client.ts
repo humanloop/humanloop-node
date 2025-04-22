@@ -1,8 +1,4 @@
 import { Tracer } from "@opentelemetry/api";
-import {
-    Instrumentation,
-    registerInstrumentations,
-} from "@opentelemetry/instrumentation";
 import { resourceFromAttributes } from "@opentelemetry/resources";
 import { NodeTracerProvider } from "@opentelemetry/sdk-trace-node";
 import { AnthropicInstrumentation } from "@traceloop/instrumentation-anthropic";
@@ -102,7 +98,7 @@ class ExtendedEvaluations extends BaseEvaluations {
      * @param evaluators - List of evaluators to be. Can be ran on Humanloop if specified only by path, or locally if a callable is provided.
      * @param concurrency - Number of datapoints to process in parallel.
      */
-    async run<I, O>({
+    async run<I extends Record<string, unknown> & { messages?: any[] }, O>({
         file,
         dataset,
         name,
@@ -122,14 +118,7 @@ class ExtendedEvaluations extends BaseEvaluations {
         )[];
         concurrency?: number;
     }): Promise<EvaluatorCheck[]> {
-        return runEval<I, O>(
-            this._client,
-            file,
-            dataset,
-            name,
-            evaluators,
-            concurrency,
-        );
+        return runEval(this._client, file, dataset, name, evaluators, concurrency);
     }
 }
 
@@ -293,7 +282,7 @@ export class HumanloopClient extends BaseHumanloopClient {
     }
 
     // Check if user has passed the LLM provider instrumentors
-    private assertProviders() {
+    private assertAtLeastOneProviderModuleSet() {
         const userDidNotPassProviders = Object.values(this.instrumentProviders).every(
             (provider) => !provider,
         );
@@ -406,20 +395,18 @@ ${RESET}`,
      * @param path - The path to the Prompt.
      */
     public prompt<I, O>(args: {
-        callable: I extends Record<string, unknown> & { messages?: ChatMessage[] }
-            ? (args: I) => O
-            : () => O;
+        callable: I extends never ? () => O : (args: I) => O;
         path: string;
-    }): I extends Record<string, unknown>
-        ? (
+    }): I extends never
+        ? () => O extends Promise<infer R>
+              ? Promise<R | undefined>
+              : Promise<O | undefined>
+        : (
               args: I,
           ) => O extends Promise<infer R>
               ? Promise<R | undefined>
-              : Promise<O | undefined>
-        : () => O extends Promise<infer R>
-              ? Promise<R | undefined>
               : Promise<O | undefined> {
-        this.assertProviders();
+        this.assertAtLeastOneProviderModuleSet();
         // @ts-ignore
         return promptDecoratorFactory(args.path, args.callable);
     }
@@ -457,16 +444,20 @@ ${RESET}`,
      * @param version - The JSON Schema of the Tool's inputs and outputs, plus the optional Humanloop fields `attributes and `setupValues`. See API reference for details.
      */
     public tool<I, O>(args: {
-        callable: I extends Record<string, unknown> ? (args: I) => O : () => O;
+        callable: I extends never
+            ? () => O
+            : I extends Record<string, any>
+              ? (args: I) => O
+              : never;
         path: string;
         version: ToolKernelRequest;
-    }): I extends Record<string, unknown>
-        ? (
-              args: I,
-          ) => O extends Promise<infer R>
+    }): I extends never
+        ? () => O extends Promise<infer R>
               ? Promise<R | undefined>
               : Promise<O | undefined>
-        : () => O extends Promise<infer R>
+        : (
+              args: I,
+          ) => O extends Promise<infer R>
               ? Promise<R | undefined>
               : Promise<O | undefined> {
         // @ts-ignore
@@ -543,18 +534,20 @@ ${RESET}`,
         path,
         attributes,
     }: {
-        callable: I extends Record<string, unknown> & { messages?: ChatMessage[] }
-            ? ((args: I) => O) | (() => O)
-            : never;
+        callable: I extends never
+            ? () => O
+            : I extends Record<string, any> & { messages?: ChatMessage[] }
+              ? (args: I) => O
+              : never;
         path: string;
         attributes?: Record<string, unknown>;
-    }): I extends Record<string, unknown> & { messages?: ChatMessage[] }
-        ? (
-              args: I,
-          ) => O extends Promise<infer R>
+    }): I extends never
+        ? () => O extends Promise<infer R>
               ? Promise<R | undefined>
               : Promise<O | undefined>
-        : () => O extends Promise<infer R>
+        : (
+              args: I,
+          ) => O extends Promise<infer R>
               ? Promise<R | undefined>
               : Promise<O | undefined> {
         // @ts-ignore

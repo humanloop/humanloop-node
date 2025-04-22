@@ -15,32 +15,14 @@ import {
 export function flowUtilityFactory<I, O>(
     client: HumanloopClient,
     opentelemetryTracer: Tracer,
-    callable: (
-        args: I extends Record<string, unknown> & {
-            messages?: ChatMessage[];
-        }
-            ? I
-            : never,
-    ) => O,
+    callable: (args: I) => O,
     path: string,
     attributes?: Record<string, unknown>,
-): (args: I) => Promise<O | undefined> & {
-    file: {
-        type: string;
-        version: { attributes?: Record<string, unknown> };
-        callable: (args: I) => Promise<O | undefined>;
-    };
-} {
+) {
     const flowKernel = { attributes: attributes || {} };
     const fileType = "flow";
 
-    const wrappedFunction = async (
-        inputs: I extends Record<string, unknown> & {
-            messages?: ChatMessage[];
-        }
-            ? I
-            : never,
-    ) => {
+    const wrappedFunction = async (inputs: I) => {
         return HL_CONTEXT.with(
             setDecoratorContext({
                 path: path,
@@ -139,7 +121,6 @@ export function flowUtilityFactory<I, O>(
         );
     };
 
-    // @ts-ignore
     return Object.assign(wrappedFunction, {
         file: {
             path: path,

@@ -47,7 +47,8 @@ interface Identifiers {
     path?: string;
 }
 
-export interface File<I, O> extends Identifiers {
+export interface File<I extends Record<string, unknown> & { messages?: any[] }, O>
+    extends Identifiers {
     /** The type of File this callable relates to on Humanloop. */
     type?: "flow" | "prompt";
     /** The contents uniquely define the version of the File on Humanloop. */
@@ -59,9 +60,7 @@ export interface File<I, O> extends Identifiers {
      * If messages are defined in your Dataset, then
      * `output = callable(datapoint.inputs, messages=datapoint.messages)`.
      */
-    callable?: I extends Record<string, unknown> & { messages?: ChatMessage[] }
-        ? (args: I) => O
-        : never;
+    callable?: (args: I) => O;
 }
 
 export interface Dataset extends Identifiers {

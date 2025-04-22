@@ -117,11 +117,17 @@ async function pMap<T, O>(
     return result;
 }
 
-function callableIsHumanloopUtility<I, O>(file: File<I, O>): boolean {
+function callableIsHumanloopUtility<
+    I extends Record<string, unknown> & { messages?: any[] },
+    O,
+>(file: File<I, O>): boolean {
     return file.callable !== undefined && "decorator" in file.callable;
 }
 
-function fileOrFileInsideHLUtility<I, O>(file: File<I, O>): File<I, O> {
+function fileOrFileInsideHLUtility<
+    I extends Record<string, unknown> & { messages?: any[] },
+    O,
+>(file: File<I, O>): File<I, O> {
     if (callableIsHumanloopUtility(file)) {
         // @ts-ignore
         const innerFile: File<I, O> = file.callable!.file! as File<I, O>;
@@ -171,7 +177,9 @@ function fileOrFileInsideHLUtility<I, O>(file: File<I, O>): File<I, O> {
     }
 }
 
-function getFileType<I, O>(file: File<I, O>): FileType {
+function getFileType<I extends Record<string, unknown> & { messages?: any[] }, O>(
+    file: File<I, O>,
+): FileType {
     // Determine the `type` of the `file` to Evaluate - if not `type` provided, default to `flow`
     try {
         const type_ = file.type as FileType;
@@ -188,7 +196,7 @@ function getFileType<I, O>(file: File<I, O>): FileType {
     }
 }
 
-function getFileCallable<I, O>(
+function getFileCallable<I extends Record<string, unknown> & { messages?: any[] }, O>(
     file: File<I, O>,
     type_: FileType,
 ): File<I, O>["callable"] {
@@ -208,7 +216,10 @@ function getFileCallable<I, O>(
     return function_;
 }
 
-export async function runEval<I, O>(
+export async function runEval<
+    I extends Record<string, unknown> & { messages?: any[] },
+    O,
+>(
     client: HumanloopClient,
     file: File<I, O>,
     dataset: Dataset,
@@ -519,10 +530,10 @@ export async function runEval<I, O>(
     return checks;
 }
 
-async function callFunction<I, O>(
-    callable: File<I, O>["callable"],
-    datapoint: DatapointResponse,
-): Promise<string> {
+async function callFunction<
+    I extends Record<string, unknown> & { messages?: any[] },
+    O,
+>(callable: File<I, O>["callable"], datapoint: DatapointResponse): Promise<string> {
     const datapointDict = { ...datapoint };
     let output;
     if (callable === undefined) {
@@ -551,7 +562,7 @@ async function callFunction<I, O>(
     return output;
 }
 
-async function upsertFile<I, O>({
+async function upsertFile<I extends Record<string, unknown> & { messages?: any[] }, O>({
     file,
     type,
     client,
@@ -688,7 +699,10 @@ async function getNewRun({
     return { evaluation, run };
 }
 
-async function upsertLocalEvaluators<I, O>({
+async function upsertLocalEvaluators<
+    I extends Record<string, unknown> & { messages?: any[] },
+    O,
+>({
     evaluators,
     callable,
     type,

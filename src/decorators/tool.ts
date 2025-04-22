@@ -3,7 +3,6 @@ import { ReadableSpan } from "@opentelemetry/sdk-trace-node";
 
 import { ToolKernelRequest } from "../api/types/ToolKernelRequest";
 import { getEvaluationContext, getTraceId } from "../context";
-import { File as EvalRunFile } from "../evals/types";
 import { NestedDict, jsonifyIfNotString, writeToOpenTelemetrySpan } from "../otel";
 import {
     HUMANLOOP_FILE_KEY,
@@ -30,7 +29,6 @@ export function toolUtilityFactory<I, O>(
     path: string,
 ): (inputs: I) => O & {
     jsonSchema: Record<string, unknown>;
-    file: EvalRunFile<I, O>;
 } {
     const fileType = "tool";
 
@@ -96,11 +94,6 @@ export function toolUtilityFactory<I, O>(
     // @ts-ignore Adding jsonSchema property to utility-wrapped function
     return Object.assign(wrappedFunction, {
         jsonSchema: version.function || {},
-        decorator: {
-            type: fileType,
-            path: path,
-            version,
-        },
     });
 }
 
