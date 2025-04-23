@@ -17,7 +17,8 @@ export const DatasetRequest: core.serialization.Schema<
     datapoints: core.serialization.list(CreateDatapointRequest),
     action: UpdateDatesetAction.optional(),
     attributes: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
-    commitMessage: core.serialization.property("commit_message", core.serialization.string().optional()),
+    versionName: core.serialization.property("version_name", core.serialization.string().optional()),
+    versionDescription: core.serialization.property("version_description", core.serialization.string().optional()),
 });
 
 export declare namespace DatasetRequest {
@@ -27,6 +28,7 @@ export declare namespace DatasetRequest {
         datapoints: CreateDatapointRequest.Raw[];
         action?: UpdateDatesetAction.Raw | null;
         attributes?: Record<string, unknown> | null;
-        commit_message?: string | null;
+        version_name?: string | null;
+        version_description?: string | null;
     }
 }

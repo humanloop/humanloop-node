@@ -6,6 +6,6 @@ export { type ListPromptsGetRequest } from "./ListPromptsGetRequest";
 export { type PromptRequest } from "./PromptRequest";
 export { type GetPromptsIdGetRequest } from "./GetPromptsIdGetRequest";
 export { type UpdatePromptRequest } from "./UpdatePromptRequest";
-export { type PopulateTemplatePromptsIdPopulatePostRequest } from "./PopulateTemplatePromptsIdPopulatePostRequest";
+export { type PopulatePromptsIdPopulatePostRequest } from "./PopulatePromptsIdPopulatePostRequest";
 export { type ListVersionsPromptsIdVersionsGetRequest } from "./ListVersionsPromptsIdVersionsGetRequest";
 export { type SetDeploymentPromptsIdEnvironmentsEnvironmentIdPostRequest } from "./SetDeploymentPromptsIdEnvironmentsEnvironmentIdPostRequest";

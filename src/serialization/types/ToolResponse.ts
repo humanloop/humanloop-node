@@ -9,7 +9,6 @@ import { ToolFunction } from "./ToolFunction";
 import { FilesToolType } from "./FilesToolType";
 import { EnvironmentResponse } from "./EnvironmentResponse";
 import { UserResponse } from "./UserResponse";
-import { VersionStatus } from "./VersionStatus";
 import { InputResponse } from "./InputResponse";
 import { EvaluatorAggregate } from "./EvaluatorAggregate";
 
@@ -26,7 +25,8 @@ export const ToolResponse: core.serialization.ObjectSchema<serializers.ToolRespo
         ),
         attributes: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
         toolType: core.serialization.property("tool_type", FilesToolType.optional()),
-        commitMessage: core.serialization.property("commit_message", core.serialization.string().optional()),
+        versionName: core.serialization.property("version_name", core.serialization.string().optional()),
+        versionDescription: core.serialization.property("version_description", core.serialization.string().optional()),
         name: core.serialization.string(),
         description: core.serialization.string().optional(),
         readme: core.serialization.string().optional(),
@@ -37,9 +37,6 @@ export const ToolResponse: core.serialization.ObjectSchema<serializers.ToolRespo
         createdAt: core.serialization.property("created_at", core.serialization.date()),
         updatedAt: core.serialization.property("updated_at", core.serialization.date()),
         createdBy: core.serialization.property("created_by", UserResponse.optional()),
-        committedBy: core.serialization.property("committed_by", UserResponse.optional()),
-        committedAt: core.serialization.property("committed_at", core.serialization.date().optional()),
-        status: VersionStatus,
         lastUsedAt: core.serialization.property("last_used_at", core.serialization.date()),
         versionLogsCount: core.serialization.property("version_logs_count", core.serialization.number()),
         totalLogsCount: core.serialization.property("total_logs_count", core.serialization.number()),
@@ -64,7 +61,8 @@ export declare namespace ToolResponse {
         setup_values?: Record<string, unknown> | null;
         attributes?: Record<string, unknown> | null;
         tool_type?: FilesToolType.Raw | null;
-        commit_message?: string | null;
+        version_name?: string | null;
+        version_description?: string | null;
         name: string;
         description?: string | null;
         readme?: string | null;
@@ -75,9 +73,6 @@ export declare namespace ToolResponse {
         created_at: string;
         updated_at: string;
         created_by?: (UserResponse.Raw | undefined) | null;
-        committed_by?: (UserResponse.Raw | undefined) | null;
-        committed_at?: string | null;
-        status: VersionStatus.Raw;
         last_used_at: string;
         version_logs_count: number;
         total_logs_count: number;

@@ -98,8 +98,8 @@ export class Flows {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.18",
-                "User-Agent": "humanloop/0.8.18",
+                "X-Fern-SDK-Version": "0.8.20",
+                "User-Agent": "humanloop/0.8.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -198,8 +198,8 @@ export class Flows {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.18",
-                "User-Agent": "humanloop/0.8.18",
+                "X-Fern-SDK-Version": "0.8.20",
+                "User-Agent": "humanloop/0.8.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -298,8 +298,8 @@ export class Flows {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.18",
-                "User-Agent": "humanloop/0.8.18",
+                "X-Fern-SDK-Version": "0.8.20",
+                "User-Agent": "humanloop/0.8.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -380,8 +380,8 @@ export class Flows {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.18",
-                "User-Agent": "humanloop/0.8.18",
+                "X-Fern-SDK-Version": "0.8.20",
+                "User-Agent": "humanloop/0.8.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -462,8 +462,8 @@ export class Flows {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.18",
-                "User-Agent": "humanloop/0.8.18",
+                "X-Fern-SDK-Version": "0.8.20",
+                "User-Agent": "humanloop/0.8.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -572,8 +572,8 @@ export class Flows {
                 headers: {
                     "X-Fern-Language": "JavaScript",
                     "X-Fern-SDK-Name": "humanloop",
-                    "X-Fern-SDK-Version": "0.8.18",
-                    "User-Agent": "humanloop/0.8.18",
+                    "X-Fern-SDK-Version": "0.8.20",
+                    "User-Agent": "humanloop/0.8.20",
                     "X-Fern-Runtime": core.RUNTIME.type,
                     "X-Fern-Runtime-Version": core.RUNTIME.version,
                     ...(await this._getCustomAuthorizationHeaders()),
@@ -645,9 +645,9 @@ export class Flows {
      *
      * Flows can also be identified by the `ID` or their `path`.
      *
-     * If you provide a commit message, then the new version will be committed;
-     * otherwise it will be uncommitted. If you try to commit an already committed version,
-     * an exception will be raised.
+     * You can provide `version_name` and `version_description` to identify and describe your versions.
+     * Version names must be unique within a Flow - attempting to create a version with a name
+     * that already exists will result in a 409 Conflict error.
      *
      * @param {Humanloop.FlowRequest} request
      * @param {Flows.RequestOptions} requestOptions - Request-specific configuration.
@@ -668,7 +668,8 @@ export class Flows {
      *                 "description": "Retrieval tool for MedQA.",
      *                 "source_code": "def retrieval_tool(question: str) -> str:\n    pass\n"
      *             },
-     *             "commit_message": "Initial commit"
+     *             "version_name": "medqa-flow-v1",
+     *             "version_description": "Initial version"
      *         }
      *     })
      */
@@ -687,8 +688,8 @@ export class Flows {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.18",
-                "User-Agent": "humanloop/0.8.18",
+                "X-Fern-SDK-Version": "0.8.20",
+                "User-Agent": "humanloop/0.8.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -756,21 +757,15 @@ export class Flows {
      * @throws {@link Humanloop.UnprocessableEntityError}
      *
      * @example
-     *     await client.flows.listVersions("fl_6o701g4jmcanPVHxdqD0O", {
-     *         status: "committed"
-     *     })
+     *     await client.flows.listVersions("fl_6o701g4jmcanPVHxdqD0O")
      */
     public async listVersions(
         id: string,
         request: Humanloop.ListVersionsFlowsIdVersionsGetRequest = {},
         requestOptions?: Flows.RequestOptions,
     ): Promise<Humanloop.ListFlows> {
-        const { status, evaluatorAggregates } = request;
+        const { evaluatorAggregates } = request;
         const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-        if (status != null) {
-            _queryParams["status"] = serializers.VersionStatus.jsonOrThrow(status, { unrecognizedObjectKeys: "strip" });
-        }
-
         if (evaluatorAggregates != null) {
             _queryParams["evaluator_aggregates"] = evaluatorAggregates.toString();
         }
@@ -786,8 +781,8 @@ export class Flows {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.18",
-                "User-Agent": "humanloop/0.8.18",
+                "X-Fern-SDK-Version": "0.8.20",
+                "User-Agent": "humanloop/0.8.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -846,101 +841,6 @@ export class Flows {
     }
 
     /**
-     * Commit a version of the Flow with a commit message.
-     *
-     * If the version is already committed, an exception will be raised.
-     *
-     * @param {string} id - Unique identifier for Flow.
-     * @param {string} versionId - Unique identifier for the specific version of the Flow.
-     * @param {Humanloop.CommitRequest} request
-     * @param {Flows.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @throws {@link Humanloop.UnprocessableEntityError}
-     *
-     * @example
-     *     await client.flows.commit("fl_6o701g4jmcanPVHxdqD0O", "flv_6o701g4jmcanPVHxdqD0O", {
-     *         commitMessage: "RAG lookup tool bug fixing"
-     *     })
-     */
-    public async commit(
-        id: string,
-        versionId: string,
-        request: Humanloop.CommitRequest,
-        requestOptions?: Flows.RequestOptions,
-    ): Promise<Humanloop.FlowResponse> {
-        const _response = await (this._options.fetcher ?? core.fetcher)({
-            url: urlJoin(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.HumanloopEnvironment.Default,
-                `flows/${encodeURIComponent(id)}/versions/${encodeURIComponent(versionId)}/commit`,
-            ),
-            method: "POST",
-            headers: {
-                "X-Fern-Language": "JavaScript",
-                "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.18",
-                "User-Agent": "humanloop/0.8.18",
-                "X-Fern-Runtime": core.RUNTIME.type,
-                "X-Fern-Runtime-Version": core.RUNTIME.version,
-                ...(await this._getCustomAuthorizationHeaders()),
-                ...requestOptions?.headers,
-            },
-            contentType: "application/json",
-            requestType: "json",
-            body: serializers.CommitRequest.jsonOrThrow(request, { unrecognizedObjectKeys: "strip" }),
-            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-            maxRetries: requestOptions?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-        });
-        if (_response.ok) {
-            return serializers.FlowResponse.parseOrThrow(_response.body, {
-                unrecognizedObjectKeys: "passthrough",
-                allowUnrecognizedUnionMembers: true,
-                allowUnrecognizedEnumValues: true,
-                skipValidation: true,
-                breadcrumbsPrefix: ["response"],
-            });
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 422:
-                    throw new Humanloop.UnprocessableEntityError(
-                        serializers.HttpValidationError.parseOrThrow(_response.error.body, {
-                            unrecognizedObjectKeys: "passthrough",
-                            allowUnrecognizedUnionMembers: true,
-                            allowUnrecognizedEnumValues: true,
-                            skipValidation: true,
-                            breadcrumbsPrefix: ["response"],
-                        }),
-                    );
-                default:
-                    throw new errors.HumanloopError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                    });
-            }
-        }
-
-        switch (_response.error.reason) {
-            case "non-json":
-                throw new errors.HumanloopError({
-                    statusCode: _response.error.statusCode,
-                    body: _response.error.rawBody,
-                });
-            case "timeout":
-                throw new errors.HumanloopTimeoutError(
-                    "Timeout exceeded when calling POST /flows/{id}/versions/{version_id}/commit.",
-                );
-            case "unknown":
-                throw new errors.HumanloopError({
-                    message: _response.error.errorMessage,
-                });
-        }
-    }
-
-    /**
      * Delete a version of the Flow.
      *
      * @param {string} id - Unique identifier for Flow.
@@ -968,8 +868,8 @@ export class Flows {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.18",
-                "User-Agent": "humanloop/0.8.18",
+                "X-Fern-SDK-Version": "0.8.20",
+                "User-Agent": "humanloop/0.8.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1023,6 +923,97 @@ export class Flows {
     }
 
     /**
+     * Update the name or description of the Flow version.
+     *
+     * @param {string} id - Unique identifier for Flow.
+     * @param {string} versionId - Unique identifier for the specific version of the Flow.
+     * @param {Humanloop.UpdateVersionRequest} request
+     * @param {Flows.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Humanloop.UnprocessableEntityError}
+     *
+     * @example
+     *     await client.flows.updateFlowVersion("id", "version_id", {})
+     */
+    public async updateFlowVersion(
+        id: string,
+        versionId: string,
+        request: Humanloop.UpdateVersionRequest,
+        requestOptions?: Flows.RequestOptions,
+    ): Promise<Humanloop.FlowResponse> {
+        const _response = await (this._options.fetcher ?? core.fetcher)({
+            url: urlJoin(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.HumanloopEnvironment.Default,
+                `flows/${encodeURIComponent(id)}/versions/${encodeURIComponent(versionId)}`,
+            ),
+            method: "PATCH",
+            headers: {
+                "X-Fern-Language": "JavaScript",
+                "X-Fern-SDK-Name": "humanloop",
+                "X-Fern-SDK-Version": "0.8.20",
+                "User-Agent": "humanloop/0.8.20",
+                "X-Fern-Runtime": core.RUNTIME.type,
+                "X-Fern-Runtime-Version": core.RUNTIME.version,
+                ...(await this._getCustomAuthorizationHeaders()),
+                ...requestOptions?.headers,
+            },
+            contentType: "application/json",
+            requestType: "json",
+            body: serializers.UpdateVersionRequest.jsonOrThrow(request, { unrecognizedObjectKeys: "strip" }),
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return serializers.FlowResponse.parseOrThrow(_response.body, {
+                unrecognizedObjectKeys: "passthrough",
+                allowUnrecognizedUnionMembers: true,
+                allowUnrecognizedEnumValues: true,
+                skipValidation: true,
+                breadcrumbsPrefix: ["response"],
+            });
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 422:
+                    throw new Humanloop.UnprocessableEntityError(
+                        serializers.HttpValidationError.parseOrThrow(_response.error.body, {
+                            unrecognizedObjectKeys: "passthrough",
+                            allowUnrecognizedUnionMembers: true,
+                            allowUnrecognizedEnumValues: true,
+                            skipValidation: true,
+                            breadcrumbsPrefix: ["response"],
+                        }),
+                    );
+                default:
+                    throw new errors.HumanloopError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                    });
+            }
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.HumanloopError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
+                });
+            case "timeout":
+                throw new errors.HumanloopTimeoutError(
+                    "Timeout exceeded when calling PATCH /flows/{id}/versions/{version_id}.",
+                );
+            case "unknown":
+                throw new errors.HumanloopError({
+                    message: _response.error.errorMessage,
+                });
+        }
+    }
+
+    /**
      * Deploy Flow to an Environment.
      *
      * Set the deployed version for the specified Environment. This Flow
@@ -1060,8 +1051,8 @@ export class Flows {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.18",
-                "User-Agent": "humanloop/0.8.18",
+                "X-Fern-SDK-Version": "0.8.20",
+                "User-Agent": "humanloop/0.8.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1152,8 +1143,8 @@ export class Flows {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.18",
-                "User-Agent": "humanloop/0.8.18",
+                "X-Fern-SDK-Version": "0.8.20",
+                "User-Agent": "humanloop/0.8.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1232,8 +1223,8 @@ export class Flows {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.18",
-                "User-Agent": "humanloop/0.8.18",
+                "X-Fern-SDK-Version": "0.8.20",
+                "User-Agent": "humanloop/0.8.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1325,8 +1316,8 @@ export class Flows {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.18",
-                "User-Agent": "humanloop/0.8.18",
+                "X-Fern-SDK-Version": "0.8.20",
+                "User-Agent": "humanloop/0.8.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),

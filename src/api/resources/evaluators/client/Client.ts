@@ -73,8 +73,8 @@ export class Evaluators {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.18",
-                "User-Agent": "humanloop/0.8.18",
+                "X-Fern-SDK-Version": "0.8.20",
+                "User-Agent": "humanloop/0.8.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -186,8 +186,8 @@ export class Evaluators {
                 headers: {
                     "X-Fern-Language": "JavaScript",
                     "X-Fern-SDK-Name": "humanloop",
-                    "X-Fern-SDK-Version": "0.8.18",
-                    "User-Agent": "humanloop/0.8.18",
+                    "X-Fern-SDK-Version": "0.8.20",
+                    "User-Agent": "humanloop/0.8.20",
                     "X-Fern-Runtime": core.RUNTIME.type,
                     "X-Fern-Runtime-Version": core.RUNTIME.version,
                     ...(await this._getCustomAuthorizationHeaders()),
@@ -259,9 +259,9 @@ export class Evaluators {
      *
      * Evaluators are identified by the `ID` or their `path`. The spec provided determines the version of the Evaluator.
      *
-     * If you provide a commit message, then the new version will be committed;
-     * otherwise it will be uncommitted. If you try to commit an already committed version,
-     * an exception will be raised.
+     * You can provide `version_name` and `version_description` to identify and describe your versions.
+     * Version names must be unique within an Evaluator - attempting to create a version with a name
+     * that already exists will result in a 409 Conflict error.
      *
      * @param {Humanloop.EvaluatorRequest} request
      * @param {Evaluators.RequestOptions} requestOptions - Request-specific configuration.
@@ -277,7 +277,8 @@ export class Evaluators {
      *             evaluatorType: "python",
      *             code: "def evaluate(answer, target):\n    return 0.5"
      *         },
-     *         commitMessage: "Initial commit"
+     *         versionName: "simple-evaluator",
+     *         versionDescription: "Simple evaluator that returns 0.5"
      *     })
      */
     public async upsert(
@@ -295,8 +296,8 @@ export class Evaluators {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.18",
-                "User-Agent": "humanloop/0.8.18",
+                "X-Fern-SDK-Version": "0.8.20",
+                "User-Agent": "humanloop/0.8.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -395,8 +396,8 @@ export class Evaluators {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.18",
-                "User-Agent": "humanloop/0.8.18",
+                "X-Fern-SDK-Version": "0.8.20",
+                "User-Agent": "humanloop/0.8.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -477,8 +478,8 @@ export class Evaluators {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.18",
-                "User-Agent": "humanloop/0.8.18",
+                "X-Fern-SDK-Version": "0.8.20",
+                "User-Agent": "humanloop/0.8.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -559,8 +560,8 @@ export class Evaluators {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.18",
-                "User-Agent": "humanloop/0.8.18",
+                "X-Fern-SDK-Version": "0.8.20",
+                "User-Agent": "humanloop/0.8.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -635,12 +636,8 @@ export class Evaluators {
         request: Humanloop.ListVersionsEvaluatorsIdVersionsGetRequest = {},
         requestOptions?: Evaluators.RequestOptions,
     ): Promise<Humanloop.ListEvaluators> {
-        const { status, evaluatorAggregates } = request;
+        const { evaluatorAggregates } = request;
         const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-        if (status != null) {
-            _queryParams["status"] = serializers.VersionStatus.jsonOrThrow(status, { unrecognizedObjectKeys: "strip" });
-        }
-
         if (evaluatorAggregates != null) {
             _queryParams["evaluator_aggregates"] = evaluatorAggregates.toString();
         }
@@ -656,8 +653,8 @@ export class Evaluators {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.18",
-                "User-Agent": "humanloop/0.8.18",
+                "X-Fern-SDK-Version": "0.8.20",
+                "User-Agent": "humanloop/0.8.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -716,101 +713,6 @@ export class Evaluators {
     }
 
     /**
-     * Commit a version of the Evaluator with a commit message.
-     *
-     * If the version is already committed, an exception will be raised.
-     *
-     * @param {string} id - Unique identifier for Prompt.
-     * @param {string} versionId - Unique identifier for the specific version of the Evaluator.
-     * @param {Humanloop.CommitRequest} request
-     * @param {Evaluators.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @throws {@link Humanloop.UnprocessableEntityError}
-     *
-     * @example
-     *     await client.evaluators.commit("ev_890bcd", "evv_012def", {
-     *         commitMessage: "Initial commit"
-     *     })
-     */
-    public async commit(
-        id: string,
-        versionId: string,
-        request: Humanloop.CommitRequest,
-        requestOptions?: Evaluators.RequestOptions,
-    ): Promise<Humanloop.EvaluatorResponse> {
-        const _response = await (this._options.fetcher ?? core.fetcher)({
-            url: urlJoin(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.HumanloopEnvironment.Default,
-                `evaluators/${encodeURIComponent(id)}/versions/${encodeURIComponent(versionId)}/commit`,
-            ),
-            method: "POST",
-            headers: {
-                "X-Fern-Language": "JavaScript",
-                "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.18",
-                "User-Agent": "humanloop/0.8.18",
-                "X-Fern-Runtime": core.RUNTIME.type,
-                "X-Fern-Runtime-Version": core.RUNTIME.version,
-                ...(await this._getCustomAuthorizationHeaders()),
-                ...requestOptions?.headers,
-            },
-            contentType: "application/json",
-            requestType: "json",
-            body: serializers.CommitRequest.jsonOrThrow(request, { unrecognizedObjectKeys: "strip" }),
-            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-            maxRetries: requestOptions?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-        });
-        if (_response.ok) {
-            return serializers.EvaluatorResponse.parseOrThrow(_response.body, {
-                unrecognizedObjectKeys: "passthrough",
-                allowUnrecognizedUnionMembers: true,
-                allowUnrecognizedEnumValues: true,
-                skipValidation: true,
-                breadcrumbsPrefix: ["response"],
-            });
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 422:
-                    throw new Humanloop.UnprocessableEntityError(
-                        serializers.HttpValidationError.parseOrThrow(_response.error.body, {
-                            unrecognizedObjectKeys: "passthrough",
-                            allowUnrecognizedUnionMembers: true,
-                            allowUnrecognizedEnumValues: true,
-                            skipValidation: true,
-                            breadcrumbsPrefix: ["response"],
-                        }),
-                    );
-                default:
-                    throw new errors.HumanloopError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                    });
-            }
-        }
-
-        switch (_response.error.reason) {
-            case "non-json":
-                throw new errors.HumanloopError({
-                    statusCode: _response.error.statusCode,
-                    body: _response.error.rawBody,
-                });
-            case "timeout":
-                throw new errors.HumanloopTimeoutError(
-                    "Timeout exceeded when calling POST /evaluators/{id}/versions/{version_id}/commit.",
-                );
-            case "unknown":
-                throw new errors.HumanloopError({
-                    message: _response.error.errorMessage,
-                });
-        }
-    }
-
-    /**
      * Delete a version of the Evaluator.
      *
      * @param {string} id - Unique identifier for Evaluator.
@@ -838,8 +740,8 @@ export class Evaluators {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.18",
-                "User-Agent": "humanloop/0.8.18",
+                "X-Fern-SDK-Version": "0.8.20",
+                "User-Agent": "humanloop/0.8.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -893,6 +795,97 @@ export class Evaluators {
     }
 
     /**
+     * Update the name or description of the Evaluator version.
+     *
+     * @param {string} id - Unique identifier for Evaluator.
+     * @param {string} versionId - Unique identifier for the specific version of the Evaluator.
+     * @param {Humanloop.UpdateVersionRequest} request
+     * @param {Evaluators.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Humanloop.UnprocessableEntityError}
+     *
+     * @example
+     *     await client.evaluators.updateEvaluatorVersion("id", "version_id", {})
+     */
+    public async updateEvaluatorVersion(
+        id: string,
+        versionId: string,
+        request: Humanloop.UpdateVersionRequest,
+        requestOptions?: Evaluators.RequestOptions,
+    ): Promise<Humanloop.EvaluatorResponse> {
+        const _response = await (this._options.fetcher ?? core.fetcher)({
+            url: urlJoin(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.HumanloopEnvironment.Default,
+                `evaluators/${encodeURIComponent(id)}/versions/${encodeURIComponent(versionId)}`,
+            ),
+            method: "PATCH",
+            headers: {
+                "X-Fern-Language": "JavaScript",
+                "X-Fern-SDK-Name": "humanloop",
+                "X-Fern-SDK-Version": "0.8.20",
+                "User-Agent": "humanloop/0.8.20",
+                "X-Fern-Runtime": core.RUNTIME.type,
+                "X-Fern-Runtime-Version": core.RUNTIME.version,
+                ...(await this._getCustomAuthorizationHeaders()),
+                ...requestOptions?.headers,
+            },
+            contentType: "application/json",
+            requestType: "json",
+            body: serializers.UpdateVersionRequest.jsonOrThrow(request, { unrecognizedObjectKeys: "strip" }),
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return serializers.EvaluatorResponse.parseOrThrow(_response.body, {
+                unrecognizedObjectKeys: "passthrough",
+                allowUnrecognizedUnionMembers: true,
+                allowUnrecognizedEnumValues: true,
+                skipValidation: true,
+                breadcrumbsPrefix: ["response"],
+            });
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 422:
+                    throw new Humanloop.UnprocessableEntityError(
+                        serializers.HttpValidationError.parseOrThrow(_response.error.body, {
+                            unrecognizedObjectKeys: "passthrough",
+                            allowUnrecognizedUnionMembers: true,
+                            allowUnrecognizedEnumValues: true,
+                            skipValidation: true,
+                            breadcrumbsPrefix: ["response"],
+                        }),
+                    );
+                default:
+                    throw new errors.HumanloopError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                    });
+            }
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.HumanloopError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
+                });
+            case "timeout":
+                throw new errors.HumanloopTimeoutError(
+                    "Timeout exceeded when calling PATCH /evaluators/{id}/versions/{version_id}.",
+                );
+            case "unknown":
+                throw new errors.HumanloopError({
+                    message: _response.error.errorMessage,
+                });
+        }
+    }
+
+    /**
      * Deploy Evaluator to an Environment.
      *
      * Set the deployed version for the specified Environment. This Evaluator
@@ -930,8 +923,8 @@ export class Evaluators {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.18",
-                "User-Agent": "humanloop/0.8.18",
+                "X-Fern-SDK-Version": "0.8.20",
+                "User-Agent": "humanloop/0.8.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1022,8 +1015,8 @@ export class Evaluators {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.18",
-                "User-Agent": "humanloop/0.8.18",
+                "X-Fern-SDK-Version": "0.8.20",
+                "User-Agent": "humanloop/0.8.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1102,8 +1095,8 @@ export class Evaluators {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.18",
-                "User-Agent": "humanloop/0.8.18",
+                "X-Fern-SDK-Version": "0.8.20",
+                "User-Agent": "humanloop/0.8.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1193,8 +1186,8 @@ export class Evaluators {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.18",
-                "User-Agent": "humanloop/0.8.18",
+                "X-Fern-SDK-Version": "0.8.20",
+                "User-Agent": "humanloop/0.8.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),

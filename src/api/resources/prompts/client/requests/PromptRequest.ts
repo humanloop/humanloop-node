@@ -17,7 +17,8 @@ import * as Humanloop from "../../../../index";
  *         provider: "openai",
  *         maxTokens: -1,
  *         temperature: 0.7,
- *         commitMessage: "Initial commit"
+ *         versionName: "coding-assistant-v1",
+ *         versionDescription: "Initial version"
  *     }
  */
 export interface PromptRequest {
@@ -68,8 +69,10 @@ export interface PromptRequest {
     linkedTools?: string[];
     /** Additional fields to describe the Prompt. Helpful to separate Prompt versions from each other with details on how they were created or used. */
     attributes?: Record<string, unknown>;
-    /** Message describing the changes made. */
-    commitMessage?: string;
+    /** Unique name for the Prompt version. Version names must be unique for a given Prompt. */
+    versionName?: string;
+    /** Description of the version, e.g., the changes made in this version. */
+    versionDescription?: string;
     /** Description of the Prompt. */
     description?: string;
     /** List of tags associated with this prompt. */

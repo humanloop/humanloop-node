@@ -10,7 +10,7 @@
  *         }
  *     }
  */
-export interface PopulateTemplatePromptsIdPopulatePostRequest {
+export interface PopulatePromptsIdPopulatePostRequest {
     /**
      * A specific Version ID of the Prompt to retrieve to populate the template.
      */

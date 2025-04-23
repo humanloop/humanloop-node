@@ -14,7 +14,8 @@ import * as Humanloop from "../../../../index";
  *             evaluatorType: "python",
  *             code: "def evaluate(answer, target):\n    return 0.5"
  *         },
- *         commitMessage: "Initial commit"
+ *         versionName: "simple-evaluator",
+ *         versionDescription: "Simple evaluator that returns 0.5"
  *     }
  */
 export interface EvaluatorRequest {
@@ -22,7 +23,9 @@ export interface EvaluatorRequest {
     path?: string;
     /** ID for an existing Evaluator. */
     id?: string;
-    /** Message describing the changes made. */
-    commitMessage?: string;
+    /** Unique name for the Evaluator version. Version names must be unique for a given Evaluator. */
+    versionName?: string;
+    /** Description of the version, e.g., the changes made in this version. */
+    versionDescription?: string;
     spec: Humanloop.EvaluatorRequestSpec;
 }

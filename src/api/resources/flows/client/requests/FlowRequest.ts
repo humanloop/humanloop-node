@@ -17,7 +17,8 @@
  *                 "description": "Retrieval tool for MedQA.",
  *                 "source_code": "def retrieval_tool(question: str) -> str:\n    pass\n"
  *             },
- *             "commit_message": "Initial commit"
+ *             "version_name": "medqa-flow-v1",
+ *             "version_description": "Initial version"
  *         }
  *     }
  */
@@ -28,6 +29,8 @@ export interface FlowRequest {
     id?: string;
     /** A key-value object identifying the Flow Version. */
     attributes: Record<string, unknown>;
-    /** Message describing the changes made. */
-    commitMessage?: string;
+    /** Unique name for the Flow version. Version names must be unique for a given Flow. */
+    versionName?: string;
+    /** Description of the version, e.g., the changes made in this version. */
+    versionDescription?: string;
 }

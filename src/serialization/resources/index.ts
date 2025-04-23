@@ -1,5 +1,7 @@
 export * as prompts from "./prompts";
 export * from "./prompts/types";
+export * as datasets from "./datasets";
+export * from "./datasets/types";
 export * as evaluators from "./evaluators";
 export * from "./evaluators/types";
 export * as files from "./files";
@@ -7,7 +9,6 @@ export * from "./files/types";
 export * as evaluations from "./evaluations";
 export * from "./evaluations/types";
 export * as tools from "./tools";
-export * as datasets from "./datasets";
 export * as flows from "./flows";
 export * as directories from "./directories";
 export * from "./prompts/client/requests";

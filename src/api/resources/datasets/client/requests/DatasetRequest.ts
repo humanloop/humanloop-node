@@ -24,7 +24,8 @@ import * as Humanloop from "../../../../index";
  *                 }
  *             }],
  *         action: "set",
- *         commitMessage: "Add two new questions and answers"
+ *         versionName: "test-questions-v1",
+ *         versionDescription: "Add two new questions and answers"
  *     }
  *
  * @example
@@ -47,7 +48,8 @@ import * as Humanloop from "../../../../index";
  *                     "response": "Hey, thanks for your questions. Here are steps for how to achieve: 1. Navigate to your Prompt dashboard. \n 2. Select the `Monitoring` button on the top right of the Prompt dashboard \n 3. Within the model select the Version of the Evaluator you want to turn on for monitoring. \n\nWould you need help with anything else?"
  *                 }
  *             }],
- *         commitMessage: "Add two new questions and answers"
+ *         versionName: "Initial version",
+ *         versionDescription: "Add two new questions and answers"
  *     }
  */
 export interface DatasetRequest {
@@ -81,6 +83,8 @@ export interface DatasetRequest {
     action?: Humanloop.UpdateDatesetAction;
     /** Additional fields to describe the Dataset. Helpful to separate Dataset versions from each other with details on how they were created or used. */
     attributes?: Record<string, unknown>;
-    /** Message describing the changes made. If provided, a committed version of the Dataset is created. Otherwise, an uncommitted version is created. */
-    commitMessage?: string;
+    /** Unique name for the Dataset version. Version names must be unique for a given Dataset. */
+    versionName?: string;
+    /** Description of the version, e.g., the changes made in this version. */
+    versionDescription?: string;
 }

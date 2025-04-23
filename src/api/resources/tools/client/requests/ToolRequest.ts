@@ -27,7 +27,8 @@ import * as Humanloop from "../../../../index";
  *                 ]
  *             }
  *         },
- *         commitMessage: "Initial commit"
+ *         versionName: "math-tool-v1",
+ *         versionDescription: "Simple math tool that multiplies two numbers"
  *     }
  */
 export interface ToolRequest {
@@ -45,6 +46,8 @@ export interface ToolRequest {
     attributes?: Record<string, unknown>;
     /** Type of Tool. */
     toolType?: Humanloop.FilesToolType;
-    /** Message describing the changes made. */
-    commitMessage?: string;
+    /** Unique identifier for this Tool version. Each Tool can only have one version with a given name. */
+    versionName?: string;
+    /** Description of the Version. */
+    versionDescription?: string;
 }

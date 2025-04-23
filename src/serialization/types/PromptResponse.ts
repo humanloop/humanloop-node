@@ -16,7 +16,6 @@ import { ToolFunction } from "./ToolFunction";
 import { LinkedToolResponse } from "./LinkedToolResponse";
 import { EnvironmentResponse } from "./EnvironmentResponse";
 import { UserResponse } from "./UserResponse";
-import { VersionStatus } from "./VersionStatus";
 import { InputResponse } from "./InputResponse";
 import { EvaluatorAggregate } from "./EvaluatorAggregate";
 
@@ -46,7 +45,8 @@ export const PromptResponse: core.serialization.ObjectSchema<serializers.PromptR
             core.serialization.list(LinkedToolResponse).optional(),
         ),
         attributes: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
-        commitMessage: core.serialization.property("commit_message", core.serialization.string().optional()),
+        versionName: core.serialization.property("version_name", core.serialization.string().optional()),
+        versionDescription: core.serialization.property("version_description", core.serialization.string().optional()),
         description: core.serialization.string().optional(),
         tags: core.serialization.list(core.serialization.string()).optional(),
         readme: core.serialization.string().optional(),
@@ -57,9 +57,6 @@ export const PromptResponse: core.serialization.ObjectSchema<serializers.PromptR
         createdAt: core.serialization.property("created_at", core.serialization.date()),
         updatedAt: core.serialization.property("updated_at", core.serialization.date()),
         createdBy: core.serialization.property("created_by", UserResponse.optional()),
-        committedBy: core.serialization.property("committed_by", UserResponse.optional()),
-        committedAt: core.serialization.property("committed_at", core.serialization.date().optional()),
-        status: VersionStatus,
         lastUsedAt: core.serialization.property("last_used_at", core.serialization.date()),
         versionLogsCount: core.serialization.property("version_logs_count", core.serialization.number()),
         totalLogsCount: core.serialization.property("total_logs_count", core.serialization.number()),
@@ -96,7 +93,8 @@ export declare namespace PromptResponse {
         tools?: ToolFunction.Raw[] | null;
         linked_tools?: LinkedToolResponse.Raw[] | null;
         attributes?: Record<string, unknown> | null;
-        commit_message?: string | null;
+        version_name?: string | null;
+        version_description?: string | null;
         description?: string | null;
         tags?: string[] | null;
         readme?: string | null;
@@ -107,9 +105,6 @@ export declare namespace PromptResponse {
         created_at: string;
         updated_at: string;
         created_by?: (UserResponse.Raw | undefined) | null;
-        committed_by?: (UserResponse.Raw | undefined) | null;
-        committed_at?: string | null;
-        status: VersionStatus.Raw;
         last_used_at: string;
         version_logs_count: number;
         total_logs_count: number;

@@ -60,8 +60,10 @@ export interface PopulateTemplateResponse {
     linkedTools?: Humanloop.LinkedToolResponse[];
     /** Additional fields to describe the Prompt. Helpful to separate Prompt versions from each other with details on how they were created or used. */
     attributes?: Record<string, unknown>;
-    /** Message describing the changes made. */
-    commitMessage?: string;
+    /** Unique name for the Prompt version. Version names must be unique for a given Prompt. */
+    versionName?: string;
+    /** Description of the version, e.g., the changes made in this version. */
+    versionDescription?: string;
     /** Description of the Prompt. */
     description?: string;
     /** List of tags associated with the file. */
@@ -79,12 +81,6 @@ export interface PopulateTemplateResponse {
     updatedAt: Date;
     /** The user who created the Prompt. */
     createdBy?: Humanloop.UserResponse | undefined;
-    /** The user who committed the Prompt Version. */
-    committedBy?: Humanloop.UserResponse | undefined;
-    /** The date and time the Prompt Version was committed. */
-    committedAt?: Date;
-    /** The status of the Prompt Version. */
-    status: Humanloop.VersionStatus;
     lastUsedAt: Date;
     /** The number of logs that have been generated for this Prompt Version */
     versionLogsCount: number;

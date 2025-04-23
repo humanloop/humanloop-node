@@ -11,7 +11,8 @@ export const EvaluatorRequest: core.serialization.Schema<serializers.EvaluatorRe
     core.serialization.object({
         path: core.serialization.string().optional(),
         id: core.serialization.string().optional(),
-        commitMessage: core.serialization.property("commit_message", core.serialization.string().optional()),
+        versionName: core.serialization.property("version_name", core.serialization.string().optional()),
+        versionDescription: core.serialization.property("version_description", core.serialization.string().optional()),
         spec: EvaluatorRequestSpec,
     });
 
@@ -19,7 +20,8 @@ export declare namespace EvaluatorRequest {
     export interface Raw {
         path?: string | null;
         id?: string | null;
-        commit_message?: string | null;
+        version_name?: string | null;
+        version_description?: string | null;
         spec: EvaluatorRequestSpec.Raw;
     }
 }

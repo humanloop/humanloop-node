@@ -105,8 +105,8 @@ export class Tools {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.18",
-                "User-Agent": "humanloop/0.8.18",
+                "X-Fern-SDK-Version": "0.8.20",
+                "User-Agent": "humanloop/0.8.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -197,8 +197,8 @@ export class Tools {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.18",
-                "User-Agent": "humanloop/0.8.18",
+                "X-Fern-SDK-Version": "0.8.20",
+                "User-Agent": "humanloop/0.8.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -307,8 +307,8 @@ export class Tools {
                 headers: {
                     "X-Fern-Language": "JavaScript",
                     "X-Fern-SDK-Name": "humanloop",
-                    "X-Fern-SDK-Version": "0.8.18",
-                    "User-Agent": "humanloop/0.8.18",
+                    "X-Fern-SDK-Version": "0.8.20",
+                    "User-Agent": "humanloop/0.8.20",
                     "X-Fern-Runtime": core.RUNTIME.type,
                     "X-Fern-Runtime-Version": core.RUNTIME.version,
                     ...(await this._getCustomAuthorizationHeaders()),
@@ -380,9 +380,9 @@ export class Tools {
      *
      * Tools are identified by the `ID` or their `path`. The name, description and parameters determine the versions of the Tool.
      *
-     * If you provide a commit message, then the new version will be committed;
-     * otherwise it will be uncommitted. If you try to commit an already committed version,
-     * an exception will be raised.
+     * You can provide `version_name` and `version_description` to identify and describe your versions.
+     * Version names must be unique within a Tool - attempting to create a version with a name
+     * that already exists will result in a 409 Conflict error.
      *
      * @param {Humanloop.ToolRequest} request
      * @param {Tools.RequestOptions} requestOptions - Request-specific configuration.
@@ -411,7 +411,8 @@ export class Tools {
      *                 ]
      *             }
      *         },
-     *         commitMessage: "Initial commit"
+     *         versionName: "math-tool-v1",
+     *         versionDescription: "Simple math tool that multiplies two numbers"
      *     })
      */
     public async upsert(
@@ -429,8 +430,8 @@ export class Tools {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.18",
-                "User-Agent": "humanloop/0.8.18",
+                "X-Fern-SDK-Version": "0.8.20",
+                "User-Agent": "humanloop/0.8.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -529,8 +530,8 @@ export class Tools {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.18",
-                "User-Agent": "humanloop/0.8.18",
+                "X-Fern-SDK-Version": "0.8.20",
+                "User-Agent": "humanloop/0.8.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -611,8 +612,8 @@ export class Tools {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.18",
-                "User-Agent": "humanloop/0.8.18",
+                "X-Fern-SDK-Version": "0.8.20",
+                "User-Agent": "humanloop/0.8.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -693,8 +694,8 @@ export class Tools {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.18",
-                "User-Agent": "humanloop/0.8.18",
+                "X-Fern-SDK-Version": "0.8.20",
+                "User-Agent": "humanloop/0.8.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -762,21 +763,15 @@ export class Tools {
      * @throws {@link Humanloop.UnprocessableEntityError}
      *
      * @example
-     *     await client.tools.listVersions("tl_789ghi", {
-     *         status: "committed"
-     *     })
+     *     await client.tools.listVersions("tl_789ghi")
      */
     public async listVersions(
         id: string,
         request: Humanloop.ListVersionsToolsIdVersionsGetRequest = {},
         requestOptions?: Tools.RequestOptions,
     ): Promise<Humanloop.ListTools> {
-        const { status, evaluatorAggregates } = request;
+        const { evaluatorAggregates } = request;
         const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-        if (status != null) {
-            _queryParams["status"] = serializers.VersionStatus.jsonOrThrow(status, { unrecognizedObjectKeys: "strip" });
-        }
-
         if (evaluatorAggregates != null) {
             _queryParams["evaluator_aggregates"] = evaluatorAggregates.toString();
         }
@@ -792,8 +787,8 @@ export class Tools {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.18",
-                "User-Agent": "humanloop/0.8.18",
+                "X-Fern-SDK-Version": "0.8.20",
+                "User-Agent": "humanloop/0.8.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -852,101 +847,6 @@ export class Tools {
     }
 
     /**
-     * Commit a version of the Tool with a commit message.
-     *
-     * If the version is already committed, an exception will be raised.
-     *
-     * @param {string} id - Unique identifier for Tool.
-     * @param {string} versionId - Unique identifier for the specific version of the Tool.
-     * @param {Humanloop.CommitRequest} request
-     * @param {Tools.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @throws {@link Humanloop.UnprocessableEntityError}
-     *
-     * @example
-     *     await client.tools.commit("tl_789ghi", "tv_012jkl", {
-     *         commitMessage: "Initial commit"
-     *     })
-     */
-    public async commit(
-        id: string,
-        versionId: string,
-        request: Humanloop.CommitRequest,
-        requestOptions?: Tools.RequestOptions,
-    ): Promise<Humanloop.ToolResponse> {
-        const _response = await (this._options.fetcher ?? core.fetcher)({
-            url: urlJoin(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.HumanloopEnvironment.Default,
-                `tools/${encodeURIComponent(id)}/versions/${encodeURIComponent(versionId)}/commit`,
-            ),
-            method: "POST",
-            headers: {
-                "X-Fern-Language": "JavaScript",
-                "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.18",
-                "User-Agent": "humanloop/0.8.18",
-                "X-Fern-Runtime": core.RUNTIME.type,
-                "X-Fern-Runtime-Version": core.RUNTIME.version,
-                ...(await this._getCustomAuthorizationHeaders()),
-                ...requestOptions?.headers,
-            },
-            contentType: "application/json",
-            requestType: "json",
-            body: serializers.CommitRequest.jsonOrThrow(request, { unrecognizedObjectKeys: "strip" }),
-            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-            maxRetries: requestOptions?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-        });
-        if (_response.ok) {
-            return serializers.ToolResponse.parseOrThrow(_response.body, {
-                unrecognizedObjectKeys: "passthrough",
-                allowUnrecognizedUnionMembers: true,
-                allowUnrecognizedEnumValues: true,
-                skipValidation: true,
-                breadcrumbsPrefix: ["response"],
-            });
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 422:
-                    throw new Humanloop.UnprocessableEntityError(
-                        serializers.HttpValidationError.parseOrThrow(_response.error.body, {
-                            unrecognizedObjectKeys: "passthrough",
-                            allowUnrecognizedUnionMembers: true,
-                            allowUnrecognizedEnumValues: true,
-                            skipValidation: true,
-                            breadcrumbsPrefix: ["response"],
-                        }),
-                    );
-                default:
-                    throw new errors.HumanloopError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                    });
-            }
-        }
-
-        switch (_response.error.reason) {
-            case "non-json":
-                throw new errors.HumanloopError({
-                    statusCode: _response.error.statusCode,
-                    body: _response.error.rawBody,
-                });
-            case "timeout":
-                throw new errors.HumanloopTimeoutError(
-                    "Timeout exceeded when calling POST /tools/{id}/versions/{version_id}/commit.",
-                );
-            case "unknown":
-                throw new errors.HumanloopError({
-                    message: _response.error.errorMessage,
-                });
-        }
-    }
-
-    /**
      * Delete a version of the Tool.
      *
      * @param {string} id - Unique identifier for Tool.
@@ -974,8 +874,8 @@ export class Tools {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.18",
-                "User-Agent": "humanloop/0.8.18",
+                "X-Fern-SDK-Version": "0.8.20",
+                "User-Agent": "humanloop/0.8.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1029,6 +929,97 @@ export class Tools {
     }
 
     /**
+     * Update the name or description of the Tool version.
+     *
+     * @param {string} id - Unique identifier for Tool.
+     * @param {string} versionId - Unique identifier for the specific version of the Tool.
+     * @param {Humanloop.UpdateVersionRequest} request
+     * @param {Tools.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link Humanloop.UnprocessableEntityError}
+     *
+     * @example
+     *     await client.tools.updateToolVersion("id", "version_id", {})
+     */
+    public async updateToolVersion(
+        id: string,
+        versionId: string,
+        request: Humanloop.UpdateVersionRequest,
+        requestOptions?: Tools.RequestOptions,
+    ): Promise<Humanloop.ToolResponse> {
+        const _response = await (this._options.fetcher ?? core.fetcher)({
+            url: urlJoin(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.HumanloopEnvironment.Default,
+                `tools/${encodeURIComponent(id)}/versions/${encodeURIComponent(versionId)}`,
+            ),
+            method: "PATCH",
+            headers: {
+                "X-Fern-Language": "JavaScript",
+                "X-Fern-SDK-Name": "humanloop",
+                "X-Fern-SDK-Version": "0.8.20",
+                "User-Agent": "humanloop/0.8.20",
+                "X-Fern-Runtime": core.RUNTIME.type,
+                "X-Fern-Runtime-Version": core.RUNTIME.version,
+                ...(await this._getCustomAuthorizationHeaders()),
+                ...requestOptions?.headers,
+            },
+            contentType: "application/json",
+            requestType: "json",
+            body: serializers.UpdateVersionRequest.jsonOrThrow(request, { unrecognizedObjectKeys: "strip" }),
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return serializers.ToolResponse.parseOrThrow(_response.body, {
+                unrecognizedObjectKeys: "passthrough",
+                allowUnrecognizedUnionMembers: true,
+                allowUnrecognizedEnumValues: true,
+                skipValidation: true,
+                breadcrumbsPrefix: ["response"],
+            });
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 422:
+                    throw new Humanloop.UnprocessableEntityError(
+                        serializers.HttpValidationError.parseOrThrow(_response.error.body, {
+                            unrecognizedObjectKeys: "passthrough",
+                            allowUnrecognizedUnionMembers: true,
+                            allowUnrecognizedEnumValues: true,
+                            skipValidation: true,
+                            breadcrumbsPrefix: ["response"],
+                        }),
+                    );
+                default:
+                    throw new errors.HumanloopError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                    });
+            }
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.HumanloopError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
+                });
+            case "timeout":
+                throw new errors.HumanloopTimeoutError(
+                    "Timeout exceeded when calling PATCH /tools/{id}/versions/{version_id}.",
+                );
+            case "unknown":
+                throw new errors.HumanloopError({
+                    message: _response.error.errorMessage,
+                });
+        }
+    }
+
+    /**
      * Deploy Tool to an Environment.
      *
      * Set the deployed version for the specified Environment. This Prompt
@@ -1066,8 +1057,8 @@ export class Tools {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.18",
-                "User-Agent": "humanloop/0.8.18",
+                "X-Fern-SDK-Version": "0.8.20",
+                "User-Agent": "humanloop/0.8.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1158,8 +1149,8 @@ export class Tools {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.18",
-                "User-Agent": "humanloop/0.8.18",
+                "X-Fern-SDK-Version": "0.8.20",
+                "User-Agent": "humanloop/0.8.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1238,8 +1229,8 @@ export class Tools {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.18",
-                "User-Agent": "humanloop/0.8.18",
+                "X-Fern-SDK-Version": "0.8.20",
+                "User-Agent": "humanloop/0.8.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1331,8 +1322,8 @@ export class Tools {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.18",
-                "User-Agent": "humanloop/0.8.18",
+                "X-Fern-SDK-Version": "0.8.20",
+                "User-Agent": "humanloop/0.8.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),

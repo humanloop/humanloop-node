@@ -6,7 +6,7 @@ import * as serializers from "../../../index";
 import * as core from "../../../../core";
 
 export const Request: core.serialization.Schema<
-    serializers.prompts.populateTemplate.Request.Raw,
+    serializers.prompts.populate.Request.Raw,
     Record<string, unknown>
 > = core.serialization.record(core.serialization.string(), core.serialization.unknown());
 
