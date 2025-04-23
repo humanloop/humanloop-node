@@ -201,7 +201,10 @@ export function isHumanloopSpan(span: ReadableSpan): boolean {
  * @param output - Output to be converted
  * @returns JSON string representation of the output
  */
-export function jsonifyIfNotString(func: Function, output: any): string {
+export function jsonifyIfNotString(func: Function, output: any): string | undefined {
+    if (output === undefined || output === null) {
+        return undefined;
+    }
     if (typeof output !== "string") {
         try {
             return JSON.stringify(output);
