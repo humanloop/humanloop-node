@@ -129,8 +129,8 @@ export class Prompts {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.21",
-                "User-Agent": "humanloop/0.8.21",
+                "X-Fern-SDK-Version": "0.8.21-beta1",
+                "User-Agent": "humanloop/0.8.21-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -221,8 +221,8 @@ export class Prompts {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.21",
-                "User-Agent": "humanloop/0.8.21",
+                "X-Fern-SDK-Version": "0.8.21-beta1",
+                "User-Agent": "humanloop/0.8.21-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -321,8 +321,8 @@ export class Prompts {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.21",
-                "User-Agent": "humanloop/0.8.21",
+                "X-Fern-SDK-Version": "0.8.21-beta1",
+                "User-Agent": "humanloop/0.8.21-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -502,8 +502,8 @@ export class Prompts {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.21",
-                "User-Agent": "humanloop/0.8.21",
+                "X-Fern-SDK-Version": "0.8.21-beta1",
+                "User-Agent": "humanloop/0.8.21-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -618,8 +618,8 @@ export class Prompts {
                 headers: {
                     "X-Fern-Language": "JavaScript",
                     "X-Fern-SDK-Name": "humanloop",
-                    "X-Fern-SDK-Version": "0.8.21",
-                    "User-Agent": "humanloop/0.8.21",
+                    "X-Fern-SDK-Version": "0.8.21-beta1",
+                    "User-Agent": "humanloop/0.8.21-beta1",
                     "X-Fern-Runtime": core.RUNTIME.type,
                     "X-Fern-Runtime-Version": core.RUNTIME.version,
                     ...(await this._getCustomAuthorizationHeaders()),
@@ -731,8 +731,8 @@ export class Prompts {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.21",
-                "User-Agent": "humanloop/0.8.21",
+                "X-Fern-SDK-Version": "0.8.21-beta1",
+                "User-Agent": "humanloop/0.8.21-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -831,8 +831,8 @@ export class Prompts {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.21",
-                "User-Agent": "humanloop/0.8.21",
+                "X-Fern-SDK-Version": "0.8.21-beta1",
+                "User-Agent": "humanloop/0.8.21-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -913,8 +913,8 @@ export class Prompts {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.21",
-                "User-Agent": "humanloop/0.8.21",
+                "X-Fern-SDK-Version": "0.8.21-beta1",
+                "User-Agent": "humanloop/0.8.21-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -995,8 +995,8 @@ export class Prompts {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.21",
-                "User-Agent": "humanloop/0.8.21",
+                "X-Fern-SDK-Version": "0.8.21-beta1",
+                "User-Agent": "humanloop/0.8.21-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1099,8 +1099,8 @@ export class Prompts {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.21",
-                "User-Agent": "humanloop/0.8.21",
+                "X-Fern-SDK-Version": "0.8.21-beta1",
+                "User-Agent": "humanloop/0.8.21-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1193,8 +1193,8 @@ export class Prompts {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.21",
-                "User-Agent": "humanloop/0.8.21",
+                "X-Fern-SDK-Version": "0.8.21-beta1",
+                "User-Agent": "humanloop/0.8.21-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1280,8 +1280,8 @@ export class Prompts {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.21",
-                "User-Agent": "humanloop/0.8.21",
+                "X-Fern-SDK-Version": "0.8.21-beta1",
+                "User-Agent": "humanloop/0.8.21-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1364,8 +1364,8 @@ export class Prompts {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.21",
-                "User-Agent": "humanloop/0.8.21",
+                "X-Fern-SDK-Version": "0.8.21-beta1",
+                "User-Agent": "humanloop/0.8.21-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1463,8 +1463,8 @@ export class Prompts {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.21",
-                "User-Agent": "humanloop/0.8.21",
+                "X-Fern-SDK-Version": "0.8.21-beta1",
+                "User-Agent": "humanloop/0.8.21-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1555,8 +1555,8 @@ export class Prompts {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.21",
-                "User-Agent": "humanloop/0.8.21",
+                "X-Fern-SDK-Version": "0.8.21-beta1",
+                "User-Agent": "humanloop/0.8.21-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1635,8 +1635,8 @@ export class Prompts {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.21",
-                "User-Agent": "humanloop/0.8.21",
+                "X-Fern-SDK-Version": "0.8.21-beta1",
+                "User-Agent": "humanloop/0.8.21-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1728,8 +1728,8 @@ export class Prompts {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.21",
-                "User-Agent": "humanloop/0.8.21",
+                "X-Fern-SDK-Version": "0.8.21-beta1",
+                "User-Agent": "humanloop/0.8.21-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1811,7 +1811,7 @@ export class Prompts {
         id: string,
         request: Humanloop.SerializePromptsIdSerializeGetRequest = {},
         requestOptions?: Prompts.RequestOptions,
-    ): Promise<void> {
+    ): Promise<unknown> {
         const { versionId, environment } = request;
         const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
         if (versionId != null) {
@@ -1833,8 +1833,8 @@ export class Prompts {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.21",
-                "User-Agent": "humanloop/0.8.21",
+                "X-Fern-SDK-Version": "0.8.21-beta1",
+                "User-Agent": "humanloop/0.8.21-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1848,7 +1848,7 @@ export class Prompts {
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return;
+            return _response.body;
         }
 
         if (_response.error.reason === "status-code") {
@@ -1917,8 +1917,8 @@ export class Prompts {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.21",
-                "User-Agent": "humanloop/0.8.21",
+                "X-Fern-SDK-Version": "0.8.21-beta1",
+                "User-Agent": "humanloop/0.8.21-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),

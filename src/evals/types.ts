@@ -45,12 +45,16 @@ export type FileResponse =
 interface Identifiers {
     id?: string;
     path?: string;
+    versionId?: string;
+    environment?: string;
 }
+
+export type EvalFileType = "prompt" | "tool" | "flow" | "agent";
 
 export interface File<I extends Record<string, unknown> & { messages?: any[] }, O>
     extends Identifiers {
     /** The type of File this callable relates to on Humanloop. */
-    type?: "flow" | "prompt";
+    type?: EvalFileType;
     /** The contents uniquely define the version of the File on Humanloop. */
     version?: Version;
     /**

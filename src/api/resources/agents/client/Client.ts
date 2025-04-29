@@ -49,49 +49,7 @@ export class Agents {
      * @throws {@link Humanloop.UnprocessableEntityError}
      *
      * @example
-     *     await client.agents.log({
-     *         path: "Banking/Teller Agent",
-     *         agent: {
-     *             provider: "anthropic",
-     *             endpoint: "chat",
-     *             model: "claude-3-7-sonnet-latest",
-     *             reasoningEffort: 1024,
-     *             template: [{
-     *                     role: "system",
-     *                     content: "You are a helpful digital assistant, helping users navigate our digital banking platform."
-     *                 }],
-     *             maxIterations: 3,
-     *             tools: [{
-     *                     type: "file",
-     *                     link: {
-     *                         fileId: "pr_1234567890",
-     *                         versionId: "prv_1234567890"
-     *                     },
-     *                     onAgentCall: "continue"
-     *                 }, {
-     *                     type: "inline",
-     *                     jsonSchema: {
-     *                         name: "stop",
-     *                         description: "Call this tool when you have finished your task.",
-     *                         parameters: {
-     *                             "type": "object",
-     *                             "properties": {
-     *                                 "output": {
-     *                                     "type": "string",
-     *                                     "description": "The final output to return to the user."
-     *                                 }
-     *                             },
-     *                             "additionalProperties": false,
-     *                             "required": [
-     *                                 "output"
-     *                             ]
-     *                         },
-     *                         strict: true
-     *                     },
-     *                     onAgentCall: "stop"
-     *                 }]
-     *         }
-     *     })
+     *     await client.agents.log()
      */
     public async log(
         request: Humanloop.AgentLogRequest = {},
@@ -118,8 +76,8 @@ export class Agents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.21",
-                "User-Agent": "humanloop/0.8.21",
+                "X-Fern-SDK-Version": "0.8.21-beta1",
+                "User-Agent": "humanloop/0.8.21-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -191,27 +149,14 @@ export class Agents {
      * @throws {@link Humanloop.UnprocessableEntityError}
      *
      * @example
-     *     await client.agents.updateLog("ag_1234567890", "log_1234567890", {
-     *         messages: [{
-     *                 role: "user",
-     *                 content: "I need to withdraw $1000"
-     *             }, {
-     *                 role: "assistant",
-     *                 content: "Of course! Would you like to use your savings or checking account?"
-     *             }],
-     *         outputMessage: {
-     *             role: "assistant",
-     *             content: "I'm sorry, I can't help with that."
-     *         },
-     *         logStatus: "complete"
-     *     })
+     *     await client.agents.updateLog("id", "log_id")
      */
     public async updateLog(
         id: string,
         logId: string,
         request: Humanloop.UpdateAgentLogRequest = {},
         requestOptions?: Agents.RequestOptions,
-    ): Promise<Humanloop.AgentLogResponse> {
+    ): Promise<Humanloop.LogResponse> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -223,8 +168,8 @@ export class Agents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.21",
-                "User-Agent": "humanloop/0.8.21",
+                "X-Fern-SDK-Version": "0.8.21-beta1",
+                "User-Agent": "humanloop/0.8.21-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -238,7 +183,7 @@ export class Agents {
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return serializers.AgentLogResponse.parseOrThrow(_response.body, {
+            return serializers.LogResponse.parseOrThrow(_response.body, {
                 unrecognizedObjectKeys: "passthrough",
                 allowUnrecognizedUnionMembers: true,
                 allowUnrecognizedEnumValues: true,
@@ -285,26 +230,23 @@ export class Agents {
     }
 
     /**
-     * Call an Agent. The Agent will run on the Humanloop runtime and return a completed Agent Log.
+     * Call an Agent.
      *
-     * If the Agent requires a tool call that cannot be ran by Humanloop, execution will halt. To continue,
-     * pass the ID of the incomplete Log and the required tool call to the /agents/continue endpoint.
-     *
-     * The agent will run for the maximum number of iterations, or until it encounters a stop condition,
-     * according to its configuration.
+     * Calling an Agent calls the model provider before logging
+     * the request, responses and metadata to Humanloop.
      *
      * You can use query parameters `version_id`, or `environment`, to target
      * an existing version of the Agent. Otherwise the default deployed version will be chosen.
      *
      * Instead of targeting an existing version explicitly, you can instead pass in
-     * Agent details in the request body. A new version is created if it does not match
-     * any existing ones. This is helpful in the case where you are storing or deriving
-     * your Agent details in code.
+     * Agent details in the request body. In this case, we will check if the details correspond
+     * to an existing version of the Agent. If they do not, we will create a new version. This is helpful
+     * in the case where you are storing or deriving your Agent details in code.
      */
     public async callStream(
         request: Humanloop.AgentsCallStreamRequest,
         requestOptions?: Agents.RequestOptions,
-    ): Promise<core.Stream<Humanloop.AgentCallStreamResponse>> {
+    ): Promise<core.Stream<Humanloop.AgentContinueCallStreamResponse>> {
         const { versionId, environment, ..._body } = request;
         const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
         if (versionId != null) {
@@ -326,8 +268,8 @@ export class Agents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.21",
-                "User-Agent": "humanloop/0.8.21",
+                "X-Fern-SDK-Version": "0.8.21-beta1",
+                "User-Agent": "humanloop/0.8.21-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -349,7 +291,7 @@ export class Agents {
             return new core.Stream({
                 stream: _response.body,
                 parse: async (data) => {
-                    return serializers.AgentCallStreamResponse.parseOrThrow(data, {
+                    return serializers.AgentContinueCallStreamResponse.parseOrThrow(data, {
                         unrecognizedObjectKeys: "passthrough",
                         allowUnrecognizedUnionMembers: true,
                         allowUnrecognizedEnumValues: true,
@@ -401,21 +343,18 @@ export class Agents {
     }
 
     /**
-     * Call an Agent. The Agent will run on the Humanloop runtime and return a completed Agent Log.
+     * Call an Agent.
      *
-     * If the Agent requires a tool call that cannot be ran by Humanloop, execution will halt. To continue,
-     * pass the ID of the incomplete Log and the required tool call to the /agents/continue endpoint.
-     *
-     * The agent will run for the maximum number of iterations, or until it encounters a stop condition,
-     * according to its configuration.
+     * Calling an Agent calls the model provider before logging
+     * the request, responses and metadata to Humanloop.
      *
      * You can use query parameters `version_id`, or `environment`, to target
      * an existing version of the Agent. Otherwise the default deployed version will be chosen.
      *
      * Instead of targeting an existing version explicitly, you can instead pass in
-     * Agent details in the request body. A new version is created if it does not match
-     * any existing ones. This is helpful in the case where you are storing or deriving
-     * your Agent details in code.
+     * Agent details in the request body. In this case, we will check if the details correspond
+     * to an existing version of the Agent. If they do not, we will create a new version. This is helpful
+     * in the case where you are storing or deriving your Agent details in code.
      *
      * @param {Humanloop.AgentsCallRequest} request
      * @param {Agents.RequestOptions} requestOptions - Request-specific configuration.
@@ -423,18 +362,12 @@ export class Agents {
      * @throws {@link Humanloop.UnprocessableEntityError}
      *
      * @example
-     *     await client.agents.call({
-     *         path: "Banking/Teller Agent",
-     *         messages: [{
-     *                 role: "user",
-     *                 content: "I'd like to deposit $1000 to my savings account from my checking account."
-     *             }]
-     *     })
+     *     await client.agents.call({})
      */
     public async call(
         request: Humanloop.AgentsCallRequest,
         requestOptions?: Agents.RequestOptions,
-    ): Promise<Humanloop.AgentCallResponse> {
+    ): Promise<Humanloop.AgentContinueCallResponse> {
         const { versionId, environment, ..._body } = request;
         const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
         if (versionId != null) {
@@ -456,8 +389,8 @@ export class Agents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.21",
-                "User-Agent": "humanloop/0.8.21",
+                "X-Fern-SDK-Version": "0.8.21-beta1",
+                "User-Agent": "humanloop/0.8.21-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -475,7 +408,7 @@ export class Agents {
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return serializers.AgentCallResponse.parseOrThrow(_response.body, {
+            return serializers.AgentContinueCallResponse.parseOrThrow(_response.body, {
                 unrecognizedObjectKeys: "passthrough",
                 allowUnrecognizedUnionMembers: true,
                 allowUnrecognizedEnumValues: true,
@@ -522,15 +455,15 @@ export class Agents {
     /**
      * Continue an incomplete Agent call.
      *
-     * This endpoint allows continuing an existing incomplete Agent call, by passing the tool call
-     * requested by the Agent. The Agent will resume processing from where it left off.
-     *
-     * The messages in the request will be appended to the original messages in the Log. You do not
-     * have to provide the previous conversation history.
+     * This endpoint allows continuing an existing incomplete Agent call, using the context
+     * from the previous interaction. The Agent will resume processing from where it left off.
      *
      * The original log must be in an incomplete state to be continued.
+     *
+     * The messages in the request will be appended
+     * to the original messages in the log.
      */
-    public async continueCallStream(
+    public async continueStream(
         request: Humanloop.AgentsContinueCallStreamRequest,
         requestOptions?: Agents.RequestOptions,
     ): Promise<core.Stream<Humanloop.AgentContinueCallStreamResponse>> {
@@ -545,8 +478,8 @@ export class Agents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.21",
-                "User-Agent": "humanloop/0.8.21",
+                "X-Fern-SDK-Version": "0.8.21-beta1",
+                "User-Agent": "humanloop/0.8.21-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -555,9 +488,7 @@ export class Agents {
             contentType: "application/json",
             requestType: "json",
             body: {
-                ...serializers.AgentsContinueCallStreamRequest.jsonOrThrow(request, {
-                    unrecognizedObjectKeys: "strip",
-                }),
+                ...serializers.AgentsContinueCallStreamRequest.jsonOrThrow(request, { unrecognizedObjectKeys: "strip" }),
                 stream: true,
             },
             responseType: "sse",
@@ -623,30 +554,28 @@ export class Agents {
     /**
      * Continue an incomplete Agent call.
      *
-     * This endpoint allows continuing an existing incomplete Agent call, by passing the tool call
-     * requested by the Agent. The Agent will resume processing from where it left off.
-     *
-     * The messages in the request will be appended to the original messages in the Log. You do not
-     * have to provide the previous conversation history.
+     * This endpoint allows continuing an existing incomplete Agent call, using the context
+     * from the previous interaction. The Agent will resume processing from where it left off.
      *
      * The original log must be in an incomplete state to be continued.
      *
-     * @param {Humanloop.AgentsContinueCallRequest} request
+     * The messages in the request will be appended
+     * to the original messages in the log.
+     *
+     * @param {Humanloop.AgentsContinueRequest} request
      * @param {Agents.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link Humanloop.UnprocessableEntityError}
      *
      * @example
-     *     await client.agents.continueCall({
-     *         logId: "log_1234567890",
+     *     await client.agents.continue({
+     *         logId: "log_id",
      *         messages: [{
-     *                 role: "tool",
-     *                 content: "{\"type\": \"checking\", \"balance\": 5200}",
-     *                 toolCallId: "tc_1234567890"
+     *                 role: "user"
      *             }]
      *     })
      */
-    public async continueCall(
+    public async continue(
         request: Humanloop.AgentsContinueCallRequest,
         requestOptions?: Agents.RequestOptions,
     ): Promise<Humanloop.AgentContinueCallResponse> {
@@ -661,8 +590,8 @@ export class Agents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.21",
-                "User-Agent": "humanloop/0.8.21",
+                "X-Fern-SDK-Version": "0.8.21-beta1",
+                "User-Agent": "humanloop/0.8.21-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -732,114 +661,108 @@ export class Agents {
      * @throws {@link Humanloop.UnprocessableEntityError}
      *
      * @example
-     *     await client.agents.list({
-     *         size: 1
-     *     })
+     *     await client.agents.list()
      */
     public async list(
         request: Humanloop.ListAgentsGetRequest = {},
         requestOptions?: Agents.RequestOptions,
-    ): Promise<core.Page<Humanloop.AgentResponse>> {
-        const list = async (request: Humanloop.ListAgentsGetRequest): Promise<Humanloop.PaginatedDataAgentResponse> => {
-            const { page, size, name, userFilter, sortBy, order } = request;
-            const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-            if (page != null) {
-                _queryParams["page"] = page.toString();
-            }
-            if (size != null) {
-                _queryParams["size"] = size.toString();
-            }
-            if (name != null) {
-                _queryParams["name"] = name;
-            }
-            if (userFilter != null) {
-                _queryParams["user_filter"] = userFilter;
-            }
-            if (sortBy != null) {
-                _queryParams["sort_by"] = serializers.ProjectSortBy.jsonOrThrow(sortBy, {
-                    unrecognizedObjectKeys: "strip",
-                });
-            }
-            if (order != null) {
-                _queryParams["order"] = serializers.SortOrder.jsonOrThrow(order, { unrecognizedObjectKeys: "strip" });
-            }
-            const _response = await (this._options.fetcher ?? core.fetcher)({
-                url: urlJoin(
-                    (await core.Supplier.get(this._options.baseUrl)) ??
-                        (await core.Supplier.get(this._options.environment)) ??
-                        environments.HumanloopEnvironment.Default,
-                    "agents",
-                ),
-                method: "GET",
-                headers: {
-                    "X-Fern-Language": "JavaScript",
-                    "X-Fern-SDK-Name": "humanloop",
-                    "X-Fern-SDK-Version": "0.8.21",
-                    "User-Agent": "humanloop/0.8.21",
-                    "X-Fern-Runtime": core.RUNTIME.type,
-                    "X-Fern-Runtime-Version": core.RUNTIME.version,
-                    ...(await this._getCustomAuthorizationHeaders()),
-                    ...requestOptions?.headers,
-                },
-                contentType: "application/json",
-                queryParameters: _queryParams,
-                requestType: "json",
-                timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-                maxRetries: requestOptions?.maxRetries,
-                abortSignal: requestOptions?.abortSignal,
+    ): Promise<Humanloop.PaginatedDataAgentResponse> {
+        const { page, size, name, userFilter, sortBy, order } = request;
+        const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
+        if (page != null) {
+            _queryParams["page"] = page.toString();
+        }
+
+        if (size != null) {
+            _queryParams["size"] = size.toString();
+        }
+
+        if (name != null) {
+            _queryParams["name"] = name;
+        }
+
+        if (userFilter != null) {
+            _queryParams["user_filter"] = userFilter;
+        }
+
+        if (sortBy != null) {
+            _queryParams["sort_by"] = serializers.ProjectSortBy.jsonOrThrow(sortBy, {
+                unrecognizedObjectKeys: "strip",
             });
-            if (_response.ok) {
-                return serializers.PaginatedDataAgentResponse.parseOrThrow(_response.body, {
-                    unrecognizedObjectKeys: "passthrough",
-                    allowUnrecognizedUnionMembers: true,
-                    allowUnrecognizedEnumValues: true,
-                    skipValidation: true,
-                    breadcrumbsPrefix: ["response"],
-                });
-            }
-            if (_response.error.reason === "status-code") {
-                switch (_response.error.statusCode) {
-                    case 422:
-                        throw new Humanloop.UnprocessableEntityError(
-                            serializers.HttpValidationError.parseOrThrow(_response.error.body, {
-                                unrecognizedObjectKeys: "passthrough",
-                                allowUnrecognizedUnionMembers: true,
-                                allowUnrecognizedEnumValues: true,
-                                skipValidation: true,
-                                breadcrumbsPrefix: ["response"],
-                            }),
-                        );
-                    default:
-                        throw new errors.HumanloopError({
-                            statusCode: _response.error.statusCode,
-                            body: _response.error.body,
-                        });
-                }
-            }
-            switch (_response.error.reason) {
-                case "non-json":
+        }
+
+        if (order != null) {
+            _queryParams["order"] = serializers.SortOrder.jsonOrThrow(order, { unrecognizedObjectKeys: "strip" });
+        }
+
+        const _response = await (this._options.fetcher ?? core.fetcher)({
+            url: urlJoin(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.HumanloopEnvironment.Default,
+                "agents",
+            ),
+            method: "GET",
+            headers: {
+                "X-Fern-Language": "JavaScript",
+                "X-Fern-SDK-Name": "humanloop",
+                "X-Fern-SDK-Version": "0.8.21-beta1",
+                "User-Agent": "humanloop/0.8.21-beta1",
+                "X-Fern-Runtime": core.RUNTIME.type,
+                "X-Fern-Runtime-Version": core.RUNTIME.version,
+                ...(await this._getCustomAuthorizationHeaders()),
+                ...requestOptions?.headers,
+            },
+            contentType: "application/json",
+            queryParameters: _queryParams,
+            requestType: "json",
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return serializers.PaginatedDataAgentResponse.parseOrThrow(_response.body, {
+                unrecognizedObjectKeys: "passthrough",
+                allowUnrecognizedUnionMembers: true,
+                allowUnrecognizedEnumValues: true,
+                skipValidation: true,
+                breadcrumbsPrefix: ["response"],
+            });
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 422:
+                    throw new Humanloop.UnprocessableEntityError(
+                        serializers.HttpValidationError.parseOrThrow(_response.error.body, {
+                            unrecognizedObjectKeys: "passthrough",
+                            allowUnrecognizedUnionMembers: true,
+                            allowUnrecognizedEnumValues: true,
+                            skipValidation: true,
+                            breadcrumbsPrefix: ["response"],
+                        }),
+                    );
+                default:
                     throw new errors.HumanloopError({
                         statusCode: _response.error.statusCode,
-                        body: _response.error.rawBody,
-                    });
-                case "timeout":
-                    throw new errors.HumanloopTimeoutError("Timeout exceeded when calling GET /agents.");
-                case "unknown":
-                    throw new errors.HumanloopError({
-                        message: _response.error.errorMessage,
+                        body: _response.error.body,
                     });
             }
-        };
-        let _offset = request?.page != null ? request?.page : 1;
-        return new core.Pageable<Humanloop.PaginatedDataAgentResponse, Humanloop.AgentResponse>({
-            response: await list(request),
-            hasNextPage: (response) => (response?.records ?? []).length > 0,
-            getItems: (response) => response?.records ?? [],
-            loadPage: (_response) => {
-                _offset += 1;
-                return list(core.setObjectProperty(request, "page", _offset));
-            },
-        });
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.HumanloopError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
+                });
+            case "timeout":
+                throw new errors.HumanloopTimeoutError("Timeout exceeded when calling GET /agents.");
+            case "unknown":
+                throw new errors.HumanloopError({
+                    message: _response.error.errorMessage,
+                });
+        }
     }
 
     /**
@@ -859,40 +782,7 @@ export class Agents {
      *
      * @example
      *     await client.agents.upsert({
-     *         path: "Banking/Teller Agent",
-     *         provider: "anthropic",
-     *         endpoint: "chat",
-     *         model: "claude-3-7-sonnet-latest",
-     *         reasoningEffort: 1024,
-     *         template: [{
-     *                 role: "system",
-     *                 content: "You are a helpful digital assistant, helping users navigate our digital banking platform."
-     *             }],
-     *         maxIterations: 3,
-     *         tools: [{
-     *                 type: "inline",
-     *                 jsonSchema: {
-     *                     name: "stop",
-     *                     description: "Call this tool when you have finished your task.",
-     *                     parameters: {
-     *                         "type": "object",
-     *                         "properties": {
-     *                             "output": {
-     *                                 "type": "string",
-     *                                 "description": "The final output to return to the user."
-     *                             }
-     *                         },
-     *                         "additionalProperties": false,
-     *                         "required": [
-     *                             "output"
-     *                         ]
-     *                     },
-     *                     strict: true
-     *                 },
-     *                 onAgentCall: "stop"
-     *             }],
-     *         versionName: "teller-agent-v1",
-     *         versionDescription: "Initial version"
+     *         model: "model"
      *     })
      */
     public async upsert(
@@ -910,8 +800,8 @@ export class Agents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.21",
-                "User-Agent": "humanloop/0.8.21",
+                "X-Fern-SDK-Version": "0.8.21-beta1",
+                "User-Agent": "humanloop/0.8.21-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -979,7 +869,7 @@ export class Agents {
      * @throws {@link Humanloop.UnprocessableEntityError}
      *
      * @example
-     *     await client.agents.deleteAgentVersion("ag_1234567890", "agv_1234567890")
+     *     await client.agents.deleteAgentVersion("id", "version_id")
      */
     public async deleteAgentVersion(
         id: string,
@@ -997,8 +887,8 @@ export class Agents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.21",
-                "User-Agent": "humanloop/0.8.21",
+                "X-Fern-SDK-Version": "0.8.21-beta1",
+                "User-Agent": "humanloop/0.8.21-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1062,10 +952,7 @@ export class Agents {
      * @throws {@link Humanloop.UnprocessableEntityError}
      *
      * @example
-     *     await client.agents.patchAgentVersion("ag_1234567890", "agv_1234567890", {
-     *         name: "teller-agent-v2",
-     *         description: "Updated version"
-     *     })
+     *     await client.agents.patchAgentVersion("id", "version_id", {})
      */
     public async patchAgentVersion(
         id: string,
@@ -1084,8 +971,8 @@ export class Agents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.21",
-                "User-Agent": "humanloop/0.8.21",
+                "X-Fern-SDK-Version": "0.8.21-beta1",
+                "User-Agent": "humanloop/0.8.21-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1158,7 +1045,7 @@ export class Agents {
      * @throws {@link Humanloop.UnprocessableEntityError}
      *
      * @example
-     *     await client.agents.get("ag_1234567890")
+     *     await client.agents.get("id")
      */
     public async get(
         id: string,
@@ -1186,8 +1073,8 @@ export class Agents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.21",
-                "User-Agent": "humanloop/0.8.21",
+                "X-Fern-SDK-Version": "0.8.21-beta1",
+                "User-Agent": "humanloop/0.8.21-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1254,7 +1141,7 @@ export class Agents {
      * @throws {@link Humanloop.UnprocessableEntityError}
      *
      * @example
-     *     await client.agents.delete("ag_1234567890")
+     *     await client.agents.delete("id")
      */
     public async delete(id: string, requestOptions?: Agents.RequestOptions): Promise<void> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
@@ -1268,8 +1155,8 @@ export class Agents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.21",
-                "User-Agent": "humanloop/0.8.21",
+                "X-Fern-SDK-Version": "0.8.21-beta1",
+                "User-Agent": "humanloop/0.8.21-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1330,9 +1217,7 @@ export class Agents {
      * @throws {@link Humanloop.UnprocessableEntityError}
      *
      * @example
-     *     await client.agents.move("ag_1234567890", {
-     *         path: "new directory/new name"
-     *     })
+     *     await client.agents.move("id")
      */
     public async move(
         id: string,
@@ -1350,8 +1235,8 @@ export class Agents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.21",
-                "User-Agent": "humanloop/0.8.21",
+                "X-Fern-SDK-Version": "0.8.21-beta1",
+                "User-Agent": "humanloop/0.8.21-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1419,7 +1304,7 @@ export class Agents {
      * @throws {@link Humanloop.UnprocessableEntityError}
      *
      * @example
-     *     await client.agents.listVersions("ag_1234567890")
+     *     await client.agents.listVersions("id")
      */
     public async listVersions(
         id: string,
@@ -1443,8 +1328,8 @@ export class Agents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.21",
-                "User-Agent": "humanloop/0.8.21",
+                "X-Fern-SDK-Version": "0.8.21-beta1",
+                "User-Agent": "humanloop/0.8.21-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1540,8 +1425,8 @@ export class Agents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.21",
-                "User-Agent": "humanloop/0.8.21",
+                "X-Fern-SDK-Version": "0.8.21-beta1",
+                "User-Agent": "humanloop/0.8.21-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1632,8 +1517,8 @@ export class Agents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.21",
-                "User-Agent": "humanloop/0.8.21",
+                "X-Fern-SDK-Version": "0.8.21-beta1",
+                "User-Agent": "humanloop/0.8.21-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1695,7 +1580,7 @@ export class Agents {
      * @throws {@link Humanloop.UnprocessableEntityError}
      *
      * @example
-     *     await client.agents.listEnvironments("ag_1234567890")
+     *     await client.agents.listEnvironments("id")
      */
     public async listEnvironments(
         id: string,
@@ -1712,8 +1597,8 @@ export class Agents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.21",
-                "User-Agent": "humanloop/0.8.21",
+                "X-Fern-SDK-Version": "0.8.21-beta1",
+                "User-Agent": "humanloop/0.8.21-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1783,17 +1668,7 @@ export class Agents {
      * @throws {@link Humanloop.UnprocessableEntityError}
      *
      * @example
-     *     await client.agents.updateMonitoring("ag_1234567890", {
-     *         activate: [{
-     *                 evaluatorVersionId: "ev_1234567890"
-     *             }, {
-     *                 evaluatorId: "ev_2345678901",
-     *                 environmentId: "env_1234567890"
-     *             }],
-     *         deactivate: [{
-     *                 evaluatorVersionId: "ev_0987654321"
-     *             }]
-     *     })
+     *     await client.agents.updateMonitoring("id", {})
      */
     public async updateMonitoring(
         id: string,
@@ -1811,8 +1686,8 @@ export class Agents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.21",
-                "User-Agent": "humanloop/0.8.21",
+                "X-Fern-SDK-Version": "0.8.21-beta1",
+                "User-Agent": "humanloop/0.8.21-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1894,7 +1769,7 @@ export class Agents {
         id: string,
         request: Humanloop.SerializeAgentsIdSerializeGetRequest = {},
         requestOptions?: Agents.RequestOptions,
-    ): Promise<void> {
+    ): Promise<unknown> {
         const { versionId, environment } = request;
         const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
         if (versionId != null) {
@@ -1916,8 +1791,8 @@ export class Agents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.21",
-                "User-Agent": "humanloop/0.8.21",
+                "X-Fern-SDK-Version": "0.8.21-beta1",
+                "User-Agent": "humanloop/0.8.21-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1931,7 +1806,7 @@ export class Agents {
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return;
+            return _response.body;
         }
 
         if (_response.error.reason === "status-code") {
@@ -2000,8 +1875,8 @@ export class Agents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.21",
-                "User-Agent": "humanloop/0.8.21",
+                "X-Fern-SDK-Version": "0.8.21-beta1",
+                "User-Agent": "humanloop/0.8.21-beta1",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),

@@ -33,9 +33,8 @@ jobs:
             - name: Compile
               run: yarn && yarn test
               env:
-                  OPENAI_KEY: ${{ secrets.OPENAI_KEY }}
-                  ANTHROPIC_KEY: ${{ secrets.ANTHROPIC_KEY }}
-                  COHERE_KEY: ${{ secrets.COHERE_KEY }}
+                  HUMANLOOP_API_KEY: ${{ secrets.HUMANLOOP_API_KEY }}
+                  OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
 
     publish:
         needs: [compile, test]
