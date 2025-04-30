@@ -47,7 +47,7 @@ export class Files {
     public async listFiles(
         request: Humanloop.ListFilesFilesGetRequest = {},
         requestOptions?: Files.RequestOptions,
-    ): Promise<Humanloop.PaginatedDataUnionPromptResponseToolResponseDatasetResponseEvaluatorResponseFlowResponse> {
+    ): Promise<Humanloop.PaginatedDataUnionPromptResponseToolResponseDatasetResponseEvaluatorResponseFlowResponseAgentResponse> {
         const { page, size, name, template, type: type_, environment, sortBy, order } = request;
         const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
         if (page != null) {
@@ -101,8 +101,8 @@ export class Files {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.20",
-                "User-Agent": "humanloop/0.8.20",
+                "X-Fern-SDK-Version": "0.8.21",
+                "User-Agent": "humanloop/0.8.21",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -116,7 +116,7 @@ export class Files {
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return serializers.PaginatedDataUnionPromptResponseToolResponseDatasetResponseEvaluatorResponseFlowResponse.parseOrThrow(
+            return serializers.PaginatedDataUnionPromptResponseToolResponseDatasetResponseEvaluatorResponseFlowResponseAgentResponse.parseOrThrow(
                 _response.body,
                 {
                     unrecognizedObjectKeys: "passthrough",
@@ -197,8 +197,8 @@ export class Files {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.20",
-                "User-Agent": "humanloop/0.8.20",
+                "X-Fern-SDK-Version": "0.8.21",
+                "User-Agent": "humanloop/0.8.21",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),

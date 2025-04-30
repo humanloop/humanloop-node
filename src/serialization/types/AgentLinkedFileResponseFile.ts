@@ -7,22 +7,24 @@ import * as Humanloop from "../../api/index";
 import * as core from "../../core";
 import { DatasetResponse } from "./DatasetResponse";
 
-export const PaginatedDataUnionPromptResponseToolResponseDatasetResponseEvaluatorResponseFlowResponseRecordsItem: core.serialization.Schema<
-    serializers.PaginatedDataUnionPromptResponseToolResponseDatasetResponseEvaluatorResponseFlowResponseRecordsItem.Raw,
-    Humanloop.PaginatedDataUnionPromptResponseToolResponseDatasetResponseEvaluatorResponseFlowResponseRecordsItem
+export const AgentLinkedFileResponseFile: core.serialization.Schema<
+    serializers.AgentLinkedFileResponseFile.Raw,
+    Humanloop.AgentLinkedFileResponseFile
 > = core.serialization.undiscriminatedUnion([
     core.serialization.lazyObject(() => serializers.PromptResponse),
     core.serialization.lazyObject(() => serializers.ToolResponse),
     DatasetResponse,
     core.serialization.lazyObject(() => serializers.EvaluatorResponse),
     core.serialization.lazyObject(() => serializers.FlowResponse),
+    core.serialization.lazyObject(() => serializers.AgentResponse),
 ]);
 
-export declare namespace PaginatedDataUnionPromptResponseToolResponseDatasetResponseEvaluatorResponseFlowResponseRecordsItem {
+export declare namespace AgentLinkedFileResponseFile {
     export type Raw =
         | serializers.PromptResponse.Raw
         | serializers.ToolResponse.Raw
         | DatasetResponse.Raw
         | serializers.EvaluatorResponse.Raw
-        | serializers.FlowResponse.Raw;
+        | serializers.FlowResponse.Raw
+        | serializers.AgentResponse.Raw;
 }

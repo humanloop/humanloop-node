@@ -14,6 +14,7 @@ export const RunVersionResponse: core.serialization.Schema<
     core.serialization.lazyObject(() => serializers.ToolResponse),
     core.serialization.lazyObject(() => serializers.EvaluatorResponse),
     core.serialization.lazyObject(() => serializers.FlowResponse),
+    core.serialization.lazyObject(() => serializers.AgentResponse),
 ]);
 
 export declare namespace RunVersionResponse {
@@ -21,5 +22,6 @@ export declare namespace RunVersionResponse {
         | serializers.PromptResponse.Raw
         | serializers.ToolResponse.Raw
         | serializers.EvaluatorResponse.Raw
-        | serializers.FlowResponse.Raw;
+        | serializers.FlowResponse.Raw
+        | serializers.AgentResponse.Raw;
 }

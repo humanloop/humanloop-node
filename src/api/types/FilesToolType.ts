@@ -5,7 +5,14 @@
 /**
  * Type of tool.
  */
-export type FilesToolType = "pinecone_search" | "google" | "mock" | "snippet" | "json_schema" | "get_api_call";
+export type FilesToolType =
+    | "pinecone_search"
+    | "google"
+    | "mock"
+    | "snippet"
+    | "json_schema"
+    | "get_api_call"
+    | "python";
 export const FilesToolType = {
     PineconeSearch: "pinecone_search",
     Google: "google",
@@ -13,4 +20,5 @@ export const FilesToolType = {
     Snippet: "snippet",
     JsonSchema: "json_schema",
     GetApiCall: "get_api_call",
+    Python: "python",
 } as const;

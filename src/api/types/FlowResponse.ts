@@ -24,6 +24,8 @@ export interface FlowResponse {
     name: string;
     /** Description of the Flow. */
     description?: string;
+    /** The JSON schema for the File. */
+    schema?: Record<string, unknown>;
     /** Long description of the file. */
     readme?: string;
     /** List of tags associated with the file. */

@@ -49,6 +49,8 @@ export interface ToolLogRequest {
     path?: string;
     /** ID for an existing Tool. */
     id?: string;
+    /** Details of your Tool. A new Tool version will be created if the provided details are new. */
+    tool?: Humanloop.ToolKernelRequest;
     /** When the logged event started. */
     startTime?: Date;
     /** When the logged event ended. */
@@ -87,6 +89,4 @@ export interface ToolLogRequest {
     save?: boolean;
     /** This will identify a Log. If you don't provide a Log ID, Humanloop will generate one for you. */
     logId?: string;
-    /** Details of your Tool. A new Tool version will be created if the provided details are new. */
-    tool?: Humanloop.ToolKernelRequest;
 }
