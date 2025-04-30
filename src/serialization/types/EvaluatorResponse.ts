@@ -23,6 +23,7 @@ export const EvaluatorResponse: core.serialization.ObjectSchema<
     spec: EvaluatorResponseSpec,
     name: core.serialization.string(),
     description: core.serialization.string().optional(),
+    schema: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
     readme: core.serialization.string().optional(),
     tags: core.serialization.list(core.serialization.string()).optional(),
     versionId: core.serialization.property("version_id", core.serialization.string()),
@@ -55,6 +56,7 @@ export declare namespace EvaluatorResponse {
         spec: EvaluatorResponseSpec.Raw;
         name: string;
         description?: string | null;
+        schema?: Record<string, unknown> | null;
         readme?: string | null;
         tags?: string[] | null;
         version_id: string;

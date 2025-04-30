@@ -5,8 +5,8 @@
 /**
  * Supported reasoning effort.
  */
-export type ReasoningEffort = "high" | "medium" | "low";
-export const ReasoningEffort = {
+export type OpenAiReasoningEffort = "high" | "medium" | "low";
+export const OpenAiReasoningEffort = {
     High: "high",
     Medium: "medium",
     Low: "low",

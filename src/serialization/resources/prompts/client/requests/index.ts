@@ -4,3 +4,4 @@ export { PromptsCallStreamRequest } from "./PromptsCallStreamRequest";
 export { PromptsCallRequest } from "./PromptsCallRequest";
 export { PromptRequest } from "./PromptRequest";
 export { UpdatePromptRequest } from "./UpdatePromptRequest";
+export { BodyDeserializePromptsDeserializePost } from "./BodyDeserializePromptsDeserializePost";

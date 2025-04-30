@@ -6,6 +6,7 @@ import * as serializers from "../index";
 import * as Humanloop from "../../api/index";
 import * as core from "../../core";
 import { LogStatus } from "./LogStatus";
+import { ChatMessage } from "./ChatMessage";
 
 export const ToolLogResponse: core.serialization.ObjectSchema<
     serializers.ToolLogResponse.Raw,
@@ -49,6 +50,7 @@ export const ToolLogResponse: core.serialization.ObjectSchema<
         core.serialization.list(core.serialization.lazy(() => serializers.LogResponse)).optional(),
     ),
     tool: core.serialization.lazyObject(() => serializers.ToolResponse),
+    outputMessage: core.serialization.property("output_message", ChatMessage.optional()),
 });
 
 export declare namespace ToolLogResponse {
@@ -79,5 +81,6 @@ export declare namespace ToolLogResponse {
         trace_id?: string | null;
         trace_children?: serializers.LogResponse.Raw[] | null;
         tool: serializers.ToolResponse.Raw;
+        output_message?: ChatMessage.Raw | null;
     }
 }

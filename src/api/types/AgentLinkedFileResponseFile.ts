@@ -4,9 +4,10 @@
 
 import * as Humanloop from "../index";
 
-export type PaginatedDataUnionPromptResponseToolResponseDatasetResponseEvaluatorResponseFlowResponseRecordsItem =
+export type AgentLinkedFileResponseFile =
     | Humanloop.PromptResponse
     | Humanloop.ToolResponse
     | Humanloop.DatasetResponse
     | Humanloop.EvaluatorResponse
-    | Humanloop.FlowResponse;
+    | Humanloop.FlowResponse
+    | Humanloop.AgentResponse;

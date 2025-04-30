@@ -8,6 +8,7 @@ import * as core from "../../core";
 import { ChatMessageContent } from "./ChatMessageContent";
 import { ChatRole } from "./ChatRole";
 import { ToolCall } from "./ToolCall";
+import { ChatMessageThinkingItem } from "./ChatMessageThinkingItem";
 
 export const ChatMessage: core.serialization.ObjectSchema<serializers.ChatMessage.Raw, Humanloop.ChatMessage> =
     core.serialization.object({
@@ -16,6 +17,7 @@ export const ChatMessage: core.serialization.ObjectSchema<serializers.ChatMessag
         toolCallId: core.serialization.property("tool_call_id", core.serialization.string().optional()),
         role: ChatRole,
         toolCalls: core.serialization.property("tool_calls", core.serialization.list(ToolCall).optional()),
+        thinking: core.serialization.list(ChatMessageThinkingItem).optional(),
     });
 
 export declare namespace ChatMessage {
@@ -25,5 +27,6 @@ export declare namespace ChatMessage {
         tool_call_id?: string | null;
         role: ChatRole.Raw;
         tool_calls?: ToolCall.Raw[] | null;
+        thinking?: ChatMessageThinkingItem.Raw[] | null;
     }
 }

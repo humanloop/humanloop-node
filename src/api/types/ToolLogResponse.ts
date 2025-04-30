@@ -60,4 +60,6 @@ export interface ToolLogResponse {
     traceChildren?: Humanloop.LogResponse[];
     /** Tool used to generate the Log. */
     tool: Humanloop.ToolResponse;
+    /** The message returned by the Tool. */
+    outputMessage?: Humanloop.ChatMessage;
 }

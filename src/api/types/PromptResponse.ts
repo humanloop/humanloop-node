@@ -52,8 +52,8 @@ export interface PromptResponse {
     seed?: number;
     /** The format of the response. Only `{"type": "json_object"}` is currently supported for chat. */
     responseFormat?: Humanloop.ResponseFormat;
-    /** Give model guidance on how many reasoning tokens it should generate before creating a response to the prompt. This is only supported for OpenAI reasoning (o1, o3-mini) models. */
-    reasoningEffort?: Humanloop.ReasoningEffort;
+    /** Guidance on how many reasoning tokens it should generate before creating a response to the prompt. OpenAI reasoning models (o1, o3-mini) expect a OpenAIReasoningEffort enum. Anthropic reasoning models expect an integer, which signifies the maximum token budget. */
+    reasoningEffort?: Humanloop.PromptResponseReasoningEffort;
     /** The tool specification that the model can choose to call if Tool calling is supported. */
     tools?: Humanloop.ToolFunction[];
     /** The tools linked to your prompt that the model can call. */
@@ -72,6 +72,8 @@ export interface PromptResponse {
     readme?: string;
     /** Name of the Prompt. */
     name: string;
+    /** The JSON schema for the Prompt. */
+    schema?: Record<string, unknown>;
     /** Unique identifier for the specific Prompt Version. If no query params provided, the default deployed Prompt Version is returned. */
     versionId: string;
     type?: "prompt";

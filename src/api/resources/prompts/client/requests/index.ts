@@ -9,3 +9,5 @@ export { type UpdatePromptRequest } from "./UpdatePromptRequest";
 export { type PopulatePromptsIdPopulatePostRequest } from "./PopulatePromptsIdPopulatePostRequest";
 export { type ListVersionsPromptsIdVersionsGetRequest } from "./ListVersionsPromptsIdVersionsGetRequest";
 export { type SetDeploymentPromptsIdEnvironmentsEnvironmentIdPostRequest } from "./SetDeploymentPromptsIdEnvironmentsEnvironmentIdPostRequest";
+export { type SerializePromptsIdSerializeGetRequest } from "./SerializePromptsIdSerializeGetRequest";
+export { type BodyDeserializePromptsDeserializePost } from "./BodyDeserializePromptsDeserializePost";

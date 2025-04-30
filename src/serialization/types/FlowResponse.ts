@@ -19,6 +19,7 @@ export const FlowResponse: core.serialization.ObjectSchema<serializers.FlowRespo
         versionDescription: core.serialization.property("version_description", core.serialization.string().optional()),
         name: core.serialization.string(),
         description: core.serialization.string().optional(),
+        schema: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
         readme: core.serialization.string().optional(),
         tags: core.serialization.list(core.serialization.string()).optional(),
         versionId: core.serialization.property("version_id", core.serialization.string()),
@@ -48,6 +49,7 @@ export declare namespace FlowResponse {
         version_description?: string | null;
         name: string;
         description?: string | null;
+        schema?: Record<string, unknown> | null;
         readme?: string | null;
         tags?: string[] | null;
         version_id: string;

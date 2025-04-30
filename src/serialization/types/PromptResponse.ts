@@ -11,7 +11,7 @@ import { TemplateLanguage } from "./TemplateLanguage";
 import { ModelProviders } from "./ModelProviders";
 import { PromptResponseStop } from "./PromptResponseStop";
 import { ResponseFormat } from "./ResponseFormat";
-import { ReasoningEffort } from "./ReasoningEffort";
+import { PromptResponseReasoningEffort } from "./PromptResponseReasoningEffort";
 import { ToolFunction } from "./ToolFunction";
 import { LinkedToolResponse } from "./LinkedToolResponse";
 import { EnvironmentResponse } from "./EnvironmentResponse";
@@ -38,7 +38,7 @@ export const PromptResponse: core.serialization.ObjectSchema<serializers.PromptR
         other: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
         seed: core.serialization.number().optional(),
         responseFormat: core.serialization.property("response_format", ResponseFormat.optional()),
-        reasoningEffort: core.serialization.property("reasoning_effort", ReasoningEffort.optional()),
+        reasoningEffort: core.serialization.property("reasoning_effort", PromptResponseReasoningEffort.optional()),
         tools: core.serialization.list(ToolFunction).optional(),
         linkedTools: core.serialization.property(
             "linked_tools",
@@ -51,6 +51,7 @@ export const PromptResponse: core.serialization.ObjectSchema<serializers.PromptR
         tags: core.serialization.list(core.serialization.string()).optional(),
         readme: core.serialization.string().optional(),
         name: core.serialization.string(),
+        schema: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
         versionId: core.serialization.property("version_id", core.serialization.string()),
         type: core.serialization.stringLiteral("prompt").optional(),
         environments: core.serialization.list(EnvironmentResponse).optional(),
@@ -89,7 +90,7 @@ export declare namespace PromptResponse {
         other?: Record<string, unknown> | null;
         seed?: number | null;
         response_format?: ResponseFormat.Raw | null;
-        reasoning_effort?: ReasoningEffort.Raw | null;
+        reasoning_effort?: PromptResponseReasoningEffort.Raw | null;
         tools?: ToolFunction.Raw[] | null;
         linked_tools?: LinkedToolResponse.Raw[] | null;
         attributes?: Record<string, unknown> | null;
@@ -99,6 +100,7 @@ export declare namespace PromptResponse {
         tags?: string[] | null;
         readme?: string | null;
         name: string;
+        schema?: Record<string, unknown> | null;
         version_id: string;
         type?: "prompt" | null;
         environments?: EnvironmentResponse.Raw[] | null;

@@ -1,3 +1,4 @@
+export { ToolCallRequest } from "./ToolCallRequest";
 export { ToolLogRequest } from "./ToolLogRequest";
 export { ToolLogUpdateRequest } from "./ToolLogUpdateRequest";
 export { ToolRequest } from "./ToolRequest";

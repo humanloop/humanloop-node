@@ -1342,7 +1342,225 @@ await client.prompts.updateMonitoring("pr_30gco7dx6JDq4200GVOHa", {
 </dl>
 </details>
 
+<details><summary><code>client.prompts.<a href="/src/api/resources/prompts/client/Client.ts">serialize</a>(id, { ...params }) -> void</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Serialize a Prompt to the .prompt file format.
+
+Useful for storing the Prompt with your code in a version control system,
+or for editing with an AI tool.
+
+By default, the deployed version of the Prompt is returned. Use the query parameters
+`version_id` or `environment` to target a specific version of the Prompt.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.prompts.serialize("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Unique identifier for Prompt.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.SerializePromptsIdSerializeGetRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Prompts.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.prompts.<a href="/src/api/resources/prompts/client/Client.ts">deserialize</a>({ ...params }) -> Humanloop.PromptKernelRequest</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Deserialize a Prompt from the .prompt file format.
+
+This returns a subset of the attributes required by a Prompt.
+This subset is the bit that defines the Prompt version (e.g. with `model` and `temperature` etc)
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.prompts.deserialize({
+    prompt: "prompt",
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.BodyDeserializePromptsDeserializePost`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Prompts.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
 ## Tools
+
+<details><summary><code>client.tools.<a href="/src/api/resources/tools/client/Client.ts">call</a>({ ...params }) -> Humanloop.ToolCallResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Call a Tool.
+
+Calling a Tool with inputs runs the tool's source code and logs the result and metadata to Humanloop.
+
+You can use query parameters `version_id`, or `environment`, to target
+an existing version of the Tool. Otherwise, the default deployed version will be chosen.
+
+Instead of targeting an existing version explicitly, you can instead pass in
+Tool details in the request body. In this case, we will check if the details correspond
+to an existing version of the Tool. If they do not, we will create a new version. This is helpful
+in the case where you are storing or deriving your Tool details in code.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.tools.call();
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.ToolCallRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Tools.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
 
 <details><summary><code>client.tools.<a href="/src/api/resources/tools/client/Client.ts">log</a>({ ...params }) -> Humanloop.CreateToolLogResponse</code></summary>
 <dl>
@@ -2400,6 +2618,186 @@ await client.tools.updateMonitoring("tl_789ghi", {
 <dd>
 
 **request:** `Humanloop.EvaluatorActivationDeactivationRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Tools.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.tools.<a href="/src/api/resources/tools/client/Client.ts">getEnvironmentVariables</a>(id) -> Humanloop.FileEnvironmentVariableRequest[]</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.tools.getEnvironmentVariables("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Unique identifier for File.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Tools.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.tools.<a href="/src/api/resources/tools/client/Client.ts">addEnvironmentVariable</a>(id, { ...params }) -> Humanloop.FileEnvironmentVariableRequest[]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Add an environment variable to a Tool.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.tools.addEnvironmentVariable("id", [
+    {
+        name: "name",
+        value: "value",
+    },
+]);
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Unique identifier for Tool.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.FileEnvironmentVariableRequest[]`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Tools.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.tools.<a href="/src/api/resources/tools/client/Client.ts">deleteEnvironmentVariable</a>(id, name) -> Humanloop.FileEnvironmentVariableRequest[]</code></summary>
+<dl>
+<dd>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.tools.deleteEnvironmentVariable("id", "name");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Unique identifier for File.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**name:** `string` — Name of the Environment Variable to delete.
 
 </dd>
 </dl>
@@ -5449,6 +5847,1617 @@ await client.flows.updateMonitoring("fl_6o701g4jmcanPVHxdqD0O", {
 </dl>
 </details>
 
+## Agents
+
+<details><summary><code>client.agents.<a href="/src/api/resources/agents/client/Client.ts">log</a>({ ...params }) -> Humanloop.CreateAgentLogResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Create an Agent Log.
+
+You can use query parameters `version_id`, or `environment`, to target
+an existing version of the Agent. Otherwise, the default deployed version will be chosen.
+
+If you create the Agent Log with a `log_status` of `incomplete`, you should later update it to `complete`
+in order to trigger Evaluators.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.agents.log({
+    path: "Banking/Teller Agent",
+    agent: {
+        provider: "anthropic",
+        endpoint: "chat",
+        model: "claude-3-7-sonnet-latest",
+        reasoningEffort: 1024,
+        template: [
+            {
+                role: "system",
+                content: "You are a helpful digital assistant, helping users navigate our digital banking platform.",
+            },
+        ],
+        maxIterations: 3,
+        tools: [
+            {
+                type: "file",
+                link: {
+                    fileId: "pr_1234567890",
+                    versionId: "prv_1234567890",
+                },
+                onAgentCall: "continue",
+            },
+            {
+                type: "inline",
+                jsonSchema: {
+                    name: "stop",
+                    description: "Call this tool when you have finished your task.",
+                    parameters: {
+                        type: "object",
+                        properties: {
+                            output: {
+                                type: "string",
+                                description: "The final output to return to the user.",
+                            },
+                        },
+                        additionalProperties: false,
+                        required: ["output"],
+                    },
+                    strict: true,
+                },
+                onAgentCall: "stop",
+            },
+        ],
+    },
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.AgentLogRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Agents.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.agents.<a href="/src/api/resources/agents/client/Client.ts">updateLog</a>(id, logId, { ...params }) -> Humanloop.AgentLogResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Update a Log.
+
+Update the details of a Log with the given ID.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.agents.updateLog("ag_1234567890", "log_1234567890", {
+    messages: [
+        {
+            role: "user",
+            content: "I need to withdraw $1000",
+        },
+        {
+            role: "assistant",
+            content: "Of course! Would you like to use your savings or checking account?",
+        },
+    ],
+    outputMessage: {
+        role: "assistant",
+        content: "I'm sorry, I can't help with that.",
+    },
+    logStatus: "complete",
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Unique identifier for Agent.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**logId:** `string` — Unique identifier for the Log.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.UpdateAgentLogRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Agents.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.agents.<a href="/src/api/resources/agents/client/Client.ts">callStream</a>({ ...params }) -> core.Stream<Humanloop.AgentCallStreamResponse></code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Call an Agent. The Agent will run on the Humanloop runtime and return a completed Agent Log.
+
+If the Agent requires a tool call that cannot be ran by Humanloop, execution will halt. To continue,
+pass the ID of the incomplete Log and the required tool call to the /agents/continue endpoint.
+
+The agent will run for the maximum number of iterations, or until it encounters a stop condition,
+according to its configuration.
+
+You can use query parameters `version_id`, or `environment`, to target
+an existing version of the Agent. Otherwise the default deployed version will be chosen.
+
+Instead of targeting an existing version explicitly, you can instead pass in
+Agent details in the request body. A new version is created if it does not match
+any existing ones. This is helpful in the case where you are storing or deriving
+your Agent details in code.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+const response = await client.agents.callStream({});
+for await (const item of response) {
+    console.log(item);
+}
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.AgentsCallStreamRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Agents.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.agents.<a href="/src/api/resources/agents/client/Client.ts">call</a>({ ...params }) -> Humanloop.AgentCallResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Call an Agent. The Agent will run on the Humanloop runtime and return a completed Agent Log.
+
+If the Agent requires a tool call that cannot be ran by Humanloop, execution will halt. To continue,
+pass the ID of the incomplete Log and the required tool call to the /agents/continue endpoint.
+
+The agent will run for the maximum number of iterations, or until it encounters a stop condition,
+according to its configuration.
+
+You can use query parameters `version_id`, or `environment`, to target
+an existing version of the Agent. Otherwise the default deployed version will be chosen.
+
+Instead of targeting an existing version explicitly, you can instead pass in
+Agent details in the request body. A new version is created if it does not match
+any existing ones. This is helpful in the case where you are storing or deriving
+your Agent details in code.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.agents.call({
+    path: "Banking/Teller Agent",
+    messages: [
+        {
+            role: "user",
+            content: "I'd like to deposit $1000 to my savings account from my checking account.",
+        },
+    ],
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.AgentsCallRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Agents.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.agents.<a href="/src/api/resources/agents/client/Client.ts">continueCallStream</a>({ ...params }) -> core.Stream<Humanloop.AgentContinueCallStreamResponse></code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Continue an incomplete Agent call.
+
+This endpoint allows continuing an existing incomplete Agent call, by passing the tool call
+requested by the Agent. The Agent will resume processing from where it left off.
+
+The messages in the request will be appended to the original messages in the Log. You do not
+have to provide the previous conversation history.
+
+The original log must be in an incomplete state to be continued.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+const response = await client.agents.continueCallStream({
+    logId: "log_id",
+    messages: [
+        {
+            role: "user",
+        },
+    ],
+});
+for await (const item of response) {
+    console.log(item);
+}
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.AgentsContinueCallStreamRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Agents.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.agents.<a href="/src/api/resources/agents/client/Client.ts">continueCall</a>({ ...params }) -> Humanloop.AgentContinueCallResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Continue an incomplete Agent call.
+
+This endpoint allows continuing an existing incomplete Agent call, by passing the tool call
+requested by the Agent. The Agent will resume processing from where it left off.
+
+The messages in the request will be appended to the original messages in the Log. You do not
+have to provide the previous conversation history.
+
+The original log must be in an incomplete state to be continued.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.agents.continueCall({
+    logId: "log_1234567890",
+    messages: [
+        {
+            role: "tool",
+            content: '{"type": "checking", "balance": 5200}',
+            toolCallId: "tc_1234567890",
+        },
+    ],
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.AgentsContinueCallRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Agents.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.agents.<a href="/src/api/resources/agents/client/Client.ts">list</a>({ ...params }) -> core.Page<Humanloop.AgentResponse></code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Get a list of all Agents.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+const response = await client.agents.list({
+    size: 1,
+});
+for await (const item of response) {
+    console.log(item);
+}
+
+// Or you can manually iterate page-by-page
+const page = await client.agents.list({
+    size: 1,
+});
+while (page.hasNextPage()) {
+    page = page.getNextPage();
+}
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.ListAgentsGetRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Agents.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.agents.<a href="/src/api/resources/agents/client/Client.ts">upsert</a>({ ...params }) -> Humanloop.AgentResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Create an Agent or update it with a new version if it already exists.
+
+Agents are identified by the `ID` or their `path`. The parameters (i.e. the template, temperature, model etc.) and
+tools determine the versions of the Agent.
+
+You can provide `version_name` and `version_description` to identify and describe your versions.
+Version names must be unique within an Agent - attempting to create a version with a name
+that already exists will result in a 409 Conflict error.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.agents.upsert({
+    path: "Banking/Teller Agent",
+    provider: "anthropic",
+    endpoint: "chat",
+    model: "claude-3-7-sonnet-latest",
+    reasoningEffort: 1024,
+    template: [
+        {
+            role: "system",
+            content: "You are a helpful digital assistant, helping users navigate our digital banking platform.",
+        },
+    ],
+    maxIterations: 3,
+    tools: [
+        {
+            type: "inline",
+            jsonSchema: {
+                name: "stop",
+                description: "Call this tool when you have finished your task.",
+                parameters: {
+                    type: "object",
+                    properties: {
+                        output: {
+                            type: "string",
+                            description: "The final output to return to the user.",
+                        },
+                    },
+                    additionalProperties: false,
+                    required: ["output"],
+                },
+                strict: true,
+            },
+            onAgentCall: "stop",
+        },
+    ],
+    versionName: "teller-agent-v1",
+    versionDescription: "Initial version",
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.AgentRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Agents.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.agents.<a href="/src/api/resources/agents/client/Client.ts">deleteAgentVersion</a>(id, versionId) -> void</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Delete a version of the Agent.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.agents.deleteAgentVersion("ag_1234567890", "agv_1234567890");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Unique identifier for Agent.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**versionId:** `string` — Unique identifier for the specific version of the Agent.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Agents.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.agents.<a href="/src/api/resources/agents/client/Client.ts">patchAgentVersion</a>(id, versionId, { ...params }) -> Humanloop.AgentResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Update the name or description of the Agent version.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.agents.patchAgentVersion("ag_1234567890", "agv_1234567890", {
+    name: "teller-agent-v2",
+    description: "Updated version",
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Unique identifier for Agent.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**versionId:** `string` — Unique identifier for the specific version of the Agent.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.UpdateVersionRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Agents.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.agents.<a href="/src/api/resources/agents/client/Client.ts">get</a>(id, { ...params }) -> Humanloop.AgentResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Retrieve the Agent with the given ID.
+
+By default, the deployed version of the Agent is returned. Use the query parameters
+`version_id` or `environment` to target a specific version of the Agent.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.agents.get("ag_1234567890");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Unique identifier for Agent.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.GetAgentsIdGetRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Agents.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.agents.<a href="/src/api/resources/agents/client/Client.ts">delete</a>(id) -> void</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Delete the Agent with the given ID.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.agents.delete("ag_1234567890");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Unique identifier for Agent.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Agents.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.agents.<a href="/src/api/resources/agents/client/Client.ts">move</a>(id, { ...params }) -> Humanloop.AgentResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Move the Agent to a different path or change the name.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.agents.move("ag_1234567890", {
+    path: "new directory/new name",
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Unique identifier for Agent.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.UpdateAgentRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Agents.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.agents.<a href="/src/api/resources/agents/client/Client.ts">listVersions</a>(id, { ...params }) -> Humanloop.ListAgents</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Get a list of all the versions of a Agent.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.agents.listVersions("ag_1234567890");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Unique identifier for Agent.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.ListVersionsAgentsIdVersionsGetRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Agents.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.agents.<a href="/src/api/resources/agents/client/Client.ts">setDeployment</a>(id, environmentId, { ...params }) -> Humanloop.AgentResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Deploy Agent to an Environment.
+
+Set the deployed version for the specified Environment. This Agent
+will be used for calls made to the Agent in this Environment.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.agents.setDeployment("id", "environment_id", {
+    versionId: "version_id",
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Unique identifier for Agent.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**environmentId:** `string` — Unique identifier for the Environment to deploy the Version to.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.SetDeploymentAgentsIdEnvironmentsEnvironmentIdPostRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Agents.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.agents.<a href="/src/api/resources/agents/client/Client.ts">removeDeployment</a>(id, environmentId) -> void</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Remove deployed Agent from the Environment.
+
+Remove the deployed version for the specified Environment. This Agent
+will no longer be used for calls made to the Agent in this Environment.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.agents.removeDeployment("id", "environment_id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Unique identifier for Agent.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**environmentId:** `string` — Unique identifier for the Environment to remove the deployment from.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Agents.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.agents.<a href="/src/api/resources/agents/client/Client.ts">listEnvironments</a>(id) -> Humanloop.FileEnvironmentResponse[]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+List all Environments and their deployed versions for the Agent.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.agents.listEnvironments("ag_1234567890");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Unique identifier for Agent.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Agents.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.agents.<a href="/src/api/resources/agents/client/Client.ts">updateMonitoring</a>(id, { ...params }) -> Humanloop.AgentResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Activate and deactivate Evaluators for monitoring the Agent.
+
+An activated Evaluator will automatically be run on all new Logs
+within the Agent for monitoring purposes.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.agents.updateMonitoring("ag_1234567890", {
+    activate: [
+        {
+            evaluatorVersionId: "ev_1234567890",
+        },
+        {
+            evaluatorId: "ev_2345678901",
+            environmentId: "env_1234567890",
+        },
+    ],
+    deactivate: [
+        {
+            evaluatorVersionId: "ev_0987654321",
+        },
+    ],
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.EvaluatorActivationDeactivationRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Agents.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.agents.<a href="/src/api/resources/agents/client/Client.ts">serialize</a>(id, { ...params }) -> void</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Serialize an Agent to the .agent file format.
+
+Useful for storing the Agent with your code in a version control system,
+or for editing with an AI tool.
+
+By default, the deployed version of the Agent is returned. Use the query parameters
+`version_id` or `environment` to target a specific version of the Agent.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.agents.serialize("id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**id:** `string` — Unique identifier for Agent.
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.SerializeAgentsIdSerializeGetRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Agents.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.agents.<a href="/src/api/resources/agents/client/Client.ts">deserialize</a>({ ...params }) -> Humanloop.AgentKernelRequest</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Deserialize an Agent from the .agent file format.
+
+This returns a subset of the attributes required by an Agent.
+This subset is the bit that defines the Agent version (e.g. with `model` and `temperature` etc)
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.agents.deserialize({
+    agent: "agent",
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `Humanloop.BodyDeserializeAgentsDeserializePost`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Agents.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
 ## Directories
 
 <details><summary><code>client.directories.<a href="/src/api/resources/directories/client/Client.ts">list</a>() -> Humanloop.DirectoryResponse[]</code></summary>
@@ -5770,7 +7779,7 @@ await client.directories.update("id");
 
 ## Files
 
-<details><summary><code>client.files.<a href="/src/api/resources/files/client/Client.ts">listFiles</a>({ ...params }) -> Humanloop.PaginatedDataUnionPromptResponseToolResponseDatasetResponseEvaluatorResponseFlowResponse</code></summary>
+<details><summary><code>client.files.<a href="/src/api/resources/files/client/Client.ts">listFiles</a>({ ...params }) -> Humanloop.PaginatedDataUnionPromptResponseToolResponseDatasetResponseEvaluatorResponseFlowResponseAgentResponse</code></summary>
 <dl>
 <dd>
 

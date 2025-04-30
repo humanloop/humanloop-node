@@ -1,3 +1,4 @@
+export { type ToolCallRequest } from "./ToolCallRequest";
 export { type ToolLogRequest } from "./ToolLogRequest";
 export { type ToolLogUpdateRequest } from "./ToolLogUpdateRequest";
 export { type ListToolsGetRequest } from "./ListToolsGetRequest";

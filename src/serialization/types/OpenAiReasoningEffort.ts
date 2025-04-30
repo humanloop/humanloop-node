@@ -6,9 +6,11 @@ import * as serializers from "../index";
 import * as Humanloop from "../../api/index";
 import * as core from "../../core";
 
-export const ReasoningEffort: core.serialization.Schema<serializers.ReasoningEffort.Raw, Humanloop.ReasoningEffort> =
-    core.serialization.enum_(["high", "medium", "low"]);
+export const OpenAiReasoningEffort: core.serialization.Schema<
+    serializers.OpenAiReasoningEffort.Raw,
+    Humanloop.OpenAiReasoningEffort
+> = core.serialization.enum_(["high", "medium", "low"]);
 
-export declare namespace ReasoningEffort {
+export declare namespace OpenAiReasoningEffort {
     export type Raw = "high" | "medium" | "low";
 }
