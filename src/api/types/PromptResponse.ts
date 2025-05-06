@@ -94,4 +94,6 @@ export interface PromptResponse {
     evaluators?: Humanloop.MonitoringEvaluatorResponse[];
     /** Aggregation of Evaluator results for the Prompt Version. */
     evaluatorAggregates?: Humanloop.EvaluatorAggregate[];
+    /** The raw content of the Prompt. Corresponds to the .prompt file. */
+    rawFileContent?: string;
 }

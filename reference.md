@@ -6267,7 +6267,7 @@ to the original messages in the log.
 <dd>
 
 ```typescript
-await client.agents.continue({
+await client.agents.continueCall({
     logId: "log_id",
     messages: [
         {
