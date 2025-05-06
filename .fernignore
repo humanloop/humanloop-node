@@ -10,8 +10,10 @@ src/humanloop.client.ts
 src/overload.ts
 src/error.ts
 src/context.ts
-src/sync 
+src/cli.ts
 src/cache
+src/sync 
+src/utils
 
 # Tests
 

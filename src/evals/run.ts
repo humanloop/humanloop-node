@@ -46,6 +46,7 @@ import {
 } from "../context";
 import { HumanloopRuntimeError } from "../error";
 import { Humanloop, HumanloopClient } from "../index";
+import { Logger } from "../utils/logger";
 import {
     Dataset,
     EvalFileType,
@@ -58,11 +59,11 @@ import {
 } from "./types";
 
 // ANSI escape codes for logging colors
-const YELLOW = "\x1b[93m";
-const CYAN = "\x1b[96m";
-const GREEN = "\x1b[92m";
-const RED = "\x1b[91m";
-const RESET = "\x1b[0m";
+// const YELLOW = "\x1b[93m";
+// const CYAN = "\x1b[96m";
+// const GREEN = "\x1b[92m";
+// const RED = "\x1b[91m";
+// const RESET = "\x1b[0m";
 
 export async function runEval<
     I extends Record<string, unknown> & { messages?: any[] },
@@ -79,7 +80,7 @@ export async function runEval<
     concurrency: number = 8,
 ): Promise<EvaluatorCheck[]> {
     if (concurrency > 32) {
-        console.log("Warning: Too many parallel workers, capping the number to 32.");
+        Logger.warn("Warning: Too many parallel workers, capping the number to 32.");
     }
     concurrency = Math.min(concurrency, 32);
 
@@ -95,8 +96,8 @@ export async function runEval<
     try {
         hlDataset = await upsertDataset({ dataset: dataset, client: client });
     } catch (e: any) {
-        console.error(
-            `${RED}Error in your \`file\` argument:\n\n${e.constructor.name}: ${e.message}${RESET}`,
+        Logger.error(
+            `Error in your \`file\` argument:\n\n${e.constructor.name}: ${e.message}`,
         );
         return [];
     }
@@ -113,8 +114,8 @@ export async function runEval<
             type: type_,
         });
     } catch (e: any) {
-        console.error(
-            `${RED}Error in your \`file\` argument:\n\n${e.constructor.name} ${e.message}${RESET}`,
+        Logger.error(
+            `Error in your \`file\` argument:\n\n${e.constructor.name} ${e.message}`,
         );
         return [];
     }
@@ -140,9 +141,7 @@ export async function runEval<
     }
 
     function handleExitSignal(signum: number) {
-        process.stderr.write(
-            `\n${RED}Received signal ${signum}, cancelling the Evaluation...${RESET}\n`,
-        );
+        Logger.error(`\nReceived signal ${signum}, cancelling the Evaluation...\n`);
         cancelEvaluation();
         process.exit(signum);
     }
@@ -151,24 +150,22 @@ export async function runEval<
     process.on("SIGTERM", handleExitSignal);
 
     // Header of the CLI report
-    console.log(`\n${CYAN}Navigate to your Evaluation:${RESET}\n${evaluation.url}\n`);
-    console.log(
-        `${CYAN}${type_.charAt(0).toUpperCase() + type_.slice(1)} Version ID: ${
-            hlFile.versionId
-        }${RESET}`,
+    Logger.info(`\nNavigate to your Evaluation:\n${evaluation.url}\n`);
+    Logger.info(
+        `${type_.charAt(0).toUpperCase() + type_.slice(1)} Version ID: ${hlFile.versionId}`,
     );
-    console.log(`${CYAN}Run ID: ${runId}${RESET}`);
+    Logger.info(`Run ID: ${runId}`);
 
     // Generate locally if a file `callable` is provided
     if (function_ === undefined) {
         // TODO: trigger run when updated API is available
-        process.stdout.write(
-            `${CYAN}\nRunning '${hlFile.name}' ${_.capitalize(hlFile.type)} over the '${hlDataset.name}' Dataset${RESET}\n`,
+        Logger.info(
+            `\nRunning '${hlFile.name}' ${_.capitalize(hlFile.type)} over the '${hlDataset.name}' Dataset`,
         );
     } else {
         // Running the evaluation locally
-        process.stdout.write(
-            `${CYAN}\nRunning '${hlFile.name}' ${_.capitalize(hlFile.type)} over the '${hlDataset.name}' Dataset locally...${RESET}\n\n`,
+        Logger.info(
+            `\nRunning '${hlFile.name}' ${_.capitalize(hlFile.type)} over the '${hlDataset.name}' Dataset locally...\n`,
         );
     }
 
@@ -275,7 +272,7 @@ export async function runEval<
                     });
                     // @ts-ignore
                     evaluationContext._callback(log.id);
-                    console.warn(
+                    Logger.warn(
                         `\nYour ${type_}'s callable failed for Datapoint: ${datapoint.id}.\nError: ${errorMessage}`,
                     );
                 }
@@ -312,7 +309,7 @@ export async function runEval<
             await new Promise((resolve) => setTimeout(resolve, 500));
         }
     } while (stats.status !== "completed");
-    console.log(stats.report);
+    Logger.log(stats.report);
 
     const checks: EvaluatorCheck[] = [];
     if (
@@ -350,7 +347,7 @@ export async function runEval<
         }
     }
 
-    console.info(`\n${CYAN}View your Evaluation:${RESET}\n${evaluation.url}\n`);
+    Logger.info(`\nView your Evaluation:\n${evaluation.url}\n`);
     return checks;
 }
 
@@ -452,11 +449,9 @@ function fileOrFileInsideHLUtility<
         }
         const file_ = { ...innerFile };
         if (file_.type === "prompt") {
-            console.warn(
-                `${YELLOW}` +
-                    "The @prompt decorator will not spy on provider calls when passed to `evaluations.run()`. " +
-                    "Using the `version` in `file` argument instead.\n" +
-                    `${RESET}`,
+            Logger.warn(
+                "The @prompt decorator will not spy on provider calls when passed to `evaluations.run()`. " +
+                    "Using the `version` in `file` argument instead.\n",
             );
             file_.version = file.version;
         }
@@ -478,8 +473,8 @@ function getFileType<I extends Record<string, unknown> & { messages?: any[] }, O
     // Determine the `type` of the `file` to Evaluate - if not `type` provided, default to `flow`
     try {
         let type_ = file.type as EvalFileType;
-        console.info(
-            `${CYAN}Evaluating your ${type_} function corresponding to \`${file.path || file.id}\` on Humanloop${RESET}\n\n`,
+        Logger.info(
+            `Evaluating your ${type_} function corresponding to \`${file.path || file.id}\` on Humanloop\n\n`,
         );
         if (!type_) {
             type_ = "flow";
@@ -490,9 +485,7 @@ function getFileType<I extends Record<string, unknown> & { messages?: any[] }, O
         };
     } catch (error) {
         const type_ = "flow";
-        console.warn(
-            `${YELLOW}No \`file\` type specified, defaulting to flow.${RESET}\n`,
-        );
+        Logger.warn(`No \`file\` type specified, defaulting to flow.\n`);
         return {
             ...file,
             type: type_,
@@ -512,8 +505,8 @@ function getFileCallable<I extends Record<string, unknown> & { messages?: any[] 
                 "You must provide a `callable` for your Flow `file` to run a local eval.",
             );
         } else {
-            console.info(
-                `${CYAN}No \`callable\` provided for your ${_.capitalize(type_)} file - will attempt to generate logs on Humanloop.\n\n${RESET}`,
+            Logger.info(
+                `No \`callable\` provided for your ${_.capitalize(type_)} file - will attempt to generate logs on Humanloop.\n\n`,
             );
         }
     } else if (type_ === "agent") {
@@ -644,14 +637,14 @@ async function resolveFile<I extends Record<string, unknown> & { message?: any[]
                 "File does not exist on Humanloop. Please provide a `file.path` and a version to create a new version.",
             );
         }
-        console.log("UPSERTING FILE", JSON.stringify(fileConfig, null, 2));
+        Logger.log(`UPSERTING FILE ${JSON.stringify(fileConfig, null, 2)}`);
         return [await upsertFile(client, fileConfig), callable];
     }
 
     if (version) {
         // User responsibility to provide adequate file.version for upserting the file
-        console.info(
-            `${CYAN}Upserting a new File version based on \`file.version\`. Will use provided callable for generating Logs.${RESET}\n`,
+        Logger.info(
+            `Upserting a new File version based on \`file.version\`. Will use provided callable for generating Logs.\n`,
         );
         try {
             return [
@@ -1014,7 +1007,7 @@ async function runLocalEvaluators(
                     startTime: startTime,
                     endTime: new Date(),
                 });
-                console.warn(`\nEvaluator ${hlEvaluator.path} failed with error ${e}`);
+                Logger.error(`\nEvaluator ${hlEvaluator.path} failed with error ${e}`);
             }
         },
     );
@@ -1034,7 +1027,7 @@ function checkEvaluationImprovement(
     }
     const latestEvaluatorStatsByPath = getEvaluatorStatsByPath(runStats, evaluation);
     if (stats.runStats.length == 1) {
-        console.log(`${YELLOW}⚠️ No previous versions to compare with.${RESET}`);
+        Logger.warn(`⚠️ No previous versions to compare with.`);
         return [true, 0, 0];
     }
 
@@ -1057,9 +1050,7 @@ function checkEvaluationImprovement(
         let diff = latestScore - previousScore;
         // Round to 2 decimal places
         diff = Math.round(diff * 100) / 100;
-        console.log(
-            `${CYAN}Change of [${diff}] for Evaluator ${evaluatorPath}${RESET}`,
-        );
+        Logger.info(`Change of [${diff}] for Evaluator ${evaluatorPath}`);
         return [diff >= 0, latestScore, diff];
     } else {
         throw Error(`Evaluator ${evaluatorPath} not found in the stats.`);
@@ -1126,12 +1117,12 @@ function checkEvaluationThreshold(
             throw new Error(`Could not find score for Evaluator ${evaluatorPath}`);
         }
         if (score >= threshold) {
-            console.log(
-                `${GREEN}✅ Latest eval [${score}] above threshold [${threshold}] for Evaluator ${evaluatorPath}.${RESET}`,
+            Logger.success(
+                `✅ Latest eval [${score}] above threshold [${threshold}] for Evaluator ${evaluatorPath}.`,
             );
         } else {
-            console.log(
-                `${RED}❌ Latest eval [${score}] below threshold [${threshold}] for Evaluator ${evaluatorPath}.${RESET}`,
+            Logger.error(
+                `❌ Latest eval [${score}] below threshold [${threshold}] for Evaluator ${evaluatorPath}.`,
             );
         }
         return score >= threshold;

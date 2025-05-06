@@ -10,6 +10,11 @@ import MetadataHandler from "./MetadataHandler";
 // Default cache size for file content caching
 const DEFAULT_CACHE_SIZE = 100;
 
+export interface SyncClientOptions {
+    baseDir?: string;
+    cacheSize?: number;
+}
+
 /**
  * Internal client for managing synchronization between local filesystem and Humanloop.
  */
@@ -22,13 +27,15 @@ export default class SyncClient {
 
     constructor(
         client: BaseHumanloopClient,
-        baseDir: string = "humanloop",
-        cacheSize: number = DEFAULT_CACHE_SIZE,
+        options: SyncClientOptions = {
+            baseDir: "humanloop",
+            cacheSize: DEFAULT_CACHE_SIZE,
+        },
     ) {
         this.client = client;
-        this.baseDir = baseDir;
-        this.cacheSize = cacheSize;
-        this.fileContentCache = new LRUCache<string, string>(cacheSize);
+        this.baseDir = options.baseDir || "humanloop";
+        this.cacheSize = options.cacheSize || DEFAULT_CACHE_SIZE;
+        this.fileContentCache = new LRUCache<string, string>(this.cacheSize);
         this.metadata = new MetadataHandler(this.baseDir);
     }
 

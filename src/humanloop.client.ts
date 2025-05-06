@@ -4,7 +4,6 @@ import { NodeTracerProvider } from "@opentelemetry/sdk-trace-node";
 import { AnthropicInstrumentation } from "@traceloop/instrumentation-anthropic";
 import { CohereInstrumentation } from "@traceloop/instrumentation-cohere";
 import { OpenAIInstrumentation } from "@traceloop/instrumentation-openai";
-import { SyncClient } from "./sync";
 
 import { HumanloopClient as BaseHumanloopClient } from "./Client";
 import { ChatMessage } from "./api";
@@ -30,6 +29,7 @@ import {
 import { HumanloopSpanExporter } from "./otel/exporter";
 import { HumanloopSpanProcessor } from "./otel/processor";
 import { overloadCall, overloadLog } from "./overload";
+import { SyncClient, SyncClientOptions } from "./sync";
 import { SDK_VERSION } from "./version";
 
 const RED = "\x1b[91m";
@@ -252,11 +252,12 @@ export class HumanloopClient extends BaseHumanloopClient {
                 Anthropic?: any;
                 CohereAI?: any;
             };
+            sync?: SyncClientOptions;
         },
     ) {
         super(_options);
 
-        this._syncClient = new SyncClient(this);
+        this._syncClient = new SyncClient(this, _options.sync);
 
         this.instrumentProviders = _options.instrumentProviders || {};
 
@@ -599,7 +600,10 @@ ${RESET}`,
      * @param environment - The environment to pull the files from.
      * @returns List of successfully processed file paths.
      */
-    public async pull(path?: string, environment?: string): Promise<string[]> {
+    public async pull(
+        path?: string,
+        environment?: string,
+    ): Promise<string[]> {
         return this._syncClient.pull(path, environment);
     }
 
