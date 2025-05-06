@@ -15,6 +15,7 @@ src/context.ts
 
 # Modified due to issues with OTEL
 tests/unit/fetcher/stream-wrappers/webpack.test.ts
+tests/integration/
 
 # CI Action
 
