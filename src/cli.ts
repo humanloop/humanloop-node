@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 import * as dotenv from "dotenv";
-import chalk from "chalk";
 import { Command } from "commander";
 
 import { HumanloopClient } from "./humanloop.client";
+import { Logger } from "./utils/logger";
 
 const { version } = require("../package.json");
 
@@ -33,10 +33,8 @@ function getClient(options: {
     if (options.envFile) dotenv.config({ path: options.envFile });
     const apiKey = options.apiKey || process.env.HUMANLOOP_API_KEY;
     if (!apiKey) {
-        console.error(
-            chalk.red(
-                "No API key found. Set HUMANLOOP_API_KEY in .env file or use --api-key",
-            ),
+        Logger.error(
+            "No API key found. Set HUMANLOOP_API_KEY in .env file or use --api-key",
         );
         process.exit(1);
     }
@@ -56,15 +54,16 @@ addAuthOptions(
         .option("-e, --environment <env>", "Environment to pull from")
         .option("--base-dir <baseDir>", "Base directory for synced files", "humanloop"),
 ).action(async (options) => {
-    try {
-        console.log(chalk.blue("Pulling files from Humanloop..."));
-        const client = getClient(options);
-        const files = await client.pull(options.path, options.environment);
-        console.log(chalk.green(`Successfully synced ${files.length} files`));
-    } catch (error) {
-        console.error(chalk.red(`Error: ${error}`));
-        process.exit(1);
-    }
+    Logger.info("Pulling files from Humanloop...");
+    // try {
+    //     Logger.info("Pulling files from Humanloop...");
+    //     const client = getClient(options);
+    //     const files = await client.pull(options.path, options.environment);
+    //     Logger.success(`Successfully synced ${files.length} files`);
+    // } catch (error) {
+    //     Logger.error(`Error: ${error}`);
+    //     process.exit(1);
+    // }
 });
 
 program.parse(process.argv);
