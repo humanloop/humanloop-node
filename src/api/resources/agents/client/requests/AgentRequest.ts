@@ -7,40 +7,7 @@ import * as Humanloop from "../../../../index";
 /**
  * @example
  *     {
- *         path: "Banking/Teller Agent",
- *         provider: "anthropic",
- *         endpoint: "chat",
- *         model: "claude-3-7-sonnet-latest",
- *         reasoningEffort: 1024,
- *         template: [{
- *                 role: "system",
- *                 content: "You are a helpful digital assistant, helping users navigate our digital banking platform."
- *             }],
- *         maxIterations: 3,
- *         tools: [{
- *                 type: "inline",
- *                 jsonSchema: {
- *                     name: "stop",
- *                     description: "Call this tool when you have finished your task.",
- *                     parameters: {
- *                         "type": "object",
- *                         "properties": {
- *                             "output": {
- *                                 "type": "string",
- *                                 "description": "The final output to return to the user."
- *                             }
- *                         },
- *                         "additionalProperties": false,
- *                         "required": [
- *                             "output"
- *                         ]
- *                     },
- *                     strict: true
- *                 },
- *                 onAgentCall: "stop"
- *             }],
- *         versionName: "teller-agent-v1",
- *         versionDescription: "Initial version"
+ *         model: "model"
  *     }
  */
 export interface AgentRequest {

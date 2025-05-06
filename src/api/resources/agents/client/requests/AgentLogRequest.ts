@@ -6,49 +6,7 @@ import * as Humanloop from "../../../../index";
 
 /**
  * @example
- *     {
- *         path: "Banking/Teller Agent",
- *         agent: {
- *             provider: "anthropic",
- *             endpoint: "chat",
- *             model: "claude-3-7-sonnet-latest",
- *             reasoningEffort: 1024,
- *             template: [{
- *                     role: "system",
- *                     content: "You are a helpful digital assistant, helping users navigate our digital banking platform."
- *                 }],
- *             maxIterations: 3,
- *             tools: [{
- *                     type: "file",
- *                     link: {
- *                         fileId: "pr_1234567890",
- *                         versionId: "prv_1234567890"
- *                     },
- *                     onAgentCall: "continue"
- *                 }, {
- *                     type: "inline",
- *                     jsonSchema: {
- *                         name: "stop",
- *                         description: "Call this tool when you have finished your task.",
- *                         parameters: {
- *                             "type": "object",
- *                             "properties": {
- *                                 "output": {
- *                                     "type": "string",
- *                                     "description": "The final output to return to the user."
- *                                 }
- *                             },
- *                             "additionalProperties": false,
- *                             "required": [
- *                                 "output"
- *                             ]
- *                         },
- *                         strict: true
- *                     },
- *                     onAgentCall: "stop"
- *                 }]
- *         }
- *     }
+ *     {}
  */
 export interface AgentLogRequest {
     /**
@@ -89,8 +47,13 @@ export interface AgentLogRequest {
      * - `{'type': 'function', 'function': {name': <TOOL_NAME>}}` forces the model to use the named function.
      */
     toolChoice?: Humanloop.AgentLogRequestToolChoice;
-    /** Details of your Agent. A new Agent version will be created if the provided details are new. */
-    agent?: Humanloop.AgentKernelRequest;
+    /**
+     * The Agent configuration to use. Two formats are supported:
+     * - An object representing the details of the Agent configuration
+     * - A string representing the raw contents of a .agent file
+     * A new Agent version will be created if the provided details do not match any existing version.
+     */
+    agent?: Humanloop.AgentLogRequestAgent;
     /** When the logged event started. */
     startTime?: Date;
     /** When the logged event ended. */

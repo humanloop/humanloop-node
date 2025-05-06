@@ -6,9 +6,9 @@ import * as serializers from "../index";
 import * as Humanloop from "../../api/index";
 import * as core from "../../core";
 
-export const ProjectSortBy: core.serialization.Schema<serializers.ProjectSortBy.Raw, Humanloop.ProjectSortBy> =
+export const FileSortBy: core.serialization.Schema<serializers.FileSortBy.Raw, Humanloop.FileSortBy> =
     core.serialization.enum_(["created_at", "updated_at", "name"]);
 
-export declare namespace ProjectSortBy {
+export declare namespace FileSortBy {
     export type Raw = "created_at" | "updated_at" | "name";
 }

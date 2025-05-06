@@ -4,7 +4,7 @@
 
 import * as Humanloop from "../index";
 
-export type AgentContinueCallStreamResponsePayload =
+export type AgentContinueStreamResponsePayload =
     | Humanloop.LogStreamResponse
     | Humanloop.LogResponse
     | Humanloop.ToolCall;

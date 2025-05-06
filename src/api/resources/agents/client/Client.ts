@@ -76,8 +76,8 @@ export class Agents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.21-beta1",
-                "User-Agent": "humanloop/0.8.21-beta1",
+                "X-Fern-SDK-Version": "0.8.21",
+                "User-Agent": "humanloop/0.8.21",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -168,8 +168,8 @@ export class Agents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.21-beta1",
-                "User-Agent": "humanloop/0.8.21-beta1",
+                "X-Fern-SDK-Version": "0.8.21",
+                "User-Agent": "humanloop/0.8.21",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -246,7 +246,7 @@ export class Agents {
     public async callStream(
         request: Humanloop.AgentsCallStreamRequest,
         requestOptions?: Agents.RequestOptions,
-    ): Promise<core.Stream<Humanloop.AgentContinueCallStreamResponse>> {
+    ): Promise<core.Stream<Humanloop.AgentCallStreamResponse>> {
         const { versionId, environment, ..._body } = request;
         const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
         if (versionId != null) {
@@ -268,8 +268,8 @@ export class Agents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.21-beta1",
-                "User-Agent": "humanloop/0.8.21-beta1",
+                "X-Fern-SDK-Version": "0.8.21",
+                "User-Agent": "humanloop/0.8.21",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -291,7 +291,7 @@ export class Agents {
             return new core.Stream({
                 stream: _response.body,
                 parse: async (data) => {
-                    return serializers.AgentContinueCallStreamResponse.parseOrThrow(data, {
+                    return serializers.AgentCallStreamResponse.parseOrThrow(data, {
                         unrecognizedObjectKeys: "passthrough",
                         allowUnrecognizedUnionMembers: true,
                         allowUnrecognizedEnumValues: true,
@@ -367,7 +367,7 @@ export class Agents {
     public async call(
         request: Humanloop.AgentsCallRequest,
         requestOptions?: Agents.RequestOptions,
-    ): Promise<Humanloop.AgentContinueCallResponse> {
+    ): Promise<Humanloop.AgentCallResponse> {
         const { versionId, environment, ..._body } = request;
         const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
         if (versionId != null) {
@@ -389,8 +389,8 @@ export class Agents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.21-beta1",
-                "User-Agent": "humanloop/0.8.21-beta1",
+                "X-Fern-SDK-Version": "0.8.21",
+                "User-Agent": "humanloop/0.8.21",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -408,7 +408,7 @@ export class Agents {
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return serializers.AgentContinueCallResponse.parseOrThrow(_response.body, {
+            return serializers.AgentCallResponse.parseOrThrow(_response.body, {
                 unrecognizedObjectKeys: "passthrough",
                 allowUnrecognizedUnionMembers: true,
                 allowUnrecognizedEnumValues: true,
@@ -464,9 +464,9 @@ export class Agents {
      * to the original messages in the log.
      */
     public async continueStream(
-        request: Humanloop.AgentsContinueCallStreamRequest,
+        request: Humanloop.AgentsContinueStreamRequest,
         requestOptions?: Agents.RequestOptions,
-    ): Promise<core.Stream<Humanloop.AgentContinueCallStreamResponse>> {
+    ): Promise<core.Stream<Humanloop.AgentContinueStreamResponse>> {
         const _response = await (this._options.fetcher ?? core.fetcher)<stream.Readable>({
             url: urlJoin(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -478,8 +478,8 @@ export class Agents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.21-beta1",
-                "User-Agent": "humanloop/0.8.21-beta1",
+                "X-Fern-SDK-Version": "0.8.21",
+                "User-Agent": "humanloop/0.8.21",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -488,7 +488,7 @@ export class Agents {
             contentType: "application/json",
             requestType: "json",
             body: {
-                ...serializers.AgentsContinueCallStreamRequest.jsonOrThrow(request, { unrecognizedObjectKeys: "strip" }),
+                ...serializers.AgentsContinueStreamRequest.jsonOrThrow(request, { unrecognizedObjectKeys: "strip" }),
                 stream: true,
             },
             responseType: "sse",
@@ -500,7 +500,7 @@ export class Agents {
             return new core.Stream({
                 stream: _response.body,
                 parse: async (data) => {
-                    return serializers.AgentContinueCallStreamResponse.parseOrThrow(data, {
+                    return serializers.AgentContinueStreamResponse.parseOrThrow(data, {
                         unrecognizedObjectKeys: "passthrough",
                         allowUnrecognizedUnionMembers: true,
                         allowUnrecognizedEnumValues: true,
@@ -576,9 +576,9 @@ export class Agents {
      *     })
      */
     public async continue(
-        request: Humanloop.AgentsContinueCallRequest,
+        request: Humanloop.AgentsContinueRequest,
         requestOptions?: Agents.RequestOptions,
-    ): Promise<Humanloop.AgentContinueCallResponse> {
+    ): Promise<Humanloop.AgentContinueResponse> {
         const _response = await (this._options.fetcher ?? core.fetcher)({
             url: urlJoin(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -590,8 +590,8 @@ export class Agents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.21-beta1",
-                "User-Agent": "humanloop/0.8.21-beta1",
+                "X-Fern-SDK-Version": "0.8.21",
+                "User-Agent": "humanloop/0.8.21",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -600,7 +600,7 @@ export class Agents {
             contentType: "application/json",
             requestType: "json",
             body: {
-                ...serializers.AgentsContinueCallRequest.jsonOrThrow(request, { unrecognizedObjectKeys: "strip" }),
+                ...serializers.AgentsContinueRequest.jsonOrThrow(request, { unrecognizedObjectKeys: "strip" }),
                 stream: false,
             },
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
@@ -608,7 +608,7 @@ export class Agents {
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return serializers.AgentContinueCallResponse.parseOrThrow(_response.body, {
+            return serializers.AgentContinueResponse.parseOrThrow(_response.body, {
                 unrecognizedObjectKeys: "passthrough",
                 allowUnrecognizedUnionMembers: true,
                 allowUnrecognizedEnumValues: true,
@@ -686,9 +686,7 @@ export class Agents {
         }
 
         if (sortBy != null) {
-            _queryParams["sort_by"] = serializers.ProjectSortBy.jsonOrThrow(sortBy, {
-                unrecognizedObjectKeys: "strip",
-            });
+            _queryParams["sort_by"] = serializers.FileSortBy.jsonOrThrow(sortBy, { unrecognizedObjectKeys: "strip" });
         }
 
         if (order != null) {
@@ -706,8 +704,8 @@ export class Agents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.21-beta1",
-                "User-Agent": "humanloop/0.8.21-beta1",
+                "X-Fern-SDK-Version": "0.8.21",
+                "User-Agent": "humanloop/0.8.21",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -800,8 +798,8 @@ export class Agents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.21-beta1",
-                "User-Agent": "humanloop/0.8.21-beta1",
+                "X-Fern-SDK-Version": "0.8.21",
+                "User-Agent": "humanloop/0.8.21",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -887,8 +885,8 @@ export class Agents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.21-beta1",
-                "User-Agent": "humanloop/0.8.21-beta1",
+                "X-Fern-SDK-Version": "0.8.21",
+                "User-Agent": "humanloop/0.8.21",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -971,8 +969,8 @@ export class Agents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.21-beta1",
-                "User-Agent": "humanloop/0.8.21-beta1",
+                "X-Fern-SDK-Version": "0.8.21",
+                "User-Agent": "humanloop/0.8.21",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1073,8 +1071,8 @@ export class Agents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.21-beta1",
-                "User-Agent": "humanloop/0.8.21-beta1",
+                "X-Fern-SDK-Version": "0.8.21",
+                "User-Agent": "humanloop/0.8.21",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1155,8 +1153,8 @@ export class Agents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.21-beta1",
-                "User-Agent": "humanloop/0.8.21-beta1",
+                "X-Fern-SDK-Version": "0.8.21",
+                "User-Agent": "humanloop/0.8.21",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1235,8 +1233,8 @@ export class Agents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.21-beta1",
-                "User-Agent": "humanloop/0.8.21-beta1",
+                "X-Fern-SDK-Version": "0.8.21",
+                "User-Agent": "humanloop/0.8.21",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1328,8 +1326,8 @@ export class Agents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.21-beta1",
-                "User-Agent": "humanloop/0.8.21-beta1",
+                "X-Fern-SDK-Version": "0.8.21",
+                "User-Agent": "humanloop/0.8.21",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1425,8 +1423,8 @@ export class Agents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.21-beta1",
-                "User-Agent": "humanloop/0.8.21-beta1",
+                "X-Fern-SDK-Version": "0.8.21",
+                "User-Agent": "humanloop/0.8.21",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1517,8 +1515,8 @@ export class Agents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.21-beta1",
-                "User-Agent": "humanloop/0.8.21-beta1",
+                "X-Fern-SDK-Version": "0.8.21",
+                "User-Agent": "humanloop/0.8.21",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1597,8 +1595,8 @@ export class Agents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.21-beta1",
-                "User-Agent": "humanloop/0.8.21-beta1",
+                "X-Fern-SDK-Version": "0.8.21",
+                "User-Agent": "humanloop/0.8.21",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1686,8 +1684,8 @@ export class Agents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.21-beta1",
-                "User-Agent": "humanloop/0.8.21-beta1",
+                "X-Fern-SDK-Version": "0.8.21",
+                "User-Agent": "humanloop/0.8.21",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1769,7 +1767,7 @@ export class Agents {
         id: string,
         request: Humanloop.SerializeAgentsIdSerializeGetRequest = {},
         requestOptions?: Agents.RequestOptions,
-    ): Promise<unknown> {
+    ): Promise<string> {
         const { versionId, environment } = request;
         const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
         if (versionId != null) {
@@ -1791,8 +1789,8 @@ export class Agents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.21-beta1",
-                "User-Agent": "humanloop/0.8.21-beta1",
+                "X-Fern-SDK-Version": "0.8.21",
+                "User-Agent": "humanloop/0.8.21",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -1801,12 +1799,13 @@ export class Agents {
             contentType: "application/json",
             queryParameters: _queryParams,
             requestType: "json",
+            responseType: "text",
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return _response.body;
+            return _response.body as string;
         }
 
         if (_response.error.reason === "status-code") {
@@ -1875,8 +1874,8 @@ export class Agents {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.21-beta1",
-                "User-Agent": "humanloop/0.8.21-beta1",
+                "X-Fern-SDK-Version": "0.8.21",
+                "User-Agent": "humanloop/0.8.21",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),

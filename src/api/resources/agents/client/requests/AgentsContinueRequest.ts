@@ -13,7 +13,7 @@ import * as Humanloop from "../../../../index";
  *             }]
  *     }
  */
-export interface AgentsContinueCallRequest {
+export interface AgentsContinueRequest {
     /** This identifies the Agent Log to continue. */
     logId: string;
     /** The additional messages with which to continue the Agent Log. Often, these should start with the Tool messages with results for the previous Assistant message's tool calls. */

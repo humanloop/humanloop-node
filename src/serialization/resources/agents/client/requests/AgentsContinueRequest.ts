@@ -8,9 +8,9 @@ import * as core from "../../../../../core";
 import { ChatMessage } from "../../../../types/ChatMessage";
 import { ProviderApiKeys } from "../../../../types/ProviderApiKeys";
 
-export const AgentsContinueCallRequest: core.serialization.Schema<
-    serializers.AgentsContinueCallRequest.Raw,
-    Humanloop.AgentsContinueCallRequest
+export const AgentsContinueRequest: core.serialization.Schema<
+    serializers.AgentsContinueRequest.Raw,
+    Humanloop.AgentsContinueRequest
 > = core.serialization.object({
     logId: core.serialization.property("log_id", core.serialization.string()),
     messages: core.serialization.list(ChatMessage),
@@ -21,7 +21,7 @@ export const AgentsContinueCallRequest: core.serialization.Schema<
     ),
 });
 
-export declare namespace AgentsContinueCallRequest {
+export declare namespace AgentsContinueRequest {
     export interface Raw {
         log_id: string;
         messages: ChatMessage.Raw[];

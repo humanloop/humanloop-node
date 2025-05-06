@@ -7,10 +7,10 @@ import * as Humanloop from "../index";
 /**
  * Response model for continuing an Agent call in streaming mode.
  */
-export interface AgentContinueCallStreamResponse {
+export interface AgentContinueStreamResponse {
     logId: string;
     message: string;
-    payload?: Humanloop.AgentContinueCallStreamResponsePayload;
+    payload?: Humanloop.AgentContinueStreamResponsePayload;
     type: Humanloop.EventType;
     createdAt: Date;
 }

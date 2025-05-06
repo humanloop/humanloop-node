@@ -5,25 +5,25 @@
 import * as serializers from "../index";
 import * as Humanloop from "../../api/index";
 import * as core from "../../core";
-import { AgentContinueCallStreamResponsePayload } from "./AgentContinueCallStreamResponsePayload";
+import { AgentContinueStreamResponsePayload } from "./AgentContinueStreamResponsePayload";
 import { EventType } from "./EventType";
 
-export const AgentContinueCallStreamResponse: core.serialization.ObjectSchema<
-    serializers.AgentContinueCallStreamResponse.Raw,
-    Humanloop.AgentContinueCallStreamResponse
+export const AgentContinueStreamResponse: core.serialization.ObjectSchema<
+    serializers.AgentContinueStreamResponse.Raw,
+    Humanloop.AgentContinueStreamResponse
 > = core.serialization.object({
     logId: core.serialization.property("log_id", core.serialization.string()),
     message: core.serialization.string(),
-    payload: AgentContinueCallStreamResponsePayload.optional(),
+    payload: AgentContinueStreamResponsePayload.optional(),
     type: EventType,
     createdAt: core.serialization.property("created_at", core.serialization.date()),
 });
 
-export declare namespace AgentContinueCallStreamResponse {
+export declare namespace AgentContinueStreamResponse {
     export interface Raw {
         log_id: string;
         message: string;
-        payload?: AgentContinueCallStreamResponsePayload.Raw | null;
+        payload?: AgentContinueStreamResponsePayload.Raw | null;
         type: EventType.Raw;
         created_at: string;
     }

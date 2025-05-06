@@ -7,7 +7,7 @@ import * as Humanloop from "../index";
 /**
  * Response model for continuing an Agent call.
  */
-export interface AgentContinueCallResponse {
+export interface AgentContinueResponse {
     /** The message returned by the provider. */
     outputMessage?: Humanloop.ChatMessage;
     /** Number of tokens in the prompt used to generate the output. */
@@ -31,7 +31,7 @@ export interface AgentContinueCallResponse {
      * - `'required'` means the model must call one or more of the provided tools.
      * - `{'type': 'function', 'function': {name': <TOOL_NAME>}}` forces the model to use the named function.
      */
-    toolChoice?: Humanloop.AgentContinueCallResponseToolChoice;
+    toolChoice?: Humanloop.AgentContinueResponseToolChoice;
     /** Agent that generated the Log. */
     agent: Humanloop.AgentResponse;
     /** When the logged event started. */

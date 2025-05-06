@@ -6,9 +6,7 @@ import * as Humanloop from "../../../../index";
 
 /**
  * @example
- *     {
- *         size: 1
- *     }
+ *     {}
  */
 export interface ListAgentsGetRequest {
     /**
@@ -30,7 +28,7 @@ export interface ListAgentsGetRequest {
     /**
      * Field to sort Agents by
      */
-    sortBy?: Humanloop.ProjectSortBy;
+    sortBy?: Humanloop.FileSortBy;
     /**
      * Direction to sort by.
      */

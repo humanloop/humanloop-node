@@ -6,20 +6,7 @@ import * as Humanloop from "../../../../index";
 
 /**
  * @example
- *     {
- *         messages: [{
- *                 role: "user",
- *                 content: "I need to withdraw $1000"
- *             }, {
- *                 role: "assistant",
- *                 content: "Of course! Would you like to use your savings or checking account?"
- *             }],
- *         outputMessage: {
- *             role: "assistant",
- *             content: "I'm sorry, I can't help with that."
- *         },
- *         logStatus: "complete"
- *     }
+ *     {}
  */
 export interface UpdateAgentLogRequest {
     /** List of chat messages that were used as an input to the Flow. */

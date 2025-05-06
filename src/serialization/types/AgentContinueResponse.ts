@@ -6,12 +6,12 @@ import * as serializers from "../index";
 import * as Humanloop from "../../api/index";
 import * as core from "../../core";
 import { ChatMessage } from "./ChatMessage";
-import { AgentContinueCallResponseToolChoice } from "./AgentContinueCallResponseToolChoice";
+import { AgentContinueResponseToolChoice } from "./AgentContinueResponseToolChoice";
 import { LogStatus } from "./LogStatus";
 
-export const AgentContinueCallResponse: core.serialization.ObjectSchema<
-    serializers.AgentContinueCallResponse.Raw,
-    Humanloop.AgentContinueCallResponse
+export const AgentContinueResponse: core.serialization.ObjectSchema<
+    serializers.AgentContinueResponse.Raw,
+    Humanloop.AgentContinueResponse
 > = core.serialization.object({
     outputMessage: core.serialization.property("output_message", ChatMessage.optional()),
     promptTokens: core.serialization.property("prompt_tokens", core.serialization.number().optional()),
@@ -21,7 +21,7 @@ export const AgentContinueCallResponse: core.serialization.ObjectSchema<
     outputCost: core.serialization.property("output_cost", core.serialization.number().optional()),
     finishReason: core.serialization.property("finish_reason", core.serialization.string().optional()),
     messages: core.serialization.list(ChatMessage).optional(),
-    toolChoice: core.serialization.property("tool_choice", AgentContinueCallResponseToolChoice.optional()),
+    toolChoice: core.serialization.property("tool_choice", AgentContinueResponseToolChoice.optional()),
     agent: core.serialization.lazyObject(() => serializers.AgentResponse),
     startTime: core.serialization.property("start_time", core.serialization.date().optional()),
     endTime: core.serialization.property("end_time", core.serialization.date().optional()),
@@ -63,7 +63,7 @@ export const AgentContinueCallResponse: core.serialization.ObjectSchema<
     previousAgentMessage: core.serialization.property("previous_agent_message", ChatMessage.optional()),
 });
 
-export declare namespace AgentContinueCallResponse {
+export declare namespace AgentContinueResponse {
     export interface Raw {
         output_message?: ChatMessage.Raw | null;
         prompt_tokens?: number | null;
@@ -73,7 +73,7 @@ export declare namespace AgentContinueCallResponse {
         output_cost?: number | null;
         finish_reason?: string | null;
         messages?: ChatMessage.Raw[] | null;
-        tool_choice?: AgentContinueCallResponseToolChoice.Raw | null;
+        tool_choice?: AgentContinueResponseToolChoice.Raw | null;
         agent: serializers.AgentResponse.Raw;
         start_time?: string | null;
         end_time?: string | null;

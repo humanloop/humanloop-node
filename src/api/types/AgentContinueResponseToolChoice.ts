@@ -11,4 +11,4 @@ import * as Humanloop from "../index";
  * - `'required'` means the model must call one or more of the provided tools.
  * - `{'type': 'function', 'function': {name': <TOOL_NAME>}}` forces the model to use the named function.
  */
-export type AgentContinueCallResponseToolChoice = "none" | "auto" | "required" | Humanloop.ToolChoice;
+export type AgentContinueResponseToolChoice = "none" | "auto" | "required" | Humanloop.ToolChoice;

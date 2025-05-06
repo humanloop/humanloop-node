@@ -8,15 +8,15 @@ import * as core from "../../core";
 import { LogStreamResponse } from "./LogStreamResponse";
 import { ToolCall } from "./ToolCall";
 
-export const AgentContinueCallStreamResponsePayload: core.serialization.Schema<
-    serializers.AgentContinueCallStreamResponsePayload.Raw,
-    Humanloop.AgentContinueCallStreamResponsePayload
+export const AgentContinueStreamResponsePayload: core.serialization.Schema<
+    serializers.AgentContinueStreamResponsePayload.Raw,
+    Humanloop.AgentContinueStreamResponsePayload
 > = core.serialization.undiscriminatedUnion([
     LogStreamResponse,
     core.serialization.lazy(() => serializers.LogResponse),
     ToolCall,
 ]);
 
-export declare namespace AgentContinueCallStreamResponsePayload {
+export declare namespace AgentContinueStreamResponsePayload {
     export type Raw = LogStreamResponse.Raw | serializers.LogResponse.Raw | ToolCall.Raw;
 }

@@ -7,9 +7,9 @@ import * as Humanloop from "../../api/index";
 import * as core from "../../core";
 import { ToolChoice } from "./ToolChoice";
 
-export const AgentContinueCallResponseToolChoice: core.serialization.Schema<
-    serializers.AgentContinueCallResponseToolChoice.Raw,
-    Humanloop.AgentContinueCallResponseToolChoice
+export const AgentContinueResponseToolChoice: core.serialization.Schema<
+    serializers.AgentContinueResponseToolChoice.Raw,
+    Humanloop.AgentContinueResponseToolChoice
 > = core.serialization.undiscriminatedUnion([
     core.serialization.stringLiteral("none"),
     core.serialization.stringLiteral("auto"),
@@ -17,6 +17,6 @@ export const AgentContinueCallResponseToolChoice: core.serialization.Schema<
     ToolChoice,
 ]);
 
-export declare namespace AgentContinueCallResponseToolChoice {
+export declare namespace AgentContinueResponseToolChoice {
     export type Raw = "none" | "auto" | "required" | ToolChoice.Raw;
 }
