@@ -75,8 +75,13 @@ export interface PromptLogRequest {
      * - `{'type': 'function', 'function': {name': <TOOL_NAME>}}` forces the model to use the named function.
      */
     toolChoice?: Humanloop.PromptLogRequestToolChoice;
-    /** Details of your Prompt. A new Prompt version will be created if the provided details are new. */
-    prompt?: Humanloop.PromptKernelRequest;
+    /**
+     * The Prompt configuration to use. Two formats are supported:
+     * - An object representing the details of the Prompt configuration
+     * - A string representing the raw contents of a .prompt file
+     * A new Prompt version will be created if the provided details do not match any existing version.
+     */
+    prompt?: Humanloop.PromptLogRequestPrompt;
     /** When the logged event started. */
     startTime?: Date;
     /** When the logged event ended. */

@@ -7,7 +7,7 @@ import * as Humanloop from "../../../../../api/index";
 import * as core from "../../../../../core";
 import { ChatMessage } from "../../../../types/ChatMessage";
 import { AgentsCallRequestToolChoice } from "../../types/AgentsCallRequestToolChoice";
-import { AgentKernelRequest } from "../../../../types/AgentKernelRequest";
+import { AgentsCallRequestAgent } from "../../types/AgentsCallRequestAgent";
 import { LogStatus } from "../../../../types/LogStatus";
 import { ProviderApiKeys } from "../../../../types/ProviderApiKeys";
 
@@ -19,7 +19,7 @@ export const AgentsCallRequest: core.serialization.Schema<
     id: core.serialization.string().optional(),
     messages: core.serialization.list(ChatMessage).optional(),
     toolChoice: core.serialization.property("tool_choice", AgentsCallRequestToolChoice.optional()),
-    agent: AgentKernelRequest.optional(),
+    agent: AgentsCallRequestAgent.optional(),
     inputs: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
     source: core.serialization.string().optional(),
     metadata: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
@@ -46,7 +46,7 @@ export declare namespace AgentsCallRequest {
         id?: string | null;
         messages?: ChatMessage.Raw[] | null;
         tool_choice?: AgentsCallRequestToolChoice.Raw | null;
-        agent?: AgentKernelRequest.Raw | null;
+        agent?: AgentsCallRequestAgent.Raw | null;
         inputs?: Record<string, unknown> | null;
         source?: string | null;
         metadata?: Record<string, unknown> | null;

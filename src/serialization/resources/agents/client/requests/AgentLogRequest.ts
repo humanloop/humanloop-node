@@ -7,7 +7,7 @@ import * as Humanloop from "../../../../../api/index";
 import * as core from "../../../../../core";
 import { ChatMessage } from "../../../../types/ChatMessage";
 import { AgentLogRequestToolChoice } from "../../types/AgentLogRequestToolChoice";
-import { AgentKernelRequest } from "../../../../types/AgentKernelRequest";
+import { AgentLogRequestAgent } from "../../types/AgentLogRequestAgent";
 import { LogStatus } from "../../../../types/LogStatus";
 
 export const AgentLogRequest: core.serialization.Schema<
@@ -26,7 +26,7 @@ export const AgentLogRequest: core.serialization.Schema<
     finishReason: core.serialization.property("finish_reason", core.serialization.string().optional()),
     messages: core.serialization.list(ChatMessage).optional(),
     toolChoice: core.serialization.property("tool_choice", AgentLogRequestToolChoice.optional()),
-    agent: AgentKernelRequest.optional(),
+    agent: AgentLogRequestAgent.optional(),
     startTime: core.serialization.property("start_time", core.serialization.date().optional()),
     endTime: core.serialization.property("end_time", core.serialization.date().optional()),
     output: core.serialization.string().optional(),
@@ -68,7 +68,7 @@ export declare namespace AgentLogRequest {
         finish_reason?: string | null;
         messages?: ChatMessage.Raw[] | null;
         tool_choice?: AgentLogRequestToolChoice.Raw | null;
-        agent?: AgentKernelRequest.Raw | null;
+        agent?: AgentLogRequestAgent.Raw | null;
         start_time?: string | null;
         end_time?: string | null;
         output?: string | null;

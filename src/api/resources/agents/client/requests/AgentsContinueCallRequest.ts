@@ -7,11 +7,9 @@ import * as Humanloop from "../../../../index";
 /**
  * @example
  *     {
- *         logId: "log_1234567890",
+ *         logId: "log_id",
  *         messages: [{
- *                 role: "tool",
- *                 content: "{\"type\": \"checking\", \"balance\": 5200}",
- *                 toolCallId: "tc_1234567890"
+ *                 role: "user"
  *             }]
  *     }
  */

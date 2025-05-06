@@ -1342,7 +1342,7 @@ await client.prompts.updateMonitoring("pr_30gco7dx6JDq4200GVOHa", {
 </dl>
 </details>
 
-<details><summary><code>client.prompts.<a href="/src/api/resources/prompts/client/Client.ts">serialize</a>(id, { ...params }) -> void</code></summary>
+<details><summary><code>client.prompts.<a href="/src/api/resources/prompts/client/Client.ts">serialize</a>(id, { ...params }) -> string</code></summary>
 <dl>
 <dd>
 
@@ -5883,52 +5883,7 @@ in order to trigger Evaluators.
 <dd>
 
 ```typescript
-await client.agents.log({
-    path: "Banking/Teller Agent",
-    agent: {
-        provider: "anthropic",
-        endpoint: "chat",
-        model: "claude-3-7-sonnet-latest",
-        reasoningEffort: 1024,
-        template: [
-            {
-                role: "system",
-                content: "You are a helpful digital assistant, helping users navigate our digital banking platform.",
-            },
-        ],
-        maxIterations: 3,
-        tools: [
-            {
-                type: "file",
-                link: {
-                    fileId: "pr_1234567890",
-                    versionId: "prv_1234567890",
-                },
-                onAgentCall: "continue",
-            },
-            {
-                type: "inline",
-                jsonSchema: {
-                    name: "stop",
-                    description: "Call this tool when you have finished your task.",
-                    parameters: {
-                        type: "object",
-                        properties: {
-                            output: {
-                                type: "string",
-                                description: "The final output to return to the user.",
-                            },
-                        },
-                        additionalProperties: false,
-                        required: ["output"],
-                    },
-                    strict: true,
-                },
-                onAgentCall: "stop",
-            },
-        ],
-    },
-});
+await client.agents.log();
 ```
 
 </dd>
@@ -5993,23 +5948,7 @@ Update the details of a Log with the given ID.
 <dd>
 
 ```typescript
-await client.agents.updateLog("ag_1234567890", "log_1234567890", {
-    messages: [
-        {
-            role: "user",
-            content: "I need to withdraw $1000",
-        },
-        {
-            role: "assistant",
-            content: "Of course! Would you like to use your savings or checking account?",
-        },
-    ],
-    outputMessage: {
-        role: "assistant",
-        content: "I'm sorry, I can't help with that.",
-    },
-    logStatus: "complete",
-});
+await client.agents.updateLog("id", "log_id");
 ```
 
 </dd>
@@ -6182,15 +6121,7 @@ your Agent details in code.
 <dd>
 
 ```typescript
-await client.agents.call({
-    path: "Banking/Teller Agent",
-    messages: [
-        {
-            role: "user",
-            content: "I'd like to deposit $1000 to my savings account from my checking account.",
-        },
-    ],
-});
+await client.agents.call({});
 ```
 
 </dd>
@@ -6343,12 +6274,10 @@ The original log must be in an incomplete state to be continued.
 
 ```typescript
 await client.agents.continueCall({
-    logId: "log_1234567890",
+    logId: "log_id",
     messages: [
         {
-            role: "tool",
-            content: '{"type": "checking", "balance": 5200}',
-            toolCallId: "tc_1234567890",
+            role: "user",
         },
     ],
 });
@@ -6386,7 +6315,7 @@ await client.agents.continueCall({
 </dl>
 </details>
 
-<details><summary><code>client.agents.<a href="/src/api/resources/agents/client/Client.ts">list</a>({ ...params }) -> core.Page<Humanloop.AgentResponse></code></summary>
+<details><summary><code>client.agents.<a href="/src/api/resources/agents/client/Client.ts">list</a>({ ...params }) -> Humanloop.PaginatedDataAgentResponse</code></summary>
 <dl>
 <dd>
 
@@ -6414,20 +6343,7 @@ Get a list of all Agents.
 <dd>
 
 ```typescript
-const response = await client.agents.list({
-    size: 1,
-});
-for await (const item of response) {
-    console.log(item);
-}
-
-// Or you can manually iterate page-by-page
-const page = await client.agents.list({
-    size: 1,
-});
-while (page.hasNextPage()) {
-    page = page.getNextPage();
-}
+await client.agents.list();
 ```
 
 </dd>
@@ -6498,42 +6414,7 @@ that already exists will result in a 409 Conflict error.
 
 ```typescript
 await client.agents.upsert({
-    path: "Banking/Teller Agent",
-    provider: "anthropic",
-    endpoint: "chat",
-    model: "claude-3-7-sonnet-latest",
-    reasoningEffort: 1024,
-    template: [
-        {
-            role: "system",
-            content: "You are a helpful digital assistant, helping users navigate our digital banking platform.",
-        },
-    ],
-    maxIterations: 3,
-    tools: [
-        {
-            type: "inline",
-            jsonSchema: {
-                name: "stop",
-                description: "Call this tool when you have finished your task.",
-                parameters: {
-                    type: "object",
-                    properties: {
-                        output: {
-                            type: "string",
-                            description: "The final output to return to the user.",
-                        },
-                    },
-                    additionalProperties: false,
-                    required: ["output"],
-                },
-                strict: true,
-            },
-            onAgentCall: "stop",
-        },
-    ],
-    versionName: "teller-agent-v1",
-    versionDescription: "Initial version",
+    model: "model",
 });
 ```
 
@@ -6597,7 +6478,7 @@ Delete a version of the Agent.
 <dd>
 
 ```typescript
-await client.agents.deleteAgentVersion("ag_1234567890", "agv_1234567890");
+await client.agents.deleteAgentVersion("id", "version_id");
 ```
 
 </dd>
@@ -6668,10 +6549,7 @@ Update the name or description of the Agent version.
 <dd>
 
 ```typescript
-await client.agents.patchAgentVersion("ag_1234567890", "agv_1234567890", {
-    name: "teller-agent-v2",
-    description: "Updated version",
-});
+await client.agents.patchAgentVersion("id", "version_id", {});
 ```
 
 </dd>
@@ -6753,7 +6631,7 @@ By default, the deployed version of the Agent is returned. Use the query paramet
 <dd>
 
 ```typescript
-await client.agents.get("ag_1234567890");
+await client.agents.get("id");
 ```
 
 </dd>
@@ -6824,7 +6702,7 @@ Delete the Agent with the given ID.
 <dd>
 
 ```typescript
-await client.agents.delete("ag_1234567890");
+await client.agents.delete("id");
 ```
 
 </dd>
@@ -6887,9 +6765,7 @@ Move the Agent to a different path or change the name.
 <dd>
 
 ```typescript
-await client.agents.move("ag_1234567890", {
-    path: "new directory/new name",
-});
+await client.agents.move("id");
 ```
 
 </dd>
@@ -6960,7 +6836,7 @@ Get a list of all the versions of a Agent.
 <dd>
 
 ```typescript
-await client.agents.listVersions("ag_1234567890");
+await client.agents.listVersions("id");
 ```
 
 </dd>
@@ -7189,7 +7065,7 @@ List all Environments and their deployed versions for the Agent.
 <dd>
 
 ```typescript
-await client.agents.listEnvironments("ag_1234567890");
+await client.agents.listEnvironments("id");
 ```
 
 </dd>
@@ -7255,22 +7131,7 @@ within the Agent for monitoring purposes.
 <dd>
 
 ```typescript
-await client.agents.updateMonitoring("ag_1234567890", {
-    activate: [
-        {
-            evaluatorVersionId: "ev_1234567890",
-        },
-        {
-            evaluatorId: "ev_2345678901",
-            environmentId: "env_1234567890",
-        },
-    ],
-    deactivate: [
-        {
-            evaluatorVersionId: "ev_0987654321",
-        },
-    ],
-});
+await client.agents.updateMonitoring("id", {});
 ```
 
 </dd>
@@ -7313,7 +7174,7 @@ await client.agents.updateMonitoring("ag_1234567890", {
 </dl>
 </details>
 
-<details><summary><code>client.agents.<a href="/src/api/resources/agents/client/Client.ts">serialize</a>(id, { ...params }) -> void</code></summary>
+<details><summary><code>client.agents.<a href="/src/api/resources/agents/client/Client.ts">serialize</a>(id, { ...params }) -> string</code></summary>
 <dl>
 <dd>
 

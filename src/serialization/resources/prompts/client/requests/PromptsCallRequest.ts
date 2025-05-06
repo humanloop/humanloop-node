@@ -7,7 +7,7 @@ import * as Humanloop from "../../../../../api/index";
 import * as core from "../../../../../core";
 import { ChatMessage } from "../../../../types/ChatMessage";
 import { PromptsCallRequestToolChoice } from "../../types/PromptsCallRequestToolChoice";
-import { PromptKernelRequest } from "../../../../types/PromptKernelRequest";
+import { PromptsCallRequestPrompt } from "../../types/PromptsCallRequestPrompt";
 import { LogStatus } from "../../../../types/LogStatus";
 import { ProviderApiKeys } from "../../../../types/ProviderApiKeys";
 
@@ -19,7 +19,7 @@ export const PromptsCallRequest: core.serialization.Schema<
     id: core.serialization.string().optional(),
     messages: core.serialization.list(ChatMessage).optional(),
     toolChoice: core.serialization.property("tool_choice", PromptsCallRequestToolChoice.optional()),
-    prompt: PromptKernelRequest.optional(),
+    prompt: PromptsCallRequestPrompt.optional(),
     inputs: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
     source: core.serialization.string().optional(),
     metadata: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
@@ -45,7 +45,7 @@ export declare namespace PromptsCallRequest {
         id?: string | null;
         messages?: ChatMessage.Raw[] | null;
         tool_choice?: PromptsCallRequestToolChoice.Raw | null;
-        prompt?: PromptKernelRequest.Raw | null;
+        prompt?: PromptsCallRequestPrompt.Raw | null;
         inputs?: Record<string, unknown> | null;
         source?: string | null;
         metadata?: Record<string, unknown> | null;

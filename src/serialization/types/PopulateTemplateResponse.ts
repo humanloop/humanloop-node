@@ -72,6 +72,7 @@ export const PopulateTemplateResponse: core.serialization.ObjectSchema<
         "evaluator_aggregates",
         core.serialization.list(EvaluatorAggregate).optional(),
     ),
+    rawFileContent: core.serialization.property("raw_file_content", core.serialization.string().optional()),
     populatedTemplate: core.serialization.property(
         "populated_template",
         PopulateTemplateResponsePopulatedTemplate.optional(),
@@ -120,6 +121,7 @@ export declare namespace PopulateTemplateResponse {
         inputs: InputResponse.Raw[];
         evaluators?: serializers.MonitoringEvaluatorResponse.Raw[] | null;
         evaluator_aggregates?: EvaluatorAggregate.Raw[] | null;
+        raw_file_content?: string | null;
         populated_template?: PopulateTemplateResponsePopulatedTemplate.Raw | null;
     }
 }
