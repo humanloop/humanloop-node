@@ -3,8 +3,8 @@
     "version": "0.8.21",
     "private": false,
     "repository": "https://github.com/humanloop/humanloop-node",
-    "main": "./dist/index.js",
-    "types": "./dist/index.d.ts",
+    "main": "./index.js",
+    "types": "./index.d.ts",
     "scripts": {
         "format": "prettier . --write --ignore-unknown",
         "build": "tsc",

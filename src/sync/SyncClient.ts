@@ -176,7 +176,11 @@ export default class SyncClient {
             throw new Error(`Unsupported file type: ${file.type}`);
         }
 
-        this.saveSerializedFile((file as any).rawFileContent, file.path, file.type);
+        if (!file.rawFileContent) {
+            throw new Error(`No content found for ${file.type} ${file.id}`);
+        }
+
+        this.saveSerializedFile(file.rawFileContent, file.path, file.type);
     }
 
     /**
@@ -214,7 +218,7 @@ export default class SyncClient {
                     }
 
                     // Skip if no raw file content
-                    if (!(file as any).rawFileContent) {
+                    if (!file.rawFileContent) {
                         console.warn(
                             `No content found for ${file.type} ${file.id || "<unknown>"}`,
                         );
@@ -223,7 +227,7 @@ export default class SyncClient {
 
                     try {
                         this.saveSerializedFile(
-                            (file as any).rawFileContent,
+                            file.rawFileContent,
                             file.path,
                             file.type,
                         );
