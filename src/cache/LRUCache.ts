@@ -17,7 +17,7 @@ export default class LRUCache<K, V> {
 
         // Get the value
         const value = this.cache.get(key);
-        
+
         // Remove key and re-insert to mark as most recently used
         this.cache.delete(key);
         this.cache.set(key, value!);
