@@ -637,7 +637,6 @@ async function resolveFile<I extends Record<string, unknown> & { message?: any[]
                 "File does not exist on Humanloop. Please provide a `file.path` and a version to create a new version.",
             );
         }
-        Logger.log(`UPSERTING FILE ${JSON.stringify(fileConfig, null, 2)}`);
         return [await upsertFile(client, fileConfig), callable];
     }
 

@@ -316,18 +316,19 @@ export default class SyncClient {
                 path: normalizedPath || "",
                 environment,
                 successfulFiles,
-                startTime,
+                duration_ms: duration,
             });
             
             return successfulFiles;
         } catch (error) {
+            const duration = Date.now() - startTime;
             // Log the failed operation
             this.metadata.logOperation({
                 operationType: "pull",
                 path: normalizedPath || "",
                 environment,
                 error: String(error),
-                startTime,
+                duration_ms: duration,
             });
             throw error;
         }

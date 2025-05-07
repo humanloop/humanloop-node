@@ -1,5 +1,5 @@
-import fs from "fs";
-import path from "path";
+import * as fs from "fs";
+import * as path from "path";
 
 /**
  * Interface for operation data
@@ -33,7 +33,7 @@ interface LogOperationParams {
     successfulFiles?: string[];
     failedFiles?: string[];
     error?: string;
-    startTime: number;
+    duration_ms: number;
 }
 
 /**
@@ -107,7 +107,6 @@ export default class MetadataHandler {
      */
     public logOperation(params: LogOperationParams): void {
         const currentTime = new Date().toISOString();
-        const duration = Date.now() - params.startTime;
 
         const operationData: OperationData = {
             timestamp: currentTime,
@@ -117,7 +116,7 @@ export default class MetadataHandler {
             successful_files: params.successfulFiles || [],
             failed_files: params.failedFiles || [],
             error: params.error,
-            duration_ms: duration,
+            duration_ms: params.duration_ms,
         };
 
         const metadata = this.readMetadata();

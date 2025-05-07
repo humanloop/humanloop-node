@@ -19,6 +19,7 @@ src/utils
 
 # Modified due to issues with OTEL
 tests/unit/fetcher/stream-wrappers/webpack.test.ts
+tests/unit/internal/
 tests/integration/
 
 # CI Action
