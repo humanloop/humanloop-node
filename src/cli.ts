@@ -3,7 +3,7 @@ import * as dotenv from "dotenv";
 import { Command } from "commander";
 
 import { HumanloopClient } from "./humanloop.client";
-import { Logger } from "./utils/logger";
+import Logger from "./utils/Logger";
 
 const { version } = require("../package.json");
 

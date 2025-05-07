@@ -1,4 +1,4 @@
-import LRUCache from "../../../src/cache/LRUCache";
+import LRUCache from "../../../../src/cache/LRUCache";
 
 describe("LRUCache", () => {
     let cache: LRUCache<string, number>;

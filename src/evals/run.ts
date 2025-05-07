@@ -46,7 +46,7 @@ import {
 } from "../context";
 import { HumanloopRuntimeError } from "../error";
 import { Humanloop, HumanloopClient } from "../index";
-import { Logger } from "../utils/logger";
+import Logger from "../utils/Logger";
 import {
     Dataset,
     EvalFileType,
