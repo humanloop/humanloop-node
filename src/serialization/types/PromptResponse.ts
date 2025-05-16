@@ -69,6 +69,7 @@ export const PromptResponse: core.serialization.ObjectSchema<serializers.PromptR
             "evaluator_aggregates",
             core.serialization.list(EvaluatorAggregate).optional(),
         ),
+        rawFileContent: core.serialization.property("raw_file_content", core.serialization.string().optional()),
     });
 
 export declare namespace PromptResponse {
@@ -113,5 +114,6 @@ export declare namespace PromptResponse {
         inputs: InputResponse.Raw[];
         evaluators?: serializers.MonitoringEvaluatorResponse.Raw[] | null;
         evaluator_aggregates?: EvaluatorAggregate.Raw[] | null;
+        raw_file_content?: string | null;
     }
 }

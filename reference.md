@@ -1342,7 +1342,7 @@ await client.prompts.updateMonitoring("pr_30gco7dx6JDq4200GVOHa", {
 </dl>
 </details>
 
-<details><summary><code>client.prompts.<a href="/src/api/resources/prompts/client/Client.ts">serialize</a>(id, { ...params }) -> void</code></summary>
+<details><summary><code>client.prompts.<a href="/src/api/resources/prompts/client/Client.ts">serialize</a>(id, { ...params }) -> string</code></summary>
 <dl>
 <dd>
 
@@ -4794,9 +4794,6 @@ Log to a Flow.
 You can use query parameters `version_id`, or `environment`, to target
 an existing version of the Flow. Otherwise, the default deployed version will be chosen.
 
-If you create the Flow Log with a `log_status` of `incomplete`, you should later update it to `complete`
-in order to trigger Evaluators.
-
 </dd>
 </dl>
 </dd>
@@ -7313,7 +7310,7 @@ await client.agents.updateMonitoring("ag_1234567890", {
 </dl>
 </details>
 
-<details><summary><code>client.agents.<a href="/src/api/resources/agents/client/Client.ts">serialize</a>(id, { ...params }) -> void</code></summary>
+<details><summary><code>client.agents.<a href="/src/api/resources/agents/client/Client.ts">serialize</a>(id, { ...params }) -> string</code></summary>
 <dl>
 <dd>
 

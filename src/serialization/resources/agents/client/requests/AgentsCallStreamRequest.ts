@@ -7,8 +7,7 @@ import * as Humanloop from "../../../../../api/index";
 import * as core from "../../../../../core";
 import { ChatMessage } from "../../../../types/ChatMessage";
 import { AgentsCallStreamRequestToolChoice } from "../../types/AgentsCallStreamRequestToolChoice";
-import { AgentKernelRequest } from "../../../../types/AgentKernelRequest";
-import { LogStatus } from "../../../../types/LogStatus";
+import { AgentsCallStreamRequestAgent } from "../../types/AgentsCallStreamRequestAgent";
 import { ProviderApiKeys } from "../../../../types/ProviderApiKeys";
 
 export const AgentsCallStreamRequest: core.serialization.Schema<
@@ -19,13 +18,12 @@ export const AgentsCallStreamRequest: core.serialization.Schema<
     id: core.serialization.string().optional(),
     messages: core.serialization.list(ChatMessage).optional(),
     toolChoice: core.serialization.property("tool_choice", AgentsCallStreamRequestToolChoice.optional()),
-    agent: AgentKernelRequest.optional(),
+    agent: AgentsCallStreamRequestAgent.optional(),
     inputs: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
     source: core.serialization.string().optional(),
     metadata: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
     startTime: core.serialization.property("start_time", core.serialization.date().optional()),
     endTime: core.serialization.property("end_time", core.serialization.date().optional()),
-    logStatus: core.serialization.property("log_status", LogStatus.optional()),
     sourceDatapointId: core.serialization.property("source_datapoint_id", core.serialization.string().optional()),
     traceParentId: core.serialization.property("trace_parent_id", core.serialization.string().optional()),
     user: core.serialization.string().optional(),
@@ -49,13 +47,12 @@ export declare namespace AgentsCallStreamRequest {
         id?: string | null;
         messages?: ChatMessage.Raw[] | null;
         tool_choice?: AgentsCallStreamRequestToolChoice.Raw | null;
-        agent?: AgentKernelRequest.Raw | null;
+        agent?: AgentsCallStreamRequestAgent.Raw | null;
         inputs?: Record<string, unknown> | null;
         source?: string | null;
         metadata?: Record<string, unknown> | null;
         start_time?: string | null;
         end_time?: string | null;
-        log_status?: LogStatus.Raw | null;
         source_datapoint_id?: string | null;
         trace_parent_id?: string | null;
         user?: string | null;

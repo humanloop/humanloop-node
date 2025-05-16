@@ -91,8 +91,13 @@ export interface PromptsCallRequest {
      * - `{'type': 'function', 'function': {name': <TOOL_NAME>}}` forces the model to use the named function.
      */
     toolChoice?: Humanloop.PromptsCallRequestToolChoice;
-    /** Details of your Prompt. A new Prompt version will be created if the provided details are new. */
-    prompt?: Humanloop.PromptKernelRequest;
+    /**
+     * The Prompt configuration to use. Two formats are supported:
+     * - An object representing the details of the Prompt configuration
+     * - A string representing the raw contents of a .prompt file
+     * A new Prompt version will be created if the provided details do not match any existing version.
+     */
+    prompt?: Humanloop.PromptsCallRequestPrompt;
     /** The inputs passed to the prompt template. */
     inputs?: Record<string, unknown>;
     /** Identifies where the model was called from. */
@@ -103,8 +108,6 @@ export interface PromptsCallRequest {
     startTime?: Date;
     /** When the logged event ended. */
     endTime?: Date;
-    /** Status of a Log. Set to `incomplete` if you intend to update and eventually complete the Log and want the File's monitoring Evaluators to wait until you mark it as `complete`. If log_status is not provided, observability will pick up the Log as soon as possible. Updating this from specified to unspecified is undefined behavior. */
-    logStatus?: Humanloop.LogStatus;
     /** Unique identifier for the Datapoint that this Log is derived from. This can be used by Humanloop to associate Logs to Evaluations. If provided, Humanloop will automatically associate this Log to Evaluations that require a Log for this Datapoint-Version pair. */
     sourceDatapointId?: string;
     /** The ID of the parent Log to nest this Log under in a Trace. */

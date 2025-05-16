@@ -13,6 +13,10 @@ export interface BodyRetrieveByPathFilesRetrieveByPathPost {
      * Name of the Environment to retrieve a deployed Version from.
      */
     environment?: string;
+    /**
+     * Whether to include the raw file content in the response. Currently only supported for Agents and Prompts.
+     */
+    includeRawFileContent?: boolean;
     /** Path of the File to retrieve. */
     path: string;
 }

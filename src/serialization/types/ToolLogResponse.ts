@@ -5,7 +5,6 @@
 import * as serializers from "../index";
 import * as Humanloop from "../../api/index";
 import * as core from "../../core";
-import { LogStatus } from "./LogStatus";
 import { ChatMessage } from "./ChatMessage";
 
 export const ToolLogResponse: core.serialization.ObjectSchema<
@@ -30,7 +29,6 @@ export const ToolLogResponse: core.serialization.ObjectSchema<
     inputs: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
     source: core.serialization.string().optional(),
     metadata: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
-    logStatus: core.serialization.property("log_status", LogStatus.optional()),
     sourceDatapointId: core.serialization.property("source_datapoint_id", core.serialization.string().optional()),
     traceParentId: core.serialization.property("trace_parent_id", core.serialization.string().optional()),
     batches: core.serialization.list(core.serialization.string()).optional(),
@@ -67,7 +65,6 @@ export declare namespace ToolLogResponse {
         inputs?: Record<string, unknown> | null;
         source?: string | null;
         metadata?: Record<string, unknown> | null;
-        log_status?: LogStatus.Raw | null;
         source_datapoint_id?: string | null;
         trace_parent_id?: string | null;
         batches?: string[] | null;

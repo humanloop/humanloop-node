@@ -30,7 +30,7 @@ export interface ListDatasetsGetRequest {
     /**
      * Field to sort Datasets by
      */
-    sortBy?: Humanloop.ProjectSortBy;
+    sortBy?: Humanloop.FileSortBy;
     /**
      * Direction to sort by.
      */

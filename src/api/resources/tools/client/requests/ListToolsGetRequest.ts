@@ -30,7 +30,7 @@ export interface ListToolsGetRequest {
     /**
      * Field to sort Tools by
      */
-    sortBy?: Humanloop.ProjectSortBy;
+    sortBy?: Humanloop.FileSortBy;
     /**
      * Direction to sort by.
      */
