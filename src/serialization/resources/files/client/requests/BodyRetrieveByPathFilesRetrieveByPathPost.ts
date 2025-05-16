@@ -8,7 +8,7 @@ import * as core from "../../../../../core";
 
 export const BodyRetrieveByPathFilesRetrieveByPathPost: core.serialization.Schema<
     serializers.BodyRetrieveByPathFilesRetrieveByPathPost.Raw,
-    Omit<Humanloop.BodyRetrieveByPathFilesRetrieveByPathPost, "environment">
+    Omit<Humanloop.BodyRetrieveByPathFilesRetrieveByPathPost, "environment" | "includeRawFileContent">
 > = core.serialization.object({
     path: core.serialization.string(),
 });

@@ -3,6 +3,6 @@ export default {
     preset: "ts-jest",
     testEnvironment: "node",
     moduleNameMapper: {
-        "^(?!.*node_modules)(.+)\\.js$": "$1",
+        "(.+)\.js$": "$1",
     },
 };
