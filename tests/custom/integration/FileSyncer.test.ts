@@ -71,7 +71,7 @@ describe("FileSyncer Integration Tests", () => {
             const content = fs.readFileSync(localPath, "utf8");
             expect(content).toBeTruthy();
         }
-    });
+    }, 30000);
 
     test("pull_with_invalid_path: should handle error when path doesn't exist", async () => {
         // GIVEN a client
