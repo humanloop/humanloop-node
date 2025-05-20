@@ -29,7 +29,7 @@ import {
 import { HumanloopSpanExporter } from "./otel/exporter";
 import { HumanloopSpanProcessor } from "./otel/processor";
 import { overloadCall, overloadLog } from "./overload";
-import { SyncClient, SyncClientOptions } from "./sync";
+import { SyncClient, FileSyncerOptions } from "./sync";
 import { SDK_VERSION } from "./version";
 
 const RED = "\x1b[91m";
@@ -252,7 +252,7 @@ export class HumanloopClient extends BaseHumanloopClient {
                 Anthropic?: any;
                 CohereAI?: any;
             };
-            sync?: SyncClientOptions;
+            sync?: FileSyncerOptions;
         },
     ) {
         super(_options);
