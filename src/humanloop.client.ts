@@ -8,10 +8,6 @@ import { OpenAIInstrumentation } from "@traceloop/instrumentation-openai";
 import { HumanloopClient as BaseHumanloopClient } from "./Client";
 import { ChatMessage } from "./api";
 import { Evaluations as BaseEvaluations } from "./api/resources/evaluations/client/Client";
-import { Evaluators } from "./api/resources/evaluators/client/Client";
-import { Flows } from "./api/resources/flows/client/Client";
-import { Prompts } from "./api/resources/prompts/client/Client";
-import { Tools } from "./api/resources/tools/client/Client";
 import { ToolKernelRequest } from "./api/types/ToolKernelRequest";
 import { flowUtilityFactory } from "./decorators/flow";
 import { promptDecoratorFactory } from "./decorators/prompt";
@@ -28,8 +24,8 @@ import {
 } from "./evals/types";
 import { HumanloopSpanExporter } from "./otel/exporter";
 import { HumanloopSpanProcessor } from "./otel/processor";
-import { overloadCall, overloadLog } from "./overload";
-import { SyncClient } from "./sync";
+import { overloadClient } from "./overload";
+import { FileSyncer } from "./sync";
 import { SDK_VERSION } from "./version";
 
 const RED = "\x1b[91m";
@@ -235,16 +231,12 @@ export interface HumanloopClientOptions extends BaseHumanloopClient.Options {
 
 export class HumanloopClient extends BaseHumanloopClient {
     protected readonly _evaluations: ExtendedEvaluations;
-    protected readonly _prompts_overloaded: Prompts;
-    protected readonly _flows_overloaded: Flows;
-    protected readonly _tools_overloaded: Tools;
-    protected readonly _evaluators_overloaded: Evaluators;
     protected readonly instrumentProviders: {
         OpenAI?: any;
         Anthropic?: any;
         CohereAI?: any;
     };
-    protected readonly _syncClient: SyncClient;
+    protected readonly _fileSyncer: FileSyncer;
     protected readonly useLocalFiles: boolean;
 
     protected get opentelemetryTracer(): Tracer {
@@ -292,21 +284,17 @@ export class HumanloopClient extends BaseHumanloopClient {
             );
         }
 
-        this._syncClient = new SyncClient(this, {
+        this._fileSyncer = new FileSyncer(this, {
             baseDir: options.localFilesDirectory || "humanloop",
             cacheSize: options.cacheSize,
         });
 
         this.instrumentProviders = options.instrumentProviders || {};
 
-        this._prompts_overloaded = overloadLog(super.prompts);
-        this._prompts_overloaded = overloadCall(this._prompts_overloaded);
-
-        this._tools_overloaded = overloadLog(super.tools);
-
-        this._flows_overloaded = overloadLog(super.flows);
-
-        this._evaluators_overloaded = overloadLog(super.evaluators);
+        overloadClient(super.prompts, this._fileSyncer, this.useLocalFiles);
+        overloadClient(super.flows, this._fileSyncer, this.useLocalFiles);
+        overloadClient(super.tools, this._fileSyncer, this.useLocalFiles);
+        overloadClient(super.evaluators, this._fileSyncer, this.useLocalFiles);
 
         this._evaluations = new ExtendedEvaluations(options, this);
 
@@ -652,26 +640,10 @@ ${RESET}`,
         path?: string,
         environment?: string,
     ): Promise<[string[], string[]]> {
-        return this._syncClient.pull(path, environment);
+        return this._fileSyncer.pull(path, environment);
     }
 
     public get evaluations(): ExtendedEvaluations {
         return this._evaluations;
-    }
-
-    public get prompts(): Prompts {
-        return this._prompts_overloaded;
-    }
-
-    public get flows(): Flows {
-        return this._flows_overloaded;
-    }
-
-    public get tools(): Tools {
-        return this._tools_overloaded;
-    }
-
-    public get evaluators(): Evaluators {
-        return this._evaluators_overloaded;
     }
 }
