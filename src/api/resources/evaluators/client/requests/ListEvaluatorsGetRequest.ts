@@ -30,7 +30,7 @@ export interface ListEvaluatorsGetRequest {
     /**
      * Field to sort Evaluators by
      */
-    sortBy?: Humanloop.ProjectSortBy;
+    sortBy?: Humanloop.FileSortBy;
     /**
      * Direction to sort by.
      */

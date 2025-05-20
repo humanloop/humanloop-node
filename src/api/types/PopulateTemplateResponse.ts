@@ -94,6 +94,8 @@ export interface PopulateTemplateResponse {
     evaluators?: Humanloop.MonitoringEvaluatorResponse[];
     /** Aggregation of Evaluator results for the Prompt Version. */
     evaluatorAggregates?: Humanloop.EvaluatorAggregate[];
+    /** The raw content of the Prompt. Corresponds to the .prompt file. */
+    rawFileContent?: string;
     /** The template populated with the input values you provided in the request. Returns None if no template exists. */
     populatedTemplate?: Humanloop.PopulateTemplateResponsePopulatedTemplate;
 }

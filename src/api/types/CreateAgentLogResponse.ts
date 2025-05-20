@@ -14,6 +14,6 @@ export interface CreateAgentLogResponse {
     agentId: string;
     /** Unique identifier for the Agent Version. */
     versionId: string;
-    /** Status of the Agent Log. When a Agent Log is marked as `complete`, no more Logs can be added to it. Monitoring Evaluators will only run on `complete` Agent Logs. */
+    /** Status of the Agent Log. When a Agent Log is marked as `complete`, no more Logs can be added to it. */
     logStatus?: Humanloop.LogStatus;
 }

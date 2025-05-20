@@ -7,8 +7,7 @@ import * as Humanloop from "../../../../../api/index";
 import * as core from "../../../../../core";
 import { ChatMessage } from "../../../../types/ChatMessage";
 import { PromptLogRequestToolChoice } from "../../types/PromptLogRequestToolChoice";
-import { PromptKernelRequest } from "../../../../types/PromptKernelRequest";
-import { LogStatus } from "../../../../types/LogStatus";
+import { PromptLogRequestPrompt } from "../../types/PromptLogRequestPrompt";
 
 export const PromptLogRequest: core.serialization.Schema<
     serializers.PromptLogRequest.Raw,
@@ -26,7 +25,7 @@ export const PromptLogRequest: core.serialization.Schema<
     finishReason: core.serialization.property("finish_reason", core.serialization.string().optional()),
     messages: core.serialization.list(ChatMessage).optional(),
     toolChoice: core.serialization.property("tool_choice", PromptLogRequestToolChoice.optional()),
-    prompt: PromptKernelRequest.optional(),
+    prompt: PromptLogRequestPrompt.optional(),
     startTime: core.serialization.property("start_time", core.serialization.date().optional()),
     endTime: core.serialization.property("end_time", core.serialization.date().optional()),
     output: core.serialization.string().optional(),
@@ -45,7 +44,6 @@ export const PromptLogRequest: core.serialization.Schema<
     inputs: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
     source: core.serialization.string().optional(),
     metadata: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
-    logStatus: core.serialization.property("log_status", LogStatus.optional()),
     sourceDatapointId: core.serialization.property("source_datapoint_id", core.serialization.string().optional()),
     traceParentId: core.serialization.property("trace_parent_id", core.serialization.string().optional()),
     user: core.serialization.string().optional(),
@@ -68,7 +66,7 @@ export declare namespace PromptLogRequest {
         finish_reason?: string | null;
         messages?: ChatMessage.Raw[] | null;
         tool_choice?: PromptLogRequestToolChoice.Raw | null;
-        prompt?: PromptKernelRequest.Raw | null;
+        prompt?: PromptLogRequestPrompt.Raw | null;
         start_time?: string | null;
         end_time?: string | null;
         output?: string | null;
@@ -81,7 +79,6 @@ export declare namespace PromptLogRequest {
         inputs?: Record<string, unknown> | null;
         source?: string | null;
         metadata?: Record<string, unknown> | null;
-        log_status?: LogStatus.Raw | null;
         source_datapoint_id?: string | null;
         trace_parent_id?: string | null;
         user?: string | null;

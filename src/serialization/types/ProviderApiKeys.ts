@@ -11,7 +11,6 @@ export const ProviderApiKeys: core.serialization.ObjectSchema<
     Humanloop.ProviderApiKeys
 > = core.serialization.object({
     openai: core.serialization.string().optional(),
-    ai21: core.serialization.string().optional(),
     mock: core.serialization.string().optional(),
     anthropic: core.serialization.string().optional(),
     deepseek: core.serialization.string().optional(),
@@ -19,12 +18,12 @@ export const ProviderApiKeys: core.serialization.ObjectSchema<
     cohere: core.serialization.string().optional(),
     openaiAzure: core.serialization.property("openai_azure", core.serialization.string().optional()),
     openaiAzureEndpoint: core.serialization.property("openai_azure_endpoint", core.serialization.string().optional()),
+    google: core.serialization.string().optional(),
 });
 
 export declare namespace ProviderApiKeys {
     export interface Raw {
         openai?: string | null;
-        ai21?: string | null;
         mock?: string | null;
         anthropic?: string | null;
         deepseek?: string | null;
@@ -32,5 +31,6 @@ export declare namespace ProviderApiKeys {
         cohere?: string | null;
         openai_azure?: string | null;
         openai_azure_endpoint?: string | null;
+        google?: string | null;
     }
 }
