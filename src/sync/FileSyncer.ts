@@ -5,6 +5,7 @@ import path from "path";
 import LRUCache from "../cache/LRUCache";
 import { HumanloopRuntimeError } from "../error";
 import { HumanloopClient } from "../humanloop.client";
+import * as pathUtils from "../pathUtils";
 
 // Default cache size for file content caching
 const DEFAULT_CACHE_SIZE = 100;
@@ -380,7 +381,7 @@ export default class FileSyncer {
             isFilePath = this.isFile(filePath);
 
             // For API communication, we need path without extension
-            apiPath = this._normalizePath(filePath, true);
+            apiPath = pathUtils.normalizePath(filePath, true);
         }
 
         try {
@@ -422,47 +423,6 @@ export default class FileSyncer {
             return [successfulFiles, failedFiles];
         } catch (error) {
             throw new HumanloopRuntimeError(`Pull operation failed: ${error}`);
-        }
-    }
-
-    /**
-     * Normalize the path by removing extensions, etc.
-     */
-    private _normalizePath(filePath: string, stripExtension: boolean = false): string {
-        if (!filePath) return "";
-
-        // Remove any file extensions if requested
-        let normalizedPath =
-            stripExtension && filePath.includes(".")
-                ? filePath.substring(0, filePath.lastIndexOf("."))
-                : filePath;
-
-        // Convert backslashes to forward slashes
-        normalizedPath = normalizedPath.replace(/\\/g, "/");
-
-        // Remove leading/trailing whitespace and slashes
-        normalizedPath = normalizedPath.trim().replace(/^\/+|\/+$/g, "");
-
-        // Normalize multiple consecutive slashes into a single forward slash
-        while (normalizedPath.includes("//")) {
-            normalizedPath = normalizedPath.replace(/\/\//g, "/");
-        }
-
-        return normalizedPath;
-    }
-
-    private _parseErrorResponse(response: any): string {
-        try {
-            if (response?.error?.message) {
-                return response.error.message;
-            }
-            if (typeof response === "string") {
-                return response;
-            }
-            return JSON.stringify(response);
-        } catch (e) {
-            log(`Failed to parse error message: ${e}`, "DEBUG", this.verbose);
-            return String(response);
         }
     }
 }
