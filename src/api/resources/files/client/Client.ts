@@ -48,7 +48,18 @@ export class Files {
         request: Humanloop.ListFilesFilesGetRequest = {},
         requestOptions?: Files.RequestOptions,
     ): Promise<Humanloop.PaginatedDataUnionPromptResponseToolResponseDatasetResponseEvaluatorResponseFlowResponseAgentResponse> {
-        const { page, size, name, template, type: type_, environment, sortBy, order } = request;
+        const {
+            page,
+            size,
+            name,
+            path,
+            template,
+            type: type_,
+            environment,
+            sortBy,
+            order,
+            includeRawFileContent,
+        } = request;
         const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
         if (page != null) {
             _queryParams["page"] = page.toString();
@@ -60,6 +71,10 @@ export class Files {
 
         if (name != null) {
             _queryParams["name"] = name;
+        }
+
+        if (path != null) {
+            _queryParams["path"] = path;
         }
 
         if (template != null) {
@@ -81,13 +96,15 @@ export class Files {
         }
 
         if (sortBy != null) {
-            _queryParams["sort_by"] = serializers.ProjectSortBy.jsonOrThrow(sortBy, {
-                unrecognizedObjectKeys: "strip",
-            });
+            _queryParams["sort_by"] = serializers.FileSortBy.jsonOrThrow(sortBy, { unrecognizedObjectKeys: "strip" });
         }
 
         if (order != null) {
             _queryParams["order"] = serializers.SortOrder.jsonOrThrow(order, { unrecognizedObjectKeys: "strip" });
+        }
+
+        if (includeRawFileContent != null) {
+            _queryParams["include_raw_file_content"] = includeRawFileContent.toString();
         }
 
         const _response = await (this._options.fetcher ?? core.fetcher)({
@@ -101,8 +118,8 @@ export class Files {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.21-beta1",
-                "User-Agent": "humanloop/0.8.21-beta1",
+                "X-Fern-SDK-Version": "0.8.21-beta2",
+                "User-Agent": "humanloop/0.8.21-beta2",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -180,10 +197,14 @@ export class Files {
         request: Humanloop.BodyRetrieveByPathFilesRetrieveByPathPost,
         requestOptions?: Files.RequestOptions,
     ): Promise<Humanloop.RetrieveByPathFilesRetrieveByPathPostResponse> {
-        const { environment, ..._body } = request;
+        const { environment, includeRawFileContent, ..._body } = request;
         const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
         if (environment != null) {
             _queryParams["environment"] = environment;
+        }
+
+        if (includeRawFileContent != null) {
+            _queryParams["include_raw_file_content"] = includeRawFileContent.toString();
         }
 
         const _response = await (this._options.fetcher ?? core.fetcher)({
@@ -197,8 +218,8 @@ export class Files {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "humanloop",
-                "X-Fern-SDK-Version": "0.8.21-beta1",
-                "User-Agent": "humanloop/0.8.21-beta1",
+                "X-Fern-SDK-Version": "0.8.21-beta2",
+                "User-Agent": "humanloop/0.8.21-beta2",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),

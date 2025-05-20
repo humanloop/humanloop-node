@@ -10,19 +10,20 @@ export type EventType =
     | "agent_turn_suspend"
     | "agent_turn_continue"
     | "agent_turn_end"
+    | "agent_turn_error"
     | "agent_start"
     | "agent_update"
     | "agent_end"
     | "tool_start"
     | "tool_update"
     | "tool_end"
-    | "error"
-    | "agent_generation_error";
+    | "error";
 export const EventType = {
     AgentTurnStart: "agent_turn_start",
     AgentTurnSuspend: "agent_turn_suspend",
     AgentTurnContinue: "agent_turn_continue",
     AgentTurnEnd: "agent_turn_end",
+    AgentTurnError: "agent_turn_error",
     AgentStart: "agent_start",
     AgentUpdate: "agent_update",
     AgentEnd: "agent_end",
@@ -30,5 +31,4 @@ export const EventType = {
     ToolUpdate: "tool_update",
     ToolEnd: "tool_end",
     Error: "error",
-    AgentGenerationError: "agent_generation_error",
 } as const;

@@ -7,7 +7,6 @@ import * as Humanloop from "../../../../../api/index";
 import * as core from "../../../../../core";
 import { ChatMessage } from "../../../../types/ChatMessage";
 import { PromptLogUpdateRequestToolChoice } from "../../types/PromptLogUpdateRequestToolChoice";
-import { LogStatus } from "../../../../types/LogStatus";
 
 export const PromptLogUpdateRequest: core.serialization.Schema<
     serializers.PromptLogUpdateRequest.Raw,
@@ -40,7 +39,6 @@ export const PromptLogUpdateRequest: core.serialization.Schema<
     metadata: core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
     startTime: core.serialization.property("start_time", core.serialization.date().optional()),
     endTime: core.serialization.property("end_time", core.serialization.date().optional()),
-    logStatus: core.serialization.property("log_status", LogStatus.optional()),
 });
 
 export declare namespace PromptLogUpdateRequest {
@@ -66,6 +64,5 @@ export declare namespace PromptLogUpdateRequest {
         metadata?: Record<string, unknown> | null;
         start_time?: string | null;
         end_time?: string | null;
-        log_status?: LogStatus.Raw | null;
     }
 }

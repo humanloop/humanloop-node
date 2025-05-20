@@ -4,7 +4,6 @@
 
 export interface ProviderApiKeys {
     openai?: string;
-    ai21?: string;
     mock?: string;
     anthropic?: string;
     deepseek?: string;
@@ -12,4 +11,5 @@ export interface ProviderApiKeys {
     cohere?: string;
     openaiAzure?: string;
     openaiAzureEndpoint?: string;
+    google?: string;
 }

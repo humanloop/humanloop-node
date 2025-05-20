@@ -74,7 +74,7 @@ export interface FlowLogRequest {
     source?: string;
     /** Any additional metadata to record. */
     metadata?: Record<string, unknown>;
-    /** Status of the Flow Log. When a Log is updated from `incomplete` to `complete`, it becomes available to Monitoring Evaluators. Flow Logs cannot have an unspecified status: they must start as `incomplete` to allow children to be added. Provide `complete` if you don't intend to add children to the trace. */
+    /** Status of the Flow Log. When a Log is updated from `incomplete` to `complete`, no more Logs can be added to it. */
     logStatus?: Humanloop.LogStatus;
     /** Unique identifier for the Datapoint that this Log is derived from. This can be used by Humanloop to associate Logs to Evaluations. If provided, Humanloop will automatically associate this Log to Evaluations that require a Log for this Datapoint-Version pair. */
     sourceDatapointId?: string;

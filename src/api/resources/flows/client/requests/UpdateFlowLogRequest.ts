@@ -26,6 +26,6 @@ export interface UpdateFlowLogRequest {
     output?: string;
     /** The error message of the Flow Log. Provide None to unset existing `error` value. Provide either this, `output_message` or `output`. */
     error?: string;
-    /** Status of the Flow Log. When a Flow Log is updated to `complete`, no more Logs can be added to it. Monitoring Evaluators will only run on `complete` Flow Logs. */
+    /** Status of the Flow Log. When a Flow Log is updated to `complete`, no more Logs can be added to it. You cannot update a Flow Log's status from `complete` to `incomplete`. */
     logStatus?: Humanloop.LogStatus;
 }
