@@ -2,10 +2,10 @@ import { FileType } from "api";
 import fs from "fs";
 import path from "path";
 
+import * as pathUtils from "../pathUtils";
 import LRUCache from "../cache/LRUCache";
 import { HumanloopRuntimeError } from "../error";
 import { HumanloopClient } from "../humanloop.client";
-import * as pathUtils from "../pathUtils";
 
 // Default cache size for file content caching
 const DEFAULT_CACHE_SIZE = 100;
@@ -257,8 +257,8 @@ export default class FileSyncer {
         let page = 1;
         let totalPages = 0;
 
-    log(
-        `Fetching files from ${dirPath || "root"} (environment: ${environment || "default"})`,
+        log(
+            `Fetching files from ${dirPath || "root"} (environment: ${environment || "default"})`,
             "INFO",
             this.verbose,
         );
@@ -276,7 +276,8 @@ export default class FileSyncer {
 
                 // Calculate total pages on first response
                 if (page === 1) {
-                    totalPages = Math.ceil(response.total / FileSyncer.PAGE_SIZE);
+                    const actualPageSize = response.size || FileSyncer.PAGE_SIZE;
+                    totalPages = Math.ceil(response.total / actualPageSize);
                 }
 
                 if (response.records.length === 0) {
@@ -315,9 +316,8 @@ export default class FileSyncer {
                     }
                 }
 
-                // Update pagination based on items received
-                if (response.records.length < FileSyncer.PAGE_SIZE) {
-                    // Last page (either partial or empty)
+                // Check if we've reached the last page
+                if (page >= totalPages) {
                     break;
                 }
                 page += 1;
