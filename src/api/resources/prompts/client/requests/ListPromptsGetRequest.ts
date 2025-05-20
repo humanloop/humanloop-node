@@ -30,7 +30,7 @@ export interface ListPromptsGetRequest {
     /**
      * Field to sort Prompts by
      */
-    sortBy?: Humanloop.ProjectSortBy;
+    sortBy?: Humanloop.FileSortBy;
     /**
      * Direction to sort by.
      */

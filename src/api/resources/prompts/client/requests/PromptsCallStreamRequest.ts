@@ -31,8 +31,14 @@ export interface PromptsCallStreamRequest {
      * - `{'type': 'function', 'function': {name': <TOOL_NAME>}}` forces the model to use the named function.
      */
     toolChoice?: Humanloop.PromptsCallStreamRequestToolChoice;
-    /** Details of your Prompt. A new Prompt version will be created if the provided details are new. */
-    prompt?: Humanloop.PromptKernelRequest;
+    /**
+     * The Prompt configuration to use. Two formats are supported:
+     * - An object representing the details of the Prompt configuration
+     * - A string representing the raw contents of a .prompt file
+     *
+     * A new Prompt version will be created if the provided details do not match any existing version.
+     */
+    prompt?: Humanloop.PromptsCallStreamRequestPrompt;
     /** The inputs passed to the prompt template. */
     inputs?: Record<string, unknown>;
     /** Identifies where the model was called from. */

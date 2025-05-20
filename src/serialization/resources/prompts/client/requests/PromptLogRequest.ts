@@ -7,7 +7,7 @@ import * as Humanloop from "../../../../../api/index";
 import * as core from "../../../../../core";
 import { ChatMessage } from "../../../../types/ChatMessage";
 import { PromptLogRequestToolChoice } from "../../types/PromptLogRequestToolChoice";
-import { PromptKernelRequest } from "../../../../types/PromptKernelRequest";
+import { PromptLogRequestPrompt } from "../../types/PromptLogRequestPrompt";
 import { LogStatus } from "../../../../types/LogStatus";
 
 export const PromptLogRequest: core.serialization.Schema<
@@ -26,7 +26,7 @@ export const PromptLogRequest: core.serialization.Schema<
     finishReason: core.serialization.property("finish_reason", core.serialization.string().optional()),
     messages: core.serialization.list(ChatMessage).optional(),
     toolChoice: core.serialization.property("tool_choice", PromptLogRequestToolChoice.optional()),
-    prompt: PromptKernelRequest.optional(),
+    prompt: PromptLogRequestPrompt.optional(),
     startTime: core.serialization.property("start_time", core.serialization.date().optional()),
     endTime: core.serialization.property("end_time", core.serialization.date().optional()),
     output: core.serialization.string().optional(),
@@ -68,7 +68,7 @@ export declare namespace PromptLogRequest {
         finish_reason?: string | null;
         messages?: ChatMessage.Raw[] | null;
         tool_choice?: PromptLogRequestToolChoice.Raw | null;
-        prompt?: PromptKernelRequest.Raw | null;
+        prompt?: PromptLogRequestPrompt.Raw | null;
         start_time?: string | null;
         end_time?: string | null;
         output?: string | null;

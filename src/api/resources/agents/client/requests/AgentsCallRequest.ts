@@ -37,8 +37,14 @@ export interface AgentsCallRequest {
      * - `{'type': 'function', 'function': {name': <TOOL_NAME>}}` forces the model to use the named function.
      */
     toolChoice?: Humanloop.AgentsCallRequestToolChoice;
-    /** Details of your Agent. A new Agent version will be created if the provided details are new. */
-    agent?: Humanloop.AgentKernelRequest;
+    /**
+     * The Agent configuration to use. Two formats are supported:
+     * - An object representing the details of the Agent configuration
+     * - A string representing the raw contents of a .agent file
+     *
+     * A new Agent version will be created if the provided details do not match any existing version.
+     */
+    agent?: Humanloop.AgentsCallRequestAgent;
     /** The inputs passed to the prompt template. */
     inputs?: Record<string, unknown>;
     /** Identifies where the model was called from. */

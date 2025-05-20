@@ -68,6 +68,7 @@ export const AgentResponse: core.serialization.ObjectSchema<serializers.AgentRes
             "evaluator_aggregates",
             core.serialization.list(EvaluatorAggregate).optional(),
         ),
+        rawFileContent: core.serialization.property("raw_file_content", core.serialization.string().optional()),
     });
 
 export declare namespace AgentResponse {
@@ -115,5 +116,6 @@ export declare namespace AgentResponse {
         inputs: InputResponse.Raw[];
         evaluators?: serializers.MonitoringEvaluatorResponse.Raw[] | null;
         evaluator_aggregates?: EvaluatorAggregate.Raw[] | null;
+        raw_file_content?: string | null;
     }
 }

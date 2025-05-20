@@ -22,6 +22,10 @@ export interface ListFilesFilesGetRequest {
      */
     name?: string;
     /**
+     * Path of the directory to filter for. Returns files in this directory and all its subdirectories.
+     */
+    path?: string;
+    /**
      * Filter to include only template files.
      */
     template?: boolean;
@@ -36,9 +40,13 @@ export interface ListFilesFilesGetRequest {
     /**
      * Field to sort files by
      */
-    sortBy?: Humanloop.ProjectSortBy;
+    sortBy?: Humanloop.FileSortBy;
     /**
      * Direction to sort by.
      */
     order?: Humanloop.SortOrder;
+    /**
+     * Whether to include the raw file content in the response. Currently only supported for Agents and Prompts.
+     */
+    includeRawFileContent?: boolean;
 }

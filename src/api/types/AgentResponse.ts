@@ -100,4 +100,6 @@ export interface AgentResponse {
     evaluators?: Humanloop.MonitoringEvaluatorResponse[];
     /** Aggregation of Evaluator results for the Agent Version. */
     evaluatorAggregates?: Humanloop.EvaluatorAggregate[];
+    /** The raw content of the Agent. Corresponds to the .agent file. */
+    rawFileContent?: string;
 }

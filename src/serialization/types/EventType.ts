@@ -12,6 +12,7 @@ export const EventType: core.serialization.Schema<serializers.EventType.Raw, Hum
         "agent_turn_suspend",
         "agent_turn_continue",
         "agent_turn_end",
+        "agent_turn_error",
         "agent_start",
         "agent_update",
         "agent_end",
@@ -19,7 +20,6 @@ export const EventType: core.serialization.Schema<serializers.EventType.Raw, Hum
         "tool_update",
         "tool_end",
         "error",
-        "agent_generation_error",
     ]);
 
 export declare namespace EventType {
@@ -28,12 +28,12 @@ export declare namespace EventType {
         | "agent_turn_suspend"
         | "agent_turn_continue"
         | "agent_turn_end"
+        | "agent_turn_error"
         | "agent_start"
         | "agent_update"
         | "agent_end"
         | "tool_start"
         | "tool_update"
         | "tool_end"
-        | "error"
-        | "agent_generation_error";
+        | "error";
 }

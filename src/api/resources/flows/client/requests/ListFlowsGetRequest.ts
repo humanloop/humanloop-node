@@ -30,7 +30,7 @@ export interface ListFlowsGetRequest {
     /**
      * Field to sort Flows by
      */
-    sortBy?: Humanloop.ProjectSortBy;
+    sortBy?: Humanloop.FileSortBy;
     /**
      * Direction to sort by.
      */
