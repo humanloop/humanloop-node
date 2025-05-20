@@ -250,9 +250,9 @@ export default class FileSyncer {
     /**
      * Sync Prompt and Agent files from Humanloop to local filesystem.
      *
-     * @returns Tuple of two lists:
-     * - First list contains paths of successfully pulled files
-     * - Second list contains paths of files that failed to pull.
+     * @returns An array containing two string arrays:
+     * - First array contains paths of successfully pulled files
+     * - Second array contains paths of files that failed to pull.
      *   Failures can occur due to missing content in the response or errors during local file writing.
      * @throws HumanloopRuntimeError If there's an error communicating with the API
      */
@@ -357,9 +357,9 @@ export default class FileSyncer {
      *
      * Paths should not contain leading or trailing slashes
      * @param environment The environment to pull from
-     * @returns Tuple of two lists:
-     * - First list contains paths of successfully pulled files
-     * - Second list contains paths of files that failed to pull (e.g. failed to write to disk or missing raw content)
+     * @returns An array containing two string arrays:
+     * - First array contains paths of successfully pulled files
+     * - Second array contains paths of files that failed to pull (e.g. failed to write to disk or missing raw content)
      * @throws HumanloopRuntimeError If there's an error communicating with the API
      */
     public async pull(
