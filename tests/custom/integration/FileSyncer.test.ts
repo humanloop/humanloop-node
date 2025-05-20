@@ -42,7 +42,7 @@ describe("FileSyncer Integration Tests", () => {
                 })),
             );
         }
-    });
+    }, 30000);
 
     test("pull_basic: should pull all files from remote to local filesystem", async () => {
         // GIVEN a set of files in the remote system (from syncableFiles)
