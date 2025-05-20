@@ -29,8 +29,7 @@ import {
 import { HumanloopSpanExporter } from "./otel/exporter";
 import { HumanloopSpanProcessor } from "./otel/processor";
 import { overloadCall, overloadLog } from "./overload";
-import { FileSyncerOptions, SyncClient } from "./sync";
-import Logger from "./utils/Logger";
+import { SyncClient } from "./sync";
 import { SDK_VERSION } from "./version";
 
 const RED = "\x1b[91m";
@@ -287,7 +286,7 @@ export class HumanloopClient extends BaseHumanloopClient {
 
         // Warn user if cacheSize is non-default but useLocalFiles is false
         if (!this.useLocalFiles && options.cacheSize !== undefined) {
-            Logger.warn(
+            console.warn(
                 `The specified cacheSize=${options.cacheSize} will have no effect because useLocalFiles=false. ` +
                     `File caching is only active when local files are enabled.`,
             );
