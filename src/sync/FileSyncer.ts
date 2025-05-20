@@ -2,16 +2,9 @@ import { FileType } from "api";
 import fs from "fs";
 import path from "path";
 
-import { HumanloopClient as BaseHumanloopClient } from "../Client";
 import LRUCache from "../cache/LRUCache";
 import { HumanloopRuntimeError } from "../error";
-import Logger, { LogLevel } from "../utils/Logger";
-
-// Set up isolated logger for file sync operations
-// This logger uses the "humanloop.sdk.file_syncer" namespace, separate from the main client's logger,
-// allowing CLI commands and other consumers to control sync logging verbosity independently.
-const LOGGER_NAMESPACE = "humanloop.sdk.file_syncer";
-Logger.setLevel("info");
+import { HumanloopClient } from "../humanloop.client";
 
 // Default cache size for file content caching
 const DEFAULT_CACHE_SIZE = 100;
@@ -26,41 +19,43 @@ export const SERIALIZABLE_FILE_TYPES = new Set<SerializableFileType>([
 export interface FileSyncerOptions {
     baseDir?: string;
     cacheSize?: number;
-    logLevel?: LogLevel;
+    verbose?: boolean;
+}
+
+// Simple logging with color and verbosity control
+const LogType = {
+    DEBUG: "\x1b[90m", // gray
+    INFO: "\x1b[96m", // cyan
+    WARN: "\x1b[93m", // yellow
+    ERROR: "\x1b[91m", // red
+    RESET: "\x1b[0m",
+} as const;
+
+function log(
+    message: string,
+    type: keyof typeof LogType,
+    verbose: boolean = false,
+): void {
+    // Only show debug/info if verbose is true
+    if ((type === "DEBUG" || type === "INFO") && !verbose) return;
+    console.log(`${LogType[type]}${message}${LogType.RESET}`);
 }
 
 /**
  * Format API error messages to be more user-friendly.
  */
-function formatApiError(error: Error): string {
-    const errorMsg = error.toString();
-
-    // If the error doesn't look like an API error with status code and body
-    if (!errorMsg.includes("status_code") || !errorMsg.includes("body:")) {
-        return errorMsg;
-    }
-
+function formatApiError(error: Error, verbose: boolean = false): string {
+    const errorMsg = error.message || String(error);
     try {
-        // Extract the body part and parse as JSON
-        const bodyParts = errorMsg.split("body:");
-        if (bodyParts.length < 2) return errorMsg;
-
-        const bodyStr = bodyParts[1].trim();
-        const body = JSON.parse(bodyStr);
-
-        // Get the detail from the body
-        const detail = body.detail || {};
-
-        // Handle both string and dictionary types for detail
+        const detail = JSON.parse(errorMsg);
         if (typeof detail === "string") {
             return detail;
         } else if (typeof detail === "object") {
             return detail.description || detail.msg || errorMsg;
         }
-
         return errorMsg;
     } catch (e) {
-        Logger.debug(`Failed to parse error message: ${e}`);
+        log(`Failed to parse error message: ${e}`, "DEBUG", verbose);
         return errorMsg;
     }
 }
@@ -78,19 +73,21 @@ function formatApiError(error: Error): string {
  * allowing for seamless reference between local and remote environments using the same path identifiers.
  */
 export default class FileSyncer {
-    private client: BaseHumanloopClient;
-    private baseDir: string;
-    private cacheSize: number;
-    private fileContentCache: LRUCache<string, string>;
+    // Default page size for API pagination when listing Files
+    private static readonly PAGE_SIZE = 100;
 
-    constructor(client: BaseHumanloopClient, options: FileSyncerOptions = {}) {
+    private readonly client: HumanloopClient;
+    private readonly baseDir: string;
+    private readonly cacheSize: number;
+    private readonly fileContentCache: LRUCache<string, string>;
+    private readonly verbose: boolean;
+
+    constructor(client: HumanloopClient, options: FileSyncerOptions = {}) {
         this.client = client;
         this.baseDir = options.baseDir || "humanloop";
         this.cacheSize = options.cacheSize || DEFAULT_CACHE_SIZE;
         this.fileContentCache = new LRUCache<string, string>(this.cacheSize);
-
-        // Set the log level using the isolated logger
-        Logger.setLevel(options.logLevel || "warn");
+        this.verbose = options.verbose || false;
     }
 
     /**
@@ -107,25 +104,15 @@ export default class FileSyncer {
         filePath: string,
         fileType: SerializableFileType,
     ): string {
-        // Construct path to local file
-        const localPath = path.join(this.baseDir, filePath);
-        // Add appropriate extension
-        const dirName = path.dirname(localPath);
-        const baseName = path.basename(localPath, path.extname(localPath));
-        const fullPath = path.join(dirName, `${baseName}.${fileType}`);
-
-        if (!fs.existsSync(fullPath)) {
-            throw new HumanloopRuntimeError(`Local file not found: ${fullPath}`);
-        }
-
+        const fullPath = path.join(this.baseDir, `${filePath}.${fileType}`);
         try {
             // Read the raw file content
             const fileContent = fs.readFileSync(fullPath, "utf8");
-            Logger.debug(`Using local file content from ${fullPath}`);
+            log(`Using local file content from ${fullPath}`, "DEBUG", this.verbose);
             return fileContent;
         } catch (error) {
             throw new HumanloopRuntimeError(
-                `Error reading local file ${fullPath}: ${error}`,
+                `Failed to read ${fileType} ${filePath} from disk: ${error}`,
             );
         }
     }
@@ -147,7 +134,11 @@ export default class FileSyncer {
         // Check if in cache
         const cachedContent = this.fileContentCache.get(cacheKey);
         if (cachedContent !== undefined) {
-            Logger.debug(`Using cached file content for ${filePath}.${fileType}`);
+            log(
+                `Using cached file content for ${filePath}.${fileType}`,
+                "DEBUG",
+                this.verbose,
+            );
             return cachedContent;
         }
 
@@ -204,8 +195,9 @@ export default class FileSyncer {
 
             // Write raw file content to file
             fs.writeFileSync(newPath, serializedContent);
+            log(`Writing ${fileType} ${filePath} to disk`, "DEBUG", this.verbose);
         } catch (error) {
-            Logger.error(`Failed to write ${fileType} ${filePath} to disk: ${error}`);
+            log(`Failed to write ${fileType} ${filePath} to disk: ${error}`, "ERROR");
             throw error;
         }
     }
@@ -224,14 +216,13 @@ export default class FileSyncer {
             });
 
             if (!SERIALIZABLE_FILE_TYPES.has(file.type as SerializableFileType)) {
-                Logger.error(`Unsupported file type: ${file.type}`);
+                log(`Unsupported file type: ${file.type}`, "ERROR");
                 return false;
             }
 
-            // Type assertion for rawFileContent since we know it exists when includeRawFileContent is true
             const rawContent = (file as any).rawFileContent;
             if (!rawContent) {
-                Logger.error(`No content found for ${file.type} ${filePath}`);
+                log(`No content found for ${file.type} ${filePath}`, "ERROR");
                 return false;
             }
 
@@ -242,7 +233,7 @@ export default class FileSyncer {
             );
             return true;
         } catch (error) {
-            Logger.error(`Failed to pull file ${filePath}: ${error}`);
+            log(`Failed to pull file ${filePath}: ${error}`, "ERROR");
             return false;
         }
     }
@@ -263,81 +254,82 @@ export default class FileSyncer {
         const successfulFiles: string[] = [];
         const failedFiles: string[] = [];
         let page = 1;
+        let totalPages = 0;
 
-        Logger.debug(
-            `Fetching files from directory: ${dirPath || "(root)"} in environment: ${environment || "(default)"}`,
+    log(
+        `Fetching files from ${dirPath || "root"} (environment: ${environment || "default"})`,
+            "INFO",
+            this.verbose,
         );
 
         while (true) {
             try {
-                Logger.debug(
-                    `${dirPath || "(root)"}: Requesting page ${page} of files`,
-                );
-
                 const response = await this.client.files.listFiles({
                     type: Array.from(SERIALIZABLE_FILE_TYPES),
                     page,
-                    size: 100,
+                    size: FileSyncer.PAGE_SIZE,
                     includeRawFileContent: true,
                     environment,
                     path: dirPath,
                 });
 
+                // Calculate total pages on first response
+                if (page === 1) {
+                    totalPages = Math.ceil(response.total / FileSyncer.PAGE_SIZE);
+                }
+
                 if (response.records.length === 0) {
-                    Logger.debug(
-                        `Finished reading files for path ${dirPath || "(root)"}`,
-                    );
                     break;
                 }
 
-                Logger.debug(
-                    `${dirPath || "(root)"}: Read page ${page} containing ${response.records.length} files`,
+                log(
+                    `Reading page ${page}/${totalPages} (${response.records.length} Files)`,
+                    "DEBUG",
+                    this.verbose,
                 );
 
                 // Process each file
                 for (const file of response.records) {
-                    // Skip if not a serializable file type
                     if (
                         !SERIALIZABLE_FILE_TYPES.has(file.type as SerializableFileType)
                     ) {
-                        Logger.warn(`Skipping unsupported file type: ${file.type}`);
+                        log(`Skipping unsupported file type: ${file.type}`, "WARN");
                         continue;
                     }
 
                     const fileType = file.type as SerializableFileType;
-
-                    // Type assertion for rawFileContent since we know it exists when includeRawFileContent is true
                     const rawContent = (file as any).rawFileContent;
                     if (!rawContent) {
-                        Logger.warn(`No content found for ${file.type} ${file.path}`);
+                        log(`No content found for ${file.type} ${file.path}`, "WARN");
                         failedFiles.push(file.path);
                         continue;
                     }
 
                     try {
-                        Logger.debug(`Writing ${file.type} ${file.path} to disk`);
                         this._saveSerializedFile(rawContent, file.path, fileType);
                         successfulFiles.push(file.path);
                     } catch (error) {
                         failedFiles.push(file.path);
-                        Logger.error(`Failed to save ${file.path}: ${error}`);
+                        log(`Failed to save ${file.path}: ${error}`, "ERROR");
                     }
                 }
 
+                // Update pagination based on items received
+                if (response.records.length < FileSyncer.PAGE_SIZE) {
+                    // Last page (either partial or empty)
+                    break;
+                }
                 page += 1;
             } catch (error) {
-                const formattedError = formatApiError(error as Error);
+                const formattedError = formatApiError(error as Error, this.verbose);
                 throw new HumanloopRuntimeError(
                     `Failed to fetch page ${page}: ${formattedError}`,
                 );
             }
         }
 
-        if (successfulFiles.length > 0) {
-            Logger.info(`Successfully pulled ${successfulFiles.length} files`);
-        }
         if (failedFiles.length > 0) {
-            Logger.warn(`Failed to pull ${failedFiles.length} files`);
+            log(`Failed to pull ${failedFiles.length} files`, "WARN");
         }
 
         return [successfulFiles, failedFiles];
@@ -391,24 +383,17 @@ export default class FileSyncer {
             apiPath = this._normalizePath(filePath, true);
         }
 
-        Logger.info(
-            `Starting pull: path=${apiPath || "(root)"}, environment=${environment || "(default)"}`,
-        );
-
         try {
             let successfulFiles: string[];
             let failedFiles: string[];
 
             if (apiPath === undefined) {
-                // Pull all from root
-                Logger.debug("Pulling all files from (root)");
                 [successfulFiles, failedFiles] = await this._pullDirectory(
                     undefined,
                     environment,
                 );
             } else {
                 if (isFilePath) {
-                    Logger.debug(`Pulling file: ${apiPath}`);
                     if (await this._pullFile(apiPath, environment)) {
                         successfulFiles = [apiPath];
                         failedFiles = [];
@@ -417,7 +402,6 @@ export default class FileSyncer {
                         failedFiles = [apiPath];
                     }
                 } else {
-                    Logger.debug(`Pulling directory: ${apiPath || "(root)"}`);
                     [successfulFiles, failedFiles] = await this._pullDirectory(
                         apiPath,
                         environment,
@@ -429,8 +413,10 @@ export default class FileSyncer {
             this.clearCache();
 
             const duration = Date.now() - startTime;
-            Logger.info(
-                `Pull completed in ${duration}ms: ${successfulFiles.length} files pulled`,
+            log(
+                `Successfully pulled ${successfulFiles.length} files in ${duration}ms`,
+                "INFO",
+                this.verbose,
             );
 
             return [successfulFiles, failedFiles];
@@ -463,5 +449,20 @@ export default class FileSyncer {
         }
 
         return normalizedPath;
+    }
+
+    private _parseErrorResponse(response: any): string {
+        try {
+            if (response?.error?.message) {
+                return response.error.message;
+            }
+            if (typeof response === "string") {
+                return response;
+            }
+            return JSON.stringify(response);
+        } catch (e) {
+            log(`Failed to parse error message: ${e}`, "DEBUG", this.verbose);
+            return String(response);
+        }
     }
 }
