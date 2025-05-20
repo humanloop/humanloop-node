@@ -205,48 +205,33 @@ export async function cleanupTestEnvironment(
         // First clean up any additional resources
         if (resources) {
             for (const resource of resources) {
-                const subclient = getSubclient(setup.humanloopClient, resource.type);
-                if (resource.id) {
-                    await subclient.delete(resource.id);
+                try {
+                    const subclient = getSubclient(
+                        setup.humanloopClient,
+                        resource.type,
+                    );
+                    if (resource.id) {
+                        await subclient.delete(resource.id);
+                    }
+                } catch (error) {
+                    console.warn(
+                        `Failed to delete ${resource.type} ${resource.id}:`,
+                        error,
+                    );
                 }
             }
         }
 
-        // Clean up fixed test resources
-        if (setup.outputNotNullEvaluator?.id) {
-            try {
-                await setup.humanloopClient.evaluators.delete(
-                    setup.outputNotNullEvaluator.id,
-                );
-            } catch (error) {
-                console.warn(
-                    `Failed to delete evaluator ${setup.outputNotNullEvaluator.id}:`,
-                    error,
-                );
-            }
-        }
+        // Sleep a bit to let API operations settle
+        await new Promise((resolve) => setTimeout(resolve, 3000));
 
-        if (setup.evalDataset?.id) {
-            try {
-                await setup.humanloopClient.datasets.delete(setup.evalDataset.id);
-            } catch (error) {
-                console.warn(
-                    `Failed to delete dataset ${setup.evalDataset.id}:`,
-                    error,
-                );
+        // Recursively clean up the test directory
+        try {
+            if (setup.sdkTestDir.id) {
+                await cleanupDirectory(setup.humanloopClient, setup.sdkTestDir.id);
             }
-        }
-
-        // Finally, clean up the test directory
-        if (setup.sdkTestDir.id) {
-            try {
-                await setup.humanloopClient.directories.delete(setup.sdkTestDir.id);
-            } catch (error) {
-                console.warn(
-                    `Failed to delete directory ${setup.sdkTestDir.id}:`,
-                    error,
-                );
-            }
+        } catch (error) {
+            console.warn(`Failed to clean up test directory: ${error}`);
         }
     } catch (error) {
         console.error("Error during cleanup:", error);
@@ -254,8 +239,43 @@ export async function cleanupTestEnvironment(
 }
 
 /**
- * Creates a predefined structure of files in Humanloop for testing sync,
- * mirroring the Python syncable_files_fixture
+ * Recursively cleans up a directory and all its contents
+ * Mirrors the Python SDK's cleanup_directory function
+ * @param client The Humanloop client
+ * @param directoryId ID of the directory to clean
+ */
+async function cleanupDirectory(
+    client: HumanloopClient,
+    directoryId: string,
+): Promise<void> {
+    try {
+        // Get directory details
+        const directory = await client.directories.get(directoryId);
+
+        // First, recursively clean up subdirectories
+        for (const subdirectory of directory.subdirectories) {
+            await cleanupDirectory(client, subdirectory.id);
+        }
+
+        // Then delete all files in this directory
+        for (const file of directory.files) {
+            try {
+                const subclient = getSubclient(client, file.type as FileType);
+                await subclient.delete(file.id);
+            } catch (error) {
+                console.warn(`Failed to delete ${file.type} ${file.id}: ${error}`);
+            }
+        }
+
+        // Finally delete this directory
+        await client.directories.delete(directoryId);
+    } catch (error) {
+        console.warn(`Error cleaning directory ${directoryId}: ${error}`);
+    }
+}
+
+/**
+ * Creates a predefined structure of files in Humanloop for testing sync
  */
 export async function createSyncableFilesFixture(
     testSetup: TestSetup,
@@ -264,7 +284,7 @@ export async function createSyncableFilesFixture(
         {
             path: "prompts/gpt-4",
             type: "prompt",
-            model: "gpt-4o-mini", // Using gpt-4o-mini as safer default for tests
+            model: "gpt-4o-mini",
         },
         {
             path: "prompts/gpt-4o",
@@ -298,11 +318,9 @@ export async function createSyncableFilesFixture(
             if (file.type === "prompt") {
                 response = await testSetup.humanloopClient.prompts.upsert({
                     path: fullPath,
-                    ...testSetup.testPromptConfig,
                     model: file.model,
                 });
             } else if (file.type === "agent") {
-                // Assuming agent creation works similar to your Python implementation
                 response = await testSetup.humanloopClient.agents.upsert({
                     path: fullPath,
                     model: file.model,
