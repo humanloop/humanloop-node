@@ -1,7 +1,7 @@
 import OpenAI from "openai";
 
-import { PromptRequest } from "../../src/api";
-import { HumanloopRuntimeError } from "../../src/error";
+import { PromptRequest } from "../../../src/api";
+import { HumanloopRuntimeError } from "../../../src/error";
 import {
     CleanupResources,
     TestPrompt,
