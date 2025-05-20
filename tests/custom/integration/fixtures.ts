@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 import { FileType, PromptRequest, PromptResponse } from "../../../src/api";
 import { HumanloopClient } from "../../../src/humanloop.client";
 
-export interface TestIdentifiers {
+export interface ResourceIdentifiers {
     id: string;
     path: string;
 }
@@ -16,15 +16,23 @@ export interface TestPrompt {
     response: PromptResponse;
 }
 
+export interface SyncableFile {
+    path: string;
+    type: "prompt" | "agent";
+    model: string;
+    id?: string;
+    versionId?: string;
+}
+
 export interface TestSetup {
-    sdkTestDir: TestIdentifiers;
+    sdkTestDir: ResourceIdentifiers;
     testPromptConfig: PromptRequest;
     openaiApiKey: string;
     humanloopClient: HumanloopClient;
-    evalDataset: TestIdentifiers;
-    evalPrompt: TestIdentifiers;
+    evalDataset: ResourceIdentifiers;
+    evalPrompt: ResourceIdentifiers;
     stagingEnvironmentId: string;
-    outputNotNullEvaluator: TestIdentifiers;
+    outputNotNullEvaluator: ResourceIdentifiers;
 }
 
 export interface CleanupResources {
@@ -243,4 +251,77 @@ export async function cleanupTestEnvironment(
     } catch (error) {
         console.error("Error during cleanup:", error);
     }
+}
+
+/**
+ * Creates a predefined structure of files in Humanloop for testing sync,
+ * mirroring the Python syncable_files_fixture
+ */
+export async function createSyncableFilesFixture(
+    testSetup: TestSetup,
+): Promise<SyncableFile[]> {
+    const fileDefinitions: SyncableFile[] = [
+        {
+            path: "prompts/gpt-4",
+            type: "prompt",
+            model: "gpt-4o-mini", // Using gpt-4o-mini as safer default for tests
+        },
+        {
+            path: "prompts/gpt-4o",
+            type: "prompt",
+            model: "gpt-4o-mini",
+        },
+        {
+            path: "prompts/nested/complex/gpt-4o",
+            type: "prompt",
+            model: "gpt-4o-mini",
+        },
+        {
+            path: "agents/gpt-4",
+            type: "agent",
+            model: "gpt-4o-mini",
+        },
+        {
+            path: "agents/gpt-4o",
+            type: "agent",
+            model: "gpt-4o-mini",
+        },
+    ];
+
+    const createdFiles: SyncableFile[] = [];
+
+    for (const file of fileDefinitions) {
+        const fullPath = `${testSetup.sdkTestDir.path}/${file.path}`;
+        let response;
+
+        try {
+            if (file.type === "prompt") {
+                response = await testSetup.humanloopClient.prompts.upsert({
+                    path: fullPath,
+                    ...testSetup.testPromptConfig,
+                    model: file.model,
+                });
+            } else if (file.type === "agent") {
+                // Assuming agent creation works similar to your Python implementation
+                response = await testSetup.humanloopClient.agents.upsert({
+                    path: fullPath,
+                    model: file.model,
+                });
+            }
+
+            if (response) {
+                createdFiles.push({
+                    path: fullPath,
+                    type: file.type,
+                    model: file.model,
+                    id: response.id,
+                    versionId: response.versionId,
+                });
+            }
+        } catch (error) {
+            console.warn(`Failed to create ${file.type} at ${fullPath}: ${error}`);
+        }
+    }
+
+    return createdFiles;
 }
