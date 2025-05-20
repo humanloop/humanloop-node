@@ -10,11 +10,16 @@ src/humanloop.client.ts
 src/overload.ts
 src/error.ts
 src/context.ts
+src/cli.ts
+src/cache
+src/sync 
+src/utils
 
 # Tests
 
 # Modified due to issues with OTEL
 tests/unit/fetcher/stream-wrappers/webpack.test.ts
+tests/custom/
 
 # CI Action
 

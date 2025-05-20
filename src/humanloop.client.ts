@@ -29,6 +29,7 @@ import {
 import { HumanloopSpanExporter } from "./otel/exporter";
 import { HumanloopSpanProcessor } from "./otel/processor";
 import { overloadCall, overloadLog } from "./overload";
+import { SyncClient, SyncClientOptions } from "./sync";
 import { SDK_VERSION } from "./version";
 
 const RED = "\x1b[91m";
@@ -210,6 +211,7 @@ export class HumanloopClient extends BaseHumanloopClient {
         Anthropic?: any;
         CohereAI?: any;
     };
+    protected readonly _syncClient: SyncClient;
 
     protected get opentelemetryTracer(): Tracer {
         return HumanloopTracerSingleton.getInstance({
@@ -250,9 +252,12 @@ export class HumanloopClient extends BaseHumanloopClient {
                 Anthropic?: any;
                 CohereAI?: any;
             };
+            sync?: SyncClientOptions;
         },
     ) {
         super(_options);
+
+        this._syncClient = new SyncClient(this, _options.sync);
 
         this.instrumentProviders = _options.instrumentProviders || {};
 
@@ -558,6 +563,48 @@ ${RESET}`,
             path,
             attributes,
         );
+    }
+
+    /**
+     * Pull Prompt and Agent files from Humanloop to local filesystem.
+     *
+     * This method will:
+     * 1. Fetch Prompt and Agent files from your Humanloop workspace
+     * 2. Save them to the local filesystem using the client's files_directory (set during initialization)
+     * 3. Maintain the same directory structure as in Humanloop
+     * 4. Add appropriate file extensions (.prompt or .agent)
+     *
+     * The path parameter can be used in two ways:
+     * - If it points to a specific file (e.g. "path/to/file.prompt" or "path/to/file.agent"), only that file will be pulled
+     * - If it points to a directory (e.g. "path/to/directory"), all Prompt and Agent files in that directory will be pulled
+     * - If no path is provided, all Prompt and Agent files will be pulled
+     *
+     * The operation will overwrite existing files with the latest version from Humanloop
+     * but will not delete local files that don't exist in the remote workspace.
+     *
+     * Currently only supports syncing prompt and agent files. Other file types will be skipped.
+     *
+     * The files will be saved with the following structure:
+     * ```
+     * {files_directory}/
+     * ├── prompts/
+     * │   ├── my_prompt.prompt
+     * │   └── nested/
+     * │       └── another_prompt.prompt
+     * └── agents/
+     *     └── my_agent.agent
+     * ```
+     *
+     * @param path - Optional path to either a specific file (e.g. "path/to/file.prompt") or a directory (e.g. "path/to/directory").
+     *              If not provided, all Prompt and Agent files will be pulled.
+     * @param environment - The environment to pull the files from.
+     * @returns List of successfully processed file paths.
+     */
+    public async pull(
+        path?: string,
+        environment?: string,
+    ): Promise<string[]> {
+        return this._syncClient.pull(path, environment);
     }
 
     public get evaluations(): ExtendedEvaluations {
