@@ -10,12 +10,17 @@ import {
     setupTestEnvironment,
 } from "./fixtures";
 
+// Set global timeout for all tests in this suite
+jest.setTimeout(40 * 1000); // 40 seconds
+
 // Helper function to run CLI commands with TypeScript
 async function runCli(
     args: string[],
 ): Promise<{ stdout: string; stderr: string; exitCode: number }> {
     return new Promise((resolve) => {
         const packageRoot = path.resolve(__dirname, "../../../");
+        // NB: cli.js must be compiled before running this test
+        // This is fine in CI, since we compile before running tests
         const cliPath = path.join(packageRoot, "dist/cli.js");
 
         // Use spawn to avoid shell interpretation issues
@@ -49,15 +54,12 @@ describe("CLI Integration Tests", () => {
     let syncableFiles: any[] = [];
 
     beforeAll(async () => {
-        // Increase timeout for setup operations
-        jest.setTimeout(40000); // 40 seconds
-
         // Set up test environment
         testSetup = await setupTestEnvironment("cli_test");
 
         // Create test files in Humanloop for syncing
         syncableFiles = await createSyncableFilesFixture(testSetup);
-    }, 30000);
+    });
 
     afterAll(async () => {
         await cleanupTestEnvironment(
@@ -67,25 +69,25 @@ describe("CLI Integration Tests", () => {
                 id: file.id as string,
             })),
         );
-    }, 30000);
+    });
 
     /**
      * NOTE: This test is currently skipped due to issues with CLI environment isolation.
-     * 
-     * The test attempts to verify behavior when no API key is available, but faces 
+     *
+     * The test attempts to verify behavior when no API key is available, but faces
      * challenges with how Node.js handles process execution during tests:
-     * 
-     * 1. When executed via child_process.exec, the path to nonexistent env files 
+     *
+     * 1. When executed via child_process.exec, the path to nonexistent env files
      *    causes Node to return exit code 9 (SIGKILL) instead of the expected code 1
      * 2. Shell interpretation of arguments makes it difficult to reliably test this edge case
-     * 
+     *
      * If this functionality needs testing, consider:
      * - Using child_process.spawn for better argument handling
      * - Unit testing the API key validation logic directly
      * - Moving this test to a separate process with full environment isolation
-     * 
+     *
      * @see https://nodejs.org/api/child_process.html for more info on process execution
-    */
+     */
     test.skip("pull_without_api_key: should show error when no API key is available", async () => {
         // GIVEN a temporary directory and no API key
         const { tempDir, cleanup } = createTempDir("cli-no-api-key");
@@ -118,9 +120,6 @@ describe("CLI Integration Tests", () => {
     });
 
     test("pull_basic: should pull all files successfully", async () => {
-        // Increase timeout for this test
-        jest.setTimeout(30000); // 30 seconds
-
         // GIVEN a base directory for pulled files
         const { tempDir, cleanup } = createTempDir("cli-basic-pull");
 
@@ -152,7 +151,7 @@ describe("CLI Integration Tests", () => {
         }
 
         cleanup();
-    }, 30000);
+    });
 
     test("pull_with_specific_path: should pull files from a specific path", async () => {
         // GIVEN a base directory and specific path
@@ -193,9 +192,6 @@ describe("CLI Integration Tests", () => {
     });
 
     test("pull_with_environment: should pull files from a specific environment", async () => {
-        // Increase timeout for this test
-        jest.setTimeout(30000); // 30 seconds
-
         // GIVEN a base directory and environment
         const { tempDir, cleanup } = createTempDir("cli-env-pull");
 
@@ -216,7 +212,7 @@ describe("CLI Integration Tests", () => {
         expect(result.stdout).toContain("Environment: staging");
 
         cleanup();
-    }, 30000);
+    });
 
     test("pull_with_quiet_mode: should pull files with quiet mode enabled", async () => {
         // GIVEN a base directory and quiet mode

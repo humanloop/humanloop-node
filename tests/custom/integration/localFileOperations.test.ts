@@ -12,6 +12,9 @@ import {
     setupTestEnvironment,
 } from "./fixtures";
 
+// Set global timeout for all tests in this suite
+jest.setTimeout(40 * 1000); // 40 seconds
+
 // Define SyncableFile interface to match Python version
 interface SyncableFile {
     path: string;
@@ -34,9 +37,6 @@ describe("Local File Operations Integration Tests", () => {
     let tempDirInfo: { tempDir: string; cleanup: () => void };
 
     beforeAll(async () => {
-        // Increase timeout for setup operations
-        jest.setTimeout(30000); // 30 seconds
-
         // Set up test environment
         testSetup = await setupTestEnvironment("local_file_ops");
         tempDirInfo = createTempDir("local-file-integration");
@@ -52,7 +52,7 @@ describe("Local File Operations Integration Tests", () => {
         });
 
         await setupClient.pull();
-    }, 30000);
+    });
 
     afterAll(async () => {
         // Clean up resources
@@ -64,7 +64,7 @@ describe("Local File Operations Integration Tests", () => {
                 id: file.id as string,
             })),
         );
-    }, 30000);
+    });
 
     describe("Path Validation", () => {
         // Path validation test cases
