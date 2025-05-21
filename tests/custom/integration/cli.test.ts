@@ -13,7 +13,46 @@ import {
 // Set global timeout for all tests in this suite
 jest.setTimeout(40 * 1000); // 40 seconds
 
-// Helper function to run CLI commands with TypeScript
+/**
+ * Runs the Humanloop CLI as a child process, executing the TypeScript source directly.
+ * 
+ * This function is used in integration tests to verify CLI behavior. Instead of using
+ * the compiled JavaScript file (dist/cli.js), it runs the TypeScript source (src/cli.ts)
+ * directly using ts-node. This approach:
+ * 
+ * 1. Eliminates the need for a build step before running tests
+ * 2. Ensures tests always run against the latest source code
+ * 3. Maintains process isolation for proper CLI testing
+ * 
+ * Implementation details:
+ * - Uses child_process.spawn to run the CLI in a separate process
+ * - Uses npx to execute ts-node without requiring it as a dependency
+ * - Captures stdout/stderr for assertion in tests
+ * - Returns a promise that resolves with the command output and exit code
+ * 
+ * Environment setup:
+ * - Modifies PATH to prioritize the project's node_modules/.bin
+ * - This ensures we use the project's TypeScript version
+ * - Preserves all other environment variables
+ * 
+ * Example usage:
+ * ```typescript
+ * const result = await runCli([
+ *   "pull",
+ *   "--local-files-directory",
+ *   tempDir,
+ *   "--verbose"
+ * ]);
+ * expect(result.exitCode).toBe(0);
+ * expect(result.stdout).toContain("Pull completed");
+ * ```
+ * 
+ * @param args - Array of command line arguments to pass to the CLI
+ * @returns Promise resolving to an object containing:
+ *   - stdout: Standard output of the command
+ *   - stderr: Standard error of the command
+ *   - exitCode: Exit code of the process (0 for success)
+ */
 async function runCli(
     args: string[],
 ): Promise<{ stdout: string; stderr: string; exitCode: number }> {
