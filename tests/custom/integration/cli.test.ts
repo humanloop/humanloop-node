@@ -19,13 +19,17 @@ async function runCli(
 ): Promise<{ stdout: string; stderr: string; exitCode: number }> {
     return new Promise((resolve) => {
         const packageRoot = path.resolve(__dirname, "../../../");
-        // NB: cli.js must be compiled before running this test
-        // This is fine in CI, since we compile before running tests
-        const cliPath = path.join(packageRoot, "dist/cli.js");
+        // Use ts-node to run the TypeScript source directly
+        const cliPath = path.join(packageRoot, "src/cli.ts");
 
-        // Use spawn to avoid shell interpretation issues
-        const childProcess = spawn("node", [cliPath, ...args], {
+        // Use spawn with ts-node to execute the TypeScript file
+        const childProcess = spawn("npx", ["ts-node", cliPath, ...args], {
             stdio: ["ignore", "pipe", "pipe"],
+            // Ensure we use the project's ts-node and typescript
+            env: {
+                ...process.env,
+                PATH: `${packageRoot}/node_modules/.bin:${process.env.PATH}`,
+            },
         });
 
         let stdout = "";
