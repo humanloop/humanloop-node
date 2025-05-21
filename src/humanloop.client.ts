@@ -8,10 +8,6 @@ import { OpenAIInstrumentation } from "@traceloop/instrumentation-openai";
 import { HumanloopClient as BaseHumanloopClient } from "./Client";
 import { ChatMessage } from "./api";
 import { Evaluations as BaseEvaluations } from "./api/resources/evaluations/client/Client";
-import { Evaluators } from "./api/resources/evaluators/client/Client";
-import { Flows } from "./api/resources/flows/client/Client";
-import { Prompts } from "./api/resources/prompts/client/Client";
-import { Tools } from "./api/resources/tools/client/Client";
 import { ToolKernelRequest } from "./api/types/ToolKernelRequest";
 import { flowUtilityFactory } from "./decorators/flow";
 import { promptDecoratorFactory } from "./decorators/prompt";
@@ -28,7 +24,8 @@ import {
 } from "./evals/types";
 import { HumanloopSpanExporter } from "./otel/exporter";
 import { HumanloopSpanProcessor } from "./otel/processor";
-import { overloadCall, overloadLog } from "./overload";
+import { overloadClient } from "./overload";
+import { FileSyncer } from "./sync";
 import { SDK_VERSION } from "./version";
 
 const RED = "\x1b[91m";
@@ -199,17 +196,48 @@ class HumanloopTracerSingleton {
     }
 }
 
+export interface HumanloopClientOptions extends BaseHumanloopClient.Options {
+    /**
+     * Whether to use local files for prompts and agents
+     */
+    useLocalFiles?: boolean;
+
+    /**
+     * Base directory where local prompt and agent files are stored (default: "humanloop").
+     * This is relative to the current working directory. For example:
+     * - "humanloop" will look for files in "./humanloop/"
+     * - "data/humanloop" will look for files in "./data/humanloop/"
+     * When using paths in the API, they must be relative to this directory. For example,
+     * if localFilesDirectory="humanloop" and you have a file at "humanloop/samples/test.prompt",
+     * you would reference it as "samples/test" in your code.
+     */
+    localFilesDirectory?: string;
+
+    /**
+     * Maximum number of files to cache when useLocalFiles is true (default: DEFAULT_CACHE_SIZE).
+     * This parameter has no effect if useLocalFiles is false.
+     */
+    cacheSize?: number;
+
+    /**
+     * LLM provider modules to instrument. Allows the prompt decorator to spy on provider calls and log them to Humanloop
+     */
+    instrumentProviders?: {
+        OpenAI?: any;
+        Anthropic?: any;
+        CohereAI?: any;
+    };
+}
+
 export class HumanloopClient extends BaseHumanloopClient {
     protected readonly _evaluations: ExtendedEvaluations;
-    protected readonly _prompts_overloaded: Prompts;
-    protected readonly _flows_overloaded: Flows;
-    protected readonly _tools_overloaded: Tools;
-    protected readonly _evaluators_overloaded: Evaluators;
     protected readonly instrumentProviders: {
         OpenAI?: any;
         Anthropic?: any;
         CohereAI?: any;
     };
+    protected readonly _fileSyncer: FileSyncer;
+    protected readonly useLocalFiles: boolean;
 
     protected get opentelemetryTracer(): Tracer {
         return HumanloopTracerSingleton.getInstance({
@@ -243,29 +271,32 @@ export class HumanloopClient extends BaseHumanloopClient {
      * const anthropic = new Anthropic({apiKey: process.env.ANTHROPIC_KEY});
      * ```
      */
-    constructor(
-        _options: BaseHumanloopClient.Options & {
-            instrumentProviders?: {
-                OpenAI?: any;
-                Anthropic?: any;
-                CohereAI?: any;
-            };
-        },
-    ) {
-        super(_options);
+    constructor(options: HumanloopClientOptions = {}) {
+        super(options);
 
-        this.instrumentProviders = _options.instrumentProviders || {};
+        this.useLocalFiles = options.useLocalFiles || false;
 
-        this._prompts_overloaded = overloadLog(super.prompts);
-        this._prompts_overloaded = overloadCall(this._prompts_overloaded);
+        // Warn user if cacheSize is non-default but useLocalFiles is false
+        if (!this.useLocalFiles && options.cacheSize !== undefined) {
+            console.warn(
+                `The specified cacheSize=${options.cacheSize} will have no effect because useLocalFiles=false. ` +
+                    `File caching is only active when local files are enabled.`,
+            );
+        }
 
-        this._tools_overloaded = overloadLog(super.tools);
+        this._fileSyncer = new FileSyncer(this, {
+            baseDir: options.localFilesDirectory || "humanloop",
+            cacheSize: options.cacheSize,
+        });
 
-        this._flows_overloaded = overloadLog(super.flows);
+        this.instrumentProviders = options.instrumentProviders || {};
 
-        this._evaluators_overloaded = overloadLog(super.evaluators);
+        overloadClient(super.prompts, this._fileSyncer, this.useLocalFiles);
+        overloadClient(super.flows, this._fileSyncer, this.useLocalFiles);
+        overloadClient(super.tools, this._fileSyncer, this.useLocalFiles);
+        overloadClient(super.evaluators, this._fileSyncer, this.useLocalFiles);
 
-        this._evaluations = new ExtendedEvaluations(_options, this);
+        this._evaluations = new ExtendedEvaluations(options, this);
 
         // Initialize the tracer singleton
         HumanloopTracerSingleton.getInstance({
@@ -359,14 +390,14 @@ ${RESET}`,
      *       temperature: 0.5,
      *     });
      *     const openaiContent = openaiResponse.choices[0].message.content;
-     *
+    
      *     const anthropicClient = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
      *     const anthropicResponse = await anthropicClient.messages.create({
      *       model: "claude-3-5-sonnet-20240620",
      *       temperature: 0.5,
      *     });
      *     const anthropicContent = anthropicResponse.content;
-     *
+    
      *     return { openaiContent, anthropicContent };
      *   }
      * });
@@ -560,23 +591,59 @@ ${RESET}`,
         );
     }
 
+    /**
+     * Pull Prompt and Agent files from Humanloop to local filesystem.
+     *
+     * This method will:
+     * 1. Fetch Prompt and Agent files from your Humanloop workspace
+     * 2. Save them to your local filesystem (directory specified by `localFilesDirectory`, default: "humanloop")
+     * 3. Maintain the same directory structure as in Humanloop
+     * 4. Add appropriate file extensions (`.prompt` or `.agent`)
+     *
+     * The path parameter can be used in two ways:
+     * - If it points to a specific file (e.g. "path/to/file.prompt" or "path/to/file.agent"), only that file will be pulled
+     * - If it points to a directory (e.g. "path/to/directory"), all Prompt and Agent files in that directory and its subdirectories will be pulled
+     * - If no path is provided, all Prompt and Agent files will be pulled
+     *
+     * The operation will overwrite existing files with the latest version from Humanloop
+     * but will not delete local files that don't exist in the remote workspace.
+     *
+     * Currently only supports syncing Prompt and Agent files. Other file types will be skipped.
+     *
+     * For example, with the default `localFilesDirectory="humanloop"`, files will be saved as:
+     * ```
+     * ./humanloop/
+     * ├── my_project/
+     * │   ├── prompts/
+     * │   │   ├── my_prompt.prompt
+     * │   │   └── nested/
+     * │   │       └── another_prompt.prompt
+     * │   └── agents/
+     * │       └── my_agent.agent
+     * └── another_project/
+     *     └── prompts/
+     *         └── other_prompt.prompt
+     * ```
+     *
+     * If you specify `localFilesDirectory="data/humanloop"`, files will be saved in ./data/humanloop/ instead.
+     *
+     * @param path - Optional path to either a specific file (e.g. "path/to/file.prompt") or a directory (e.g. "path/to/directory").
+     *              If not provided, all Prompt and Agent files will be pulled.
+     * @param environment - The environment to pull the files from.
+     * @returns An array containing two string arrays:
+     *          - First array contains paths of successfully synced files
+     *          - Second array contains paths of files that failed to sync (due to API errors, missing content,
+     *            or filesystem issues)
+     * @throws HumanloopRuntimeError If there's an error communicating with the API
+     */
+    public async pull(
+        path?: string,
+        environment?: string,
+    ): Promise<[string[], string[]]> {
+        return this._fileSyncer.pull(path, environment);
+    }
+
     public get evaluations(): ExtendedEvaluations {
         return this._evaluations;
-    }
-
-    public get prompts(): Prompts {
-        return this._prompts_overloaded;
-    }
-
-    public get flows(): Flows {
-        return this._flows_overloaded;
-    }
-
-    public get tools(): Tools {
-        return this._tools_overloaded;
-    }
-
-    public get evaluators(): Evaluators {
-        return this._evaluators_overloaded;
     }
 }
