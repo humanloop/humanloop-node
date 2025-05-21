@@ -8,6 +8,7 @@ import * as Humanloop from "../../../index";
  * The Agent configuration to use. Two formats are supported:
  * - An object representing the details of the Agent configuration
  * - A string representing the raw contents of a .agent file
+ *
  * A new Agent version will be created if the provided details do not match any existing version.
  */
 export type AgentsCallRequestAgent = Humanloop.AgentKernelRequest | string;
