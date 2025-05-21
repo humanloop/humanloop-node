@@ -91,6 +91,47 @@ try {
 }
 ```
 
+## Store Humanloop Files in Code
+
+Humanloop allows you to maintain Prompts and Agents in your local filesystem and version control, while still leveraging Humanloop's prompt management capabilities.
+
+### Syncing Files with the CLI
+
+```bash
+# Basic usage
+npx humanloop pull                               # Pull all files to 'humanloop/' directory
+npx humanloop pull --path="examples/chat"        # Pull specific directory
+npx humanloop pull --environment="production"    # Pull from specific environment
+npx humanloop pull --local-files-directory="ai"  # Specify local destination (default: "humanloop")
+
+# View available options
+npx humanloop pull --help
+```
+
+### Using Local Files in the SDK
+
+To use local Files in your code:
+
+```typescript
+// Enable local file support
+const client = new HumanloopClient({
+  apiKey: "YOUR_API_KEY",
+  useLocalFiles: true
+});
+
+// Call a local Prompt file
+const response = await client.prompts.call({
+  path: "examples/chat/basic",  // Looks for humanloop/examples/chat/basic.prompt
+  inputs: { query: "Hello world" }
+});
+
+// The same path-based approach works with prompts.log(), agents.call(), and agents.log()
+```
+
+For detailed instructions, see our [Guide on Storing Files in Code](https://humanloop.com/docs/v5/guides/prompts/store-prompts-in-code).
+
+For information about file formats, see our [File Format Reference](https://humanloop.com/docs/v5/reference/serialized-files).
+
 ## Pagination
 
 List endpoints are paginated. The SDK provides an iterator so that you can simply loop over the items:
