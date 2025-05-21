@@ -97,9 +97,10 @@ function handleSyncErrors<T extends CommonOptions>(fn: (options: T) => Promise<v
 addCommonOptions(
     program
         .command("pull")
-        .description(
-            "Pull Prompt and Agent files from Humanloop to your local filesystem.\n\n" +
-                "This command will:\n" +
+        .description("Pull Prompt and Agent files from Humanloop to your local filesystem")
+        .addHelpText(
+            "after",
+            "\nThis command will:\n" +
                 "1. Fetch Prompt and Agent files from your Humanloop workspace\n" +
                 "2. Save them to your local filesystem (directory specified by --local-files-directory, default: humanloop/)\n" +
                 "3. Maintain the same directory structure as in Humanloop\n" +
